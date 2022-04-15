@@ -3,11 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "directories": {
     "example": "examples"
   },
   "scripts": {
-    "adapt_example": "bash ./scripts/build.sh && cd build/clang_debug/bin && "
+    "build": "bash ./scripts/build.sh",
+    "request_listener": "npm run build && bash ./scripts/runexe.sh ./build/clang_debug/bin/request_listener"
   },
   "keywords": [],
   "author": "Tim Ebbeke",
