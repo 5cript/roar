@@ -54,6 +54,7 @@ cmake \
   -DCMAKE_LINKER=$LINKER \
   -DCMAKE_CXX_STANDARD=20 \
   -DROAR_BUILD_EXAMPLES=on \
+  -DENABLE_SANITIZER_THREAD=on \
   ../..
 
 cd ../..
