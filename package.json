@@ -1,0 +1,15 @@
+{
+  "name": "roar",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "adapt_example": "bash ./scripts/build.sh && cd build/clang_debug/bin && "
+  },
+  "keywords": [],
+  "author": "Tim Ebbeke",
+  "license": "BSC"
+}

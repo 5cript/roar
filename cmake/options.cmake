@@ -1,0 +1,1 @@
+option(ROAR_BUILD_EXAMPLES "Build examples?" off)
