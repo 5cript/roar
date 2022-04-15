@@ -19,9 +19,10 @@ CURDIR=$(basename $PWD)
 if [[ $CURDIR == "scripts" ]]; then
   cd ..
 fi
+BUILD_DIR="build/${CCOMPILER}_${BUILD_TYPE,,}"
 mkdir -p build
-mkdir -p "build/${CCOMPILER}_${BUILD_TYPE,,}"
-cd "build/${CCOMPILER}_${BUILD_TYPE,,}"
+mkdir -p ${BUILD_DIR}
+cd ${BUILD_DIR}
 
 export CXX=$COMPILER
 export CC=$CCOMPILER
@@ -46,6 +47,7 @@ cmake \
   -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
   -DJWT_DISABLE_PICOJSON=on \
   -DJWT_BUILD_EXAMPLES=off \
+  -DCMAKE_EXPORT_COMPILE_COMMANDS=1 \
   -DCMAKE_CXX_FLAGS=$CMAKE_CXX_FLAGS \
   -DCMAKE_CXX_COMPILER=$COMPILER \
   -DCMAKE_C_COMPILER=$CCOMPILER \
@@ -54,4 +56,9 @@ cmake \
   -DROAR_BUILD_EXAMPLES=on \
   ../..
 
+cd ../..
+node ./scripts/copy_compile_commands.js
+cd ${BUILD_DIR}
+
 make -j$THREADS
+
