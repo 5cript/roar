@@ -1,0 +1,82 @@
+#include <boost/asio/ip/tcp.hpp>
+
+#include <roar/session/factory.hpp>
+#include <roar/session/session.hpp>
+
+#include <boost/asio/ssl/context.hpp>
+#include <boost/asio/basic_stream_socket.hpp>
+#include <boost/beast/core/detect_ssl.hpp>
+#include <boost/beast/core/tcp_stream.hpp>
+#include <boost/beast/core/flat_buffer.hpp>
+#include <boost/beast/core/stream_traits.hpp>
+
+#include <chrono>
+
+namespace Roar::Session
+{
+    namespace
+    {
+        constexpr static std::chrono::seconds SSL_DETECTION_TIMEOUT{10};
+    }
+    //##################################################################################################################
+    struct Factory::ProtoSession
+    {
+        boost::beast::tcp_stream stream;
+        boost::beast::flat_buffer buffer;
+
+        ProtoSession(boost::asio::ip::tcp::socket&& socket)
+            : stream{std::move(socket)}
+            , buffer{}
+        {}
+    };
+    //##################################################################################################################
+    struct Factory::Implementation
+    {
+        std::optional<boost::asio::ssl::context>& sslContext;
+        std::function<void(Error&&)> onError;
+
+        Implementation(std::optional<boost::asio::ssl::context>& sslContext, std::function<void(Error&&)> onError)
+            : sslContext{sslContext}
+            , onError{std::move(onError)}
+        {}
+    };
+    //##################################################################################################################
+    Factory::Factory(std::optional<boost::asio::ssl::context>& sslContext, std::function<void(Error&&)> onError)
+        : impl_{std::make_unique<Implementation>(sslContext, std::move(onError))}
+    {}
+    //------------------------------------------------------------------------------------------------------------------
+    ROAR_PIMPL_SPECIAL_FUNCTIONS_IMPL(Factory);
+    //------------------------------------------------------------------------------------------------------------------
+    void Factory::makeSession(boost::asio::basic_stream_socket<boost::asio::ip::tcp>&& socket)
+    {
+        auto protoSession = std::make_shared<ProtoSession>(std::move(socket));
+        boost::beast::get_lowest_layer(protoSession->stream).expires_after(std::chrono::seconds(SSL_DETECTION_TIMEOUT));
+        boost::beast::async_detect_ssl(
+            protoSession->stream,
+            protoSession->buffer,
+            [protoSession, self = shared_from_this()](boost::beast::error_code ec, bool isSecure) {
+                try
+                {
+                    if (ec)
+                        return self->impl_->onError({.error = ec, .additionalInfo = "Error in SSL detector."});
+
+                    if (isSecure && !self->impl_->sslContext)
+                        return self->impl_->onError({.error = "SSL handshake received on insecure server."});
+
+                    std::make_shared<Session>(
+                        protoSession->stream.release_socket(),
+                        std::move(protoSession->buffer),
+                        self->impl_->sslContext,
+                        isSecure,
+                        self->impl_->onError)
+                        ->startup();
+                }
+                catch (std::exception const& exc)
+                {
+                    return self->impl_->onError(
+                        {.error = exc.what(), .additionalInfo = "Exception in session factory."});
+                }
+            });
+    }
+    //##################################################################################################################
+}

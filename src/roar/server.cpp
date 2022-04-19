@@ -3,7 +3,10 @@
 #include <boost/asio/ssl/context.hpp>
 
 #include <roar/server.hpp>
+#include <roar/routing/router.hpp>
 #include <roar/dns/resolve.hpp>
+#include <roar/session/session.hpp>
+#include <roar/session/factory.hpp>
 
 #include <optional>
 #include <mutex>
@@ -18,47 +21,72 @@ namespace Roar
         std::optional<boost::asio::ssl::context> sslContext;
         boost::asio::ip::tcp::endpoint bindEndpoint;
         std::shared_mutex acceptorStopGuard;
+        std::function<void(boost::system::error_code)> onAcceptAbort;
+        Router router;
+        std::function<void(Error&&)> onError;
+        Session::Factory sessionFactory;
 
-        Implementation(boost::asio::any_io_executor& executor, std::optional<boost::asio::ssl::context> sslContext);
+        Implementation(
+            boost::asio::any_io_executor& executor,
+            std::optional<boost::asio::ssl::context> sslContext,
+            std::function<void(Error&&)> onError,
+            std::function<void(boost::system::error_code)> onAcceptAbort);
 
-        void acceptOnce();
+        void acceptOnce(int failCount);
     };
     //------------------------------------------------------------------------------------------------------------------
     Server::Implementation::Implementation(
         boost::asio::any_io_executor& executor,
-        std::optional<boost::asio::ssl::context> sslContext)
+        std::optional<boost::asio::ssl::context> sslContext,
+        std::function<void(Error&&)> onError,
+        std::function<void(boost::system::error_code)> onAcceptAbort)
         : acceptor{executor}
         , sslContext{std::move(sslContext)}
         , bindEndpoint{}
+        , acceptorStopGuard{}
+        , onAcceptAbort{std::move(onAcceptAbort)}
+        , router{}
+        , onError{std::move(onError)}
+        , sessionFactory{this->sslContext, this->onError}
     {}
     //------------------------------------------------------------------------------------------------------------------
-    void Server::Implementation::acceptOnce()
+    void Server::Implementation::acceptOnce(int failCount)
     {
         auto socket = std::make_shared<boost::asio::ip::tcp::socket>(acceptor.get_executor());
 
-        acceptor.async_accept(*socket, [self = shared_from_this(), socket](boost::system::error_code ec) mutable {
-            if (ec == boost::asio::error::operation_aborted)
-                return;
-
-            {
-                std::shared_lock lock{self->acceptorStopGuard};
-
-                if (!self->acceptor.is_open())
+        acceptor.async_accept(
+            *socket, [self = shared_from_this(), socket, failCount](boost::system::error_code ec) mutable {
+                if (ec == boost::asio::error::operation_aborted)
                     return;
-            }
 
-            // FIXME: not every error should continue accepting:
-            if (ec)
-                return self->acceptOnce();
-            self->acceptOnce();
-        });
+                {
+                    std::shared_lock lock{self->acceptorStopGuard};
+                    if (!self->acceptor.is_open())
+                        return;
+                }
+
+                if (!ec)
+                {
+                    // TODO: on accept
+                    self->sessionFactory.makeSession(std::move(*socket));
+                    self->acceptOnce(0);
+                    return;
+                }
+                else
+                {
+                    if (failCount >= 5)
+                        return self->onAcceptAbort(ec);
+                    self->acceptOnce(failCount + 1);
+                }
+            });
     }
     //##################################################################################################################
-    Server::Server(boost::asio::any_io_executor& executor)
-        : impl_{std::make_unique<Implementation>(executor, std::nullopt)}
-    {}
-    Server::Server(boost::asio::any_io_executor& executor, boost::asio::ssl::context&& sslContext)
-        : impl_{std::make_unique<Implementation>(executor, std::move(sslContext))}
+    Server::Server(ConstructionArguments constructionArgs)
+        : impl_{std::make_unique<Implementation>(
+              constructionArgs.executor,
+              std::move(constructionArgs.sslContext),
+              std::move(constructionArgs.onError),
+              std::move(constructionArgs.onAcceptAbort))}
     {}
     //------------------------------------------------------------------------------------------------------------------
     Server::~Server()
@@ -66,7 +94,7 @@ namespace Roar
         stop();
     }
     //------------------------------------------------------------------------------------------------------------------
-    boost::leaf::result<void> Server::start(std::string const& host, unsigned short port)
+    boost::leaf::result<void> Server::start(unsigned short port, std::string const& host)
     {
         return start(Dns::resolveSingle(impl_->acceptor.get_executor(), host, port));
     }
@@ -93,7 +121,7 @@ namespace Roar
         if (ec)
             return boost::leaf::new_error("Could not listen on socket.", ec);
 
-        impl_->acceptOnce();
+        impl_->acceptOnce(0);
         return {};
     }
     //------------------------------------------------------------------------------------------------------------------
@@ -101,6 +129,11 @@ namespace Roar
     {
         std::scoped_lock lock{impl_->acceptorStopGuard};
         impl_->acceptor.close();
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    void Server::addRequestListenerToRouter(std::unordered_multimap<boost::beast::http::verb, ProtoRoute>&& routes)
+    {
+        impl_->router.addRoutes(std::move(routes));
     }
     //------------------------------------------------------------------------------------------------------------------
     Server::Server(Server&&) = default;
