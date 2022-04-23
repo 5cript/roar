@@ -3,6 +3,7 @@
 #include <roar/detail/pimpl_special_functions.hpp>
 #include <roar/routing/proto_route.hpp>
 
+#include <iostream>
 #include <boost/beast/http/verb.hpp>
 
 #include <memory>
@@ -18,7 +19,7 @@ namespace Roar
 
         void addRoutes(std::unordered_multimap<boost::beast::http::verb, ProtoRoute>&& routes);
 
-        bool callRoute(boost::beast::http::verb verb, );
+        // bool callRoute(boost::beast::http::verb verb, );
 
       private:
         struct Implementation;

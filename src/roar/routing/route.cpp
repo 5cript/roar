@@ -14,7 +14,7 @@ namespace Roar
         : impl_{std::make_unique<Implementation>(std::move(proto))}
     {}
     //------------------------------------------------------------------------------------------------------------------
-    ROAR_PIMPL_SPECIAL_FUNCTIONS_IMPL(Router);
+    ROAR_PIMPL_SPECIAL_FUNCTIONS_IMPL(Route);
     //------------------------------------------------------------------------------------------------------------------
     void Route::operator()()
     {

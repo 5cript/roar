@@ -1,5 +1,6 @@
 #pragma once
 
+#include <__utility/piecewise_construct.h>
 #include <boost/describe/modifiers.hpp>
 #include <roar/beast/forward.hpp>
 #include <roar/routing/proto_route.hpp>
@@ -13,6 +14,7 @@
 
 #include <memory>
 #include <string>
+#include <tuple>
 #include <unordered_map>
 #include <functional>
 
@@ -91,7 +93,7 @@ namespace Roar
                             // TODO:
                         },
                 };
-                extractedRoutes[route.pointer->verb] = route.pointer->path;
+                extractedRoutes.emplace(*route.pointer->verb, protoRoute);
             });
             addRequestListenerToRouter(std::move(extractedRoutes));
         }

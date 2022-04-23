@@ -14,6 +14,8 @@
 //         .path = "/api/status",
 //         .allowInsecure = true,
 //     });
+//
+//     ROAR_GET(bla)("^/api/([a-zA-Z0-9]+)"_rgx)
 
 //     // There is a shorthand overload which only takes a path and uses secure defaults.
 //     ROAR_POST(start)("/api/start");

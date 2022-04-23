@@ -1,5 +1,7 @@
 #pragma once
 
+#include <roar/detail/overloaded.hpp>
+
 #include <boost/beast/http/verb.hpp>
 
 #include <string_view>
@@ -12,28 +14,31 @@ namespace Roar
 {
     class Server;
 
-    namespace Detail
-    {
-        template <class... Ts>
-        struct overloaded : Ts...
-        {
-            using Ts::operator()...;
-        };
-        template <class... Ts>
-        overloaded(Ts...) -> overloaded<Ts...>;
-    }
-
     template <typename RequestListenerT>
     using HandlerType = void (RequestListenerT::*)();
+
+    enum class RoutePathType
+    {
+        Unspecified,
+        RegularString,
+        Regex
+    };
+
+    struct PseudoRegex
+    {
+        char const* pattern;
+        std::size_t size;
+    };
 
     template <typename RequestListenerT>
     struct RouteInfo
     {
         std::optional<boost::beast::http::verb> verb = std::nullopt;
-        std::variant<std::string, std::regex> path = std::string{};
+        char const* path = nullptr;
+        RoutePathType pathType = RoutePathType::Unspecified;
         bool allowInsecure = false;
         bool allowUpgrade = false;
-        HandlerType<RequestListenerT> handler;
+        HandlerType<RequestListenerT> handler = nullptr;
     };
 
     template <typename RequestListenerT>
@@ -44,6 +49,7 @@ namespace Roar
                 return {
                     .verb = userInfo.verb ? userInfo.verb : info.verb,
                     .path = userInfo.path,
+                    .pathType = userInfo.pathType == RoutePathType::Unspecified ? info.pathType : userInfo.pathType,
                     .allowInsecure = userInfo.allowInsecure ? userInfo.allowInsecure : info.allowInsecure,
                     .allowUpgrade = userInfo.allowUpgrade ? userInfo.allowUpgrade : info.allowUpgrade,
                     .handler = handler,
@@ -53,15 +59,17 @@ namespace Roar
                 return {
                     .verb = info.verb,
                     .path = path,
+                    .pathType = RoutePathType::RegularString,
                     .allowInsecure = info.allowInsecure,
                     .allowUpgrade = info.allowUpgrade,
                     .handler = handler,
                 };
             },
-            [info, handler](std::regex path) -> RouteInfo<RequestListenerT> {
+            [info, handler](PseudoRegex path) -> RouteInfo<RequestListenerT> {
                 return {
                     .verb = info.verb,
-                    .path = std::move(path),
+                    .path = path.pattern,
+                    .pathType = RoutePathType::Regex,
                     .allowInsecure = info.allowInsecure,
                     .allowUpgrade = info.allowUpgrade,
                     .handler = handler,
@@ -73,9 +81,9 @@ namespace Roar
     {
         inline namespace regex_literals
         {
-            inline std::regex operator"" _rg(char const* regexString, std::size_t length)
+            inline PseudoRegex operator"" _rgx(char const* regexString, std::size_t length)
             {
-                return std::regex{regexString, length};
+                return PseudoRegex{regexString, length};
             }
         }
     }
