@@ -3,6 +3,7 @@
 #include <roar/error.hpp>
 #include <roar/beast/forward.hpp>
 #include <roar/detail/pimpl_special_functions.hpp>
+#include <roar/detail/literals/memory.hpp>
 
 #include <memory>
 #include <optional>
@@ -12,6 +13,9 @@ namespace Roar::Session
     class Session : public std::enable_shared_from_this<Session>
     {
       public:
+        constexpr static uint64_t defaultHeaderLimit{8_MiB};
+        constexpr static uint64_t defaultBodyLimit{8_MiB};
+
         Session(
             boost::asio::basic_stream_socket<boost::asio::ip::tcp>&& socket,
             boost::beast::basic_flat_buffer<std::allocator<char>>&& buffer,
@@ -22,6 +26,10 @@ namespace Roar::Session
 
         void startup();
         void close();
+
+      private:
+        void readHeader();
+        void performSslHandshake();
 
       private:
         struct Implementation;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <roar/detail/overloaded.hpp>
+#include <roar/detail/literals/regex.hpp>
 
 #include <boost/beast/http/verb.hpp>
 
@@ -22,12 +23,6 @@ namespace Roar
         Unspecified,
         RegularString,
         Regex
-    };
-
-    struct PseudoRegex
-    {
-        char const* pattern;
-        std::size_t size;
     };
 
     template <typename RequestListenerT>
@@ -75,17 +70,6 @@ namespace Roar
                     .handler = handler,
                 };
             }};
-    }
-
-    inline namespace literals
-    {
-        inline namespace regex_literals
-        {
-            inline PseudoRegex operator"" _rgx(char const* regexString, std::size_t length)
-            {
-                return PseudoRegex{regexString, length};
-            }
-        }
     }
 
 #define ROAR_MAKE_LISTENER(ListenerType) using this_type = ListenerType
