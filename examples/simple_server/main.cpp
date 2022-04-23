@@ -37,8 +37,6 @@ int main()
             },
             err.error);
         std::cout << " (" << err.additionalInfo << ")\n";
-        if (err.getRemoteEndpoint)
-            std::cout << "On connection with: " << err.getRemoteEndpoint().address().to_string() << "\n";
     };
 
     boost::asio::thread_pool pool{4};
