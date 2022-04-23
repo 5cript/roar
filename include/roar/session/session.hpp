@@ -7,6 +7,7 @@
 
 #include <memory>
 #include <optional>
+#include <chrono>
 
 namespace Roar::Session
 {
@@ -15,6 +16,7 @@ namespace Roar::Session
       public:
         constexpr static uint64_t defaultHeaderLimit{8_MiB};
         constexpr static uint64_t defaultBodyLimit{8_MiB};
+        constexpr static std::chrono::seconds sessionTimeout{10};
 
         Session(
             boost::asio::basic_stream_socket<boost::asio::ip::tcp>&& socket,

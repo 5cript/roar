@@ -1,6 +1,7 @@
 #include <boost/asio/ip/tcp.hpp>
 
 #include <roar/session/session.hpp>
+#include <roar/request.hpp>
 
 #include <boost/beast/core/flat_buffer.hpp>
 #include <boost/asio/dispatch.hpp>
@@ -16,11 +17,6 @@
 
 namespace Roar::Session
 {
-    namespace
-    {
-        constexpr static std::chrono::seconds SSL_DETECTION_TIMEOUT{10};
-        constexpr static std::chrono::seconds SESSION_TIMEOUT{10};
-    }
     //##################################################################################################################
     struct Session::Implementation
     {
@@ -91,7 +87,7 @@ namespace Roar::Session
     {
         impl_->withStreamDo([this](auto& stream) {
             std::shared_ptr<boost::beast::http::request_parser<boost::beast::http::empty_body>> headerRequestParser;
-            boost::beast::get_lowest_layer(stream).expires_after(SESSION_TIMEOUT);
+            boost::beast::get_lowest_layer(stream).expires_after(sessionTimeout);
             headerRequestParser =
                 std::make_shared<boost::beast::http::request_parser<boost::beast::http::empty_body>>();
             headerRequestParser->header_limit(defaultHeaderLimit);
@@ -161,7 +157,7 @@ namespace Roar::Session
         else
         {
             auto& stream = std::get<boost::beast::ssl_stream<boost::beast::tcp_stream>>(impl_->stream);
-            boost::beast::get_lowest_layer(stream).expires_after(std::chrono::seconds(SESSION_TIMEOUT));
+            boost::beast::get_lowest_layer(stream).expires_after(std::chrono::seconds(sessionTimeout));
             stream.shutdown(ec);
         }
         // That the remote is not connected anymore is not an error if the shutdown was ordered anyway.

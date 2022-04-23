@@ -14,10 +14,6 @@
 
 namespace Roar::Session
 {
-    namespace
-    {
-        constexpr static std::chrono::seconds SSL_DETECTION_TIMEOUT{10};
-    }
     //##################################################################################################################
     struct Factory::ProtoSession
     {
@@ -50,7 +46,7 @@ namespace Roar::Session
     void Factory::makeSession(boost::asio::basic_stream_socket<boost::asio::ip::tcp>&& socket)
     {
         auto protoSession = std::make_shared<ProtoSession>(std::move(socket));
-        boost::beast::get_lowest_layer(protoSession->stream).expires_after(std::chrono::seconds(SSL_DETECTION_TIMEOUT));
+        boost::beast::get_lowest_layer(protoSession->stream).expires_after(std::chrono::seconds(sslDetectionTimeout));
         boost::beast::async_detect_ssl(
             protoSession->stream,
             protoSession->buffer,
