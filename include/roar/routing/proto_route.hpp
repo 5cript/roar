@@ -9,16 +9,13 @@
 
 namespace Roar
 {
-    namespace Session
-    {
-        class Session;
-    }
+    class Session;
     template <typename>
     class Request;
     struct ProtoRoute
     {
         std::variant<std::string, std::regex> path;
-        std::function<void(Session::Session& session, Request<boost::beast::http::empty_body> const& req)> callRoute;
+        std::function<void(Session& session, Request<boost::beast::http::empty_body> const& req)> callRoute;
         std::function<bool(std::string const&, std::vector<std::string>&)> matches;
     };
 }

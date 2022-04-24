@@ -16,7 +16,7 @@
 #include <chrono>
 #include <variant>
 
-namespace Roar::Session
+namespace Roar
 {
     //##################################################################################################################
     struct Session::Implementation
@@ -26,6 +26,7 @@ namespace Roar::Session
         bool isSecure;
         std::function<void(Error&&)> onError;
         std::weak_ptr<Router> router;
+        std::shared_ptr<boost::beast::http::request_parser<boost::beast::http::empty_body>> headerParser;
 
         Implementation(
             boost::asio::ip::tcp::socket&& socket,
@@ -43,6 +44,7 @@ namespace Roar::Session
             , isSecure{isSecure}
             , onError{std::move(onError)}
             , router{std::move(router)}
+            , headerParser{}
         {}
 
         template <typename FunctionT>
@@ -91,24 +93,21 @@ namespace Roar::Session
     //------------------------------------------------------------------------------------------------------------------
     void Session::readHeader()
     {
-        impl_->withStreamDo([this](auto& stream) {
-            std::shared_ptr<boost::beast::http::request_parser<boost::beast::http::empty_body>> headerRequestParser;
-            boost::beast::get_lowest_layer(stream).expires_after(sessionTimeout);
-            headerRequestParser =
-                std::make_shared<boost::beast::http::request_parser<boost::beast::http::empty_body>>();
-            headerRequestParser->header_limit(defaultHeaderLimit);
+        // reset parser.
+        impl_->headerParser = std::make_shared<boost::beast::http::request_parser<boost::beast::http::empty_body>>();
 
-            // Do not reject the body due to the limit when reading the header:
-            headerRequestParser->body_limit(boost::none);
+        impl_->withStreamDo([this](auto& stream) {
+            boost::beast::get_lowest_layer(stream).expires_after(sessionTimeout);
+            impl_->headerParser->header_limit(defaultHeaderLimit);
 
             // Do not attempt to read available body bytes.
-            headerRequestParser->eager(false);
+            impl_->headerParser->eager(false);
 
             boost::beast::http::async_read_header(
                 stream,
                 impl_->buffer,
-                *headerRequestParser,
-                [headerRequestParser, self = this->shared_from_this()](boost::beast::error_code ec, std::size_t) {
+                *impl_->headerParser,
+                [self = this->shared_from_this()](boost::beast::error_code ec, std::size_t) {
                     if (ec)
                     {
                         switch (static_cast<boost::beast::http::error>(ec.value()))
@@ -116,11 +115,6 @@ namespace Roar::Session
                             case boost::beast::http::error::end_of_stream:
                             {
                                 return self->close();
-                            }
-                            // its ok reaching the body limit in header read, this is not an error.
-                            case boost::beast::http::error::body_limit:
-                            {
-                                break;
                             }
                             default:
                             {
@@ -132,7 +126,8 @@ namespace Roar::Session
 
                     if (auto router = self->impl_->router.lock(); router)
                     {
-                        Request<boost::beast::http::empty_body> extendedRequest{std::move(headerRequestParser->get())};
+                        Request<boost::beast::http::empty_body> extendedRequest{
+                            std::move(self->impl_->headerParser->get())};
                         router->followRoute(*self, extendedRequest);
                     }
                 });
@@ -157,6 +152,16 @@ namespace Roar::Session
     std::variant<boost::beast::tcp_stream, boost::beast::ssl_stream<boost::beast::tcp_stream>>& Session::stream()
     {
         return impl_->stream;
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    std::shared_ptr<boost::beast::http::request_parser<boost::beast::http::empty_body>>& Session::parser()
+    {
+        return impl_->headerParser;
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    boost::beast::flat_buffer& Session::buffer()
+    {
+        return impl_->buffer;
     }
     //------------------------------------------------------------------------------------------------------------------
     void Session::onWriteComplete(bool expectsClose, boost::beast::error_code ec, std::size_t)

@@ -19,7 +19,7 @@ namespace Roar
     class Server;
 
     template <typename RequestListenerT>
-    using HandlerType = void (RequestListenerT::*)(Session::Session&, Request<boost::beast::http::empty_body> const&);
+    using HandlerType = void (RequestListenerT::*)(Session&, Request<boost::beast::http::empty_body> const&);
 
     enum class RoutePathType
     {
@@ -78,10 +78,9 @@ namespace Roar
 #define ROAR_MAKE_LISTENER(ListenerType) using this_type = ListenerType
 
 #define ROAR_ROUTE_I(HandlerName, DefaultVerb) \
-    void HandlerName(auto& session, auto const& request); \
-    constexpr static auto roar_##HandlerName = Roar::extendRouteInfo( \
-        {.verb = boost::beast::http::verb::DefaultVerb}, \
-        &this_type::HandlerName<Roar::Session::Session&, Roar::Request<boost::beast::http::empty_body> const&>)
+    void HandlerName(Roar::Session& session, Roar::Request<boost::beast::http::empty_body> const& request); \
+    constexpr static auto roar_##HandlerName = \
+        Roar::extendRouteInfo({.verb = boost::beast::http::verb::DefaultVerb}, &this_type::HandlerName)
 
 #define ROAR_ROUTE(HandlerName) ROAR_ROUTE_I(HandlerName, get)
 

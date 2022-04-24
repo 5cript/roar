@@ -13,20 +13,17 @@
 
 namespace Roar
 {
-    namespace Session
-    {
-        class Session;
-    }
+    class Session;
     template <typename>
     class Request;
     class Router : public std::enable_shared_from_this<Router>
     {
       public:
-        Router(std::function<void(Session::Session&, Request<boost::beast::http::empty_body> const&)> onNotFound);
+        Router(std::function<void(Session&, Request<boost::beast::http::empty_body> const&)> onNotFound);
         ROAR_PIMPL_SPECIAL_FUNCTIONS(Router);
 
         void addRoutes(std::unordered_multimap<boost::beast::http::verb, ProtoRoute>&& routes);
-        void followRoute(Session::Session&, Request<boost::beast::http::empty_body>& request);
+        void followRoute(Session&, Request<boost::beast::http::empty_body>& request);
 
       private:
         struct Implementation;

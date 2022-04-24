@@ -7,7 +7,10 @@
 #include <roar/detail/literals/memory.hpp>
 
 #include <boost/beast/http/message.hpp>
+#include <boost/beast/http/empty_body.hpp>
+#include <boost/beast/http/parser.hpp>
 #include <boost/beast/http/write.hpp>
+#include <boost/beast/http/read.hpp>
 #include <boost/beast/ssl/ssl_stream.hpp>
 #include <boost/beast/core/tcp_stream.hpp>
 
@@ -19,10 +22,8 @@
 namespace Roar
 {
     class Router;
-}
-
-namespace Roar::Session
-{
+    template <typename>
+    class Request;
     class Session : public std::enable_shared_from_this<Session>
     {
       public:
@@ -58,6 +59,75 @@ namespace Roar::Session
         }
 
         template <typename BodyT>
+        class ReadIntermediate
+        {
+          private:
+            friend Session;
+
+            template <typename... Forwards>
+            ReadIntermediate(Session& session, Forwards&&... forwardArgs)
+                : session_{session}
+                , req_{[&]() -> decltype(req_) {
+                    if constexpr (std::is_same_v<BodyT, boost::beast::http::empty_body>)
+                        return std::move(session.parser());
+                    else
+                        return std::make_shared<boost::beast::http::request_parser<BodyT>>(
+                            std::move(*session.parser()), std::forward<Forwards>(forwardArgs)...);
+                }()}
+            {
+                req_->body_limit(defaultBodyLimit);
+            }
+
+          public:
+            ReadIntermediate& bodyLimit(std::size_t limit)
+            {
+                req_->body_limit(limit);
+                return *this;
+            }
+
+            ReadIntermediate& bodyLimit(boost::beast::string_view limit)
+            {
+                req_->body_limit(std::stoull(std::string{limit}));
+                return *this;
+            }
+
+            ReadIntermediate& noBodyLimit()
+            {
+                req_->body_limit(boost::none);
+                return *this;
+            }
+
+            template <typename... Forwards>
+            void start(std::function<void(Session& session, Request<BodyT>&&)> onReadComplete)
+            {
+                session_.withStreamDo([this, &onReadComplete](auto& stream) {
+                    boost::beast::get_lowest_layer(stream).expires_after(std::chrono::seconds(sessionTimeout));
+                    boost::beast::http::async_read(
+                        stream,
+                        session_.buffer(),
+                        *req_,
+                        [session = session_.shared_from_this(), req = req_, onReadComplete = std::move(onReadComplete)](
+                            boost::beast::error_code ec, std::size_t) {
+                            if (ec)
+                                return session->close();
+
+                            onReadComplete(*session, req->release());
+                        });
+                });
+            }
+
+          private:
+            Session& session_;
+            std::shared_ptr<boost::beast::http::request_parser<BodyT>> req_;
+        };
+
+        template <typename BodyT, typename... Forwards>
+        ReadIntermediate<BodyT> read(Forwards&&... forwardArgs)
+        {
+            return ReadIntermediate<BodyT>{*this, std::forward<Forwards>(forwardArgs)...};
+        }
+
+        template <typename BodyT>
         static Response<BodyT> prepareResponse()
         {
             return Response<BodyT>{};
@@ -74,6 +144,8 @@ namespace Roar::Session
         void performSslHandshake();
         void onWriteComplete(bool expectsClose, boost::beast::error_code ec, std::size_t bytesTransferred);
         std::variant<boost::beast::tcp_stream, boost::beast::ssl_stream<boost::beast::tcp_stream>>& stream();
+        std::shared_ptr<boost::beast::http::request_parser<boost::beast::http::empty_body>>& parser();
+        boost::beast::flat_buffer& buffer();
 
       private:
         struct Implementation;

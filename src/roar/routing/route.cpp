@@ -16,7 +16,7 @@ namespace Roar
     //------------------------------------------------------------------------------------------------------------------
     ROAR_PIMPL_SPECIAL_FUNCTIONS_IMPL(Route);
     //------------------------------------------------------------------------------------------------------------------
-    void Route::operator()(Session::Session& session, Request<boost::beast::http::empty_body> const& req) const
+    void Route::operator()(Session& session, Request<boost::beast::http::empty_body> const& req) const
     {
         impl_->callRoute(session, req);
     }

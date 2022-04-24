@@ -1,9 +1,14 @@
 #pragma once
 
 #include <boost/beast/http/message.hpp>
+#include <boost/beast/http/empty_body.hpp>
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/constants.hpp>
 #include <boost/algorithm/string/split.hpp>
+
+#ifdef ROAR_ENABLE_NLOHMANN_JSON
+#    include <nlohmann/json.hpp>
+#endif
 
 #include <optional>
 #include <string>
@@ -40,6 +45,13 @@ namespace Roar
         {
             regexMatches_ = std::move(matches);
         }
+
+#ifdef ROAR_ENABLE_NLOHMANN_JSON
+        nlohmann::json json()
+        {
+            return nlohmann::json::parse(this->body());
+        }
+#endif
 
       private:
         void parseTarget()
@@ -78,4 +90,6 @@ namespace Roar
         std::string path_;
         std::unordered_map<std::string, std::string> query_;
     };
+
+    using EmptyBodyRequest = Request<boost::beast::http::empty_body>;
 }

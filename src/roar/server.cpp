@@ -25,7 +25,7 @@ namespace Roar
         std::unique_ptr<StandardResponseProvider> standardResponseProvider;
         std::shared_ptr<Router> router;
         std::function<void(Error&&)> onError;
-        Session::Factory sessionFactory;
+        Factory sessionFactory;
 
         Implementation(
             boost::asio::any_io_executor& executor,
@@ -49,11 +49,10 @@ namespace Roar
         , acceptorStopGuard{}
         , onAcceptAbort{std::move(onAcceptAbort)}
         , standardResponseProvider{std::move(standardResponseProvider)}
-        , router{std::make_shared<Router>(
-              [this](Session::Session& session, Request<boost::beast::http::empty_body> const& req) {
-                  session.send(this->standardResponseProvider->makeStandardResponse(
-                      session, req, boost::beast::http::status::not_found));
-              })}
+        , router{std::make_shared<Router>([this](Session& session, Request<boost::beast::http::empty_body> const& req) {
+            session.send(this->standardResponseProvider->makeStandardResponse(
+                session, req, boost::beast::http::status::not_found));
+        })}
         , onError{std::move(onError)}
         , sessionFactory{this->sslContext, this->onError}
     {}

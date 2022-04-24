@@ -12,10 +12,9 @@ namespace Roar
     {
         mutable std::mutex routesMutex;
         std::unordered_multimap<boost::beast::http::verb, Route> routes;
-        std::function<void(Session::Session&, Request<boost::beast::http::empty_body> const&)> onNotFound;
+        std::function<void(Session&, Request<boost::beast::http::empty_body> const&)> onNotFound;
 
-        Implementation(
-            std::function<void(Session::Session&, Request<boost::beast::http::empty_body> const&)> onNotFound)
+        Implementation(std::function<void(Session&, Request<boost::beast::http::empty_body> const&)> onNotFound)
             : routesMutex{}
             , routes{}
             , onNotFound{std::move(onNotFound)}
@@ -37,7 +36,7 @@ namespace Roar
         }
     };
     //##################################################################################################################
-    Router::Router(std::function<void(Session::Session&, Request<boost::beast::http::empty_body> const&)> onNotFound)
+    Router::Router(std::function<void(Session&, Request<boost::beast::http::empty_body> const&)> onNotFound)
         : impl_{std::make_unique<Implementation>(std::move(onNotFound))}
     {}
     //------------------------------------------------------------------------------------------------------------------
@@ -50,7 +49,7 @@ namespace Roar
             impl_->routes.insert(std::make_pair(key, Route{std::move(proto)}));
     }
     //------------------------------------------------------------------------------------------------------------------
-    void Router::followRoute(Session::Session& session, Request<boost::beast::http::empty_body>& request)
+    void Router::followRoute(Session& session, Request<boost::beast::http::empty_body>& request)
     {
         auto result = impl_->findRoute(request.method(), request.path());
         if (!result)

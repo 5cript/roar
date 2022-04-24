@@ -12,7 +12,7 @@
 
 #include <chrono>
 
-namespace Roar::Session
+namespace Roar
 {
     //##################################################################################################################
     struct Factory::ProtoSession
@@ -55,7 +55,13 @@ namespace Roar::Session
                 try
                 {
                     if (ec)
+                    {
+                        if (ec == boost::beast::http::error::end_of_stream ||
+                            ec == boost::asio::error::misc_errors::eof)
+                            return;
+
                         return impl_->onError({.error = ec, .additionalInfo = "Error in SSL detector."});
+                    }
 
                     if (isSecure && !impl_->sslContext)
                         return impl_->onError({.error = "SSL handshake received on insecure server."});

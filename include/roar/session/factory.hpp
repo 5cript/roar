@@ -12,10 +12,7 @@
 namespace Roar
 {
     class Router;
-}
 
-namespace Roar::Session
-{
     class Factory
     {
       public:

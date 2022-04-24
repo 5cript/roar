@@ -121,8 +121,7 @@ namespace Roar
                         throw std::runtime_error("Invalid path type for route.");
                 }
                 protoRoute.callRoute = [listener, handler = route.pointer->handler](
-                                           Session::Session& session,
-                                           Request<boost::beast::http::empty_body> const& req) {
+                                           Session& session, Request<boost::beast::http::empty_body> const& req) {
                     std::invoke(handler, *listener, session, req);
                 };
                 extractedRoutes.emplace(*route.pointer->verb, protoRoute);

@@ -8,7 +8,7 @@ namespace Roar
     {
       public:
         boost::beast::http::response<boost::beast::http::string_body> makeStandardResponse(
-            Session::Session& session,
+            Session& session,
             Request<boost::beast::http::empty_body> const& req,
             boost::beast::http::status status)
         {
