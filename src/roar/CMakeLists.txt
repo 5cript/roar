@@ -5,6 +5,7 @@ add_library(roar STATIC
   session/factory.cpp
   session/session.cpp
   ssl/make_ssl_context.cpp
+  websocket/websocket_session.cpp
 )
 
 find_package(Boost 1.78.0 REQUIRED COMPONENTS system)

@@ -164,6 +164,17 @@ namespace Roar
         return impl_->buffer;
     }
     //------------------------------------------------------------------------------------------------------------------
+    std::shared_ptr<WebsocketSession> Session::upgrade(Request<boost::beast::http::empty_body> const& req)
+    {
+        if (req.isWebsocketUpgrade())
+        {
+            auto ws = std::make_shared<WebsocketSession>(std::move(impl_->stream));
+            ws->accept(req);
+            return ws;
+        }
+        return {};
+    }
+    //------------------------------------------------------------------------------------------------------------------
     void Session::onWriteComplete(bool expectsClose, boost::beast::error_code ec, std::size_t)
     {
         if (ec && ec != boost::beast::http::error::end_of_stream)

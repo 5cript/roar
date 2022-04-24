@@ -1,6 +1,7 @@
 #pragma once
 
 #include <roar/error.hpp>
+#include <roar/websocket/websocket_session.hpp>
 #include <roar/response.hpp>
 #include <roar/beast/forward.hpp>
 #include <roar/detail/pimpl_special_functions.hpp>
@@ -138,6 +139,8 @@ namespace Roar
         {
             std::visit(std::forward<FunctionT>(func), stream());
         }
+
+        std::shared_ptr<WebsocketSession> upgrade(Request<boost::beast::http::empty_body> const& req);
 
       private:
         void readHeader();

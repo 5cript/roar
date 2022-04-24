@@ -35,6 +35,7 @@ namespace Roar
         char const* path = nullptr;
         RoutePathType pathType = RoutePathType::Unspecified;
         bool allowInsecure = false;
+        // FIXME: remove if unused.
         bool allowUpgrade = false;
         HandlerType<RequestListenerT> handler = nullptr;
     };

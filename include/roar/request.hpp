@@ -5,6 +5,7 @@
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/constants.hpp>
 #include <boost/algorithm/string/split.hpp>
+#include <boost/beast/websocket/rfc6455.hpp>
 
 #ifdef ROAR_ENABLE_NLOHMANN_JSON
 #    include <nlohmann/json.hpp>
@@ -44,6 +45,11 @@ namespace Roar
         void pathMatches(std::vector<std::string>&& matches)
         {
             regexMatches_ = std::move(matches);
+        }
+
+        bool isWebsocketUpgrade() const
+        {
+            return boost::beast::websocket::is_upgrade(*this);
         }
 
 #ifdef ROAR_ENABLE_NLOHMANN_JSON
