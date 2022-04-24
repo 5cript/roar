@@ -43,34 +43,35 @@ namespace Roar::Session
     //------------------------------------------------------------------------------------------------------------------
     ROAR_PIMPL_SPECIAL_FUNCTIONS_IMPL(Factory);
     //------------------------------------------------------------------------------------------------------------------
-    void Factory::makeSession(boost::asio::basic_stream_socket<boost::asio::ip::tcp>&& socket)
+    void
+    Factory::makeSession(boost::asio::basic_stream_socket<boost::asio::ip::tcp>&& socket, std::weak_ptr<Router> router)
     {
         auto protoSession = std::make_shared<ProtoSession>(std::move(socket));
         boost::beast::get_lowest_layer(protoSession->stream).expires_after(std::chrono::seconds(sslDetectionTimeout));
         boost::beast::async_detect_ssl(
             protoSession->stream,
             protoSession->buffer,
-            [protoSession, self = shared_from_this()](boost::beast::error_code ec, bool isSecure) {
+            [this, protoSession, router = std::move(router)](boost::beast::error_code ec, bool isSecure) {
                 try
                 {
                     if (ec)
-                        return self->impl_->onError({.error = ec, .additionalInfo = "Error in SSL detector."});
+                        return impl_->onError({.error = ec, .additionalInfo = "Error in SSL detector."});
 
-                    if (isSecure && !self->impl_->sslContext)
-                        return self->impl_->onError({.error = "SSL handshake received on insecure server."});
+                    if (isSecure && !impl_->sslContext)
+                        return impl_->onError({.error = "SSL handshake received on insecure server."});
 
                     std::make_shared<Session>(
                         protoSession->stream.release_socket(),
                         std::move(protoSession->buffer),
-                        self->impl_->sslContext,
+                        impl_->sslContext,
                         isSecure,
-                        self->impl_->onError)
+                        impl_->onError,
+                        router)
                         ->startup();
                 }
                 catch (std::exception const& exc)
                 {
-                    return self->impl_->onError(
-                        {.error = exc.what(), .additionalInfo = "Exception in session factory."});
+                    return impl_->onError({.error = exc.what(), .additionalInfo = "Exception in session factory."});
                 }
             });
     }

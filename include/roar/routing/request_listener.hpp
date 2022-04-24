@@ -2,8 +2,11 @@
 
 #include <roar/detail/overloaded.hpp>
 #include <roar/detail/literals/regex.hpp>
+#include <roar/session/session.hpp>
+#include <roar/request.hpp>
 
 #include <boost/beast/http/verb.hpp>
+#include <boost/beast/http/empty_body.hpp>
 
 #include <string_view>
 #include <optional>
@@ -16,7 +19,7 @@ namespace Roar
     class Server;
 
     template <typename RequestListenerT>
-    using HandlerType = void (RequestListenerT::*)();
+    using HandlerType = void (RequestListenerT::*)(Session::Session&, Request<boost::beast::http::empty_body> const&);
 
     enum class RoutePathType
     {
@@ -75,9 +78,10 @@ namespace Roar
 #define ROAR_MAKE_LISTENER(ListenerType) using this_type = ListenerType
 
 #define ROAR_ROUTE_I(HandlerName, DefaultVerb) \
-    void HandlerName(); \
-    constexpr static auto roar_##HandlerName = \
-        Roar::extendRouteInfo({.verb = boost::beast::http::verb::DefaultVerb}, &this_type::HandlerName)
+    void HandlerName(auto& session, auto const& request); \
+    constexpr static auto roar_##HandlerName = Roar::extendRouteInfo( \
+        {.verb = boost::beast::http::verb::DefaultVerb}, \
+        &this_type::HandlerName<Roar::Session::Session&, Roar::Request<boost::beast::http::empty_body> const&>)
 
 #define ROAR_ROUTE(HandlerName) ROAR_ROUTE_I(HandlerName, get)
 

@@ -9,8 +9,9 @@
   },
   "scripts": {
     "build": "bash ./scripts/build.sh",
-    "request_listener": "bash ./scripts/runexe.sh ./build/clang_debug/bin/request_listener",
-    "simple_server": "bash ./scripts/runexe.sh ./build/clang_debug/bin/simple_server",
+    "request_listener": "npm run build && bash ./scripts/runexe.sh ./build/clang_debug/bin/request_listener",
+    "simple_server": "npm run build && bash ./scripts/runexe.sh ./build/clang_debug/bin/simple_server",
+    "debug:simple_server": "npm run build && bash ./scripts/rungdb.sh ./build/clang_debug/bin/simple_server",
     "all_examples": "npm run build && npm run request_listener && npm run simple_server"
   },
   "keywords": [],

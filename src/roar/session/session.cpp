@@ -2,6 +2,7 @@
 
 #include <roar/session/session.hpp>
 #include <roar/request.hpp>
+#include <roar/routing/router.hpp>
 
 #include <boost/beast/core/flat_buffer.hpp>
 #include <boost/asio/dispatch.hpp>
@@ -24,13 +25,15 @@ namespace Roar::Session
         boost::beast::flat_buffer buffer;
         bool isSecure;
         std::function<void(Error&&)> onError;
+        std::weak_ptr<Router> router;
 
         Implementation(
             boost::asio::ip::tcp::socket&& socket,
             boost::beast::flat_buffer&& buffer,
             std::optional<boost::asio::ssl::context>& sslContext,
             bool isSecure,
-            std::function<void(Error&&)> onError)
+            std::function<void(Error&&)> onError,
+            std::weak_ptr<Router> router)
             : stream{[&socket, &sslContext]() -> decltype(stream) {
                 if (sslContext)
                     return boost::beast::ssl_stream<boost::beast::tcp_stream>{std::move(socket), *sslContext};
@@ -39,6 +42,7 @@ namespace Roar::Session
             , buffer{std::move(buffer)}
             , isSecure{isSecure}
             , onError{std::move(onError)}
+            , router{std::move(router)}
         {}
 
         template <typename FunctionT>
@@ -53,13 +57,15 @@ namespace Roar::Session
         boost::beast::flat_buffer&& buffer,
         std::optional<boost::asio::ssl::context>& sslContext,
         bool isSecure,
-        std::function<void(Error&&)> onError)
+        std::function<void(Error&&)> onError,
+        std::weak_ptr<Router> router)
         : impl_{std::make_unique<Implementation>(
               std::move(socket),
               std::move(buffer),
               sslContext,
               isSecure,
-              std::move(onError))}
+              std::move(onError),
+              std::move(router))}
     {}
     //------------------------------------------------------------------------------------------------------------------
     ROAR_PIMPL_SPECIAL_FUNCTIONS_IMPL(Session);
@@ -124,8 +130,11 @@ namespace Roar::Session
                         }
                     }
 
-                    // TODO:
-                    // self->m_requestRouter->onHeaderRead(*self, extendedRequest);
+                    if (auto router = self->impl_->router.lock(); router)
+                    {
+                        Request<boost::beast::http::empty_body> extendedRequest{std::move(headerRequestParser->get())};
+                        router->followRoute(*self, extendedRequest);
+                    }
                 });
         });
     }
@@ -143,6 +152,20 @@ namespace Roar::Session
                     self->impl_->buffer.consume(bytesUsed);
                     self->readHeader();
                 });
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    std::variant<boost::beast::tcp_stream, boost::beast::ssl_stream<boost::beast::tcp_stream>>& Session::stream()
+    {
+        return impl_->stream;
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    void Session::onWriteComplete(bool expectsClose, boost::beast::error_code ec, std::size_t)
+    {
+        if (ec && ec != boost::beast::http::error::end_of_stream)
+            impl_->onError({.error = ec, .additionalInfo = "Error during write."});
+
+        if (ec || expectsClose)
+            return close();
     }
     //------------------------------------------------------------------------------------------------------------------
     void Session::close()

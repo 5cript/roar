@@ -17,15 +17,20 @@ class RequestListener : public std::enable_shared_from_this<RequestListener>
   private:
     ROAR_MAKE_LISTENER(RequestListener);
 
-    ROAR_GET(index)("/");
+    ROAR_GET(index)("/index");
 
   private:
     BOOST_DESCRIBE_CLASS(RequestListener, (), (), (), (roar_index))
 };
 
-void RequestListener::index()
+void RequestListener::index(auto& session, auto const& request)
 {
-    std::cout << "hi";
+    auto res = session.template prepareResponse<boost::beast::http::string_body>();
+    res.contentType("text/plain")
+        .status(boost::beast::http::status::ok)
+        .body("Hello World!")
+        .preparePayload()
+        .send(session);
 }
 
 int main()

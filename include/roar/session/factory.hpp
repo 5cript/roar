@@ -9,9 +9,14 @@
 #include <functional>
 #include <chrono>
 
+namespace Roar
+{
+    class Router;
+}
+
 namespace Roar::Session
 {
-    class Factory : public std::enable_shared_from_this<Factory>
+    class Factory
     {
       public:
         constexpr static std::chrono::seconds sslDetectionTimeout{10};
@@ -20,7 +25,7 @@ namespace Roar::Session
         Factory(std::optional<boost::asio::ssl::context>& sslContext, std::function<void(Error&&)> onError);
         ROAR_PIMPL_SPECIAL_FUNCTIONS(Factory);
 
-        void makeSession(boost::asio::basic_stream_socket<boost::asio::ip::tcp>&& socket);
+        void makeSession(boost::asio::basic_stream_socket<boost::asio::ip::tcp>&& socket, std::weak_ptr<Router> router);
 
       private:
         struct ProtoSession;

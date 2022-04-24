@@ -1,6 +1,5 @@
 add_library(roar STATIC
   server.cpp
-  routing/request_listener.cpp
   routing/route.cpp
   routing/router.cpp
   session/factory.cpp

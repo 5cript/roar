@@ -1,11 +1,14 @@
 #pragma once
-
-#include <__utility/piecewise_construct.h>
-#include <boost/describe/modifiers.hpp>
 #include <roar/beast/forward.hpp>
 #include <roar/routing/proto_route.hpp>
 #include <roar/error.hpp>
+#include <roar/session/session.hpp>
+#include <roar/request.hpp>
+#include <roar/routing/request_listener.hpp>
+#include <roar/standard_response_provider.hpp>
+#include <roar/standard_text_response_provider.hpp>
 
+#include <boost/describe/modifiers.hpp>
 #include <boost/asio/ssl/context.hpp>
 #include <boost/describe/members.hpp>
 #include <boost/leaf.hpp>
@@ -37,6 +40,11 @@ namespace Roar
 
             /// Called when the server stops accepting connections for error reasons.
             std::function<void(boost::system::error_code)> onAcceptAbort = [](auto) {};
+
+            /// Sometimes the server has to respond with error codes outside the library users scope. So this class
+            /// provides responses for errors like 404 or 500.
+            std::unique_ptr<StandardResponseProvider> standardResponseProvider =
+                std::make_unique<StandardTextResponseProvider>();
         };
 
         /**
@@ -81,17 +89,41 @@ namespace Roar
         void installRequestListener(ConstructionArgsT&&... args)
         {
             auto listener = std::make_shared<RequestListenerT>(std::forward<ConstructionArgsT>(args)...);
-            // TODO:
             using routes = boost::describe::
                 describe_members<RequestListenerT, boost::describe::mod_any_access | boost::describe::mod_static>;
             std::unordered_multimap<boost::beast::http::verb, ProtoRoute> extractedRoutes;
             boost::mp11::mp_for_each<routes>([&extractedRoutes, &listener]<typename T>(T route) {
-                ProtoRoute protoRoute{
-                    .path = route.pointer->path,
-                    .callRoute =
-                        [listener]() {
-                            // TODO:
-                        },
+                ProtoRoute protoRoute{.path = route.pointer->path};
+                switch (route.pointer->pathType)
+                {
+                    case (RoutePathType::RegularString):
+                    {
+                        protoRoute.matches =
+                            [p = route.pointer->path](std::string const& path, std::vector<std::string>& regexMatches) {
+                                return path == p;
+                            };
+                        break;
+                    }
+                    case (RoutePathType::Regex):
+                    {
+                        protoRoute.matches =
+                            [p = route.pointer->path](std::string const& path, std::vector<std::string>& regexMatches) {
+                                std::smatch smatch;
+                                auto result = std::regex_match(path, smatch, std::regex{p});
+                                regexMatches.reserve(smatch.size());
+                                for (auto const& submatch : smatch)
+                                    regexMatches.push_back(submatch.str());
+                                return result;
+                            };
+                        break;
+                    }
+                    default:
+                        throw std::runtime_error("Invalid path type for route.");
+                }
+                protoRoute.callRoute = [listener, handler = route.pointer->handler](
+                                           Session::Session& session,
+                                           Request<boost::beast::http::empty_body> const& req) {
+                    std::invoke(handler, *listener, session, req);
                 };
                 extractedRoutes.emplace(*route.pointer->verb, protoRoute);
             });

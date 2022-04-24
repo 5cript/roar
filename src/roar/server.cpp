@@ -22,7 +22,8 @@ namespace Roar
         boost::asio::ip::tcp::endpoint bindEndpoint;
         std::shared_mutex acceptorStopGuard;
         std::function<void(boost::system::error_code)> onAcceptAbort;
-        Router router;
+        std::unique_ptr<StandardResponseProvider> standardResponseProvider;
+        std::shared_ptr<Router> router;
         std::function<void(Error&&)> onError;
         Session::Factory sessionFactory;
 
@@ -30,7 +31,8 @@ namespace Roar
             boost::asio::any_io_executor& executor,
             std::optional<boost::asio::ssl::context> sslContext,
             std::function<void(Error&&)> onError,
-            std::function<void(boost::system::error_code)> onAcceptAbort);
+            std::function<void(boost::system::error_code)> onAcceptAbort,
+            std::unique_ptr<StandardResponseProvider> standardResponseProvider);
 
         void acceptOnce(int failCount);
     };
@@ -39,13 +41,19 @@ namespace Roar
         boost::asio::any_io_executor& executor,
         std::optional<boost::asio::ssl::context> sslContext,
         std::function<void(Error&&)> onError,
-        std::function<void(boost::system::error_code)> onAcceptAbort)
+        std::function<void(boost::system::error_code)> onAcceptAbort,
+        std::unique_ptr<StandardResponseProvider> standardResponseProvider)
         : acceptor{executor}
         , sslContext{std::move(sslContext)}
         , bindEndpoint{}
         , acceptorStopGuard{}
         , onAcceptAbort{std::move(onAcceptAbort)}
-        , router{}
+        , standardResponseProvider{std::move(standardResponseProvider)}
+        , router{std::make_shared<Router>(
+              [this](Session::Session& session, Request<boost::beast::http::empty_body> const& req) {
+                  session.send(this->standardResponseProvider->makeStandardResponse(
+                      session, req, boost::beast::http::status::not_found));
+              })}
         , onError{std::move(onError)}
         , sessionFactory{this->sslContext, this->onError}
     {}
@@ -67,8 +75,7 @@ namespace Roar
 
                 if (!ec)
                 {
-                    // TODO: on accept
-                    self->sessionFactory.makeSession(std::move(*socket));
+                    self->sessionFactory.makeSession(std::move(*socket), self->router);
                     self->acceptOnce(0);
                     return;
                 }
@@ -82,11 +89,12 @@ namespace Roar
     }
     //##################################################################################################################
     Server::Server(ConstructionArguments constructionArgs)
-        : impl_{std::make_unique<Implementation>(
+        : impl_{std::make_shared<Implementation>(
               constructionArgs.executor,
               std::move(constructionArgs.sslContext),
               std::move(constructionArgs.onError),
-              std::move(constructionArgs.onAcceptAbort))}
+              std::move(constructionArgs.onAcceptAbort),
+              std::move(constructionArgs.standardResponseProvider))}
     {}
     //------------------------------------------------------------------------------------------------------------------
     Server::~Server()
@@ -133,7 +141,7 @@ namespace Roar
     //------------------------------------------------------------------------------------------------------------------
     void Server::addRequestListenerToRouter(std::unordered_multimap<boost::beast::http::verb, ProtoRoute>&& routes)
     {
-        impl_->router.addRoutes(std::move(routes));
+        impl_->router->addRoutes(std::move(routes));
     }
     //------------------------------------------------------------------------------------------------------------------
     Server::Server(Server&&) = default;
