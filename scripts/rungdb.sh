@@ -6,7 +6,7 @@ if [[ $# == 0 ]]; then
 fi
 
 if [[ ! -z "${MSYSTEM}" ]]; then
-    eval "gdb $1.exe ${@:2}"
+    eval "gdbserver :12772 $1.exe ${@:2}"
 else
-    eval "gdb $1 ${@:2}"
+    eval "gdbserver :12772 $1 ${@:2}"
 fi

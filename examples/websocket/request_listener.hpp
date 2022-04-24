@@ -2,14 +2,19 @@
 
 #include <roar/routing/request_listener.hpp>
 
-#include <boost/describe/class.hpp>
-
 class RequestListener
 {
   private:
     ROAR_MAKE_LISTENER(RequestListener);
 
-    ROAR_GET(ws)("/api/ws");
+    ROAR_GET(ws)
+    ({
+        .path = "/api/ws",
+        .routeOptions =
+            {
+                .expectUpgrade = true,
+            },
+    });
 
   private:
     BOOST_DESCRIBE_CLASS(RequestListener, (), (), (), (roar_ws))

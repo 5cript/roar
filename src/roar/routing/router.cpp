@@ -1,5 +1,6 @@
 #include <roar/routing/router.hpp>
 #include <roar/routing/route.hpp>
+#include <roar/session/session.hpp>
 #include <roar/request.hpp>
 
 #include <utility>
@@ -12,12 +13,12 @@ namespace Roar
     {
         mutable std::mutex routesMutex;
         std::unordered_multimap<boost::beast::http::verb, Route> routes;
-        std::function<void(Session&, Request<boost::beast::http::empty_body> const&)> onNotFound;
+        std::shared_ptr<const StandardResponseProvider> standardResponseProvider;
 
-        Implementation(std::function<void(Session&, Request<boost::beast::http::empty_body> const&)> onNotFound)
+        Implementation(std::shared_ptr<const StandardResponseProvider> standardResponseProvider)
             : routesMutex{}
             , routes{}
-            , onNotFound{std::move(onNotFound)}
+            , standardResponseProvider{std::move(standardResponseProvider)}
         {}
 
         std::optional<std::pair<Route const&, std::vector<std::string>>>
@@ -36,8 +37,8 @@ namespace Roar
         }
     };
     //##################################################################################################################
-    Router::Router(std::function<void(Session&, Request<boost::beast::http::empty_body> const&)> onNotFound)
-        : impl_{std::make_unique<Implementation>(std::move(onNotFound))}
+    Router::Router(std::shared_ptr<const StandardResponseProvider> standardResponseProvider)
+        : impl_{std::make_unique<Implementation>(std::move(standardResponseProvider))}
     {}
     //------------------------------------------------------------------------------------------------------------------
     ROAR_PIMPL_SPECIAL_FUNCTIONS_IMPL(Router);
@@ -49,13 +50,17 @@ namespace Roar
             impl_->routes.insert(std::make_pair(key, Route{std::move(proto)}));
     }
     //------------------------------------------------------------------------------------------------------------------
-    void Router::followRoute(Session& session, Request<boost::beast::http::empty_body>& request)
+    void Router::followRoute(Session& session, Request<boost::beast::http::empty_body> request)
     {
         auto result = impl_->findRoute(request.method(), request.path());
         if (!result)
-            return impl_->onNotFound(session, request);
+        {
+            session.send(impl_->standardResponseProvider->makeStandardResponse(
+                session, request, boost::beast::http::status::not_found));
+            return;
+        }
         request.pathMatches(std::move(result->second));
-        result->first(session, request);
+        result->first(session, std::move(request), *impl_->standardResponseProvider);
     }
     //##################################################################################################################
 }

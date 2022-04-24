@@ -6,6 +6,7 @@
 #include <roar/beast/forward.hpp>
 #include <roar/detail/pimpl_special_functions.hpp>
 #include <roar/detail/literals/memory.hpp>
+#include <roar/routing/proto_route.hpp>
 
 #include <boost/beast/http/message.hpp>
 #include <boost/beast/http/empty_body.hpp>
@@ -28,6 +29,9 @@ namespace Roar
     class Session : public std::enable_shared_from_this<Session>
     {
       public:
+        friend class Route;
+        friend class Factory;
+
         constexpr static uint64_t defaultHeaderLimit{8_MiB};
         constexpr static uint64_t defaultBodyLimit{8_MiB};
         constexpr static std::chrono::seconds sessionTimeout{10};
@@ -41,7 +45,6 @@ namespace Roar
             std::weak_ptr<Router> router);
         ROAR_PIMPL_SPECIAL_FUNCTIONS(Session);
 
-        void startup();
         void close();
 
         template <typename BodyT>
@@ -57,6 +60,12 @@ namespace Roar
                         self->onWriteComplete(res->need_eof(), ec, bytesTransferred);
                     });
             });
+        }
+
+        template <typename BodyT>
+        void send(Response<BodyT>&& response)
+        {
+            std::move(response).send(*this);
         }
 
         template <typename BodyT>
@@ -123,24 +132,56 @@ namespace Roar
         };
 
         template <typename BodyT, typename... Forwards>
-        ReadIntermediate<BodyT> read(Forwards&&... forwardArgs)
+        [[nodiscard]] ReadIntermediate<BodyT> read(Forwards&&... forwardArgs)
         {
             return ReadIntermediate<BodyT>{*this, std::forward<Forwards>(forwardArgs)...};
         }
 
-        template <typename BodyT>
-        static Response<BodyT> prepareResponse()
+        /**
+         * @brief Prepares a response with some header values already set.
+         *
+         * @tparam BodyT
+         * @return Response<BodyT>
+         */
+        template <typename BodyT, typename RequestBodyT>
+        [[nodiscard]] Response<BodyT> prepareResponse(Request<RequestBodyT> const& req)
         {
-            return Response<BodyT>{};
+            auto res = Response<BodyT>{};
+            if (routeOptions().allowCors)
+                res.allowCors(req);
+            return res;
         }
 
+        /**
+         * @brief std::visit for the underlying beast stream. Either ssl_stream or tcp_stream.
+         *
+         * @tparam FunctionT
+         * @param func
+         */
         template <typename FunctionT>
         void withStreamDo(FunctionT&& func)
         {
             std::visit(std::forward<FunctionT>(func), stream());
         }
 
-        std::shared_ptr<WebsocketSession> upgrade(Request<boost::beast::http::empty_body> const& req);
+        /**
+         * @brief Turn this session into a websocket session. Will return an invalid shared_ptr if this is not an
+         * upgrade request.
+         *
+         * @param req The request to perform this upgrade from.
+         * @return std::shared_ptr<WebsocketSession> A websocket session or an invalid shared_ptr.
+         */
+        [[nodiscard]] std::shared_ptr<WebsocketSession> upgrade(Request<boost::beast::http::empty_body> const& req);
+
+        /**
+         * @brief Retrieve the options defined by the request listener class for this route.
+         *
+         * @return RouteOptions const& The route options.
+         */
+        [[nodiscard]] RouteOptions const& routeOptions();
+
+      private:
+        void setupRouteOptions(RouteOptions options);
 
       private:
         void readHeader();
@@ -149,6 +190,7 @@ namespace Roar
         std::variant<boost::beast::tcp_stream, boost::beast::ssl_stream<boost::beast::tcp_stream>>& stream();
         std::shared_ptr<boost::beast::http::request_parser<boost::beast::http::empty_body>>& parser();
         boost::beast::flat_buffer& buffer();
+        void startup();
 
       private:
         struct Implementation;

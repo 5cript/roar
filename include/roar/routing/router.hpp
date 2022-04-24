@@ -2,6 +2,7 @@
 
 #include <roar/detail/pimpl_special_functions.hpp>
 #include <roar/routing/proto_route.hpp>
+#include <roar/standard_response_provider.hpp>
 
 #include <iostream>
 #include <boost/beast/http/verb.hpp>
@@ -19,11 +20,11 @@ namespace Roar
     class Router : public std::enable_shared_from_this<Router>
     {
       public:
-        Router(std::function<void(Session&, Request<boost::beast::http::empty_body> const&)> onNotFound);
+        Router(std::shared_ptr<const StandardResponseProvider> standardResponseProvider);
         ROAR_PIMPL_SPECIAL_FUNCTIONS(Router);
 
         void addRoutes(std::unordered_multimap<boost::beast::http::verb, ProtoRoute>&& routes);
-        void followRoute(Session&, Request<boost::beast::http::empty_body>& request);
+        void followRoute(Session&, Request<boost::beast::http::empty_body> request);
 
       private:
         struct Implementation;

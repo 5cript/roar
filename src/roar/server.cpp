@@ -1,12 +1,14 @@
 // must be top most to avoid winsock reinclude error.
 #include <boost/asio/ip/tcp.hpp>
-#include <boost/asio/ssl/context.hpp>
 
 #include <roar/server.hpp>
 #include <roar/routing/router.hpp>
 #include <roar/dns/resolve.hpp>
 #include <roar/session/session.hpp>
 #include <roar/session/factory.hpp>
+
+#include <boost/asio/ssl/context.hpp>
+#include <boost/asio/strand.hpp>
 
 #include <optional>
 #include <mutex>
@@ -20,9 +22,10 @@ namespace Roar
         boost::asio::ip::tcp::acceptor acceptor;
         std::optional<boost::asio::ssl::context> sslContext;
         boost::asio::ip::tcp::endpoint bindEndpoint;
+        boost::asio::ip::tcp::endpoint resolvedEndpoint;
         std::shared_mutex acceptorStopGuard;
         std::function<void(boost::system::error_code)> onAcceptAbort;
-        std::unique_ptr<StandardResponseProvider> standardResponseProvider;
+        std::shared_ptr<const StandardResponseProvider> standardResponseProvider;
         std::shared_ptr<Router> router;
         std::function<void(Error&&)> onError;
         Factory sessionFactory;
@@ -43,26 +46,23 @@ namespace Roar
         std::function<void(Error&&)> onError,
         std::function<void(boost::system::error_code)> onAcceptAbort,
         std::unique_ptr<StandardResponseProvider> standardResponseProvider)
-        : acceptor{executor}
+        : acceptor{boost::asio::make_strand(executor)}
         , sslContext{std::move(sslContext)}
         , bindEndpoint{}
+        , resolvedEndpoint{}
         , acceptorStopGuard{}
         , onAcceptAbort{std::move(onAcceptAbort)}
-        , standardResponseProvider{std::move(standardResponseProvider)}
-        , router{std::make_shared<Router>([this](Session& session, Request<boost::beast::http::empty_body> const& req) {
-            session.send(this->standardResponseProvider->makeStandardResponse(
-                session, req, boost::beast::http::status::not_found));
-        })}
+        , standardResponseProvider{standardResponseProvider.release()}
+        , router{std::make_shared<Router>(this->standardResponseProvider)}
         , onError{std::move(onError)}
         , sessionFactory{this->sslContext, this->onError}
     {}
     //------------------------------------------------------------------------------------------------------------------
     void Server::Implementation::acceptOnce(int failCount)
     {
-        auto socket = std::make_shared<boost::asio::ip::tcp::socket>(acceptor.get_executor());
-
         acceptor.async_accept(
-            *socket, [self = shared_from_this(), socket, failCount](boost::system::error_code ec) mutable {
+            boost::asio::make_strand(acceptor.get_executor()),
+            [self = shared_from_this(), failCount](boost::system::error_code ec, auto socket) mutable {
                 if (ec == boost::asio::error::operation_aborted)
                     return;
 
@@ -74,7 +74,7 @@ namespace Roar
 
                 if (!ec)
                 {
-                    self->sessionFactory.makeSession(std::move(*socket), self->router);
+                    self->sessionFactory.makeSession(std::move(socket), self->router);
                     self->acceptOnce(0);
                     return;
                 }
@@ -106,6 +106,11 @@ namespace Roar
         return start(Dns::resolveSingle(impl_->acceptor.get_executor(), host, port));
     }
     //------------------------------------------------------------------------------------------------------------------
+    boost::asio::ip::basic_endpoint<boost::asio::ip::tcp> const& Server::getLocalEndpoint() const
+    {
+        return impl_->resolvedEndpoint;
+    }
+    //------------------------------------------------------------------------------------------------------------------
     boost::leaf::result<void> Server::start(boost::asio::ip::tcp::endpoint const& bindEndpoint)
     {
         stop();
@@ -128,6 +133,7 @@ namespace Roar
         if (ec)
             return boost::leaf::new_error("Could not listen on socket.", ec);
 
+        impl_->resolvedEndpoint = impl_->acceptor.local_endpoint();
         impl_->acceptOnce(0);
         return {};
     }

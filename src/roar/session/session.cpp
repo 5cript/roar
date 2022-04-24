@@ -27,6 +27,7 @@ namespace Roar
         std::function<void(Error&&)> onError;
         std::weak_ptr<Router> router;
         std::shared_ptr<boost::beast::http::request_parser<boost::beast::http::empty_body>> headerParser;
+        RouteOptions routeOptions;
 
         Implementation(
             boost::asio::ip::tcp::socket&& socket,
@@ -45,6 +46,7 @@ namespace Roar
             , onError{std::move(onError)}
             , router{std::move(router)}
             , headerParser{}
+            , routeOptions{}
         {}
 
         template <typename FunctionT>
@@ -126,9 +128,8 @@ namespace Roar
 
                     if (auto router = self->impl_->router.lock(); router)
                     {
-                        Request<boost::beast::http::empty_body> extendedRequest{
-                            std::move(self->impl_->headerParser->get())};
-                        router->followRoute(*self, extendedRequest);
+                        router->followRoute(
+                            *self, Request<boost::beast::http::empty_body>{self->impl_->headerParser->get()});
                     }
                 });
         });
@@ -147,6 +148,16 @@ namespace Roar
                     self->impl_->buffer.consume(bytesUsed);
                     self->readHeader();
                 });
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    RouteOptions const& Session::routeOptions()
+    {
+        return impl_->routeOptions;
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    void Session::setupRouteOptions(RouteOptions options)
+    {
+        impl_->routeOptions = std::move(options);
     }
     //------------------------------------------------------------------------------------------------------------------
     std::variant<boost::beast::tcp_stream, boost::beast::ssl_stream<boost::beast::tcp_stream>>& Session::stream()

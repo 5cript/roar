@@ -18,8 +18,18 @@ endif()
 include (./cmake/example_target.cmake)
 include (./cmake/options.cmake)
 
+if (${ROAR_ENABLE_NLOHMANN_JSON})
+    include(./cmake/nlohmann_json.cmake)
+endif()
+
 add_subdirectory(src/roar)
 
 if (${ROAR_BUILD_EXAMPLES})
     add_subdirectory(examples)
+endif()
+
+if (${ROAR_BUILD_TESTS})
+    include(./cmake/test_target.cmake)
+    include(./cmake/gtest.cmake)
+    add_subdirectory(test)
 endif()

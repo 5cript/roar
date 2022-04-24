@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-void RequestListener::ws(Roar::Session& session, Roar::EmptyBodyRequest const& request)
+void RequestListener::ws(Roar::Session& session, Roar::EmptyBodyRequest&& request)
 {
     if (auto ws = session.upgrade(request); ws)
     {

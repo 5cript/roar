@@ -12,7 +12,9 @@
 //     ROAR_GET(status)
 //     ({
 //         .path = "/api/status",
-//         .allowInsecure = true,
+//         .routeOptions = {
+//  .allowInsecure = true,
+// },
 //     });
 //
 //     ROAR_GET(bla)("^/api/([a-zA-Z0-9]+)"_rgx)

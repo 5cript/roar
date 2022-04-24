@@ -2,9 +2,9 @@
 
 #include <iostream>
 
-void RequestListener::index(Roar::Session& session, Roar::EmptyBodyRequest const& request)
+void RequestListener::index(Roar::Session& session, Roar::EmptyBodyRequest&& request)
 {
-    session.template prepareResponse<boost::beast::http::string_body>()
+    session.template prepareResponse<boost::beast::http::string_body>(request)
         .contentType("text/plain")
         .status(boost::beast::http::status::ok)
         .body("Hello World!")
@@ -12,7 +12,7 @@ void RequestListener::index(Roar::Session& session, Roar::EmptyBodyRequest const
         .send(session);
 }
 
-void RequestListener::upload(Roar::Session& session, Roar::EmptyBodyRequest const& request)
+void RequestListener::upload(Roar::Session& session, Roar::EmptyBodyRequest&& request)
 {
     session.template read<boost::beast::http::string_body>()
         .bodyLimit(request[boost::beast::http::field::content_length])
@@ -20,7 +20,7 @@ void RequestListener::upload(Roar::Session& session, Roar::EmptyBodyRequest cons
             // TODO: handle exceptions.
             std::cout << request.json().dump() << "\n";
 
-            session.template prepareResponse<boost::beast::http::string_body>()
+            session.template prepareResponse<boost::beast::http::string_body>(request)
                 .contentType("text/plain")
                 .status(boost::beast::http::status::ok)
                 .body("Thanks!")

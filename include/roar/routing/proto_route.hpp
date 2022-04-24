@@ -9,13 +9,21 @@
 
 namespace Roar
 {
+    struct RouteOptions
+    {
+        bool allowInsecure;
+        bool expectUpgrade;
+        bool allowCors;
+    };
+
     class Session;
     template <typename>
     class Request;
     struct ProtoRoute
     {
         std::variant<std::string, std::regex> path;
-        std::function<void(Session& session, Request<boost::beast::http::empty_body> const& req)> callRoute;
+        std::function<void(Session& session, Request<boost::beast::http::empty_body>&& req)> callRoute;
         std::function<bool(std::string const&, std::vector<std::string>&)> matches;
+        RouteOptions routeOptions;
     };
 }

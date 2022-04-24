@@ -1,5 +1,6 @@
 #pragma once
 
+#include <roar/routing/proto_route.hpp>
 #include <roar/detail/overloaded.hpp>
 #include <roar/detail/literals/regex.hpp>
 #include <roar/session/session.hpp>
@@ -7,6 +8,7 @@
 
 #include <boost/beast/http/verb.hpp>
 #include <boost/beast/http/empty_body.hpp>
+#include <boost/describe/class.hpp>
 
 #include <string_view>
 #include <optional>
@@ -19,7 +21,7 @@ namespace Roar
     class Server;
 
     template <typename RequestListenerT>
-    using HandlerType = void (RequestListenerT::*)(Session&, Request<boost::beast::http::empty_body> const&);
+    using HandlerType = void (RequestListenerT::*)(Session&, Request<boost::beast::http::empty_body>&&);
 
     enum class RoutePathType
     {
@@ -34,9 +36,11 @@ namespace Roar
         std::optional<boost::beast::http::verb> verb = std::nullopt;
         char const* path = nullptr;
         RoutePathType pathType = RoutePathType::Unspecified;
-        bool allowInsecure = false;
-        // FIXME: remove if unused.
-        bool allowUpgrade = false;
+        RouteOptions routeOptions = {
+            .allowInsecure = false,
+            .expectUpgrade = false,
+            .allowCors = false,
+        };
         HandlerType<RequestListenerT> handler = nullptr;
     };
 
@@ -49,8 +53,7 @@ namespace Roar
                     .verb = userInfo.verb ? userInfo.verb : info.verb,
                     .path = userInfo.path,
                     .pathType = userInfo.pathType == RoutePathType::Unspecified ? info.pathType : userInfo.pathType,
-                    .allowInsecure = userInfo.allowInsecure ? userInfo.allowInsecure : info.allowInsecure,
-                    .allowUpgrade = userInfo.allowUpgrade ? userInfo.allowUpgrade : info.allowUpgrade,
+                    .routeOptions = userInfo.routeOptions,
                     .handler = handler,
                 };
             },
@@ -59,8 +62,7 @@ namespace Roar
                     .verb = info.verb,
                     .path = path,
                     .pathType = RoutePathType::RegularString,
-                    .allowInsecure = info.allowInsecure,
-                    .allowUpgrade = info.allowUpgrade,
+                    .routeOptions = info.routeOptions,
                     .handler = handler,
                 };
             },
@@ -69,8 +71,7 @@ namespace Roar
                     .verb = info.verb,
                     .path = path.pattern,
                     .pathType = RoutePathType::Regex,
-                    .allowInsecure = info.allowInsecure,
-                    .allowUpgrade = info.allowUpgrade,
+                    .routeOptions = info.routeOptions,
                     .handler = handler,
                 };
             }};
@@ -79,7 +80,7 @@ namespace Roar
 #define ROAR_MAKE_LISTENER(ListenerType) using this_type = ListenerType
 
 #define ROAR_ROUTE_I(HandlerName, DefaultVerb) \
-    void HandlerName(Roar::Session& session, Roar::Request<boost::beast::http::empty_body> const& request); \
+    void HandlerName(Roar::Session& session, Roar::Request<boost::beast::http::empty_body>&& request); \
     constexpr static auto roar_##HandlerName = \
         Roar::extendRouteInfo({.verb = boost::beast::http::verb::DefaultVerb}, &this_type::HandlerName)
 
@@ -92,5 +93,6 @@ namespace Roar
 #define ROAR_OPTIONS(HandlerName) ROAR_ROUTE_I(HandlerName, options)
 #define ROAR_TRACE(HandlerName) ROAR_ROUTE_I(HandlerName, trace)
 #define ROAR_HEAD(HandlerName) ROAR_ROUTE_I(HandlerName, head)
+#define ROAR_DELETE(HandlerName) ROAR_ROUTE_I(HandlerName, delete_)
 
 } // namespace Roar

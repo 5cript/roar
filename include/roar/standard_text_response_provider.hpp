@@ -10,7 +10,7 @@ namespace Roar
         boost::beast::http::response<boost::beast::http::string_body> makeStandardResponse(
             Session& session,
             Request<boost::beast::http::empty_body> const& req,
-            boost::beast::http::status status)
+            boost::beast::http::status status) const
         {
             // TODO: this once used prepareReply, can do better.
             auto res = boost::beast::http::response<boost::beast::http::string_body>(status, 11);

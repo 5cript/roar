@@ -66,7 +66,7 @@ namespace Roar
          * @param host An ip / hostname to identify the network interface to listen on.
          * @param port A port to bind on.
          */
-        boost::leaf::result<void> start(unsigned short port = 443, std::string const& host = "::");
+        boost::leaf::result<void> start(unsigned short port = 0, std::string const& host = "::");
 
         /**
          * @brief Starts the server given the already resolved bind endpoint.
@@ -74,6 +74,13 @@ namespace Roar
          * @param bindEndpoint An endpoint to bind on.
          */
         boost::leaf::result<void> start(boost::asio::ip::basic_endpoint<boost::asio::ip::tcp> const& bindEndpoint);
+
+        /**
+         * @brief Get the local endpoint that this server bound to.
+         *
+         * @return boost::asio::ip::basic_endpoint<boost::asio::ip::tcp> const&
+         */
+        boost::asio::ip::basic_endpoint<boost::asio::ip::tcp> const& getLocalEndpoint() const;
 
         /**
          * @brief Stop and shutdown the server.
@@ -120,9 +127,10 @@ namespace Roar
                     default:
                         throw std::runtime_error("Invalid path type for route.");
                 }
+                protoRoute.routeOptions = route.pointer->routeOptions;
                 protoRoute.callRoute = [listener, handler = route.pointer->handler](
-                                           Session& session, Request<boost::beast::http::empty_body> const& req) {
-                    std::invoke(handler, *listener, session, req);
+                                           Session& session, Request<boost::beast::http::empty_body> req) {
+                    std::invoke(handler, *listener, session, std::move(req));
                 };
                 extractedRoutes.emplace(*route.pointer->verb, protoRoute);
             });
