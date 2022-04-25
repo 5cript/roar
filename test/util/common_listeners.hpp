@@ -24,13 +24,12 @@ namespace Roar::Tests
         nlohmann::json j;
         for (auto const& field : req)
         {
-            if (field.name() == boost::beast::http::field::unknown)
+            if (field.name() == field::unknown)
                 j[std::string{field.name_string()}] = field.value();
             else
                 j[std::string{to_string(field.name())}] = field.value();
         }
-        res.body() = j.dump();
-        res.status(status::ok).send(session);
+        res.body(j).status(status::ok).send(session);
     }
 
     class SimpleRoutes
@@ -49,8 +48,7 @@ namespace Roar::Tests
         void justOk(Session& session, EmptyBodyRequest&& req)
         {
             using namespace boost::beast::http;
-            auto res = session.prepareResponse<empty_body>(req);
-            res.status(status::ok).send(session);
+            session.prepareResponse<empty_body>(req).status(status::ok).send(session);
         }
 
       private:
@@ -64,23 +62,23 @@ namespace Roar::Tests
     inline void SimpleRoutes::index(Session& session, EmptyBodyRequest&& req)
     {
         using namespace boost::beast::http;
-        auto res = session.prepareResponse<string_body>(req);
-        res.body() = "Hello";
-        res.contentType("text/plain");
-        res.status(status::ok).send(session);
+        session.prepareResponse<string_body>(req)
+            .body("Hello")
+            .contentType("text/plain")
+            .status(status::ok)
+            .send(session);
     }
     inline void SimpleRoutes::putHere(Session& session, EmptyBodyRequest&& req)
     {
-        session.template read<boost::beast::http::string_body>()
-            .bodyLimit(req[boost::beast::http::field::content_length])
-            .start([](auto& session, auto&& req) {
-                session.template prepareResponse<boost::beast::http::string_body>(req)
-                    .contentType("text/plain")
-                    .status(boost::beast::http::status::ok)
-                    .body(req.body())
-                    .preparePayload()
-                    .send(session);
-            });
+        using namespace boost::beast::http;
+        session.template read<string_body>().bodyLimit(req[field::content_length]).start([](auto& session, auto&& req) {
+            session.template prepareResponse<string_body>(req)
+                .contentType("text/plain")
+                .status(status::ok)
+                .body(req.body())
+                .preparePayload()
+                .send(session);
+        });
     }
     inline void SimpleRoutes::postHere(Session& session, EmptyBodyRequest&& req)
     {

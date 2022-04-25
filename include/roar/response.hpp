@@ -2,6 +2,7 @@
 
 #include <roar/cors.hpp>
 #include <roar/request.hpp>
+#include <roar/detail/template_utility/first_type.hpp>
 
 #include <boost/beast/http/message.hpp>
 #include <boost/beast/http/string_body.hpp>
@@ -55,37 +56,17 @@ namespace Roar
             return response_.body();
         }
 
-        template <typename BodyType = BodyT>
-        std::enable_if_t<std::is_same_v<BodyType, boost::beast::http::string_body>, Response&>
-        body(std::string_view body)
+        template <typename T>
+        auto body(T&& toAssign)
         {
-            response_.body() = body;
-        }
-
-        template <typename BodyType = BodyT>
-        std::enable_if_t<std::is_same_v<BodyType, boost::beast::http::string_body>, Response&> body(char const* body)
-        {
-            response_.body() = body;
-            return *this;
-        }
-
-        template <typename BodyType = BodyT>
-        std::enable_if_t<std::is_same_v<BodyType, boost::beast::http::string_body>, Response&>
-        body(std::string const& body)
-        {
-            response_.body() = body;
-            return *this;
-        }
-
 #ifdef ROAR_ENABLE_NLOHMANN_JSON
-        template <typename BodyType = BodyT>
-        std::enable_if_t<std::is_same_v<BodyType, boost::beast::http::string_body>, Response&>
-        body(nlohmann::json const& body)
-        {
-            response_.body() = body.dump();
+            if constexpr (std::is_same_v<std::decay_t<T>, nlohmann::json>)
+                response_.body() = std::forward<T>(toAssign).dump();
+            else
+#endif
+                response_.body() = std::forward<T>(toAssign);
             return *this;
         }
-#endif
 
         Response& chunked(bool activate = true)
         {
