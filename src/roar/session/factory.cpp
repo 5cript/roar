@@ -43,15 +43,21 @@ namespace Roar
     //------------------------------------------------------------------------------------------------------------------
     ROAR_PIMPL_SPECIAL_FUNCTIONS_IMPL(Factory);
     //------------------------------------------------------------------------------------------------------------------
-    void
-    Factory::makeSession(boost::asio::basic_stream_socket<boost::asio::ip::tcp>&& socket, std::weak_ptr<Router> router)
+    void Factory::makeSession(
+        boost::asio::basic_stream_socket<boost::asio::ip::tcp>&& socket,
+        std::weak_ptr<Router> router,
+        std::shared_ptr<const StandardResponseProvider> standardResponseProvider)
     {
         auto protoSession = std::make_shared<ProtoSession>(std::move(socket));
         boost::beast::get_lowest_layer(protoSession->stream).expires_after(std::chrono::seconds(sslDetectionTimeout));
         boost::beast::async_detect_ssl(
             protoSession->stream,
             protoSession->buffer,
-            [this, protoSession, router = std::move(router)](boost::beast::error_code ec, bool isSecure) {
+            [this,
+             protoSession,
+             router = std::move(router),
+             standardResponseProvider =
+                 std::move(standardResponseProvider)](boost::beast::error_code ec, bool isSecure) {
                 try
                 {
                     if (ec)
@@ -72,7 +78,8 @@ namespace Roar
                         impl_->sslContext,
                         isSecure,
                         impl_->onError,
-                        router)
+                        router,
+                        std::move(standardResponseProvider))
                         ->startup();
                 }
                 catch (std::exception const& exc)

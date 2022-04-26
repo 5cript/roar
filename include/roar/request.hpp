@@ -19,8 +19,20 @@
 
 namespace Roar
 {
+    namespace Detail
+    {
+        struct RequestExtensions
+        {
+            std::optional<std::vector<std::string>> regexMatches_;
+            std::string path_;
+            std::unordered_map<std::string, std::string> query_;
+        };
+    }
+
     template <typename BodyT>
-    class Request : public boost::beast::http::request<BodyT>
+    class Request
+        : public boost::beast::http::request<BodyT>
+        , private Detail::RequestExtensions
     {
       public:
         using beast_request = boost::beast::http::request<BodyT>;
@@ -30,9 +42,21 @@ namespace Roar
          *
          * @param req A beast http request.
          */
-        Request(beast_request req)
+        explicit Request(beast_request req)
             : boost::beast::http::request<BodyT>(std::move(req))
-            , regexMatches_{}
+            , Detail::RequestExtensions{}
+        {
+            parseTarget();
+        }
+
+        /**
+         * @brief Construct a new Request object from a beast request and takes extensions of a previous request object.
+         *
+         * @param req
+         */
+        explicit Request(beast_request req, Detail::RequestExtensions&& extensions)
+            : boost::beast::http::request<BodyT>(std::move(req))
+            , Detail::RequestExtensions{std::move(extensions)}
         {
             parseTarget();
         }
@@ -117,9 +141,19 @@ namespace Roar
          * @return nlohmann::json The body as json.
          */
         template <typename Body = BodyT>
-        std::enable_if_t<std::is_same_v<Body, boost::beast::http::string_body>, nlohmann::json> json()
+        std::enable_if_t<std::is_same_v<Body, boost::beast::http::string_body>, nlohmann::json> json() const
         {
             return nlohmann::json::parse(this->body());
+        }
+
+        /**
+         * @brief Rips extensions out of this request object intended to be implanted into another request object.
+         *
+         * @return Detail::RequestExtensions
+         */
+        Detail::RequestExtensions ejectExtensions() &&
+        {
+            return {.regexMatches_ = std::move(regexMatches_), .path_ = std::move(path_), .query_ = std::move(query_)};
         }
 #endif
 
@@ -146,7 +180,7 @@ namespace Roar
          * @param queryString The query as a complete string.
          * @return std::unordered_map<std::string, std::string> A map containing the query key/value pairs.
          */
-        std::unordered_map<std::string, std::string> parseQuery(std::string_view queryString)
+        std::unordered_map<std::string, std::string> parseQuery(std::string_view queryString) const
         {
             std::vector<std::string> splitBySeperator;
             boost::algorithm::split(

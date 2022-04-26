@@ -27,7 +27,9 @@ namespace Roar
         if (impl_->routeOptions.expectUpgrade && !req.isWebsocketUpgrade())
         {
             session.send(standardResponseProvider.makeStandardResponse(
-                session, req, boost::beast::http::status::upgrade_required));
+                session,
+                boost::beast::http::status::upgrade_required,
+                "A regular request was received for a route that wants to upgrade to a websocket."));
             return;
         }
         impl_->callRoute(session, std::move(req));

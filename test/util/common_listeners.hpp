@@ -71,7 +71,7 @@ namespace Roar::Tests
     inline void SimpleRoutes::putHere(Session& session, EmptyBodyRequest&& req)
     {
         using namespace boost::beast::http;
-        session.template read<string_body>().bodyLimit(req[field::content_length]).start([](auto& session, auto&& req) {
+        session.template read<string_body>(std::move(req))->noBodyLimit().start([](auto& session, auto const& req) {
             session.template prepareResponse<string_body>(req)
                 .contentType("text/plain")
                 .status(status::ok)

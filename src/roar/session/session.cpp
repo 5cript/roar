@@ -28,6 +28,7 @@ namespace Roar
         std::weak_ptr<Router> router;
         std::shared_ptr<boost::beast::http::request_parser<boost::beast::http::empty_body>> headerParser;
         RouteOptions routeOptions;
+        std::shared_ptr<const StandardResponseProvider> standardResponseProvider;
 
         Implementation(
             boost::asio::ip::tcp::socket&& socket,
@@ -35,7 +36,8 @@ namespace Roar
             std::optional<boost::asio::ssl::context>& sslContext,
             bool isSecure,
             std::function<void(Error&&)> onError,
-            std::weak_ptr<Router> router)
+            std::weak_ptr<Router> router,
+            std::shared_ptr<const StandardResponseProvider> standardResponseProvider)
             : stream{[&socket, &sslContext]() -> decltype(stream) {
                 if (sslContext)
                     return boost::beast::ssl_stream<boost::beast::tcp_stream>{std::move(socket), *sslContext};
@@ -47,6 +49,7 @@ namespace Roar
             , router{std::move(router)}
             , headerParser{}
             , routeOptions{}
+            , standardResponseProvider{std::move(standardResponseProvider)}
         {}
 
         template <typename FunctionT>
@@ -62,14 +65,16 @@ namespace Roar
         std::optional<boost::asio::ssl::context>& sslContext,
         bool isSecure,
         std::function<void(Error&&)> onError,
-        std::weak_ptr<Router> router)
+        std::weak_ptr<Router> router,
+        std::shared_ptr<const StandardResponseProvider> standardResponseProvider)
         : impl_{std::make_unique<Implementation>(
               std::move(socket),
               std::move(buffer),
               sslContext,
               isSecure,
               std::move(onError),
-              std::move(router))}
+              std::move(router),
+              std::move(standardResponseProvider))}
     {}
     //------------------------------------------------------------------------------------------------------------------
     ROAR_PIMPL_SPECIAL_FUNCTIONS_IMPL(Session);
@@ -173,6 +178,11 @@ namespace Roar
     boost::beast::flat_buffer& Session::buffer()
     {
         return impl_->buffer;
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    StandardResponseProvider const& Session::standardResponseProvider()
+    {
+        return *impl_->standardResponseProvider;
     }
     //------------------------------------------------------------------------------------------------------------------
     std::shared_ptr<WebsocketSession> Session::upgrade(Request<boost::beast::http::empty_body> const& req)

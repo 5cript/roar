@@ -52,15 +52,26 @@ namespace Roar
     //------------------------------------------------------------------------------------------------------------------
     void Router::followRoute(Session& session, Request<boost::beast::http::empty_body> request)
     {
+        using namespace std::string_literals;
         auto result = impl_->findRoute(request.method(), request.path());
         if (!result)
         {
             session.send(impl_->standardResponseProvider->makeStandardResponse(
-                session, request, boost::beast::http::status::not_found));
+                session, boost::beast::http::status::not_found, "No route for path: "s + request.path()));
             return;
         }
         request.pathMatches(std::move(result->second));
-        result->first(session, std::move(request), *impl_->standardResponseProvider);
+        try
+        {
+            result->first(session, std::move(request), *impl_->standardResponseProvider);
+        }
+        catch (std::exception const& exc)
+        {
+            impl_->standardResponseProvider->makeStandardResponse(
+                session,
+                boost::beast::http::status::internal_server_error,
+                "An exception was thrown in the request handler: "s + exc.what());
+        }
     }
     //##################################################################################################################
 }

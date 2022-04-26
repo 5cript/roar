@@ -74,7 +74,7 @@ namespace Roar
 
                 if (!ec)
                 {
-                    self->sessionFactory.makeSession(std::move(socket), self->router);
+                    self->sessionFactory.makeSession(std::move(socket), self->router, self->standardResponseProvider);
                     self->acceptOnce(0);
                     return;
                 }

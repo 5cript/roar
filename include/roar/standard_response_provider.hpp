@@ -5,6 +5,8 @@
 #include <boost/beast/http/empty_body.hpp>
 #include <boost/beast/http/status.hpp>
 
+#include <string_view>
+
 namespace Roar
 {
     class Session;
@@ -25,9 +27,7 @@ namespace Roar
         StandardResponseProvider& operator=(StandardResponseProvider const&) = default;
         StandardResponseProvider& operator=(StandardResponseProvider&&) = default;
 
-        virtual boost::beast::http::response<boost::beast::http::string_body> makeStandardResponse(
-            Session& session,
-            Request<boost::beast::http::empty_body> const& req,
-            boost::beast::http::status) const = 0;
+        virtual boost::beast::http::response<boost::beast::http::string_body>
+        makeStandardResponse(Session& session, boost::beast::http::status, std::string_view additionalInfo) const = 0;
     };
 }

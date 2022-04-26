@@ -7,6 +7,7 @@
 #include <roar/detail/pimpl_special_functions.hpp>
 #include <roar/detail/literals/memory.hpp>
 #include <roar/routing/proto_route.hpp>
+#include <roar/standard_response_provider.hpp>
 
 #include <boost/beast/http/message.hpp>
 #include <boost/beast/http/empty_body.hpp>
@@ -20,6 +21,7 @@
 #include <optional>
 #include <chrono>
 #include <variant>
+#include <stdexcept>
 
 namespace Roar
 {
@@ -42,7 +44,8 @@ namespace Roar
             std::optional<boost::asio::ssl::context>& sslContext,
             bool isSecure,
             std::function<void(Error&&)> onError,
-            std::weak_ptr<Router> router);
+            std::weak_ptr<Router> router,
+            std::shared_ptr<const StandardResponseProvider> standardResponseProvider);
         ROAR_PIMPL_SPECIAL_FUNCTIONS(Session);
 
         void close();
@@ -69,72 +72,102 @@ namespace Roar
         }
 
         template <typename BodyT>
-        class ReadIntermediate
+        class ReadIntermediate : public std::enable_shared_from_this<ReadIntermediate<BodyT>>
         {
           private:
             friend Session;
 
-            template <typename... Forwards>
-            ReadIntermediate(Session& session, Forwards&&... forwardArgs)
-                : session_{session}
+            template <typename OriginalBodyT, typename... Forwards>
+            ReadIntermediate(Session& session, Request<OriginalBodyT> req, Forwards&&... forwardArgs)
+                : session_{session.shared_from_this()}
                 , req_{[&]() -> decltype(req_) {
                     if constexpr (std::is_same_v<BodyT, boost::beast::http::empty_body>)
-                        return std::move(session.parser());
+                        throw std::runtime_error("Attempting to read with empty_body type.");
                     else
-                        return std::make_shared<boost::beast::http::request_parser<BodyT>>(
-                            std::move(*session.parser()), std::forward<Forwards>(forwardArgs)...);
+                        return boost::beast::http::request_parser<BodyT>{
+                            std::move(*session.parser()), std::forward<Forwards>(forwardArgs)...};
+                    session.parser().reset();
                 }()}
+                , onReadComplete_{}
+                , originalExtensions_{std::move(req).ejectExtensions()}
             {
-                req_->body_limit(defaultBodyLimit);
+                req_.body_limit(defaultBodyLimit);
             }
 
           public:
+            ReadIntermediate(ReadIntermediate&&) = default;
+            ReadIntermediate& operator=(ReadIntermediate&&) = default;
+
             ReadIntermediate& bodyLimit(std::size_t limit)
             {
-                req_->body_limit(limit);
+                req_.body_limit(limit);
                 return *this;
             }
 
             ReadIntermediate& bodyLimit(boost::beast::string_view limit)
             {
-                req_->body_limit(std::stoull(std::string{limit}));
+                req_.body_limit(std::stoull(std::string{limit}));
                 return *this;
             }
 
             ReadIntermediate& noBodyLimit()
             {
-                req_->body_limit(boost::none);
+                req_.body_limit(boost::none);
                 return *this;
             }
 
-            template <typename... Forwards>
-            void start(std::function<void(Session& session, Request<BodyT>&&)> onReadComplete)
+            void readChunk()
             {
-                session_.withStreamDo([this, &onReadComplete](auto& stream) {
+                session_->withStreamDo([this](auto& stream) {
                     boost::beast::get_lowest_layer(stream).expires_after(std::chrono::seconds(sessionTimeout));
-                    boost::beast::http::async_read(
+                    boost::beast::http::async_read_some(
                         stream,
-                        session_.buffer(),
-                        *req_,
-                        [session = session_.shared_from_this(), req = req_, onReadComplete = std::move(onReadComplete)](
-                            boost::beast::error_code ec, std::size_t) {
-                            if (ec)
-                                return session->close();
+                        session_->buffer(),
+                        req_,
+                        [self = this->shared_from_this()](boost::beast::error_code ec, std::size_t) {
+                            if (!ec && !self->req_.is_done())
+                                return self->readChunk();
 
-                            onReadComplete(*session, req->release());
+                            if (ec)
+                                return self->session_->close();
+
+                            auto request = Request<BodyT>(self->req_.release(), std::move(self->originalExtensions_));
+                            try
+                            {
+                                self->onReadComplete_(*self->session_, request);
+                            }
+                            catch (std::exception const& exc)
+                            {
+                                using namespace std::string_literals;
+                                self->session_->send(self->session_->standardResponseProvider().makeStandardResponse(
+                                    *self->session_,
+                                    boost::beast::http::status::internal_server_error,
+                                    "An exception was thrown in the body read completion handler: "s + exc.what()));
+                            }
                         });
                 });
             }
 
+            template <typename... Forwards>
+            void start(std::function<void(Session& session, Request<BodyT> const&)> onReadComplete)
+            {
+                onReadComplete_ = std::move(onReadComplete);
+                readChunk();
+            }
+
           private:
-            Session& session_;
-            std::shared_ptr<boost::beast::http::request_parser<BodyT>> req_;
+            std::shared_ptr<Session> session_;
+            boost::beast::http::request_parser<BodyT> req_;
+            std::function<void(Session& session, Request<BodyT> const&)> onReadComplete_;
+            Detail::RequestExtensions originalExtensions_;
         };
 
-        template <typename BodyT, typename... Forwards>
-        [[nodiscard]] ReadIntermediate<BodyT> read(Forwards&&... forwardArgs)
+        template <typename BodyT, typename OriginalBodyT, typename... Forwards>
+        [[nodiscard]] std::shared_ptr<ReadIntermediate<BodyT>>
+        read(Request<OriginalBodyT> req, Forwards&&... forwardArgs)
         {
-            return ReadIntermediate<BodyT>{*this, std::forward<Forwards>(forwardArgs)...};
+            return std::shared_ptr<ReadIntermediate<BodyT>>(
+                new ReadIntermediate<BodyT>{*this, std::move(req), std::forward<Forwards>(forwardArgs)...});
         }
 
         /**
@@ -190,6 +223,7 @@ namespace Roar
         std::variant<boost::beast::tcp_stream, boost::beast::ssl_stream<boost::beast::tcp_stream>>& stream();
         std::shared_ptr<boost::beast::http::request_parser<boost::beast::http::empty_body>>& parser();
         boost::beast::flat_buffer& buffer();
+        StandardResponseProvider const& standardResponseProvider();
         void startup();
 
       private:
