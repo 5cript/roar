@@ -103,10 +103,10 @@ namespace Roar
         }
 
         template <typename RequestBodyT>
-        void allowCors(Request<RequestBodyT> const& req, std::optional<CorsSettings> cors = std::nullopt)
+        void enableCors(Request<RequestBodyT> const& req, std::optional<CorsSettings> cors = std::nullopt)
         {
             if (!cors)
-                cors = makeDefaultCorsSettings(req.method());
+                cors = makePermissiveCorsSettings(req.method());
 
             response_.set(
                 boost::beast::http::field::access_control_allow_origin,
@@ -124,26 +124,44 @@ namespace Roar
             };
 
             // Preflight requests require both methods and allowHeaders to be set.
-            std::string requestedMethod;
-            if (req.find(boost::beast::http::field::access_control_request_method) != std::end(req))
-                requestedMethod = std::string{req[boost::beast::http::field::access_control_request_method]};
+            if (req.method() == boost::beast::http::verb::options)
+            {
+                std::string requestedMethod;
+                if (req.find(boost::beast::http::field::access_control_request_method) != std::end(req))
+                    requestedMethod = std::string{req[boost::beast::http::field::access_control_request_method]};
+
+                if (const auto&& allowedMethods = cors->methodAllowSelection({std::move(requestedMethod)});
+                    !allowedMethods.empty())
+                    response_.set(boost::beast::http::field::access_control_allow_methods, joinList(allowedMethods));
+            }
 
             std::vector<std::string> requestedHeaders;
             if (req.find(boost::beast::http::field::access_control_request_headers) != std::end(req))
                 requestedHeaders =
                     req.splitCommaSeperatedHeaderEntry(boost::beast::http::field::access_control_request_headers);
 
-            if (const auto&& allowedMethods = cors->methodAllowSelection({std::move(requestedMethod)});
-                !allowedMethods.empty())
-                response_.set(boost::beast::http::field::access_control_allow_methods, joinList(allowedMethods));
-
             if (const auto&& allowedHeaders = cors->headerAllowSelection(requestedHeaders); !allowedHeaders.empty())
                 response_.set(boost::beast::http::field::access_control_allow_headers, joinList(allowedHeaders));
+            else
+                response_.set(boost::beast::http::field::access_control_allow_headers, "*");
 
             if (cors->allowCredentials.has_value())
                 response_.set(
                     boost::beast::http::field::access_control_allow_credentials,
                     *cors->allowCredentials ? "true" : "false");
+
+            if (!cors->exposeHeaders.empty())
+            {
+                response_.set(
+                    boost::beast::http::field::access_control_expose_headers,
+                    std::accumulate(
+                        std::next(std::begin(cors->exposeHeaders)),
+                        std::end(cors->exposeHeaders),
+                        std::string{boost::beast::http::to_string(cors->exposeHeaders.front())},
+                        [](std::string accum, auto const& field) {
+                            return std::move(accum) + "," + std::string{boost::beast::http::to_string(field)};
+                        }));
+            }
         }
 
         template <typename SessionT>

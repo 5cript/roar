@@ -1,5 +1,6 @@
 #pragma once
 
+#include <boost/beast/http/field.hpp>
 #include <boost/beast/http/verb.hpp>
 
 #include <string>
@@ -9,50 +10,68 @@
 
 namespace Roar
 {
+    /**
+     * @brief Settings object to control CORS requests.
+     */
     struct CorsSettings
     {
-        CorsSettings()
-            : allowedOrigin{[](std::string const& origin) {
-                // Requests with credentials CANNOT use a wildcard for the allowed origin.
-                return origin.empty() ? std::string("*") : origin;
-            }}
-            , methodAllowSelection{[](std::vector<std::string> const& requestedMethods) {
-                return requestedMethods.empty() ? std::vector<std::string>{} : std::vector<std::string>{"GET"};
-            }}
-            , headerAllowSelection{[](std::vector<std::string> const& requestedHeaders) {
-                return requestedHeaders.empty() ? std::vector<std::string>{} : requestedHeaders;
-            }}
-            , allowCredentials{}
-        {}
+        /// Access-Control-Allow-Origin
+        std::function<std::string(std::string const&)> allowedOrigin{[](std::string const& origin) {
+            // Requests with credentials CANNOT use a wildcard for any Allow-* header.
+            return origin.empty() ? std::string("*") : origin;
+        }};
 
-        std::function<std::string(std::string const&)> allowedOrigin;
-        std::function<std::vector<std::string>(std::vector<std::string> const&)> methodAllowSelection;
-        std::function<std::vector<std::string>(std::vector<std::string> const&)> headerAllowSelection;
-        std::optional<bool> allowCredentials;
+        /// Access-Control-Allow-Methods
+        std::function<std::vector<std::string>(std::vector<std::string> const&)> methodAllowSelection{
+            [](std::vector<std::string> const& requestedMethods) {
+                return requestedMethods;
+            }};
+
+        /// Access-Control-Allow-Headers
+        std::function<std::vector<std::string>(std::vector<std::string> const&)> headerAllowSelection{
+            [](std::vector<std::string> const& requestedHeaders) {
+                return requestedHeaders;
+            }};
+
+        /// Access-Control-Expose-Headers, will not be set if empty.
+        std::vector<boost::beast::http::field> exposeHeaders{};
+
+        /// Access-Control-Allow-Credentials
+        std::optional<bool> allowCredentials{std::nullopt};
+
+        /// Generate an OPTIONS route for preflights?
+        bool generatePreflightOptionsRoute = true;
     };
 
-    inline CorsSettings makeDefaultCorsSettings(std::string method)
+    /**
+     * @brief Reflects all requested headers and origin or sets the Kleene star. Is as permissive as possible. Least
+     * secure option.
+     *
+     * @param method The method to allow.
+     * @return CorsSettings A created cors settings object.
+     */
+    inline CorsSettings makePermissiveCorsSettings(std::string method)
     {
         CorsSettings cors;
-        cors.methodAllowSelection =
-            [&method](std::vector<std::string> const& requestedMethods) -> std::vector<std::string> {
-            return requestedMethods.empty() ? std::vector<std::string>{} : std::vector<std::string>{std::move(method)};
-        };
-        return cors;
-    }
-
-    inline CorsSettings makeDefaultCorsSettings(boost::beast::http::verb method)
-    {
-        CorsSettings cors;
-        std::string strMethod = std::string{boost::beast::http::to_string(method)};
-        std::transform(begin(strMethod), end(strMethod), begin(strMethod), [](auto character) {
+        std::transform(begin(method), end(method), begin(method), [](auto character) {
             return std::toupper(character);
         });
         cors.methodAllowSelection =
-            [&method, &strMethod](std::vector<std::string> const& requestedMethods) -> std::vector<std::string> {
-            return requestedMethods.empty() ? std::vector<std::string>{}
-                                            : std::vector<std::string>{std::move(strMethod)};
+            [method = std::move(method)](std::vector<std::string> const& requestedMethods) -> std::vector<std::string> {
+            return std::vector<std::string>{method};
         };
+        cors.allowCredentials = true;
         return cors;
+    }
+
+    /**
+     * @brief Same as the makePermissiveCorsSettings(std::string method) overload.
+     *
+     * @param method The method to allow.
+     * @return CorsSettings A created cors settings object.
+     */
+    inline CorsSettings makePermissiveCorsSettings(boost::beast::http::verb method)
+    {
+        return makePermissiveCorsSettings(std::string{boost::beast::http::to_string(method)});
     }
 }

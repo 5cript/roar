@@ -37,7 +37,7 @@ namespace Roar::Tests
             server_->start();
         }
 
-        std::string url(std::string const& path, UrlParams params = {})
+        std::string url(std::string const& path, UrlParams params = {}) const
         {
             const auto url =
                 Url{

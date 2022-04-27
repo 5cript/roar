@@ -176,12 +176,12 @@ namespace Roar
          * @tparam BodyT
          * @return Response<BodyT>
          */
-        template <typename BodyT, typename RequestBodyT>
+        template <typename BodyT = boost::beast::http::empty_body, typename RequestBodyT>
         [[nodiscard]] Response<BodyT> prepareResponse(Request<RequestBodyT> const& req)
         {
             auto res = Response<BodyT>{};
-            if (routeOptions().allowCors)
-                res.allowCors(req);
+            if (routeOptions().cors)
+                res.enableCors(req, routeOptions().cors);
             return res;
         }
 

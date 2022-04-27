@@ -1,6 +1,7 @@
 #pragma once
 
 #include <boost/beast/http/empty_body.hpp>
+#include <roar/cors.hpp>
 
 #include <string>
 #include <functional>
@@ -13,7 +14,7 @@ namespace Roar
     {
         bool allowInsecure;
         bool expectUpgrade;
-        bool allowCors;
+        std::optional<CorsSettings> cors;
     };
 
     class Session;

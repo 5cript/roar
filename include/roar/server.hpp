@@ -133,6 +133,15 @@ namespace Roar
                     std::invoke(handler, *listener, session, std::move(req));
                 };
                 extractedRoutes.emplace(*route.pointer->verb, protoRoute);
+
+                if (protoRoute.routeOptions.cors && protoRoute.routeOptions.cors->generatePreflightOptionsRoute)
+                {
+                    auto preflightRoute = protoRoute;
+                    protoRoute.callRoute = [](Session& session, Request<boost::beast::http::empty_body> const& req) {
+                        session.send(session.prepareResponse(req));
+                    };
+                    extractedRoutes.emplace(boost::beast::http::verb::options, preflightRoute);
+                }
             });
             addRequestListenerToRouter(std::move(extractedRoutes));
         }

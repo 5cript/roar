@@ -35,17 +35,17 @@ namespace Roar
     {
         std::optional<boost::beast::http::verb> verb = std::nullopt;
         char const* path = nullptr;
-        RoutePathType pathType = RoutePathType::Unspecified;
+        RoutePathType pathType = RoutePathType::RegularString;
         RouteOptions routeOptions = {
             .allowInsecure = false,
             .expectUpgrade = false,
-            .allowCors = false,
+            .cors = std::nullopt,
         };
         HandlerType<RequestListenerT> handler = nullptr;
     };
 
     template <typename RequestListenerT>
-    consteval auto extendRouteInfo(RouteInfo<RequestListenerT> info, HandlerType<RequestListenerT> handler)
+    auto extendRouteInfo(RouteInfo<RequestListenerT> info, HandlerType<RequestListenerT> handler)
     {
         return Detail::overloaded{
             [info, handler](RouteInfo<RequestListenerT> userInfo) -> RouteInfo<RequestListenerT> {
@@ -81,7 +81,7 @@ namespace Roar
 
 #define ROAR_ROUTE_I(HandlerName, DefaultVerb) \
     void HandlerName(Roar::Session& session, Roar::Request<boost::beast::http::empty_body>&& request); \
-    constexpr static auto roar_##HandlerName = \
+    inline static const auto roar_##HandlerName = \
         Roar::extendRouteInfo({.verb = boost::beast::http::verb::DefaultVerb}, &this_type::HandlerName)
 
 #define ROAR_ROUTE(HandlerName) ROAR_ROUTE_I(HandlerName, get)
