@@ -1,3 +1,0 @@
-<map id="Roar::Curl::GlobalCurlContext" name="Roar::Curl::GlobalCurlContext">
-<area shape="rect" id="node1" title="This class calls curl_global_init and curl_global_cleanup." alt="" coords="5,5,203,97"/>
-</map>
