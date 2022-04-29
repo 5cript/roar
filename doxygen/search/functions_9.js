@@ -5,5 +5,5 @@ var searchData=
   ['makesession_2',['makeSession',['../classRoar_1_1Factory.html#ad57056e6a93d35512179bd7def29d489',1,'Roar::Factory']]],
   ['makesslcontext_3',['makeSslContext',['../namespaceRoar.html#a7dcff6d6a92d285344a126d89e0e4f49',1,'Roar']]],
   ['makestandardresponse_4',['makeStandardResponse',['../classRoar_1_1StandardResponseProvider.html#a696f09b2f00afa9a317e0112fe9f6d6b',1,'Roar::StandardResponseProvider::makeStandardResponse()'],['../classRoar_1_1StandardTextResponseProvider.html#a604715beaf115ab2cc1b008ac1cb2958',1,'Roar::StandardTextResponseProvider::makeStandardResponse()']]],
-  ['matches_5',['matches',['../classRoar_1_1Route.html#a3def21cf010dc7aa146e3dbda58fb490',1,'Roar::Route']]]
+  ['matches_5',['matches',['../classRoar_1_1Route.html#a1d70a03b3ef4520af7d8743bc41ed3f9',1,'Roar::Route']]]
 ];

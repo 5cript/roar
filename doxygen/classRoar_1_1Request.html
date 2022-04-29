@@ -76,6 +76,9 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>This class extends the boost::beast::http::request&lt;BodyT&gt; with additional convenience.  
+ <a href="classRoar_1_1Request.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="request_8hpp_source.html">request.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for Roar::Request&lt; BodyT &gt;:</div>
@@ -92,10 +95,10 @@ Public Types</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a8046c3c75bbcc5f7e3238ff7309f4c97"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Request.html#a8046c3c75bbcc5f7e3238ff7309f4c97">Request</a> (<a class="el" href="classRoar_1_1Request.html#ac75fd7af39c85deea81bd043495f08c5">beast_request</a> req)</td></tr>
-<tr class="memdesc:a8046c3c75bbcc5f7e3238ff7309f4c97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classRoar_1_1Request.html">Request</a> object from a beast request to upgrade it.  <a href="classRoar_1_1Request.html#a8046c3c75bbcc5f7e3238ff7309f4c97">More...</a><br /></td></tr>
+<tr class="memdesc:a8046c3c75bbcc5f7e3238ff7309f4c97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classRoar_1_1Request.html" title="This class extends the boost::beast::http::request&lt;BodyT&gt; with additional convenience.">Request</a> object from a beast request to upgrade it.  <a href="classRoar_1_1Request.html#a8046c3c75bbcc5f7e3238ff7309f4c97">More...</a><br /></td></tr>
 <tr class="separator:a8046c3c75bbcc5f7e3238ff7309f4c97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af49f5f6fb2fc64abdd8d827e8ae6dd0b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Request.html#af49f5f6fb2fc64abdd8d827e8ae6dd0b">Request</a> (<a class="el" href="classRoar_1_1Request.html#ac75fd7af39c85deea81bd043495f08c5">beast_request</a> req, <a class="el" href="structRoar_1_1Detail_1_1RequestExtensions.html">Detail::RequestExtensions</a> &amp;&amp;extensions)</td></tr>
-<tr class="memdesc:af49f5f6fb2fc64abdd8d827e8ae6dd0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classRoar_1_1Request.html">Request</a> object from a beast request and takes extensions of a previous request object.  <a href="classRoar_1_1Request.html#af49f5f6fb2fc64abdd8d827e8ae6dd0b">More...</a><br /></td></tr>
+<tr class="memdesc:af49f5f6fb2fc64abdd8d827e8ae6dd0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classRoar_1_1Request.html" title="This class extends the boost::beast::http::request&lt;BodyT&gt; with additional convenience.">Request</a> object from a beast request and takes extensions of a previous request object.  <a href="classRoar_1_1Request.html#af49f5f6fb2fc64abdd8d827e8ae6dd0b">More...</a><br /></td></tr>
 <tr class="separator:af49f5f6fb2fc64abdd8d827e8ae6dd0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc918924550c439506427cce78f635d9"><td class="memItemLeft" align="right" valign="top">auto const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Request.html#afc918924550c439506427cce78f635d9">path</a> () const</td></tr>
 <tr class="memdesc:afc918924550c439506427cce78f635d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns only the path of the url.  <a href="classRoar_1_1Request.html#afc918924550c439506427cce78f635d9">More...</a><br /></td></tr>
@@ -142,7 +145,16 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a74d5f4651edcbd83bb1a178b2bc3fbb3 inherit pub_attribs_structRoar_1_1Detail_1_1RequestExtensions"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1Detail_1_1RequestExtensions.html#a74d5f4651edcbd83bb1a178b2bc3fbb3">query_</a></td></tr>
 <tr class="separator:a74d5f4651edcbd83bb1a178b2bc3fbb3 inherit pub_attribs_structRoar_1_1Detail_1_1RequestExtensions"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Typedef Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><div class="compoundTemplParams">template&lt;typename BodyT&gt;<br />
+class Roar::Request&lt; BodyT &gt;</div><p >This class extends the boost::beast::http::request&lt;BodyT&gt; with additional convenience. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">BodyT</td><td>Body type of the request. (empty_body, string_body, ...) See boost beast bodies. </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="ac75fd7af39c85deea81bd043495f08c5" name="ac75fd7af39c85deea81bd043495f08c5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac75fd7af39c85deea81bd043495f08c5">&#9670;&nbsp;</a></span>beast_request</h2>
 
@@ -186,7 +198,7 @@ template&lt;typename BodyT &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Construct a new <a class="el" href="classRoar_1_1Request.html">Request</a> object from a beast request to upgrade it. </p>
+<p>Construct a new <a class="el" href="classRoar_1_1Request.html" title="This class extends the boost::beast::http::request&lt;BodyT&gt; with additional convenience.">Request</a> object from a beast request to upgrade it. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">req</td><td>A beast http request. </td></tr>
@@ -232,7 +244,7 @@ template&lt;typename BodyT &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Construct a new <a class="el" href="classRoar_1_1Request.html">Request</a> object from a beast request and takes extensions of a previous request object. </p>
+<p>Construct a new <a class="el" href="classRoar_1_1Request.html" title="This class extends the boost::beast::http::request&lt;BodyT&gt; with additional convenience.">Request</a> object from a beast request and takes extensions of a previous request object. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">req</td><td></td></tr>

@@ -75,6 +75,9 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Utilitarian class to store and modify strings in compile time.  
+ <a href="classRoar_1_1Detail_1_1FixedString.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="fixed__string_8hpp_source.html">fixed_string.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for Roar::Detail::FixedString&lt; Size &gt;:</div>
@@ -93,6 +96,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a6ea1a0782e73aa4a00dba8662d160f07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4a21309b19bcd431f2d2538a4afecdc5"><td class="memTemplParams" colspan="2">template&lt;unsigned OtherSize&gt; </td></tr>
 <tr class="memitem:a4a21309b19bcd431f2d2538a4afecdc5"><td class="memTemplItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classRoar_1_1Detail_1_1FixedString.html#a4a21309b19bcd431f2d2538a4afecdc5">compare</a> (<a class="el" href="classRoar_1_1Detail_1_1FixedString.html">FixedString</a>&lt; OtherSize &gt; const &amp;other) const</td></tr>
+<tr class="memdesc:a4a21309b19bcd431f2d2538a4afecdc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">glibc strcmp implementation.  <a href="classRoar_1_1Detail_1_1FixedString.html#a4a21309b19bcd431f2d2538a4afecdc5">More...</a><br /></td></tr>
 <tr class="separator:a4a21309b19bcd431f2d2538a4afecdc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
@@ -105,7 +109,16 @@ Static Public Attributes</h2></td></tr>
 <tr class="memitem:a756da94e5546a4ebfdc40d06c0652eff"><td class="memItemLeft" align="right" valign="top">static constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Detail_1_1FixedString.html#a756da94e5546a4ebfdc40d06c0652eff">m_size</a> = Size</td></tr>
 <tr class="separator:a756da94e5546a4ebfdc40d06c0652eff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><div class="compoundTemplParams">template&lt;unsigned Size&gt;<br />
+class Roar::Detail::FixedString&lt; Size &gt;</div><p >Utilitarian class to store and modify strings in compile time. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Size</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="af25a004ec4ee29ac48901bc0215745c9" name="af25a004ec4ee29ac48901bc0215745c9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af25a004ec4ee29ac48901bc0215745c9">&#9670;&nbsp;</a></span>FixedString() <span class="overload">[1/2]</span></h2>
 
@@ -189,7 +202,8 @@ template&lt;unsigned OtherSize&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p >glibc strcmp implementation. </p>
+
+<p>glibc strcmp implementation. </p>
 
 </div>
 </div>

@@ -75,6 +75,9 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>A route represents the mapping of a verb+path to a user provided function.  
+ <a href="classRoar_1_1Route.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="route_8hpp_source.html">route.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for Roar::Route:</div>
@@ -95,16 +98,20 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5c63e45683f7cdd23ffd9fcbdd4e45f3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Route.html#a5c63e45683f7cdd23ffd9fcbdd4e45f3">ROAR_PIMPL_SPECIAL_FUNCTIONS</a> (<a class="el" href="classRoar_1_1Route.html">Route</a>)</td></tr>
 <tr class="separator:a5c63e45683f7cdd23ffd9fcbdd4e45f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4631fa70a05cd544b80b361441b48c36"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Route.html#a4631fa70a05cd544b80b361441b48c36">operator()</a> (<a class="el" href="classRoar_1_1Session.html">Session</a> &amp;session, <a class="el" href="classRoar_1_1Request.html">Request</a>&lt; boost::beast::http::empty_body &gt; req, <a class="el" href="classRoar_1_1StandardResponseProvider.html">StandardResponseProvider</a> const &amp;standardResponseProvider) const</td></tr>
+<tr class="memdesc:a4631fa70a05cd544b80b361441b48c36"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls the associated function of this route.  <a href="classRoar_1_1Route.html#a4631fa70a05cd544b80b361441b48c36">More...</a><br /></td></tr>
 <tr class="separator:a4631fa70a05cd544b80b361441b48c36"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3def21cf010dc7aa146e3dbda58fb490"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Route.html#a3def21cf010dc7aa146e3dbda58fb490">matches</a> (std::string const &amp;, std::vector&lt; std::string &gt; &amp;) const</td></tr>
-<tr class="separator:a3def21cf010dc7aa146e3dbda58fb490"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d70a03b3ef4520af7d8743bc41ed3f9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Route.html#a1d70a03b3ef4520af7d8743bc41ed3f9">matches</a> (std::string const &amp;path, std::vector&lt; std::string &gt; &amp;matches) const</td></tr>
+<tr class="memdesc:a1d70a03b3ef4520af7d8743bc41ed3f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Does this route match the given path?  <a href="classRoar_1_1Route.html#a1d70a03b3ef4520af7d8743bc41ed3f9">More...</a><br /></td></tr>
+<tr class="separator:a1d70a03b3ef4520af7d8743bc41ed3f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a78525e5f4909cf830eee594d8b0e43ca"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="structRoar_1_1Route_1_1Implementation.html">Implementation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Route.html#a78525e5f4909cf830eee594d8b0e43ca">impl_</a></td></tr>
 <tr class="separator:a78525e5f4909cf830eee594d8b0e43ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p >A route represents the mapping of a verb+path to a user provided function. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a9c2511b4837798cf3e6ca5d7a1818e9b" name="a9c2511b4837798cf3e6ca5d7a1818e9b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9c2511b4837798cf3e6ca5d7a1818e9b">&#9670;&nbsp;</a></span>Route()</h2>
 
@@ -124,8 +131,8 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a3def21cf010dc7aa146e3dbda58fb490" name="a3def21cf010dc7aa146e3dbda58fb490"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3def21cf010dc7aa146e3dbda58fb490">&#9670;&nbsp;</a></span>matches()</h2>
+<a id="a1d70a03b3ef4520af7d8743bc41ed3f9" name="a1d70a03b3ef4520af7d8743bc41ed3f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d70a03b3ef4520af7d8743bc41ed3f9">&#9670;&nbsp;</a></span>matches()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -140,7 +147,7 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::vector&lt; std::string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>regexMatches</em>&#160;</td>
+          <td class="paramname"><em>matches</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -149,6 +156,18 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Does this route match the given path? </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>A path to match. </td></tr>
+    <tr><td class="paramname">matches</td><td>Will be filled with regex matches, if the route path is a regex.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true Does match! </dd>
+<dd>
+false Does not match! </dd></dl>
 
 </div>
 </div>
@@ -183,6 +202,16 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Calls the associated function of this route. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">session</td><td>The corresponding http session. </td></tr>
+    <tr><td class="paramname">req</td><td>A request object containing the http request. </td></tr>
+    <tr><td class="paramname">standardResponseProvider</td><td>A class that can make standard responses for 404, ... . </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

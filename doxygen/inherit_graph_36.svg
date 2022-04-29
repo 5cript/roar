@@ -20,7 +20,7 @@
 <!-- Node1 -->
 <g id="node2" class="node">
 <title>Node1</title>
-<g id="a_node2"><a xlink:href="classRoar_1_1Router.html" target="_top" xlink:title=" ">
+<g id="a_node2"><a xlink:href="classRoar_1_1Router.html" target="_top" xlink:title="The route routes http requests to their respective handler functions.">
 <polygon fill="none" stroke="black" points="249,-152.5 249,-171.5 322,-171.5 322,-152.5 249,-152.5"/>
 <text text-anchor="middle" x="285.5" y="-159.5" font-family="Helvetica,sans-Serif" font-size="10.00">Roar::Router</text>
 </a>
@@ -65,7 +65,7 @@
 <!-- Node4 -->
 <g id="node5" class="node">
 <title>Node4</title>
-<g id="a_node5"><a xlink:href="classRoar_1_1Session_1_1ReadIntermediate.html" target="_top" xlink:title=" ">
+<g id="a_node5"><a xlink:href="classRoar_1_1Session_1_1ReadIntermediate.html" target="_top" xlink:title="Utility class to build up read operations.">
 <polygon fill="none" stroke="black" points="181,-38.5 181,-57.5 390,-57.5 390,-38.5 181,-38.5"/>
 <text text-anchor="middle" x="285.5" y="-45.5" font-family="Helvetica,sans-Serif" font-size="10.00">Roar::Session::ReadIntermediate&lt; BodyT &gt;</text>
 </a>
@@ -80,7 +80,7 @@
 <!-- Node5 -->
 <g id="node6" class="node">
 <title>Node5</title>
-<g id="a_node6"><a xlink:href="classRoar_1_1WebsocketSession.html" target="_top" xlink:title=" ">
+<g id="a_node6"><a xlink:href="classRoar_1_1WebsocketSession.html" target="_top" xlink:title="A WebsocketSession allows you to interact with a client via websocket protocol.">
 <polygon fill="none" stroke="black" points="221.5,-0.5 221.5,-19.5 349.5,-19.5 349.5,-0.5 221.5,-0.5"/>
 <text text-anchor="middle" x="285.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">Roar::WebsocketSession</text>
 </a>

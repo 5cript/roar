@@ -91,6 +91,7 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1Session_1_1Implementation.html">Implementation</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html">ReadIntermediate</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utility class to build up read operations.  <a href="classRoar_1_1Session_1_1ReadIntermediate.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -100,15 +101,19 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8b0e6bde66fd7596f84f70ed759b6bd0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session.html#a8b0e6bde66fd7596f84f70ed759b6bd0">ROAR_PIMPL_SPECIAL_FUNCTIONS</a> (<a class="el" href="classRoar_1_1Session.html">Session</a>)</td></tr>
 <tr class="separator:a8b0e6bde66fd7596f84f70ed759b6bd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0433c5b46b48f4dff9d5c3e5cf38512"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session.html#ae0433c5b46b48f4dff9d5c3e5cf38512">close</a> ()</td></tr>
+<tr class="memdesc:ae0433c5b46b48f4dff9d5c3e5cf38512"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls shutdown on the socket.  <a href="classRoar_1_1Session.html#ae0433c5b46b48f4dff9d5c3e5cf38512">More...</a><br /></td></tr>
 <tr class="separator:ae0433c5b46b48f4dff9d5c3e5cf38512"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9907706d349f1c85460917b406004d55"><td class="memTemplParams" colspan="2">template&lt;typename BodyT &gt; </td></tr>
 <tr class="memitem:a9907706d349f1c85460917b406004d55"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session.html#a9907706d349f1c85460917b406004d55">send</a> (boost::beast::http::response&lt; BodyT &gt; &amp;&amp;response)</td></tr>
+<tr class="memdesc:a9907706d349f1c85460917b406004d55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a boost::beast::http response to the client.  <a href="classRoar_1_1Session.html#a9907706d349f1c85460917b406004d55">More...</a><br /></td></tr>
 <tr class="separator:a9907706d349f1c85460917b406004d55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c736cd4dc7b9a2319db18ff4b9dc2b5"><td class="memTemplParams" colspan="2">template&lt;typename BodyT &gt; </td></tr>
 <tr class="memitem:a5c736cd4dc7b9a2319db18ff4b9dc2b5"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session.html#a5c736cd4dc7b9a2319db18ff4b9dc2b5">send</a> (<a class="el" href="classRoar_1_1Response.html">Response</a>&lt; BodyT &gt; &amp;&amp;response)</td></tr>
+<tr class="memdesc:a5c736cd4dc7b9a2319db18ff4b9dc2b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a response to the client.  <a href="classRoar_1_1Session.html#a5c736cd4dc7b9a2319db18ff4b9dc2b5">More...</a><br /></td></tr>
 <tr class="separator:a5c736cd4dc7b9a2319db18ff4b9dc2b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab20ca0ab379acce913a23b06c7c650ec"><td class="memTemplParams" colspan="2">template&lt;typename BodyT , typename OriginalBodyT , typename... Forwards&gt; </td></tr>
 <tr class="memitem:ab20ca0ab379acce913a23b06c7c650ec"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html">ReadIntermediate</a>&lt; BodyT &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session.html#ab20ca0ab379acce913a23b06c7c650ec">read</a> (<a class="el" href="classRoar_1_1Request.html">Request</a>&lt; OriginalBodyT &gt; req, Forwards &amp;&amp;... forwardArgs)</td></tr>
+<tr class="memdesc:ab20ca0ab379acce913a23b06c7c650ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read data from the client.  <a href="classRoar_1_1Session.html#ab20ca0ab379acce913a23b06c7c650ec">More...</a><br /></td></tr>
 <tr class="separator:ab20ca0ab379acce913a23b06c7c650ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae66bcd4f3779ab93eaafd560ed8fc579"><td class="memTemplParams" colspan="2">template&lt;typename BodyT  = boost::beast::http::empty_body, typename RequestBodyT &gt; </td></tr>
 <tr class="memitem:ae66bcd4f3779ab93eaafd560ed8fc579"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Response.html">Response</a>&lt; BodyT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session.html#ae66bcd4f3779ab93eaafd560ed8fc579">prepareResponse</a> (<a class="el" href="classRoar_1_1Request.html">Request</a>&lt; RequestBodyT &gt; const &amp;req)</td></tr>
@@ -266,6 +271,8 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Calls shutdown on the socket. </p>
 
 </div>
 </div>
@@ -434,6 +441,24 @@ template&lt;typename BodyT , typename OriginalBodyT , typename... Forwards&gt; <
 </table>
 </div><div class="memdoc">
 
+<p>Read data from the client. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">BodyT</td><td>What body type to read? </td></tr>
+    <tr><td class="paramname">OriginalBodyT</td><td>Body of the request that came before the this read. </td></tr>
+    <tr><td class="paramname">Forwards</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">req</td><td>A request that was received </td></tr>
+    <tr><td class="paramname">forwardArgs</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::shared_ptr&lt;ReadIntermediate&lt;BodyT&gt;&gt; A class that can be used to start the reading process and set options. </dd></dl>
+
 </div>
 </div>
 <a id="aaec9b0c1bbf996b12836b3cdc2a5a726" name="aaec9b0c1bbf996b12836b3cdc2a5a726"></a>
@@ -495,7 +520,7 @@ template&lt;typename BodyT , typename OriginalBodyT , typename... Forwards&gt; <
 </div><div class="memdoc">
 
 <p>Retrieve the options defined by the request listener class for this route. </p>
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structRoar_1_1RouteOptions.html">RouteOptions</a> const&amp; The route options. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structRoar_1_1RouteOptions.html" title="Options that modify the server behavior for a given route.">RouteOptions</a> const&amp; The route options. </dd></dl>
 
 </div>
 </div>
@@ -525,6 +550,20 @@ template&lt;typename BodyT &gt; </div>
 </table>
 </div><div class="memdoc">
 
+<p>Send a boost::beast::http response to the client. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">BodyT</td><td>Body type of the response. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">response</td><td>A response object. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a5c736cd4dc7b9a2319db18ff4b9dc2b5" name="a5c736cd4dc7b9a2319db18ff4b9dc2b5"></a>
@@ -552,6 +591,20 @@ template&lt;typename BodyT &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Send a response to the client. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">BodyT</td><td>Body type of the response. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">response</td><td>A response object. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

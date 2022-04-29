@@ -2,7 +2,7 @@ var searchData=
 [
   ['emplacesource_0',['emplaceSource',['../classRoar_1_1Curl_1_1Request.html#add25d962a0790fc1cfcbaf42cfd4e0a9',1,'Roar::Curl::Request']]],
   ['emptybodyrequest_1',['EmptyBodyRequest',['../namespaceRoar.html#ab598fb110e75803c00fb724ff377c7d7',1,'Roar']]],
-  ['enablecors_2',['enableCors',['../classRoar_1_1Response.html#a82bf4269953cc2d7e69ae4d656cd41a3',1,'Roar::Response']]],
+  ['enablecors_2',['enableCors',['../classRoar_1_1Response.html#a6a82b7575861772cfd2a2f0a6e5adade',1,'Roar::Response']]],
   ['error_3',['error',['../structRoar_1_1Error.html#a9a3ddaece8f325b3b467bdf8faa96bc0',1,'Roar::Error']]],
   ['error_4',['Error',['../structRoar_1_1Error.html',1,'Roar']]],
   ['error_2ehpp_5',['error.hpp',['../error_8hpp.html',1,'']]],

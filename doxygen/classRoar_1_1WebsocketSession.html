@@ -75,6 +75,9 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>A <a class="el" href="classRoar_1_1WebsocketSession.html" title="A WebsocketSession allows you to interact with a client via websocket protocol.">WebsocketSession</a> allows you to interact with a client via websocket protocol.  
+ <a href="classRoar_1_1WebsocketSession.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="websocket__session_8hpp_source.html">websocket_session.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for Roar::WebsocketSession:</div>
@@ -95,6 +98,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a68a40c65e3739b6a6c2aea9593e79f02"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketSession.html#a68a40c65e3739b6a6c2aea9593e79f02">ROAR_PIMPL_SPECIAL_FUNCTIONS</a> (<a class="el" href="classRoar_1_1WebsocketSession.html">WebsocketSession</a>)</td></tr>
 <tr class="separator:a68a40c65e3739b6a6c2aea9593e79f02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f11a8f1ed30d7bcf52b74f5f66fb7f8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketSession.html#a1f11a8f1ed30d7bcf52b74f5f66fb7f8">accept</a> (<a class="el" href="classRoar_1_1Request.html">Request</a>&lt; boost::beast::http::empty_body &gt; const &amp;req)</td></tr>
+<tr class="memdesc:a1f11a8f1ed30d7bcf52b74f5f66fb7f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accept an upgrade request and performs the necessary websocket handshake.  <a href="classRoar_1_1WebsocketSession.html#a1f11a8f1ed30d7bcf52b74f5f66fb7f8">More...</a><br /></td></tr>
 <tr class="separator:a1f11a8f1ed30d7bcf52b74f5f66fb7f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
@@ -102,7 +106,9 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a34c6e34b09e16addf0151f93b61004ab"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="structRoar_1_1WebsocketSession_1_1Implementation.html">Implementation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketSession.html#a34c6e34b09e16addf0151f93b61004ab">impl_</a></td></tr>
 <tr class="separator:a34c6e34b09e16addf0151f93b61004ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p >A <a class="el" href="classRoar_1_1WebsocketSession.html" title="A WebsocketSession allows you to interact with a client via websocket protocol.">WebsocketSession</a> allows you to interact with a client via websocket protocol. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a5b649eeac965c66a99d256f8011a622f" name="a5b649eeac965c66a99d256f8011a622f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5b649eeac965c66a99d256f8011a622f">&#9670;&nbsp;</a></span>WebsocketSession()</h2>
 
@@ -137,6 +143,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Accept an upgrade request and performs the necessary websocket handshake. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">req</td><td>An http-&gt;ws upgrade request. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

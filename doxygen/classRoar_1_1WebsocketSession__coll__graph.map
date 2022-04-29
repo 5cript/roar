@@ -1,5 +1,5 @@
 <map id="Roar::WebsocketSession" name="Roar::WebsocketSession">
-<area shape="rect" id="node1" title=" " alt="" coords="212,145,491,252"/>
+<area shape="rect" id="node1" title="A WebsocketSession allows you to interact with a client via websocket protocol." alt="" coords="212,145,491,252"/>
 <area shape="rect" id="node2" title=" " alt="" coords="5,5,335,83"/>
 <area shape="rect" id="node3" title=" " alt="" coords="359,5,709,83"/>
 </map>

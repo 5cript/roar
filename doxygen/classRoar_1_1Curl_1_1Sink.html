@@ -73,6 +73,9 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Sublass this sink class to provide your own <a class="el" href="classRoar_1_1Curl_1_1Sink.html" title="Sublass this sink class to provide your own Sink. A sink receives data sent by the server.">Sink</a>. A sink receives data sent by the server.  
+ <a href="classRoar_1_1Curl_1_1Sink.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="sink_8hpp_source.html">sink.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for Roar::Curl::Sink:</div>
@@ -84,7 +87,7 @@ Collaboration diagram for Roar::Curl::Sink:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a6a203f47d587cbd951dd602ace46387b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Curl_1_1Sink.html#a6a203f47d587cbd951dd602ace46387b">feed</a> (char const *buffer, std::size_t amount)=0</td></tr>
-<tr class="memdesc:a6a203f47d587cbd951dd602ace46387b"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function gets called when the upload requests more data.  <a href="classRoar_1_1Curl_1_1Sink.html#a6a203f47d587cbd951dd602ace46387b">More...</a><br /></td></tr>
+<tr class="memdesc:a6a203f47d587cbd951dd602ace46387b"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function gets called with new data every time it is available.  <a href="classRoar_1_1Curl_1_1Sink.html#a6a203f47d587cbd951dd602ace46387b">More...</a><br /></td></tr>
 <tr class="separator:a6a203f47d587cbd951dd602ace46387b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e44f75072a00f2881bef3d3aefcb151"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Curl_1_1Sink.html#a7e44f75072a00f2881bef3d3aefcb151">Sink</a> ()=default</td></tr>
 <tr class="separator:a7e44f75072a00f2881bef3d3aefcb151"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -99,7 +102,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a71b108e63b0911075f63d73439f2a086"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Curl_1_1Sink.html">Sink</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Curl_1_1Sink.html#a71b108e63b0911075f63d73439f2a086">operator=</a> (<a class="el" href="classRoar_1_1Curl_1_1Sink.html">Sink</a> &amp;&amp;)=default</td></tr>
 <tr class="separator:a71b108e63b0911075f63d73439f2a086"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p >Sublass this sink class to provide your own <a class="el" href="classRoar_1_1Curl_1_1Sink.html" title="Sublass this sink class to provide your own Sink. A sink receives data sent by the server.">Sink</a>. A sink receives data sent by the server. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a7e44f75072a00f2881bef3d3aefcb151" name="a7e44f75072a00f2881bef3d3aefcb151"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7e44f75072a00f2881bef3d3aefcb151">&#9670;&nbsp;</a></span>Sink() <span class="overload">[1/3]</span></h2>
 
@@ -237,7 +242,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>This function gets called when the upload requests more data. </p>
+<p>This function gets called with new data every time it is available. </p>
 
 </div>
 </div>

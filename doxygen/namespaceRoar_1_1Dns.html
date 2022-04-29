@@ -76,15 +76,19 @@ $(function() {
 Functions</h2></td></tr>
 <tr class="memitem:aec2a74d0fffdc6b66b75e075149b5d2f"><td class="memTemplParams" colspan="2">template&lt;typename ExecutorType , typename PickerFunctionT , typename Protocol  = boost::asio::ip::tcp&gt; </td></tr>
 <tr class="memitem:aec2a74d0fffdc6b66b75e075149b5d2f"><td class="memTemplItemLeft" align="right" valign="top">Protocol::resolver::endpoint_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceRoar_1_1Dns.html#aec2a74d0fffdc6b66b75e075149b5d2f">resolve</a> (ExecutorType &amp;&amp;executor, std::string const &amp;host, std::string const &amp;<a class="el" href="websocket_2main_8cpp.html#a635babdcb679ed40dee209bd462a91eb">port</a>, PickerFunctionT &amp;&amp;picker)</td></tr>
+<tr class="memdesc:aec2a74d0fffdc6b66b75e075149b5d2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resolves a host and port and calls the passed function with all results and then returns what picker returns.  <a href="namespaceRoar_1_1Dns.html#aec2a74d0fffdc6b66b75e075149b5d2f">More...</a><br /></td></tr>
 <tr class="separator:aec2a74d0fffdc6b66b75e075149b5d2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae49494551f94078980370db0afcf15ef"><td class="memTemplParams" colspan="2">template&lt;typename ExecutorType , typename PickerFunctionT , typename Protocol  = boost::asio::ip::tcp&gt; </td></tr>
 <tr class="memitem:ae49494551f94078980370db0afcf15ef"><td class="memTemplItemLeft" align="right" valign="top">Protocol::resolver::endpoint_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceRoar_1_1Dns.html#ae49494551f94078980370db0afcf15ef">resolve</a> (ExecutorType &amp;&amp;executor, std::string const &amp;host, unsigned short <a class="el" href="websocket_2main_8cpp.html#a635babdcb679ed40dee209bd462a91eb">port</a>, PickerFunctionT &amp;&amp;picker)</td></tr>
+<tr class="memdesc:ae49494551f94078980370db0afcf15ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resolves a host and port and calls the passed function with all results and then returns what picker returns. See the other overload. This one only differs by the port, which is an unsigned short.  <a href="namespaceRoar_1_1Dns.html#ae49494551f94078980370db0afcf15ef">More...</a><br /></td></tr>
 <tr class="separator:ae49494551f94078980370db0afcf15ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad30adca6a96ae269a2e204e30ba86a4f"><td class="memTemplParams" colspan="2">template&lt;typename ExecutorType , typename Protocol  = boost::asio::ip::tcp&gt; </td></tr>
 <tr class="memitem:ad30adca6a96ae269a2e204e30ba86a4f"><td class="memTemplItemLeft" align="right" valign="top">Protocol::resolver::endpoint_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceRoar_1_1Dns.html#ad30adca6a96ae269a2e204e30ba86a4f">resolveSingle</a> (ExecutorType &amp;&amp;executor, std::string const &amp;host, std::string const &amp;<a class="el" href="websocket_2main_8cpp.html#a635babdcb679ed40dee209bd462a91eb">port</a>, bool preferIpv4=false)</td></tr>
+<tr class="memdesc:ad30adca6a96ae269a2e204e30ba86a4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like resolve but picks one of the addresses. Will sort after ipv4/ipv6.  <a href="namespaceRoar_1_1Dns.html#ad30adca6a96ae269a2e204e30ba86a4f">More...</a><br /></td></tr>
 <tr class="separator:ad30adca6a96ae269a2e204e30ba86a4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a663e959d7d65a7493a5fc80d7096d422"><td class="memTemplParams" colspan="2">template&lt;typename ExecutorType , typename Protocol  = boost::asio::ip::tcp&gt; </td></tr>
 <tr class="memitem:a663e959d7d65a7493a5fc80d7096d422"><td class="memTemplItemLeft" align="right" valign="top">Protocol::resolver::endpoint_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceRoar_1_1Dns.html#a663e959d7d65a7493a5fc80d7096d422">resolveSingle</a> (ExecutorType &amp;&amp;executor, std::string const &amp;host, unsigned short <a class="el" href="websocket_2main_8cpp.html#a635babdcb679ed40dee209bd462a91eb">port</a>, bool preferIpv4=false)</td></tr>
+<tr class="memdesc:a663e959d7d65a7493a5fc80d7096d422"><td class="mdescLeft">&#160;</td><td class="mdescRight">This overload only differs from the other one by taking an unsigned short as the port.  <a href="namespaceRoar_1_1Dns.html#a663e959d7d65a7493a5fc80d7096d422">More...</a><br /></td></tr>
 <tr class="separator:a663e959d7d65a7493a5fc80d7096d422"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
@@ -128,6 +132,26 @@ template&lt;typename ExecutorType , typename PickerFunctionT , typename Protocol
       </table>
 </div><div class="memdoc">
 
+<p>Resolves a host and port and calls the passed function with all results and then returns what picker returns. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">ExecutorType</td><td>Deduced. The type of the io executor (likely any_io_executor) </td></tr>
+    <tr><td class="paramname">PickerFunctionT</td><td>A function that takes a vector&lt;typename ResolverType::endpoint_type&gt; and returns typename ResolverType::endpoint_type </td></tr>
+    <tr><td class="paramname">Protocol</td><td>ip or udp? </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">executor</td><td>Any executor type that boost::asio::ip::PROTOCOL::resolver can take. </td></tr>
+    <tr><td class="paramname">host</td><td>The host to resolve </td></tr>
+    <tr><td class="paramname">port</td><td>The port to resolve </td></tr>
+    <tr><td class="paramname">picker</td><td>A picker function. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Protocol::resolver::endpoint_type A picked endpoint by the picker function. </dd></dl>
+
 </div>
 </div>
 <a id="ae49494551f94078980370db0afcf15ef" name="ae49494551f94078980370db0afcf15ef"></a>
@@ -169,6 +193,8 @@ template&lt;typename ExecutorType , typename PickerFunctionT , typename Protocol
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Resolves a host and port and calls the passed function with all results and then returns what picker returns. See the other overload. This one only differs by the port, which is an unsigned short. </p>
 
 </div>
 </div>
@@ -212,6 +238,25 @@ template&lt;typename ExecutorType , typename Protocol  = boost::asio::ip::tcp&gt
       </table>
 </div><div class="memdoc">
 
+<p>Like resolve but picks one of the addresses. Will sort after ipv4/ipv6. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">ExecutorType</td><td>Deduced. The type of the io executor (likely any_io_executor) </td></tr>
+    <tr><td class="paramname">Protocol</td><td>ip or udp? </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">executor</td><td>Any executor type that boost::asio::ip::PROTOCOL::resolver can take. </td></tr>
+    <tr><td class="paramname">host</td><td>The host to resolve </td></tr>
+    <tr><td class="paramname">port</td><td>The port to resolve </td></tr>
+    <tr><td class="paramname">preferIpv4</td><td>Prefer to pick an ipv4 address? (Default is false) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Protocol::resolver::endpoint_type Returns one of the results. </dd></dl>
+
 </div>
 </div>
 <a id="a663e959d7d65a7493a5fc80d7096d422" name="a663e959d7d65a7493a5fc80d7096d422"></a>
@@ -253,6 +298,8 @@ template&lt;typename ExecutorType , typename Protocol  = boost::asio::ip::tcp&gt
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>This overload only differs from the other one by taking an unsigned short as the port. </p>
 
 </div>
 </div>

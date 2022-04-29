@@ -76,6 +76,9 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>This factory creates sessions.  
+ <a href="classRoar_1_1Factory.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="factory_8hpp_source.html">factory.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for Roar::Factory:</div>
@@ -98,6 +101,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3d5d22c767e0ddd72237b27b9e985922"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Factory.html#a3d5d22c767e0ddd72237b27b9e985922">ROAR_PIMPL_SPECIAL_FUNCTIONS</a> (<a class="el" href="classRoar_1_1Factory.html">Factory</a>)</td></tr>
 <tr class="separator:a3d5d22c767e0ddd72237b27b9e985922"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad57056e6a93d35512179bd7def29d489"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Factory.html#ad57056e6a93d35512179bd7def29d489">makeSession</a> (<a class="el" href="classboost_1_1asio_1_1basic__stream__socket.html">boost::asio::basic_stream_socket</a>&lt; boost::asio::ip::tcp &gt; &amp;&amp;socket, std::weak_ptr&lt; <a class="el" href="classRoar_1_1Router.html">Router</a> &gt; router, std::shared_ptr&lt; const <a class="el" href="classRoar_1_1StandardResponseProvider.html">StandardResponseProvider</a> &gt; standardResponseProvider)</td></tr>
+<tr class="memdesc:ad57056e6a93d35512179bd7def29d489"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new http session.  <a href="classRoar_1_1Factory.html#ad57056e6a93d35512179bd7def29d489">More...</a><br /></td></tr>
 <tr class="separator:ad57056e6a93d35512179bd7def29d489"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
@@ -110,7 +114,9 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a5dfe0b4f2b7ec09e2efd014e3b448bf1"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="structRoar_1_1Factory_1_1Implementation.html">Implementation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Factory.html#a5dfe0b4f2b7ec09e2efd014e3b448bf1">impl_</a></td></tr>
 <tr class="separator:a5dfe0b4f2b7ec09e2efd014e3b448bf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p >This factory creates sessions. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a2716be4af3e8543a34c015f14af1453f" name="a2716be4af3e8543a34c015f14af1453f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2716be4af3e8543a34c015f14af1453f">&#9670;&nbsp;</a></span>Factory()</h2>
 
@@ -171,6 +177,16 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Creates a new http session. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">socket</td><td>A socket for this session </td></tr>
+    <tr><td class="paramname">router</td><td>A weak reference to the router. </td></tr>
+    <tr><td class="paramname">standardResponseProvider</td><td>A standard response provider. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

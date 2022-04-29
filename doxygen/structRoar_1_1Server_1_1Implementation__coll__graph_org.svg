@@ -205,7 +205,7 @@
 <!-- Node11 -->
 <g id="node11" class="node">
 <title>Node11</title>
-<g id="a_node11"><a xlink:href="classRoar_1_1Factory.html" target="_top" xlink:title=" ">
+<g id="a_node11"><a xlink:href="classRoar_1_1Factory.html" target="_top" xlink:title="This factory creates sessions.">
 <polygon fill="none" stroke="black" points="1535.5,-127.5 1535.5,-206.5 1744.5,-206.5 1744.5,-127.5 1535.5,-127.5"/>
 <text text-anchor="middle" x="1640" y="-194.5" font-family="Helvetica,sans-Serif" font-size="10.00">Roar::Factory</text>
 <polyline fill="none" stroke="black" points="1535.5,-187.5 1744.5,-187.5 "/>

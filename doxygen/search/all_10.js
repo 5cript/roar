@@ -15,7 +15,7 @@ var searchData=
   ['session_5f_12',['session_',['../classRoar_1_1Session_1_1ReadIntermediate.html#afe4ee00428c46cd458ca846de250f0f4',1,'Roar::Session::ReadIntermediate']]],
   ['sessionfactory_13',['sessionFactory',['../structRoar_1_1Server_1_1Implementation.html#a1ba4837c48cd28cf83d9d5ce56bdac6f',1,'Roar::Server::Implementation']]],
   ['sessiontimeout_14',['sessionTimeout',['../classRoar_1_1Session.html#af3909a76923bc3385e188a5b1b553da3',1,'Roar::Session']]],
-  ['setheader_15',['setHeader',['../classRoar_1_1Response.html#a6dd28565671f6097879a61b05e64486d',1,'Roar::Response::setHeader(boost::beast::http::field field, char const *type)'],['../classRoar_1_1Response.html#a0f914476cbdb2403404ed9f4dd31ff4f',1,'Roar::Response::setHeader(boost::beast::http::field field, std::string const &amp;type)']]],
+  ['setheader_15',['setHeader',['../classRoar_1_1Response.html#a4fa4be2c7540c066756849ff044cfe42',1,'Roar::Response::setHeader(boost::beast::http::field field, char const *value)'],['../classRoar_1_1Response.html#a85b970efdb66e17483657594c25c8e51',1,'Roar::Response::setHeader(boost::beast::http::field field, std::string const &amp;value)']]],
   ['setheaderfield_16',['setHeaderField',['../classRoar_1_1Curl_1_1Request.html#a06080184881a721f5dd4de6e8300a5ee',1,'Roar::Curl::Request']]],
   ['setheaderfields_17',['setHeaderFields',['../classRoar_1_1Curl_1_1Request.html#aa4720aa556e79924dc6e072b1b57bbb1',1,'Roar::Curl::Request']]],
   ['setuprouteoptions_18',['setupRouteOptions',['../classRoar_1_1Session.html#a6997c7a7b61c8ca816573ca20464c45f',1,'Roar::Session']]],

@@ -73,6 +73,9 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Options that modify the server behavior for a given route.  
+ <a href="structRoar_1_1RouteOptions.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="proto__route_8hpp_source.html">proto_route.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for Roar::RouteOptions:</div>
@@ -84,13 +87,18 @@ Collaboration diagram for Roar::RouteOptions:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:af8adfbeab43e0e3fe53d8ced47a8faca"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1RouteOptions.html#af8adfbeab43e0e3fe53d8ced47a8faca">allowInsecure</a></td></tr>
+<tr class="memdesc:af8adfbeab43e0e3fe53d8ced47a8faca"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the server is an https server, setting this to true will allow unencrypted requests on this route.  <a href="structRoar_1_1RouteOptions.html#af8adfbeab43e0e3fe53d8ced47a8faca">More...</a><br /></td></tr>
 <tr class="separator:af8adfbeab43e0e3fe53d8ced47a8faca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2cb0954a6abaa3440576fd86f2d3f0a0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1RouteOptions.html#a2cb0954a6abaa3440576fd86f2d3f0a0">expectUpgrade</a></td></tr>
+<tr class="memdesc:a2cb0954a6abaa3440576fd86f2d3f0a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set this to true if you expect a websocket upgrade request on this route.  <a href="structRoar_1_1RouteOptions.html#a2cb0954a6abaa3440576fd86f2d3f0a0">More...</a><br /></td></tr>
 <tr class="separator:a2cb0954a6abaa3440576fd86f2d3f0a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a51b050ad4deef290adb6265134cb7c11"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structRoar_1_1CorsSettings.html">CorsSettings</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1RouteOptions.html#a51b050ad4deef290adb6265134cb7c11">cors</a></td></tr>
+<tr class="memdesc:a51b050ad4deef290adb6265134cb7c11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set this to provide automatically generated cors headers and preflight requests.  <a href="structRoar_1_1RouteOptions.html#a51b050ad4deef290adb6265134cb7c11">More...</a><br /></td></tr>
 <tr class="separator:a51b050ad4deef290adb6265134cb7c11"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p >Options that modify the server behavior for a given route. </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="af8adfbeab43e0e3fe53d8ced47a8faca" name="af8adfbeab43e0e3fe53d8ced47a8faca"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af8adfbeab43e0e3fe53d8ced47a8faca">&#9670;&nbsp;</a></span>allowInsecure</h2>
 
@@ -102,6 +110,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>If the server is an https server, setting this to true will allow unencrypted requests on this route. </p>
 
 </div>
 </div>
@@ -117,6 +127,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Set this to provide automatically generated cors headers and preflight requests. </p>
+
 </div>
 </div>
 <a id="a2cb0954a6abaa3440576fd86f2d3f0a0" name="a2cb0954a6abaa3440576fd86f2d3f0a0"></a>
@@ -130,6 +142,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Set this to true if you expect a websocket upgrade request on this route. </p>
 
 </div>
 </div>

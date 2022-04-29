@@ -1,4 +1,4 @@
 <map id="Roar::StandardTextResponseProvider" name="Roar::StandardTextResponseProvider">
-<area shape="rect" id="node1" title=" " alt="" coords="5,219,248,296"/>
+<area shape="rect" id="node1" title="This standard response provider implementation produces very simple text responses." alt="" coords="5,219,248,296"/>
 <area shape="rect" id="node2" href="$classRoar_1_1StandardResponseProvider.html" title="Implement your own StandardResponseProvider to make custom 404 pages etc." alt="" coords="18,5,235,171"/>
 </map>

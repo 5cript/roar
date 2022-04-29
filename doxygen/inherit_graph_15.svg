@@ -20,7 +20,7 @@
 <!-- Node1 -->
 <g id="node2" class="node">
 <title>Node1</title>
-<g id="a_node2"><a xlink:href="structRoar_1_1Detail_1_1overloaded.html" target="_top" xlink:title=" ">
+<g id="a_node2"><a xlink:href="structRoar_1_1Detail_1_1overloaded.html" target="_top" xlink:title="Utility to call std::visit with a set of overloaded functions.">
 <polygon fill="none" stroke="black" points="122,-0.5 122,-19.5 272,-19.5 272,-0.5 122,-0.5"/>
 <text text-anchor="middle" x="197" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">Roar::Detail::overloaded&lt; Ts &gt;</text>
 </a>

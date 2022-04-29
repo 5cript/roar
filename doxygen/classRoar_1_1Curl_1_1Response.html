@@ -76,6 +76,9 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>This class is returned by a <a class="el" href="classRoar_1_1Curl_1_1Request.html">Request</a> class when the request is performed.  
+ <a href="classRoar_1_1Curl_1_1Response.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="curl_2response_8hpp_source.html">response.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for Roar::Curl::Response:</div>
@@ -87,23 +90,31 @@ Collaboration diagram for Roar::Curl::Response:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ad3893868ba8161f340a858b0f0a8abd7"><td class="memItemLeft" align="right" valign="top">CURLcode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Curl_1_1Response.html#ad3893868ba8161f340a858b0f0a8abd7">result</a> () const</td></tr>
+<tr class="memdesc:ad3893868ba8161f340a858b0f0a8abd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">The CURLcode. Can be useful to check for errors.  <a href="classRoar_1_1Curl_1_1Response.html#ad3893868ba8161f340a858b0f0a8abd7">More...</a><br /></td></tr>
 <tr class="separator:ad3893868ba8161f340a858b0f0a8abd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e9b976e9cc6e1edc9bd105a7a9b9010"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Curl_1_1Response.html#a4e9b976e9cc6e1edc9bd105a7a9b9010">redirectUrl</a> () const</td></tr>
+<tr class="memdesc:a4e9b976e9cc6e1edc9bd105a7a9b9010"><td class="mdescLeft">&#160;</td><td class="mdescRight">The redirect url if the response was a redirect.  <a href="classRoar_1_1Curl_1_1Response.html#a4e9b976e9cc6e1edc9bd105a7a9b9010">More...</a><br /></td></tr>
 <tr class="separator:a4e9b976e9cc6e1edc9bd105a7a9b9010"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac0191a9c3c587b6b065c7f207cf0eeb8"><td class="memItemLeft" align="right" valign="top">long long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Curl_1_1Response.html#ac0191a9c3c587b6b065c7f207cf0eeb8">sizeOfDownload</a> () const</td></tr>
+<tr class="memdesc:ac0191a9c3c587b6b065c7f207cf0eeb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">The size of the downloaded data.  <a href="classRoar_1_1Curl_1_1Response.html#ac0191a9c3c587b6b065c7f207cf0eeb8">More...</a><br /></td></tr>
 <tr class="separator:ac0191a9c3c587b6b065c7f207cf0eeb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97dddbe69fa95c66a7d153467e360aa7"><td class="memItemLeft" align="right" valign="top">long long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Curl_1_1Response.html#a97dddbe69fa95c66a7d153467e360aa7">sizeOfUpload</a> () const</td></tr>
+<tr class="memdesc:a97dddbe69fa95c66a7d153467e360aa7"><td class="mdescLeft">&#160;</td><td class="mdescRight">The size of the uploaded data.  <a href="classRoar_1_1Curl_1_1Response.html#a97dddbe69fa95c66a7d153467e360aa7">More...</a><br /></td></tr>
 <tr class="separator:a97dddbe69fa95c66a7d153467e360aa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e1b453dead4a22306075df9a25ee42e"><td class="memItemLeft" align="right" valign="top">boost::beast::http::status&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Curl_1_1Response.html#a7e1b453dead4a22306075df9a25ee42e">code</a> () const</td></tr>
+<tr class="memdesc:a7e1b453dead4a22306075df9a25ee42e"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classRoar_1_1Curl_1_1Response.html" title="This class is returned by a Request class when the request is performed.">Response</a> code.  <a href="classRoar_1_1Curl_1_1Response.html#a7e1b453dead4a22306075df9a25ee42e">More...</a><br /></td></tr>
 <tr class="separator:a7e1b453dead4a22306075df9a25ee42e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a51c1edd2ab457b3e3322d0b395c38c06"><td class="memItemLeft" align="right" valign="top">boost::beast::http::status&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Curl_1_1Response.html#a51c1edd2ab457b3e3322d0b395c38c06">proxyCode</a> () const</td></tr>
+<tr class="memdesc:a51c1edd2ab457b3e3322d0b395c38c06"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classRoar_1_1Curl_1_1Response.html" title="This class is returned by a Request class when the request is performed.">Response</a> code of the proxy if there was one inbetween.  <a href="classRoar_1_1Curl_1_1Response.html#a51c1edd2ab457b3e3322d0b395c38c06">More...</a><br /></td></tr>
 <tr class="separator:a51c1edd2ab457b3e3322d0b395c38c06"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7f72522f70c627fb5a78da5d1a01a32"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Curl_1_1Response.html#ad7f72522f70c627fb5a78da5d1a01a32">operator bool</a> () const</td></tr>
+<tr class="memdesc:ad7f72522f70c627fb5a78da5d1a01a32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Was there a response to the request?  <a href="classRoar_1_1Curl_1_1Response.html#ad7f72522f70c627fb5a78da5d1a01a32">More...</a><br /></td></tr>
 <tr class="separator:ad7f72522f70c627fb5a78da5d1a01a32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:affe1c9519235c8401904364cfa8448ac"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Curl_1_1Response.html#affe1c9519235c8401904364cfa8448ac">Response</a> (<a class="el" href="classRoar_1_1Curl_1_1Instance.html">Instance</a> instance)</td></tr>
+<tr class="memdesc:affe1c9519235c8401904364cfa8448ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cannot explicitly instantiate, it is made by the <a class="el" href="classRoar_1_1Curl_1_1Request.html">Request</a> class.  <a href="classRoar_1_1Curl_1_1Response.html#affe1c9519235c8401904364cfa8448ac">More...</a><br /></td></tr>
 <tr class="separator:affe1c9519235c8401904364cfa8448ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
@@ -118,7 +129,9 @@ Friends</h2></td></tr>
 <tr class="memitem:a5719d6ff12298e668b17796c87450d5b"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Curl_1_1Response.html#a5719d6ff12298e668b17796c87450d5b">Request</a></td></tr>
 <tr class="separator:a5719d6ff12298e668b17796c87450d5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p >This class is returned by a <a class="el" href="classRoar_1_1Curl_1_1Request.html">Request</a> class when the request is performed. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="affe1c9519235c8401904364cfa8448ac" name="affe1c9519235c8401904364cfa8448ac"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#affe1c9519235c8401904364cfa8448ac">&#9670;&nbsp;</a></span>Response()</h2>
 
@@ -143,6 +156,14 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Cannot explicitly instantiate, it is made by the <a class="el" href="classRoar_1_1Curl_1_1Request.html">Request</a> class. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">instance</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -160,6 +181,9 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p><a class="el" href="classRoar_1_1Curl_1_1Response.html" title="This class is returned by a Request class when the request is performed.">Response</a> code. </p>
+<dl class="section return"><dt>Returns</dt><dd>boost::beast::http::status </dd></dl>
 
 </div>
 </div>
@@ -186,6 +210,11 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Was there a response to the request? </p>
+<dl class="section return"><dt>Returns</dt><dd>true When the request was sent successfully and a response was received. </dd>
+<dd>
+false When the request failed and no response was received. This response object is invalid. </dd></dl>
+
 </div>
 </div>
 <a id="a51c1edd2ab457b3e3322d0b395c38c06" name="a51c1edd2ab457b3e3322d0b395c38c06"></a>
@@ -202,6 +231,9 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p><a class="el" href="classRoar_1_1Curl_1_1Response.html" title="This class is returned by a Request class when the request is performed.">Response</a> code of the proxy if there was one inbetween. </p>
+<dl class="section return"><dt>Returns</dt><dd>boost::beast::http::status </dd></dl>
 
 </div>
 </div>
@@ -220,6 +252,9 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The redirect url if the response was a redirect. </p>
+<dl class="section return"><dt>Returns</dt><dd>std::string </dd></dl>
+
 </div>
 </div>
 <a id="ad3893868ba8161f340a858b0f0a8abd7" name="ad3893868ba8161f340a858b0f0a8abd7"></a>
@@ -236,6 +271,9 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>The CURLcode. Can be useful to check for errors. </p>
+<dl class="section return"><dt>Returns</dt><dd>CURLcode Original CURLcode returned by curl_perform. </dd></dl>
 
 </div>
 </div>
@@ -254,6 +292,9 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The size of the downloaded data. </p>
+<dl class="section return"><dt>Returns</dt><dd>long long </dd></dl>
+
 </div>
 </div>
 <a id="a97dddbe69fa95c66a7d153467e360aa7" name="a97dddbe69fa95c66a7d153467e360aa7"></a>
@@ -270,6 +311,9 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>The size of the uploaded data. </p>
+<dl class="section return"><dt>Returns</dt><dd>long long </dd></dl>
 
 </div>
 </div>

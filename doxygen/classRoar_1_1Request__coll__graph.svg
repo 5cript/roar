@@ -57,7 +57,7 @@ var sectionId = 'dynsection-0';
 <!-- Node1 -->
 <g id="node1" class="node">
 <title>Node1</title>
-<g id="a_node1"><a xlink:title=" ">
+<g id="a_node1"><a xlink:title="This class extends the boost::beast::http::request&lt;BodyT&gt; with additional convenience.">
 <polygon fill="#bfbfbf" stroke="black" points="238.5,-0.5 238.5,-156.5 421.5,-156.5 421.5,-0.5 238.5,-0.5"/>
 <text text-anchor="middle" x="330" y="-144.5" font-family="Helvetica,sans-Serif" font-size="10.00">Roar::Request&lt; BodyT &gt;</text>
 <polyline fill="none" stroke="black" points="238.5,-137.5 421.5,-137.5 "/>

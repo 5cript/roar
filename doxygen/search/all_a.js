@@ -12,7 +12,7 @@ var searchData=
   ['makesession_9',['makeSession',['../classRoar_1_1Factory.html#ad57056e6a93d35512179bd7def29d489',1,'Roar::Factory']]],
   ['makesslcontext_10',['makeSslContext',['../namespaceRoar.html#a7dcff6d6a92d285344a126d89e0e4f49',1,'Roar']]],
   ['makestandardresponse_11',['makeStandardResponse',['../classRoar_1_1StandardResponseProvider.html#a696f09b2f00afa9a317e0112fe9f6d6b',1,'Roar::StandardResponseProvider::makeStandardResponse()'],['../classRoar_1_1StandardTextResponseProvider.html#a604715beaf115ab2cc1b008ac1cb2958',1,'Roar::StandardTextResponseProvider::makeStandardResponse()']]],
-  ['matches_12',['matches',['../structRoar_1_1ProtoRoute.html#a08dda83e83821e4fa543f109c874ef20',1,'Roar::ProtoRoute::matches()'],['../classRoar_1_1Route.html#a3def21cf010dc7aa146e3dbda58fb490',1,'Roar::Route::matches()']]],
+  ['matches_12',['matches',['../structRoar_1_1ProtoRoute.html#a08dda83e83821e4fa543f109c874ef20',1,'Roar::ProtoRoute::matches()'],['../classRoar_1_1Route.html#a1d70a03b3ef4520af7d8743bc41ed3f9',1,'Roar::Route::matches()']]],
   ['memoizedfilesize_5f_13',['memoizedFileSize_',['../classRoar_1_1Curl_1_1FileSource.html#ab23509d1a2d021e6d286a22e3c566c10',1,'Roar::Curl::FileSource']]],
   ['memory_2ehpp_14',['memory.hpp',['../memory_8hpp.html',1,'']]],
   ['method_15',['method',['../structRoar_1_1SslContextCreationParameters.html#ae48664e0c97866ab6de0f245183f3b72',1,'Roar::SslContextCreationParameters']]],

@@ -11,7 +11,7 @@
 <!-- Node0 -->
 <g id="node1" class="node">
 <title>Node0</title>
-<g id="a_node1"><a xlink:href="structRoar_1_1Detail_1_1FirstType.html" target="_top" xlink:title=" ">
+<g id="a_node1"><a xlink:href="structRoar_1_1Detail_1_1FirstType.html" target="_top" xlink:title="Returns the first type of a parameter pack.">
 <polygon fill="none" stroke="black" points="0,-0.5 0,-19.5 164,-19.5 164,-0.5 0,-0.5"/>
 <text text-anchor="middle" x="82" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">Roar::Detail::FirstType&lt; T, Args &gt;</text>
 </a>

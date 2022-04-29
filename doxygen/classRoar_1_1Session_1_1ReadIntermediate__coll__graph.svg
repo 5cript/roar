@@ -57,7 +57,7 @@ var sectionId = 'dynsection-0';
 <!-- Node1 -->
 <g id="node1" class="node">
 <title>Node1</title>
-<g id="a_node1"><a xlink:title=" ">
+<g id="a_node1"><a xlink:title="Utility class to build up read operations.">
 <polygon fill="#bfbfbf" stroke="black" points="408,-0.5 408,-134.5 617,-134.5 617,-0.5 408,-0.5"/>
 <text text-anchor="middle" x="512.5" y="-122.5" font-family="Helvetica,sans-Serif" font-size="10.00">Roar::Session::ReadIntermediate&lt; BodyT &gt;</text>
 <polyline fill="none" stroke="black" points="408,-115.5 617,-115.5 "/>
@@ -68,9 +68,9 @@ var sectionId = 'dynsection-0';
 <text text-anchor="start" x="416" y="-62.5" font-family="Helvetica,sans-Serif" font-size="10.00">+ bodyLimit()</text>
 <text text-anchor="start" x="416" y="-51.5" font-family="Helvetica,sans-Serif" font-size="10.00">+ bodyLimit()</text>
 <text text-anchor="start" x="416" y="-40.5" font-family="Helvetica,sans-Serif" font-size="10.00">+ noBodyLimit()</text>
-<text text-anchor="start" x="416" y="-29.5" font-family="Helvetica,sans-Serif" font-size="10.00">+ readChunk()</text>
-<text text-anchor="start" x="416" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">+ start()</text>
-<text text-anchor="start" x="416" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">&#45; ReadIntermediate()</text>
+<text text-anchor="start" x="416" y="-29.5" font-family="Helvetica,sans-Serif" font-size="10.00">+ start()</text>
+<text text-anchor="start" x="416" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">&#45; ReadIntermediate()</text>
+<text text-anchor="start" x="416" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">&#45; readChunk()</text>
 </a>
 </g>
 </g>
