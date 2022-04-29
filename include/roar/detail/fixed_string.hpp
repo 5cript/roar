@@ -2,6 +2,11 @@
 
 namespace Roar::Detail
 {
+    /**
+     * @brief Utilitarian class to store and modify strings in compile time.
+     *
+     * @tparam Size
+     */
     template <unsigned Size>
     class FixedString
     {
@@ -19,7 +24,7 @@ namespace Roar::Detail
         }
 
         /**
-         * glibc strcmp implementation.
+         * @brief glibc strcmp implementation.
          */
         template <unsigned OtherSize>
         constexpr int compare(FixedString<OtherSize> const& other) const
@@ -46,7 +51,7 @@ namespace Roar::Detail
     FixedString(char const (&)[N]) -> FixedString<N - 1>;
 
     /**
-     *  Allows for compile-time string concatenation. Use very sparingly.
+     * @brief Allows for compile-time string concatenation. Use very sparingly.
      */
     template <unsigned... Length>
     constexpr auto FixConcat(const char (&... strings)[Length])

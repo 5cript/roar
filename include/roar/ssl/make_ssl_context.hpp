@@ -13,5 +13,12 @@ namespace Roar
         std::string_view password = "";
     };
 
+    /**
+     * @brief A function to simplify the creation of ssl contexts. Make one on your own if you need more sophisticated
+     * settings.
+     *
+     * @param settings
+     * @return boost::asio::ssl::context
+     */
     boost::asio::ssl::context makeSslContext(SslContextCreationParameters settings);
 }

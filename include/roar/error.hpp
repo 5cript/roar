@@ -12,6 +12,9 @@
 
 namespace Roar
 {
+    /**
+     * @brief Holds errors that are produced asynchronously anywhere.
+     */
     struct Error
     {
         std::variant<boost::system::error_code, std::string> error;

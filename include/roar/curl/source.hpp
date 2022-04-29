@@ -4,6 +4,10 @@
 
 namespace Roar::Curl
 {
+    /**
+     * @brief Sublass this source class to provide your own Source.
+     * A source provides data to upload to servers.
+     */
     class Source
     {
       public:
@@ -13,7 +17,7 @@ namespace Roar::Curl
         virtual std::size_t fetch(char* buffer, std::size_t amount) = 0;
 
         /**
-         *  Returns the total size to upload.
+         *  Returns the total size to upload. This function is unused if chunked encoding is used.
          */
         virtual std::size_t size() = 0;
 

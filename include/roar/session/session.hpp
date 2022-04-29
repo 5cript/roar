@@ -48,8 +48,17 @@ namespace Roar
             std::shared_ptr<const StandardResponseProvider> standardResponseProvider);
         ROAR_PIMPL_SPECIAL_FUNCTIONS(Session);
 
+        /**
+         * @brief Calls shutdown on the socket.
+         */
         void close();
 
+        /**
+         * @brief Send a boost::beast::http response to the client.
+         *
+         * @tparam BodyT Body type of the response.
+         * @param response A response object.
+         */
         template <typename BodyT>
         void send(boost::beast::http::response<BodyT>&& response)
         {
@@ -65,12 +74,23 @@ namespace Roar
             });
         }
 
+        /**
+         * @brief Send a response to the client.
+         *
+         * @tparam BodyT Body type of the response.
+         * @param response A response object.
+         */
         template <typename BodyT>
         void send(Response<BodyT>&& response)
         {
             std::move(response).send(*this);
         }
 
+        /**
+         * @brief Utility class to build up read operations.
+         *
+         * @tparam BodyT The body type of this read.
+         */
         template <typename BodyT>
         class ReadIntermediate : public std::enable_shared_from_this<ReadIntermediate<BodyT>>
         {
@@ -98,24 +118,58 @@ namespace Roar
             ReadIntermediate(ReadIntermediate&&) = default;
             ReadIntermediate& operator=(ReadIntermediate&&) = default;
 
+            /**
+             * @brief Set a body limit.
+             * @param The limit as an std::size_t
+             *
+             * @return ReadIntermediate& Returns itself for chaining.
+             */
             ReadIntermediate& bodyLimit(std::size_t limit)
             {
                 req_.body_limit(limit);
                 return *this;
             }
 
+            /**
+             * @brief Set a body limit.
+             * @param The limit as a string. Must be a number.
+             *
+             * @return ReadIntermediate& Returns itself for chaining.
+             */
             ReadIntermediate& bodyLimit(boost::beast::string_view limit)
             {
                 req_.body_limit(std::stoull(std::string{limit}));
                 return *this;
             }
 
+            /**
+             * @brief Accept a body of any length.
+             *
+             * @return ReadIntermediate& Returns itself for chaining.
+             */
             ReadIntermediate& noBodyLimit()
             {
                 req_.body_limit(boost::none);
                 return *this;
             }
 
+            /**
+             * @brief Start reading here. If you dont call this function, nothing is read.
+             *
+             * @tparam Forwards
+             * @param onReadComplete A function that is called when the read operation completes in entirety.
+             */
+            template <typename... Forwards>
+            void start(std::function<void(Session& session, Request<BodyT> const&)> onReadComplete)
+            {
+                onReadComplete_ = std::move(onReadComplete);
+                readChunk();
+            }
+
+          private:
+            /**
+             * @brief Reads some bytes off of the stream.
+             */
             void readChunk()
             {
                 session_->withStreamDo([this](auto& stream) {
@@ -148,13 +202,6 @@ namespace Roar
                 });
             }
 
-            template <typename... Forwards>
-            void start(std::function<void(Session& session, Request<BodyT> const&)> onReadComplete)
-            {
-                onReadComplete_ = std::move(onReadComplete);
-                readChunk();
-            }
-
           private:
             std::shared_ptr<Session> session_;
             boost::beast::http::request_parser<BodyT> req_;
@@ -162,6 +209,17 @@ namespace Roar
             Detail::RequestExtensions originalExtensions_;
         };
 
+        /**
+         * @brief Read data from the client.
+         *
+         * @tparam BodyT What body type to read?
+         * @tparam OriginalBodyT Body of the request that came before the this read.
+         * @tparam Forwards
+         * @param req A request that was received
+         * @param forwardArgs
+         * @return std::shared_ptr<ReadIntermediate<BodyT>> A class that can be used to start the reading process and
+         * set options.
+         */
         template <typename BodyT, typename OriginalBodyT, typename... Forwards>
         [[nodiscard]] std::shared_ptr<ReadIntermediate<BodyT>>
         read(Request<OriginalBodyT> req, Forwards&&... forwardArgs)

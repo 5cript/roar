@@ -30,17 +30,32 @@ namespace Roar
         Regex
     };
 
+    /**
+     * @brief This class is what is used in ROAR_GET, ROAR_PUT, ... requests
+     * All options you can set for routes behind these macros are part of this object.
+     *
+     * @tparam RequestListenerT The request listener class that the route belongs to.
+     */
     template <typename RequestListenerT>
     struct RouteInfo
     {
+        /// What verb for this route?
         std::optional<boost::beast::http::verb> verb = std::nullopt;
+
+        /// A path to route to.
         char const* path = nullptr;
+
+        /// Is the path a string or a regex, ...?
         RoutePathType pathType = RoutePathType::RegularString;
+
+        /// Some options of this route. See documentation for RouteOptions.
         RouteOptions routeOptions = {
             .allowInsecure = false,
             .expectUpgrade = false,
             .cors = std::nullopt,
         };
+
+        /// Set automatically by the macro.
         HandlerType<RequestListenerT> handler = nullptr;
     };
 
@@ -84,9 +99,10 @@ namespace Roar
     inline static const auto roar_##HandlerName = \
         Roar::extendRouteInfo({.verb = boost::beast::http::verb::DefaultVerb}, &this_type::HandlerName)
 
+/// Define a new route.
 #define ROAR_ROUTE(HandlerName) ROAR_ROUTE_I(HandlerName, get)
 
-// Some default verbs, others can be accessed via ROAR_ROUTE({.verb = ..., .path = ""})
+/// Some default verbs, others can be accessed via ROAR_ROUTE({.verb = ..., .path = ""})
 #define ROAR_GET(HandlerName) ROAR_ROUTE_I(HandlerName, get)
 #define ROAR_POST(HandlerName) ROAR_ROUTE_I(HandlerName, post)
 #define ROAR_PUT(HandlerName) ROAR_ROUTE_I(HandlerName, put)

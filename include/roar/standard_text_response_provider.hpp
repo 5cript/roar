@@ -4,6 +4,9 @@
 
 namespace Roar
 {
+    /**
+     * @brief This standard response provider implementation produces very simple text responses.
+     */
     class StandardTextResponseProvider : public StandardResponseProvider
     {
       public:

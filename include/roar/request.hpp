@@ -29,6 +29,11 @@ namespace Roar
         };
     }
 
+    /**
+     * @brief This class extends the boost::beast::http::request<BodyT> with additional convenience.
+     *
+     * @tparam BodyT Body type of the request. (empty_body, string_body, ...) See boost beast bodies.
+     */
     template <typename BodyT>
     class Request
         : public boost::beast::http::request<BodyT>

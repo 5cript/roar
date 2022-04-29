@@ -51,13 +51,25 @@ namespace Roar
             return *this;
         }
 
+        /**
+         * @brief Retrieve the response body object.
+         *
+         * @return auto&
+         */
         auto& body()
         {
             return response_.body();
         }
 
+        /**
+         * @brief This function can be used to assign something to the body.
+         *
+         * @tparam T
+         * @param toAssign
+         * @return Response& Returned for chaining.
+         */
         template <typename T>
-        auto body(T&& toAssign)
+        Response& body(T&& toAssign)
         {
 #ifdef ROAR_ENABLE_NLOHMANN_JSON
             if constexpr (std::is_same_v<std::decay_t<T>, nlohmann::json>)
@@ -68,42 +80,82 @@ namespace Roar
             return *this;
         }
 
+        /**
+         * @brief (De)Activate chunked encoding.
+         *
+         * @param activate
+         * @return Response& Returned for chaining.
+         */
         Response& chunked(bool activate = true)
         {
             response_.chunked(activate);
             return *this;
         }
 
+        /**
+         * @brief For setting of the content type.
+         *
+         * @param type
+         * @return Response& Returned for chaining.
+         */
         Response& contentType(std::string const& type)
         {
             return setHeader(boost::beast::http::field::content_type, type);
         }
 
+        /**
+         * @brief For setting of the content type.
+         *
+         * @param type
+         * @return Response& Returned for chaining.
+         */
         Response& contentType(char const* type)
         {
             return setHeader(boost::beast::http::field::content_type, type);
         }
 
-        Response& setHeader(boost::beast::http::field field, std::string const& type)
+        /**
+         * @brief Can be used to set a header field.
+         *
+         * @return Response& Returned for chaining.
+         */
+        Response& setHeader(boost::beast::http::field field, std::string const& value)
         {
-            response_.set(field, type);
+            response_.set(field, value);
             return *this;
         }
 
-        Response& setHeader(boost::beast::http::field field, char const* type)
+        /**
+         * @brief Can be used to set a header field.
+         *
+         * @return Response& Returned for chaining.
+         */
+        Response& setHeader(boost::beast::http::field field, char const* value)
         {
-            response_.set(field, type);
+            response_.set(field, value);
             return *this;
         }
 
+        /**
+         * @brief Sets header values that are implicit by the body (like Content-Lenght).
+         *
+         * @return Response& Returned for chaining.
+         */
         Response& preparePayload()
         {
             response_.prepare_payload();
             return *this;
         }
 
+        /**
+         * @brief Sets cors headers.
+         * @param req A request to base the cors headers off of.
+         * @param cors A cors settings object. If not supplied, a very permissive setting is used.
+         *
+         * @return Response& Returned for chaining.
+         */
         template <typename RequestBodyT>
-        void enableCors(Request<RequestBodyT> const& req, std::optional<CorsSettings> cors = std::nullopt)
+        Response& enableCors(Request<RequestBodyT> const& req, std::optional<CorsSettings> cors = std::nullopt)
         {
             if (!cors)
                 cors = makePermissiveCorsSettings(req.method());
@@ -162,17 +214,36 @@ namespace Roar
                             return std::move(accum) + "," + std::string{boost::beast::http::to_string(field)};
                         }));
             }
+
+            return *this;
         }
 
+        /**
+         * @brief Sends this response on a given session. This invalides this response object.
+         *
+         * @tparam SessionT
+         * @param session The session to send this on.
+         */
         template <typename SessionT>
         void send(SessionT& session)
         {
             session.send(std::move(response_));
         }
 
+        /**
+         * @brief Ejects the underlying boost response.
+         */
         boost::beast::http::response<BodyT>&& response() &&
         {
             return std::move(response_);
+        }
+
+        /**
+         * @brief Accessor for the underlying boost response.
+         */
+        boost::beast::http::response<BodyT>& response() &
+        {
+            return response_;
         }
 
       private:

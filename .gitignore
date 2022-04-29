@@ -3,3 +3,4 @@ build
 .vscode
 compile_commands.json
 gdbserver.exe.stackdump
+gh-pages

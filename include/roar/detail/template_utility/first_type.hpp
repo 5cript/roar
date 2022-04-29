@@ -2,6 +2,12 @@
 
 namespace Roar::Detail
 {
+    /**
+     * @brief Returns the first type of a parameter pack.
+     *
+     * @tparam T
+     * @tparam Args
+     */
     template <typename T, typename... Args>
     struct FirstType
     {
