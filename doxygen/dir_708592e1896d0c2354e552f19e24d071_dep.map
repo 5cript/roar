@@ -1,0 +1,18 @@
+<map id="src/roar" name="src/roar">
+<area shape="rect" id="node8" href="dir_d44c64559bbebec7f509842c48db8b23.html" title="include" alt="" coords="339,159,411,207"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000015_000011.html" title="37" alt="" coords="422,180,437,194"/>
+<area shape="rect" id="node2" href="dir_533f187fc88d9236d5f7867101ba41d0.html" title="curl" alt="" coords="531,63,603,111"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000002_000011.html" title="13" alt="" coords="423,170,438,184"/>
+<area shape="rect" id="node3" href="dir_a7b59eada69f713e60615db6b3a43b38.html" title="routing" alt="" coords="435,63,507,111"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000017_000011.html" title="8" alt="" coords="413,145,421,159"/>
+<area shape="rect" id="node4" href="dir_530370ece72f7fec453bf913ae586c00.html" title="session" alt="" coords="339,63,411,111"/>
+<area shape="rect" id="edge4-headlabel" href="dir_000020_000011.html" title="5" alt="" coords="379,133,387,148"/>
+<area shape="rect" id="node5" href="dir_7d0c0774b28c8b676c1d4dbe481b3423.html" title="ssl" alt="" coords="243,63,315,111"/>
+<area shape="rect" id="edge5-headlabel" href="dir_000027_000011.html" title="1" alt="" coords="340,132,348,147"/>
+<area shape="rect" id="node6" href="dir_1523456250f1bb86897d17b4e1c13da2.html" title="utility" alt="" coords="147,63,219,111"/>
+<area shape="rect" id="edge6-headlabel" href="dir_000030_000011.html" title="2" alt="" coords="319,153,327,168"/>
+<area shape="rect" id="node7" href="dir_4c87c67d5204995fd4c2b9528710af28.html" title="websocket" alt="" coords="37,63,123,111"/>
+<area shape="rect" id="edge7-headlabel" href="dir_000033_000011.html" title="2" alt="" coords="317,162,325,176"/>
+<area shape="rect" id="clust2" href="dir_708592e1896d0c2354e552f19e24d071.html" alt="" coords="27,52,709,121"/>
+<area shape="rect" id="clust1" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html" title="src" alt="" coords="16,16,720,132"/>
+</map>

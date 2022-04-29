@@ -1,5 +1,0 @@
-build
-.cache
-.vscode
-compile_commands.json
-gdbserver.exe.stackdump

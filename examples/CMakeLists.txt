@@ -1,3 +1,0 @@
-add_subdirectory(request_listener)
-add_subdirectory(simple_server)
-add_subdirectory(websocket)
