@@ -1,4 +1,5 @@
 #include "test_cors.hpp"
+#include "test_reading.hpp"
 #include "curl/test_request.hpp"
 
 #include <gtest/gtest.h>

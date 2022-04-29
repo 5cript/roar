@@ -33,3 +33,7 @@ if (${ROAR_BUILD_TESTS})
     include(./cmake/gtest.cmake)
     add_subdirectory(test)
 endif()
+
+if (${ROAR_BUILD_DOCUMENTATION})
+    add_subdirectory(docs_source)
+endif()

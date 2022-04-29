@@ -93,7 +93,7 @@ namespace Roar
          * @param listener
          */
         template <typename RequestListenerT, typename... ConstructionArgsT>
-        void installRequestListener(ConstructionArgsT&&... args)
+        std::shared_ptr<RequestListenerT> installRequestListener(ConstructionArgsT&&... args)
         {
             auto listener = std::make_shared<RequestListenerT>(std::forward<ConstructionArgsT>(args)...);
             using routes = boost::describe::
@@ -144,6 +144,7 @@ namespace Roar
                 }
             });
             addRequestListenerToRouter(std::move(extractedRoutes));
+            return listener;
         }
 
       private:

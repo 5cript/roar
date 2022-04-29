@@ -4,7 +4,7 @@ IS_MSYS2_CLANG=off
 COMPILER=clang++
 CCOMPILER=clang
 LINKER=lld
-THREADS=1
+THREADS=8
 BUILD_TYPE=Debug
 
 while getopts b:j: opts; do
@@ -52,6 +52,7 @@ cmake \
   -DCMAKE_LINKER=$LINKER \
   -DCMAKE_CXX_STANDARD=20 \
   -DROAR_BUILD_EXAMPLES=on \
+  -DROAR_BUILD_DOCUMENTATION=on \
   -DROAR_BUILD_TESTS=on \
   -DENABLE_SANITIZER_THREAD=on \
   ../..
@@ -61,4 +62,6 @@ node ./scripts/copy_compile_commands.js
 cd ${BUILD_DIR}
 
 make -j$THREADS
+#cmake --build . --target doxygen
+cmake --build . --target documentation
 

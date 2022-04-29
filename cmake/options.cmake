@@ -1,6 +1,7 @@
 option(ROAR_BUILD_EXAMPLES "Build examples?" off)
 option(ROAR_BUILD_TESTS "Build tests?" off)
 option(ROAR_ENABLE_NLOHMANN_JSON "Enable nlohmann json?" on)
+option(ROAR_BUILD_DOCUMENTATION "Build documentation?" off)
 
 # Sanitizers
 option(ENABLE_SANITIZER_ADDRESS "Enable address sanitizer" off)
