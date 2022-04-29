@@ -6,6 +6,11 @@ CCOMPILER=clang
 LINKER=lld
 THREADS=8
 BUILD_TYPE=Debug
+BUILD_DOCS=on
+
+DIR="${BASH_SOURCE%/*}"
+if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
+. "$DIR/build_overrides.sh"
 
 while getopts b:j: opts; do
    case ${opts} in
@@ -52,7 +57,7 @@ cmake \
   -DCMAKE_LINKER=$LINKER \
   -DCMAKE_CXX_STANDARD=20 \
   -DROAR_BUILD_EXAMPLES=on \
-  -DROAR_BUILD_DOCUMENTATION=on \
+  -DROAR_BUILD_DOCUMENTATION=$BUILD_DOCS \
   -DROAR_BUILD_TESTS=on \
   -DENABLE_SANITIZER_THREAD=on \
   ../..
@@ -61,7 +66,5 @@ cd ../..
 node ./scripts/copy_compile_commands.js
 cd ${BUILD_DIR}
 
-make -j$THREADS
-#cmake --build . --target doxygen
-cmake --build . --target documentation
+cmake --build . -- -j$THREADS
 
