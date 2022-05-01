@@ -168,6 +168,13 @@ namespace Roar
          */
         bool isSecure() const;
 
+        /**
+         * @brief Get the Executor object
+         *
+         * @return boost::asio::any_io_executor& The ASIO any_io_executor.
+         */
+        boost::asio::any_io_executor getExecutor() const;
+
       private:
         void addRequestListenerToRouter(std::unordered_multimap<boost::beast::http::verb, ProtoRoute>&& routes);
 

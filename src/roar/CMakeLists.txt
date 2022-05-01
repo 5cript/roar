@@ -5,7 +5,8 @@ add_library(roar STATIC
   session/factory.cpp
   session/session.cpp
   ssl/make_ssl_context.cpp
-  websocket/websocket_session.cpp
+  websocket/web_socket_session.cpp
+  websocket/client.cpp
   curl/sources/file_source.cpp
   curl/sources/string_source.cpp
   curl/global_curl_context.cpp
@@ -23,7 +24,7 @@ find_library(LCRYPTO crypto)
 find_library(LCRYPTOPP cryptopp)
 
 target_include_directories(roar PUBLIC ${CMAKE_SOURCE_DIR}/include ${CURL_INCLUDE_DIR})
-target_link_libraries(roar PUBLIC Boost::system ${CURL_LIBRARIES} ${LSSL} ${LCRYPTOPP} ${LCRYPTO})
+target_link_libraries(roar PUBLIC Boost::system promise ${CURL_LIBRARIES} ${LSSL} ${LCRYPTOPP} ${LCRYPTO})
 
 if (${ROAR_ENABLE_NLOHMANN_JSON})
     target_link_libraries(roar PUBLIC nlohmann_json::nlohmann_json)

@@ -190,11 +190,11 @@ namespace Roar
         return *impl_->standardResponseProvider;
     }
     //------------------------------------------------------------------------------------------------------------------
-    std::shared_ptr<WebsocketSession> Session::upgrade(Request<boost::beast::http::empty_body> const& req)
+    std::shared_ptr<WebSocketSession> Session::upgrade(Request<boost::beast::http::empty_body> const& req)
     {
         if (req.isWebsocketUpgrade())
         {
-            auto ws = std::make_shared<WebsocketSession>(std::move(impl_->stream));
+            auto ws = std::make_shared<WebSocketSession>(std::move(impl_->stream));
             ws->accept(req);
             return ws;
         }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <roar/error.hpp>
-#include <roar/websocket/websocket_session.hpp>
+#include <roar/websocket/web_socket_session.hpp>
 #include <roar/response.hpp>
 #include <roar/beast/forward.hpp>
 #include <roar/detail/pimpl_special_functions.hpp>
@@ -262,7 +262,7 @@ namespace Roar
          * @param req The request to perform this upgrade from.
          * @return std::shared_ptr<WebsocketSession> A websocket session or an invalid shared_ptr.
          */
-        [[nodiscard]] std::shared_ptr<WebsocketSession> upgrade(Request<boost::beast::http::empty_body> const& req);
+        [[nodiscard]] std::shared_ptr<WebSocketSession> upgrade(Request<boost::beast::http::empty_body> const& req);
 
         /**
          * @brief Retrieve the options defined by the request listener class for this route.

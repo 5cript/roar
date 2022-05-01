@@ -101,6 +101,11 @@ namespace Roar
         stop();
     }
     //------------------------------------------------------------------------------------------------------------------
+    boost::asio::any_io_executor Server::getExecutor() const
+    {
+        return impl_->acceptor.get_executor();
+    }
+    //------------------------------------------------------------------------------------------------------------------
     boost::leaf::result<void> Server::start(unsigned short port, std::string const& host)
     {
         return start(Dns::resolveSingle(impl_->acceptor.get_executor(), host, port));
