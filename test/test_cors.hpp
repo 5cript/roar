@@ -24,6 +24,15 @@ namespace Roar::Tests
                     .cors = makePermissiveCorsSettings("get"),
                 },
         });
+        ROAR_GET(withUnsecureCors)
+        ({
+            .path = "/unsecurePermissiveCors",
+            .routeOptions =
+                {
+                    .allowUnsecure = true,
+                    .cors = makePermissiveCorsSettings("get"),
+                },
+        });
         ROAR_GET(noCors)
         ({
             .path = "/noCors",
@@ -74,7 +83,7 @@ namespace Roar::Tests
             (),
             (),
             (),
-            (roar_withCors, roar_noCors, roar_noCorsByDefault, roar_withCustomCors))
+            (roar_withCors, roar_noCors, roar_noCorsByDefault, roar_withCustomCors, roar_withUnsecureCors))
     };
     inline void CorsListener::withCors(Session& session, EmptyBodyRequest&& req)
     {
@@ -92,6 +101,10 @@ namespace Roar::Tests
     {
         respondDefault(session, std::move(req));
     }
+    inline void CorsListener::withUnsecureCors(Session& session, EmptyBodyRequest&& req)
+    {
+        respondDefault(session, std::move(req));
+    }
 
     class CorsTests
         : public CommonServerSetup
@@ -103,7 +116,9 @@ namespace Roar::Tests
         void SetUp() override
         {
             makeDefaultServer();
+            makeSecureServer();
             server_->installRequestListener<CorsListener>();
+            secureServer_->installRequestListener<CorsListener>();
         }
     };
 
@@ -212,5 +227,19 @@ namespace Roar::Tests
                        .options(url("/permissiveCors"));
         ASSERT_NE(std::end(headers), headers.find("Access-Control-Allow-Methods"));
         EXPECT_EQ(headers["Access-Control-Allow-Methods"], "GET");
+    }
+
+    TEST_F(CorsTests, PreflightRequestOnEncryptedServerIsNotAccessibleUnencrypted)
+    {
+        std::unordered_map<std::string, std::string> headers;
+        auto res = Curl::Request{}.headerSink(headers).options(urlEncryptedServer("/permissiveCors"));
+        EXPECT_EQ(res.code(), boost::beast::http::status::forbidden);
+    }
+
+    TEST_F(CorsTests, PreflightRequestOnEncryptedServerIsAccessibleUnencryptedWhenAllowed)
+    {
+        std::unordered_map<std::string, std::string> headers;
+        auto res = Curl::Request{}.headerSink(headers).options(urlEncryptedServer("/unsecurePermissiveCors"));
+        EXPECT_EQ(res.code(), boost::beast::http::status::ok);
     }
 }

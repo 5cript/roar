@@ -38,8 +38,8 @@ namespace Roar
             std::function<void(Error&&)> onError,
             std::weak_ptr<Router> router,
             std::shared_ptr<const StandardResponseProvider> standardResponseProvider)
-            : stream{[&socket, &sslContext]() -> decltype(stream) {
-                if (sslContext)
+            : stream{[&socket, &sslContext, isSecure]() -> decltype(stream) {
+                if (isSecure)
                     return boost::beast::ssl_stream<boost::beast::tcp_stream>{std::move(socket), *sslContext};
                 return boost::beast::tcp_stream{std::move(socket)};
             }()}
@@ -140,6 +140,11 @@ namespace Roar
         });
     }
     //------------------------------------------------------------------------------------------------------------------
+    bool Session::isSecure() const
+    {
+        return std::holds_alternative<boost::beast::ssl_stream<boost::beast::tcp_stream>>(impl_->stream);
+    }
+    //------------------------------------------------------------------------------------------------------------------
     void Session::performSslHandshake()
     {
         std::get<boost::beast::ssl_stream<boost::beast::tcp_stream>>(impl_->stream)
@@ -225,6 +230,19 @@ namespace Roar
         {
             impl_->onError({.error = ec, .additionalInfo = "Error during stream shutdown."});
         }
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    void Session::sendStandardResponse(boost::beast::http::status status, std::string_view additionalInfo)
+    {
+        send(impl_->standardResponseProvider->makeStandardResponse(*this, status, additionalInfo));
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    void Session::sendStrictTransportSecurityResponse()
+    {
+        auto res =
+            impl_->standardResponseProvider->makeStandardResponse(*this, boost::beast::http::status::forbidden, "");
+        res.set(boost::beast::http::field::strict_transport_security, "max-age=3600");
+        send(std::move(res));
     }
     //##################################################################################################################
 }

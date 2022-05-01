@@ -20,6 +20,7 @@
 #include <tuple>
 #include <unordered_map>
 #include <functional>
+#include <iterator>
 
 namespace Roar
 {
@@ -99,12 +100,13 @@ namespace Roar
             using routes = boost::describe::
                 describe_members<RequestListenerT, boost::describe::mod_any_access | boost::describe::mod_static>;
             std::unordered_multimap<boost::beast::http::verb, ProtoRoute> extractedRoutes;
-            boost::mp11::mp_for_each<routes>([&extractedRoutes, &listener]<typename T>(T route) {
-                ProtoRoute protoRoute{.path = route.pointer->path};
+            boost::mp11::mp_for_each<routes>([&extractedRoutes, &listener, this]<typename T>(T route) {
+                ProtoRoute protoRoute{};
                 switch (route.pointer->pathType)
                 {
                     case (RoutePathType::RegularString):
                     {
+                        protoRoute.path = std::string{route.pointer->path};
                         protoRoute.matches =
                             [p = route.pointer->path](std::string const& path, std::vector<std::string>& regexMatches) {
                                 return path == p;
@@ -113,23 +115,30 @@ namespace Roar
                     }
                     case (RoutePathType::Regex):
                     {
-                        protoRoute.matches =
-                            [p = route.pointer->path](std::string const& path, std::vector<std::string>& regexMatches) {
-                                std::smatch smatch;
-                                auto result = std::regex_match(path, smatch, std::regex{p});
-                                regexMatches.reserve(smatch.size());
-                                for (auto const& submatch : smatch)
-                                    regexMatches.push_back(submatch.str());
-                                return result;
-                            };
+                        protoRoute.path = std::regex{route.pointer->path};
+                        protoRoute.matches = [p = route.pointer->path](
+                                                 std::string const& path, std::vector<std::string>& regexMatches) {
+                            std::smatch smatch;
+                            auto result = std::regex_match(path, smatch, std::regex{p});
+                            regexMatches.reserve(smatch.size());
+                            for (auto submatch = std::next(std::begin(smatch)), end = std::end(smatch); submatch < end;
+                                 ++submatch)
+                                regexMatches.push_back(submatch->str());
+                            return result;
+                        };
                         break;
                     }
                     default:
                         throw std::runtime_error("Invalid path type for route.");
                 }
                 protoRoute.routeOptions = route.pointer->routeOptions;
-                protoRoute.callRoute = [listener, handler = route.pointer->handler](
+                protoRoute.callRoute = [serverIsSecure = isSecure(),
+                                        listener,
+                                        handler = route.pointer->handler,
+                                        allowUnsecure = protoRoute.routeOptions.allowUnsecure](
                                            Session& session, Request<boost::beast::http::empty_body> req) {
+                    if (serverIsSecure && !session.isSecure() && !allowUnsecure)
+                        return session.sendStrictTransportSecurityResponse();
                     std::invoke(handler, *listener, session, std::move(req));
                 };
                 extractedRoutes.emplace(*route.pointer->verb, protoRoute);
@@ -137,7 +146,11 @@ namespace Roar
                 if (protoRoute.routeOptions.cors && protoRoute.routeOptions.cors->generatePreflightOptionsRoute)
                 {
                     auto preflightRoute = protoRoute;
-                    protoRoute.callRoute = [](Session& session, Request<boost::beast::http::empty_body> const& req) {
+                    protoRoute.callRoute = [serverIsSecure = isSecure(),
+                                            allowUnsecure = protoRoute.routeOptions.allowUnsecure](
+                                               Session& session, Request<boost::beast::http::empty_body> const& req) {
+                        if (serverIsSecure && !session.isSecure() && !allowUnsecure)
+                            return session.sendStrictTransportSecurityResponse();
                         session.send(session.prepareResponse(req));
                     };
                     extractedRoutes.emplace(boost::beast::http::verb::options, preflightRoute);
@@ -146,6 +159,14 @@ namespace Roar
             addRequestListenerToRouter(std::move(extractedRoutes));
             return listener;
         }
+
+        /**
+         * @brief Returns whether this server has a certificate and key and is therefore a HTTPS server.
+         *
+         * @return true is HTTPS.
+         * @return false is not HTTPS.
+         */
+        bool isSecure() const;
 
       private:
         void addRequestListenerToRouter(std::unordered_multimap<boost::beast::http::verb, ProtoRoute>&& routes);

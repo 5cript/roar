@@ -6,6 +6,8 @@
 
 namespace Roar::Tests
 {
+    using namespace Roar::RegexLiterals;
+
     class HeaderReflector
     {
       private:
@@ -38,11 +40,18 @@ namespace Roar::Tests
         ROAR_MAKE_LISTENER(SimpleRoutes);
 
         ROAR_GET(index)("/index.txt");
+        ROAR_GET(ab)("/a/b");
+        ROAR_GET(anything)(R"(\/([^\/]+)\/(.+))"_rgx);
         ROAR_PUT(putHere)("/putHere");
         ROAR_POST(postHere)("/postHere");
         ROAR_DELETE(deleteHere)("/deleteHere");
         ROAR_OPTIONS(optionsHere)("/optionsHere");
         ROAR_HEAD(headHere)("/headHere");
+        ROAR_GET(unsecure)
+        ({.path = "/unsecure",
+          .routeOptions = {
+              .allowUnsecure = true,
+          }});
 
       private:
         void justOk(Session& session, EmptyBodyRequest&& req)
@@ -57,7 +66,15 @@ namespace Roar::Tests
             (),
             (),
             (),
-            (roar_index, roar_putHere, roar_postHere, roar_deleteHere, roar_optionsHere, roar_headHere))
+            (roar_index,
+             roar_putHere,
+             roar_postHere,
+             roar_deleteHere,
+             roar_optionsHere,
+             roar_headHere,
+             roar_anything,
+             roar_ab,
+             roar_unsecure))
     };
     inline void SimpleRoutes::index(Session& session, EmptyBodyRequest&& req)
     {
@@ -95,5 +112,27 @@ namespace Roar::Tests
     inline void SimpleRoutes::headHere(Session& session, EmptyBodyRequest&& req)
     {
         justOk(session, std::move(req));
+    }
+    inline void SimpleRoutes::ab(Session& session, EmptyBodyRequest&& req)
+    {
+        using namespace boost::beast::http;
+        session.prepareResponse<string_body>(req).body("AB").contentType("text/plain").status(status::ok).send(session);
+    }
+    inline void SimpleRoutes::anything(Session& session, EmptyBodyRequest&& req)
+    {
+        using namespace boost::beast::http;
+        session.prepareResponse<string_body>(req)
+            .body(nlohmann::json{
+                {"path", req.path()},
+                {"matches", *req.pathMatches()},
+            })
+            .contentType("text/plain")
+            .status(status::ok)
+            .send(session);
+    }
+    inline void SimpleRoutes::unsecure(Session& session, EmptyBodyRequest&& req)
+    {
+        using namespace boost::beast::http;
+        session.prepareResponse<string_body>(req).status(status::no_content).send(session);
     }
 }

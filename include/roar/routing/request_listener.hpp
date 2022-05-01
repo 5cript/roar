@@ -50,7 +50,7 @@ namespace Roar
 
         /// Some options of this route. See documentation for RouteOptions.
         RouteOptions routeOptions = {
-            .allowInsecure = false,
+            .allowUnsecure = false,
             .expectUpgrade = false,
             .cors = std::nullopt,
         };

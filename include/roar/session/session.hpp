@@ -271,6 +271,27 @@ namespace Roar
          */
         [[nodiscard]] RouteOptions const& routeOptions();
 
+        /**
+         * @brief Returns whether or not this is an encrypted session.
+         *
+         * @return true Session is encrypted.
+         * @return false Session is not encrypted.
+         */
+        bool isSecure() const;
+
+        /**
+         * @brief Sends a standard response like "404 not found".
+         *
+         * @param status The status to send.
+         * @param additionalInfo Some additional info added into the body (depends on standardResponseProvider).
+         */
+        void sendStandardResponse(boost::beast::http::status status, std::string_view additionalInfo = "");
+
+        /**
+         * @brief Sends a 403 with Strict-Transport-Security. Used only for unencrypted request on enforced HTTPS.
+         */
+        void sendStrictTransportSecurityResponse();
+
       private:
         void setupRouteOptions(RouteOptions options);
 

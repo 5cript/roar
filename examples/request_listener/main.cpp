@@ -13,7 +13,7 @@
 //     ({
 //         .path = "/api/status",
 //         .routeOptions = {
-//  .allowInsecure = true,
+//  .allowUnsecure = true,
 // },
 //     });
 //

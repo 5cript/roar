@@ -2,6 +2,7 @@
 
 #include <boost/beast/http/empty_body.hpp>
 #include <roar/cors.hpp>
+#include <roar/detail/literals/regex.hpp>
 
 #include <string>
 #include <functional>
@@ -16,7 +17,7 @@ namespace Roar
     struct RouteOptions
     {
         /// If the server is an https server, setting this to true will allow unencrypted requests on this route.
-        bool allowInsecure;
+        bool allowUnsecure;
 
         /// Set this to true if you expect a websocket upgrade request on this route.
         bool expectUpgrade;

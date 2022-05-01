@@ -1,5 +1,6 @@
 #pragma once
 
+#include "util/common_listeners.hpp"
 #include "util/common_server_setup.hpp"
 #include "util/test_sources.hpp"
 
@@ -8,8 +9,6 @@
 #include <roar/detail/literals/memory.hpp>
 
 #include <gtest/gtest.h>
-
-#include <iostream>
 
 namespace Roar::Tests
 {
