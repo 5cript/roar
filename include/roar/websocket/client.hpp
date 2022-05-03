@@ -77,8 +77,11 @@ namespace Roar
 
         /**
          * @brief Closes the websocket connection.
+         *
+         * @return true Returns true when the timeout was not reached.
+         * @return false Returns false when the timeout was reached.
          */
-        void close();
+        bool close(std::chrono::seconds closeWaitTimeout = std::chrono::seconds{3});
 
       private:
         struct Implementation;

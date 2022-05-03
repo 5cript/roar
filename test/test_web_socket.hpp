@@ -16,7 +16,7 @@ namespace Roar::Tests
 {
     using namespace std::literals;
 
-    class WebSocketListener
+    class WebSocketListener : public std::enable_shared_from_this<WebSocketListener>
     {
       private:
         ROAR_MAKE_LISTENER(WebSocketListener);
@@ -34,13 +34,22 @@ namespace Roar::Tests
 
       public:
         std::shared_ptr<WebSocketSession> ws;
+        std::function<void()> onAccept;
 
       private:
         BOOST_DESCRIBE_CLASS(WebSocketListener, (), (), (), (roar_wsRoute, roar_notWsRoute))
     };
     inline void WebSocketListener::wsRoute(Session& session, EmptyBodyRequest&& req)
     {
-        ws = session.upgrade(req);
+        session.upgrade(req).then([weak = weak_from_this()](std::shared_ptr<WebSocketSession> ws) {
+            auto self = weak.lock();
+            if (!self)
+                return;
+
+            self->ws = ws;
+            if (self->onAccept)
+                self->onAccept();
+        });
     }
     inline void WebSocketListener::notWsRoute(Session& session, EmptyBodyRequest&& req)
     {
@@ -74,6 +83,11 @@ namespace Roar::Tests
     TEST_F(WebSocketTests, CanUpgradeToWebSocketSession)
     {
         std::promise<bool> synchronizer;
+        std::promise<void> synchronizer2;
+
+        listener_->onAccept = [&synchronizer2]() {
+            synchronizer2.set_value();
+        };
 
         WebSocketClient client{
             WebSocketClient::ConstructionArguments{.executor = server_->getExecutor(), .sslContext = std::nullopt}};
@@ -91,7 +105,9 @@ namespace Roar::Tests
             });
 
         auto future = synchronizer.get_future();
-        ASSERT_EQ(future.wait_for(std::chrono::seconds(3)), std::future_status::ready);
+        auto future2 = synchronizer2.get_future();
+        ASSERT_EQ(future.wait_for(std::chrono::seconds(10)), std::future_status::ready);
+        ASSERT_EQ(future2.wait_for(std::chrono::seconds(10)), std::future_status::ready);
         EXPECT_TRUE(future.get()) << "Websocket client failed to connect.";
         EXPECT_TRUE(listener_->ws) << "Websocket session in listener was not valid.";
     }
@@ -141,7 +157,7 @@ namespace Roar::Tests
             });
 
         auto future = synchronizer.get_future();
-        ASSERT_EQ(future.wait_for(std::chrono::seconds(5)), std::future_status::ready);
+        ASSERT_EQ(future.wait_for(std::chrono::seconds(10)), std::future_status::ready);
         EXPECT_FALSE(future.get()) << "Websocket client failed to connect.";
     }
 
@@ -165,7 +181,7 @@ namespace Roar::Tests
             });
 
         auto future = synchronizer.get_future();
-        ASSERT_EQ(future.wait_for(std::chrono::seconds(5)), std::future_status::ready);
+        ASSERT_EQ(future.wait_for(std::chrono::seconds(10)), std::future_status::ready);
         EXPECT_FALSE(future.get()) << "Websocket client failed to connect.";
     }
 
@@ -173,6 +189,13 @@ namespace Roar::Tests
     {
         std::string recv;
         std::promise<bool> synchronizer;
+
+        listener_->onAccept = [&, this]() {
+            listener_->ws->read().then([&](std::string const& msg) {
+                recv = msg;
+                synchronizer.set_value(true);
+            });
+        };
 
         WebSocketClient client{
             WebSocketClient::ConstructionArguments{.executor = server_->getExecutor(), .sslContext = std::nullopt}};
@@ -183,15 +206,12 @@ namespace Roar::Tests
                 .path = "/ws",
             })
             .then([&synchronizer, &client, &recv, this]() {
-                listener_->ws->read().then([&recv, &synchronizer](std::string const& msg) {
-                    recv = msg;
-                    synchronizer.set_value(true);
-                });
                 client.send("Hello You!");
             });
 
         auto future = synchronizer.get_future();
         ASSERT_EQ(future.wait_for(std::chrono::seconds(10)), std::future_status::ready);
         EXPECT_EQ(recv, "Hello You!");
+        EXPECT_EQ(future.get(), true);
     }
 }

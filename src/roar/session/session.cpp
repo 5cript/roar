@@ -190,15 +190,27 @@ namespace Roar
         return *impl_->standardResponseProvider;
     }
     //------------------------------------------------------------------------------------------------------------------
-    std::shared_ptr<WebSocketSession> Session::upgrade(Request<boost::beast::http::empty_body> const& req)
+    promise::Promise Session::upgrade(Request<boost::beast::http::empty_body> const& req)
     {
-        if (req.isWebsocketUpgrade())
-        {
-            auto ws = std::make_shared<WebSocketSession>(std::move(impl_->stream));
-            ws->accept(req);
-            return ws;
-        }
-        return {};
+        return promise::newPromise([this, &req](promise::Defer d) {
+            if (req.isWebsocketUpgrade())
+            {
+                auto ws = std::make_shared<WebSocketSession>(std::move(impl_->stream));
+                ws->accept(req)
+                    .then([ws, d]() {
+                        d.resolve(ws);
+                    })
+                    .fail([d](Error e) {
+                        d.reject(std::move(e));
+                    });
+            }
+            else
+            {
+                d.reject(Error{
+                    .error = "boost::beast::http::status::bad_request",
+                    .additionalInfo = "Request is not a websocket upgrade."});
+            }
+        });
     }
     //------------------------------------------------------------------------------------------------------------------
     void Session::onWriteComplete(bool expectsClose, boost::beast::error_code ec, std::size_t)

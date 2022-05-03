@@ -12,6 +12,7 @@
 
 #include <stdexcept>
 #include <variant>
+#include <future>
 
 namespace Roar
 {
@@ -131,7 +132,14 @@ namespace Roar
         : impl_{std::make_shared<Implementation>(std::move(args.executor), std::move(args.sslContext))}
     {}
     //------------------------------------------------------------------------------------------------------------------
-    ROAR_PIMPL_SPECIAL_FUNCTIONS_IMPL(WebSocketClient);
+    WebSocketClient::~WebSocketClient()
+    {
+        close(std::chrono::seconds{2});
+    };
+    //------------------------------------------------------------------------------------------------------------------
+    WebSocketClient::WebSocketClient(WebSocketClient&&) = default;
+    //------------------------------------------------------------------------------------------------------------------
+    WebSocketClient& WebSocketClient::operator=(WebSocketClient&&) = default;
     //------------------------------------------------------------------------------------------------------------------
     promise::Promise WebSocketClient::connect(ConnectParameters&& connectParameters)
     {
@@ -204,11 +212,17 @@ namespace Roar
         });
     }
     //------------------------------------------------------------------------------------------------------------------
-    void WebSocketClient::close()
+    bool WebSocketClient::close(std::chrono::seconds closeWaitTimeout)
     {
+        auto waitForClose = std::make_shared<std::promise<void>>();
         impl_->withStreamDo([&, this](auto& ws) {
-            ws.close(boost::beast::websocket::close_code::normal);
+            ws.async_close(
+                boost::beast::websocket::close_code::normal, [waitForClose, impl = impl_->shared_from_this()](auto ec) {
+                    waitForClose->set_value();
+                });
         });
+        auto future = waitForClose->get_future();
+        return future.wait_for(closeWaitTimeout) == std::future_status::ready;
     }
     //##################################################################################################################
 }

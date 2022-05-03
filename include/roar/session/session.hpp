@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <roar/error.hpp>
 #include <roar/websocket/web_socket_session.hpp>
 #include <roar/response.hpp>
@@ -8,6 +9,7 @@
 #include <roar/detail/literals/memory.hpp>
 #include <roar/routing/proto_route.hpp>
 #include <roar/standard_response_provider.hpp>
+#include <roar/detail/promise_compat.hpp>
 
 #include <boost/beast/http/message.hpp>
 #include <boost/beast/http/empty_body.hpp>
@@ -16,6 +18,7 @@
 #include <boost/beast/http/read.hpp>
 #include <boost/beast/ssl/ssl_stream.hpp>
 #include <boost/beast/core/tcp_stream.hpp>
+#include <promise-cpp/promise.hpp>
 
 #include <memory>
 #include <optional>
@@ -108,8 +111,9 @@ namespace Roar
                             std::move(*session.parser()), std::forward<Forwards>(forwardArgs)...};
                     session.parser().reset();
                 }()}
-                , onReadComplete_{}
                 , originalExtensions_{std::move(req).ejectExtensions()}
+                , onChunk_{}
+                , promise_{}
             {
                 req_.body_limit(defaultBodyLimit);
             }
@@ -154,16 +158,34 @@ namespace Roar
             }
 
             /**
+             * @brief Set a callback function that is called whenever some data was read.
+             *
+             * @param onChunkFunc The function to be called. Is called with the buffer and amount of bytes transferred.
+             * Return false in this function to stop reading.
+             * @return ReadIntermediate& Returns itself for chaining.
+             */
+            ReadIntermediate& onReadSome(std::function<bool(boost::beast::flat_buffer&, std::size_t)> onChunkFunc)
+            {
+                onChunk_ = onChunkFunc;
+                return *this;
+            }
+
+            /**
              * @brief Start reading here. If you dont call this function, nothing is read.
              *
-             * @tparam Forwards
-             * @param onReadComplete A function that is called when the read operation completes in entirety.
+             * @return Promise that can be used to await the read. Promise is called with <Session& session,
+             * Request<BodyT> req>.
              */
-            template <typename... Forwards>
-            void start(std::function<void(Session& session, Request<BodyT> const&)> onReadComplete)
+            Detail::PromiseTypeBind<
+                Detail::PromiseTypeBindThen<
+                    Detail::PromiseReferenceWrap<Session>,
+                    Detail::PromiseReferenceWrap<Request<BodyT> const>>,
+                Detail::PromiseTypeBindFail<Error const&>>
+            start()
             {
-                onReadComplete_ = std::move(onReadComplete);
+                promise_ = std::make_unique<promise::Promise>(promise::newPromise());
                 readChunk();
+                return {*promise_};
             }
 
           private:
@@ -178,17 +200,23 @@ namespace Roar
                         stream,
                         session_->buffer(),
                         req_,
-                        [self = this->shared_from_this()](boost::beast::error_code ec, std::size_t) {
+                        [self = this->shared_from_this()](boost::beast::error_code ec, std::size_t bytesReceived) {
                             if (!ec && !self->req_.is_done())
                                 return self->readChunk();
 
                             if (ec)
-                                return self->session_->close();
+                            {
+                                self->session_->close();
+                                self->promise_->reject(Error{.error = ec});
+                            }
+
+                            if (self->onChunk_ && !self->onChunk_(self->session_->buffer(), bytesReceived))
+                                return;
 
                             auto request = Request<BodyT>(self->req_.release(), std::move(self->originalExtensions_));
                             try
                             {
-                                self->onReadComplete_(*self->session_, request);
+                                self->promise_->template resolve(Detail::ref(*self->session_), Detail::cref(request));
                             }
                             catch (std::exception const& exc)
                             {
@@ -205,8 +233,9 @@ namespace Roar
           private:
             std::shared_ptr<Session> session_;
             boost::beast::http::request_parser<BodyT> req_;
-            std::function<void(Session& session, Request<BodyT> const&)> onReadComplete_;
             Detail::RequestExtensions originalExtensions_;
+            std::function<bool(boost::beast::flat_buffer&, std::size_t)> onChunk_;
+            std::unique_ptr<promise::Promise> promise_;
         };
 
         /**
@@ -260,9 +289,9 @@ namespace Roar
          * upgrade request.
          *
          * @param req The request to perform this upgrade from.
-         * @return std::shared_ptr<WebsocketSession> A websocket session or an invalid shared_ptr.
+         * @return a promise resolving to std::shared_ptr<WebsocketSession> being the new websocket session or an
          */
-        [[nodiscard]] std::shared_ptr<WebSocketSession> upgrade(Request<boost::beast::http::empty_body> const& req);
+        [[nodiscard]] promise::Promise upgrade(Request<boost::beast::http::empty_body> const& req);
 
         /**
          * @brief Retrieve the options defined by the request listener class for this route.

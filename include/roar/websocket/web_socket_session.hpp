@@ -30,7 +30,7 @@ namespace Roar
          *
          * @param req An http->ws upgrade request.
          */
-        void accept(Request<boost::beast::http::empty_body> const& req);
+        promise::Promise accept(Request<boost::beast::http::empty_body> const& req);
 
         /**
          * @brief Sends a string to the client.

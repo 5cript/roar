@@ -231,6 +231,18 @@ namespace Roar
         }
 
         /**
+         * @brief Send overload for shared_ptr. This invalides this response object.
+         *
+         * @tparam SessionT
+         * @param session The session to send this on.
+         */
+        template <typename SessionT>
+        void send(std::shared_ptr<SessionT>& session)
+        {
+            session->send(std::move(response_));
+        }
+
+        /**
          * @brief Ejects the underlying boost response.
          */
         boost::beast::http::response<BodyT>&& response() &&

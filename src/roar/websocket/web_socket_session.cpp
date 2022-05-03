@@ -46,12 +46,17 @@ namespace Roar
         : impl_{std::make_unique<Implementation>(std::move(stream))}
     {}
     //------------------------------------------------------------------------------------------------------------------
-    void WebSocketSession::accept(Request<boost::beast::http::empty_body> const& req)
+    promise::Promise WebSocketSession::accept(Request<boost::beast::http::empty_body> const& req)
     {
-        impl_->withStreamDo([this, request = req](auto& ws) {
-            auto req = std::make_shared<Request<boost::beast::http::empty_body>>(std::move(request));
-            ws.async_accept(*req, [req, self = shared_from_this()](auto&& ec) {
-
+        return newPromise([this, &req](Defer d) {
+            impl_->withStreamDo([this, request = req, &d](auto& ws) {
+                auto req = std::make_shared<Request<boost::beast::http::empty_body>>(std::move(request));
+                ws.async_accept(*req, [req, self = shared_from_this(), d = std::move(d)](auto&& ec) {
+                    if (ec)
+                        d.reject(Error{.error = ec});
+                    else
+                        d.resolve();
+                });
             });
         });
     }

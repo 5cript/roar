@@ -31,9 +31,12 @@ namespace Roar::Tests
         using namespace boost::beast::http;
         if (req.find(field::content_length) != std::end(req))
             contentLength = std::stoull(std::string{req[field::content_length]});
-        session.template read<string_body>(std::move(req))->noBodyLimit().start([this](auto& session, auto const& req) {
-            body = req.body();
-        });
+        session.template read<string_body>(std::move(req))
+            ->noBodyLimit()
+            .start()
+            .then([this](auto& session, auto const& req) {
+                body = req.body();
+            });
     }
 
     class ReadingTests

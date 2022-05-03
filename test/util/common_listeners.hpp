@@ -88,14 +88,17 @@ namespace Roar::Tests
     inline void SimpleRoutes::putHere(Session& session, EmptyBodyRequest&& req)
     {
         using namespace boost::beast::http;
-        session.template read<string_body>(std::move(req))->noBodyLimit().start([](auto& session, auto const& req) {
-            session.template prepareResponse<string_body>(req)
-                .contentType("text/plain")
-                .status(status::ok)
-                .body(req.body())
-                .preparePayload()
-                .send(session);
-        });
+        session.template read<string_body>(std::move(req))
+            ->noBodyLimit()
+            .start()
+            .then([](Session& session, Request<string_body> const& req) {
+                session.template prepareResponse<string_body>(req)
+                    .contentType("text/plain")
+                    .status(status::ok)
+                    .body(req.body())
+                    .preparePayload()
+                    .send(session);
+            });
     }
     inline void SimpleRoutes::postHere(Session& session, EmptyBodyRequest&& req)
     {
