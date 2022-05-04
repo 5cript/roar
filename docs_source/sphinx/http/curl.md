@@ -1,7 +1,7 @@
 # Curl
 
 Roar provides a wrapper around libcurl.
-The most important object is the <a href="/doxygen/classRoar_1_1Curl_1_1Request.html">Curl::Request</a>.
+The most important object is the <a href="/roar/doxygen/classRoar_1_1Curl_1_1Request.html">Curl::Request</a>.
 With that you can build requests and "curl_perform" them.
 Reference the doxygen documentation for details, but here is an example:
 
