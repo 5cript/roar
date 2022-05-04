@@ -11,6 +11,7 @@
 #include <roar/standard_response_provider.hpp>
 #include <roar/detail/promise_compat.hpp>
 #include <roar/body/void_body.hpp>
+#include <roar/detail/stream_type.hpp>
 
 #include <boost/beast/http/message.hpp>
 #include <boost/beast/http/empty_body.hpp>
@@ -392,6 +393,20 @@ namespace Roar
         };
 
         /**
+         * @brief Sets a rate limit in bytes/second for this session for reading.
+         *
+         * @param bytesPerSecond
+         */
+        void readLimit(std::size_t bytesPerSecond);
+
+        /**
+         * @brief Sets a rate limit in bytes/second for this session for writing.
+         *
+         * @param bytesPerSecond
+         */
+        void writeLimit(std::size_t bytesPerSecond);
+
+        /**
          * @brief Read data from the client.
          *
          * @tparam BodyT What body type to read?
@@ -509,7 +524,7 @@ namespace Roar
         void readHeader();
         void performSslHandshake();
         bool onWriteComplete(bool expectsClose, boost::beast::error_code ec, std::size_t bytesTransferred);
-        std::variant<boost::beast::tcp_stream, boost::beast::ssl_stream<boost::beast::tcp_stream>>& stream();
+        std::variant<Detail::StreamType, boost::beast::ssl_stream<Detail::StreamType>>& stream();
         std::shared_ptr<boost::beast::http::request_parser<boost::beast::http::empty_body>>& parser();
         boost::beast::flat_buffer& buffer();
         StandardResponseProvider const& standardResponseProvider();

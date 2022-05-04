@@ -8,14 +8,14 @@ namespace Roar
 
     //##################################################################################################################
     WebsocketBase::WebsocketBase(
-        std::variant<boost::beast::tcp_stream, boost::beast::ssl_stream<boost::beast::tcp_stream>>&& stream)
+        std::variant<Detail::StreamType, boost::beast::ssl_stream<Detail::StreamType>>&& stream)
         : ws_{[&stream]() {
             return std::visit(
                 []<typename StreamT>(StreamT&& stream) -> decltype(ws_) {
-                    if constexpr (std::is_same_v<std::decay_t<StreamT>, boost::beast::tcp_stream>)
-                        return boost::beast::websocket::stream<boost::beast::tcp_stream>{std::move(stream)};
+                    if constexpr (std::is_same_v<std::decay_t<StreamT>, Detail::StreamType>)
+                        return boost::beast::websocket::stream<Detail::StreamType>{std::move(stream)};
                     else
-                        return boost::beast::websocket::stream<boost::beast::ssl_stream<boost::beast::tcp_stream>>{
+                        return boost::beast::websocket::stream<boost::beast::ssl_stream<Detail::StreamType>>{
                             std::move(stream)};
                 },
                 std::move(stream));
@@ -23,8 +23,8 @@ namespace Roar
     {}
     //------------------------------------------------------------------------------------------------------------------
     WebsocketBase::WebsocketBase(std::variant<
-                                 boost::beast::websocket::stream<boost::beast::ssl_stream<boost::beast::tcp_stream>>,
-                                 boost::beast::websocket::stream<boost::beast::tcp_stream>>&& ws)
+                                 boost::beast::websocket::stream<boost::beast::ssl_stream<Detail::StreamType>>,
+                                 boost::beast::websocket::stream<Detail::StreamType>>&& ws)
         : ws_{std::move(ws)}
     {}
     //------------------------------------------------------------------------------------------------------------------

@@ -307,3 +307,8 @@ void RequestListener::upload(Roar::Session& session, Roar::EmptyBodyRequest&& re
         });
 }
 ```
+
+## Rate Limiting
+
+Download/Upload speeds can be set on a session using "readLimit" and "writeLimit".
+<a href="/doxygen/classRoar_1_1Session.html">Session class</a>.

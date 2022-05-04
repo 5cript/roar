@@ -3,6 +3,7 @@
 #include <roar/websocket/read_result.hpp>
 #include <roar/error.hpp>
 #include <roar/detail/promise_compat.hpp>
+#include <roar/detail/stream_type.hpp>
 
 #include <promise-cpp/promise.hpp>
 #include <boost/beast/ssl/ssl_stream.hpp>
@@ -17,11 +18,10 @@ namespace Roar
     class WebsocketBase : public std::enable_shared_from_this<WebsocketBase>
     {
       public:
-        WebsocketBase(
-            std::variant<boost::beast::tcp_stream, boost::beast::ssl_stream<boost::beast::tcp_stream>>&& stream);
+        WebsocketBase(std::variant<Detail::StreamType, boost::beast::ssl_stream<Detail::StreamType>>&& stream);
         WebsocketBase(std::variant<
-                      boost::beast::websocket::stream<boost::beast::ssl_stream<boost::beast::tcp_stream>>,
-                      boost::beast::websocket::stream<boost::beast::tcp_stream>>&& ws);
+                      boost::beast::websocket::stream<boost::beast::ssl_stream<Detail::StreamType>>,
+                      boost::beast::websocket::stream<Detail::StreamType>>&& ws);
         WebsocketBase(WebsocketBase&&) = delete;
         WebsocketBase& operator=(WebsocketBase&&) = delete;
         WebsocketBase(WebsocketBase const&) = delete;
@@ -113,8 +113,8 @@ namespace Roar
 
       protected:
         std::variant<
-            boost::beast::websocket::stream<boost::beast::ssl_stream<boost::beast::tcp_stream>>,
-            boost::beast::websocket::stream<boost::beast::tcp_stream>>
+            boost::beast::websocket::stream<boost::beast::ssl_stream<Detail::StreamType>>,
+            boost::beast::websocket::stream<Detail::StreamType>>
             ws_;
     };
 }

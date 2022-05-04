@@ -3,6 +3,7 @@
 #include <roar/detail/pimpl_special_functions.hpp>
 #include <roar/detail/shared_from_base.hpp>
 #include <roar/websocket/websocket_base.hpp>
+#include <roar/detail/stream_type.hpp>
 
 #include <boost/beast/http/empty_body.hpp>
 #include <boost/beast/ssl/ssl_stream.hpp>
@@ -23,8 +24,7 @@ namespace Roar
     class WebsocketSession : public Detail::SharedFromBase<WebsocketBase, WebsocketSession>
     {
       public:
-        WebsocketSession(
-            std::variant<boost::beast::tcp_stream, boost::beast::ssl_stream<boost::beast::tcp_stream>>&& stream);
+        WebsocketSession(std::variant<Detail::StreamType, boost::beast::ssl_stream<Detail::StreamType>>&& stream);
         ROAR_PIMPL_SPECIAL_FUNCTIONS_NO_MOVE(WebsocketSession);
 
         /**

@@ -21,7 +21,7 @@ namespace Roar
     //##################################################################################################################
     struct Session::Implementation
     {
-        std::variant<boost::beast::tcp_stream, boost::beast::ssl_stream<boost::beast::tcp_stream>> stream;
+        std::variant<Detail::StreamType, boost::beast::ssl_stream<Detail::StreamType>> stream;
         boost::beast::flat_buffer buffer;
         bool isSecure;
         std::function<void(Error&&)> onError;
@@ -40,8 +40,8 @@ namespace Roar
             std::shared_ptr<const StandardResponseProvider> standardResponseProvider)
             : stream{[&socket, &sslContext, isSecure]() -> decltype(stream) {
                 if (isSecure)
-                    return boost::beast::ssl_stream<boost::beast::tcp_stream>{std::move(socket), *sslContext};
-                return boost::beast::tcp_stream{std::move(socket)};
+                    return boost::beast::ssl_stream<Detail::StreamType>{std::move(socket), *sslContext};
+                return Detail::StreamType{std::move(socket)};
             }()}
             , buffer{std::move(buffer)}
             , isSecure{isSecure}
@@ -79,19 +79,39 @@ namespace Roar
     //------------------------------------------------------------------------------------------------------------------
     ROAR_PIMPL_SPECIAL_FUNCTIONS_IMPL(Session);
     //------------------------------------------------------------------------------------------------------------------
+    void Session::readLimit(std::size_t bytesPerSecond)
+    {
+        withStreamDo([bytesPerSecond]<typename StreamT>(StreamT& stream) {
+            if constexpr (std::is_same_v<std::decay_t<StreamT>, Detail::StreamType>)
+                stream.rate_policy().read_limit(bytesPerSecond);
+            else
+                stream.next_layer().rate_policy().read_limit(bytesPerSecond);
+        });
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    void Session::writeLimit(std::size_t bytesPerSecond)
+    {
+        withStreamDo([bytesPerSecond]<typename StreamT>(StreamT& stream) {
+            if constexpr (std::is_same_v<std::decay_t<StreamT>, Detail::StreamType>)
+                stream.rate_policy().write_limit(bytesPerSecond);
+            else
+                stream.next_layer().rate_policy().write_limit(bytesPerSecond);
+        });
+    }
+    //------------------------------------------------------------------------------------------------------------------
     void Session::startup()
     {
-        if (std::holds_alternative<boost::beast::tcp_stream>(impl_->stream))
+        if (std::holds_alternative<Detail::StreamType>(impl_->stream))
         {
             boost::asio::dispatch(
-                std::get<boost::beast::tcp_stream>(impl_->stream).get_executor(), [self = this->shared_from_this()]() {
+                std::get<Detail::StreamType>(impl_->stream).get_executor(), [self = this->shared_from_this()]() {
                     self->readHeader();
                 });
         }
         else
         {
             boost::asio::dispatch(
-                std::get<boost::beast::ssl_stream<boost::beast::tcp_stream>>(impl_->stream).get_executor(),
+                std::get<boost::beast::ssl_stream<Detail::StreamType>>(impl_->stream).get_executor(),
                 [self = this->shared_from_this()]() {
                     self->performSslHandshake();
                 });
@@ -142,12 +162,12 @@ namespace Roar
     //------------------------------------------------------------------------------------------------------------------
     bool Session::isSecure() const
     {
-        return std::holds_alternative<boost::beast::ssl_stream<boost::beast::tcp_stream>>(impl_->stream);
+        return std::holds_alternative<boost::beast::ssl_stream<Detail::StreamType>>(impl_->stream);
     }
     //------------------------------------------------------------------------------------------------------------------
     void Session::performSslHandshake()
     {
-        std::get<boost::beast::ssl_stream<boost::beast::tcp_stream>>(impl_->stream)
+        std::get<boost::beast::ssl_stream<Detail::StreamType>>(impl_->stream)
             .async_handshake(
                 boost::asio::ssl::stream_base::server,
                 impl_->buffer.data(),
@@ -170,7 +190,7 @@ namespace Roar
         impl_->routeOptions = std::move(options);
     }
     //------------------------------------------------------------------------------------------------------------------
-    std::variant<boost::beast::tcp_stream, boost::beast::ssl_stream<boost::beast::tcp_stream>>& Session::stream()
+    std::variant<Detail::StreamType, boost::beast::ssl_stream<Detail::StreamType>>& Session::stream()
     {
         return impl_->stream;
     }
@@ -232,15 +252,15 @@ namespace Roar
     void Session::close()
     {
         boost::beast::error_code ec;
-        if (std::holds_alternative<boost::beast::tcp_stream>(impl_->stream))
+        if (std::holds_alternative<Detail::StreamType>(impl_->stream))
         {
-            std::get<boost::beast::tcp_stream>(impl_->stream)
+            std::get<Detail::StreamType>(impl_->stream)
                 .socket()
                 .shutdown(boost::asio::ip::tcp::socket::shutdown_both, ec);
         }
         else
         {
-            auto& stream = std::get<boost::beast::ssl_stream<boost::beast::tcp_stream>>(impl_->stream);
+            auto& stream = std::get<boost::beast::ssl_stream<Detail::StreamType>>(impl_->stream);
             boost::beast::get_lowest_layer(stream).expires_after(std::chrono::seconds(sessionTimeout));
             stream.shutdown(ec);
         }

@@ -51,8 +51,8 @@ namespace Roar
                 boost::beast::get_lowest_layer(ws).expires_after(timeout);
             });
 
-            if (std::holds_alternative<
-                    boost::beast::websocket::stream<boost::beast::ssl_stream<boost::beast::tcp_stream>>>(client->ws_))
+            if (std::holds_alternative<boost::beast::websocket::stream<boost::beast::ssl_stream<Detail::StreamType>>>(
+                    client->ws_))
                 performSslHandshake(passedHost, std::move(client));
             else
                 performWebsocketHandshake(std::move(client));
@@ -60,8 +60,8 @@ namespace Roar
 
         void performSslHandshake(std::string const& host, std::shared_ptr<WebsocketClient> client)
         {
-            auto& wss = std::get<boost::beast::websocket::stream<boost::beast::ssl_stream<boost::beast::tcp_stream>>>(
-                client->ws_);
+            auto& wss =
+                std::get<boost::beast::websocket::stream<boost::beast::ssl_stream<Detail::StreamType>>>(client->ws_);
             if (!SSL_set_tlsext_host_name(wss.next_layer().native_handle(), host.c_str()))
             {
                 auto ec = boost::beast::error_code(
@@ -116,11 +116,10 @@ namespace Roar
     WebsocketClient::WebsocketClient(ConstructionArguments&& args)
         : SharedFromBase{[&args]() -> decltype(ws_) {
             if (args.sslContext)
-                return boost::beast::websocket::stream<boost::beast::ssl_stream<boost::beast::tcp_stream>>{
+                return boost::beast::websocket::stream<boost::beast::ssl_stream<Detail::StreamType>>{
                     boost::asio::make_strand(args.executor), *args.sslContext};
             else
-                return boost::beast::websocket::stream<boost::beast::tcp_stream>{
-                    boost::asio::make_strand(args.executor)};
+                return boost::beast::websocket::stream<Detail::StreamType>{boost::asio::make_strand(args.executor)};
         }()}
         , impl_{std::make_unique<Implementation>()}
     {}

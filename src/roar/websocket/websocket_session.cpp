@@ -20,7 +20,7 @@ namespace Roar
     };
     //------------------------------------------------------------------------------------------------------------------
     WebsocketSession::WebsocketSession(
-        std::variant<boost::beast::tcp_stream, boost::beast::ssl_stream<boost::beast::tcp_stream>>&& stream)
+        std::variant<Detail::StreamType, boost::beast::ssl_stream<Detail::StreamType>>&& stream)
         : SharedFromBase(std::move(stream))
         , impl_{std::make_unique<Implementation>()}
     {}
