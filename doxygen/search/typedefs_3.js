@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['handlertype_0',['HandlerType',['../namespaceRoar.html#aacca13002ced47016c256e5e38970b38',1,'Roar']]]
+  ['firsttype_5ft_0',['FirstType_t',['../namespaceRoar_1_1Detail.html#ac75587e841aaa1148e586c7781c57c20',1,'Roar::Detail']]]
 ];

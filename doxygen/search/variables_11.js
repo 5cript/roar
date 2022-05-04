@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ws_0',['ws',['../structRoar_1_1WebsocketSession_1_1Implementation.html#a6d82a7b96ef6818067eeaae3e1c0d6b3',1,'Roar::WebsocketSession::Implementation']]]
+  ['ws_5f_0',['ws_',['../classRequestListener.html#a681eddd743ff7d580bd89053425ce337',1,'RequestListener::ws_()'],['../classRoar_1_1WebsocketBase.html#a6405bbad14683e173a9bef4adab98668',1,'Roar::WebsocketBase::ws_()']]]
 ];

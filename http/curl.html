@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Curl bla &mdash; roar 1.0.0 documentation</title>
+  <title>Curl &mdash; roar 1.0.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/override.css" type="text/css" />
@@ -23,7 +23,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Server bla" href="server.html" />
+    <link rel="next" title="HTTP Server" href="server.html" />
     <link rel="prev" title="The Roar Networking Library" href="../home.html" />
 <link href="../ _static/override.css" rel="stylesheet" type="text/css">
 
@@ -51,10 +51,27 @@
 </ul>
 </li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">HTTP Utilities</span></p>
+<p class="caption" role="heading"><span class="caption-text">HTTP</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Curl bla</a></li>
-<li class="toctree-l1"><a class="reference internal" href="server.html">Server bla</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Curl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server.html">HTTP Server</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="server.html#tutorial">Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server.html#requestlistener">RequestListener</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server.html#routing">Routing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="server.html#string-paths">String Paths</a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#regex-paths">Regex Paths</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="server.html#sending-responses">Sending Responses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server.html#reading-a-body">Reading a Body</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server.html#rate-limiting">Rate Limiting</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Websocket</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../websocket/client.html">Websocket Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../websocket/server.html">Websocket Server</a></li>
 </ul>
 
         </div>
@@ -71,7 +88,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Curl bla</li>
+      <li>Curl</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/http/curl.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -81,8 +98,34 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="curl-bla">
-<h1>Curl bla<a class="headerlink" href="#curl-bla" title="Permalink to this headline"></a></h1>
+  <section id="curl">
+<h1>Curl<a class="headerlink" href="#curl" title="Permalink to this headline"></a></h1>
+<p>Roar provides a wrapper around libcurl.
+The most important object is the <a href="/doxygen/classRoar_1_1Curl_1_1Request.html">Curl::Request</a>.
+With that you can build requests and “curl_perform” them.
+Reference the doxygen documentation for details, but here is an example:</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">Curl::Request</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;roar/curl/request.hpp&gt;</span><span class="cp"></span>
+<span class="linenos"> 2</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"></span>
+<span class="linenos"> 5</span><span class="p">{</span><span class="w"></span>
+<span class="linenos"> 6</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">responseBody</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 7</span><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Roar</span><span class="o">::</span><span class="n">Curl</span><span class="o">::</span><span class="n">Request</span><span class="p">{}</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="w">        </span><span class="p">.</span><span class="n">sink</span><span class="p">(</span><span class="n">responseBody</span><span class="p">)</span><span class="w"></span>
+<span class="linenos"> 9</span><span class="w">        </span><span class="p">.</span><span class="n">verbose</span><span class="p">()</span><span class="w"></span>
+<span class="linenos">10</span><span class="w">        </span><span class="p">.</span><span class="n">setHeaderField</span><span class="p">(</span><span class="s">&quot;Content-Type&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;text/plain&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">11</span><span class="w">        </span><span class="p">.</span><span class="n">source</span><span class="p">(</span><span class="s">&quot;Hi&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">12</span><span class="w">        </span><span class="p">.</span><span class="n">post</span><span class="p">(</span><span class="s">&quot;https://localhost:8080&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">13</span><span class="w">    </span><span class="p">;</span><span class="w"></span>
+<span class="linenos">14</span>
+<span class="linenos">15</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">responseBody</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">16</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">response</span><span class="p">.</span><span class="n">code</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">17</span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
 </section>
 
 
@@ -90,7 +133,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../home.html" class="btn btn-neutral float-left" title="The Roar Networking Library" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="server.html" class="btn btn-neutral float-right" title="Server bla" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="server.html" class="btn btn-neutral float-right" title="HTTP Server" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

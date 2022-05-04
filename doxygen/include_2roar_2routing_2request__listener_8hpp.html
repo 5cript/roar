@@ -92,7 +92,7 @@ $(function() {
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for request_listener.hpp:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="include_2roar_2routing_2request__listener_8hpp__incl.svg" width="100%" height="552"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="include_2roar_2routing_2request__listener_8hpp__incl.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -118,26 +118,33 @@ Namespaces</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:af3f206c9dd3d0fa06b2e7f5ac15b5b77"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="include_2roar_2routing_2request__listener_8hpp.html#af3f206c9dd3d0fa06b2e7f5ac15b5b77">ROAR_MAKE_LISTENER</a>(ListenerType)&#160;&#160;&#160;using this_type = ListenerType</td></tr>
+<tr class="memdesc:af3f206c9dd3d0fa06b2e7f5ac15b5b77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Necessary to make pointer to members.  <a href="include_2roar_2routing_2request__listener_8hpp.html#af3f206c9dd3d0fa06b2e7f5ac15b5b77">More...</a><br /></td></tr>
 <tr class="separator:af3f206c9dd3d0fa06b2e7f5ac15b5b77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a90c02145b5cd815e02e40f63650be0e2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="include_2roar_2routing_2request__listener_8hpp.html#a90c02145b5cd815e02e40f63650be0e2">ROAR_ROUTE_I</a>(HandlerName,  DefaultVerb)</td></tr>
 <tr class="separator:a90c02145b5cd815e02e40f63650be0e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a105374cb60deb97ed4a46e100941b470"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="include_2roar_2routing_2request__listener_8hpp.html#a105374cb60deb97ed4a46e100941b470">ROAR_ROUTE</a>(HandlerName)&#160;&#160;&#160;<a class="el" href="include_2roar_2routing_2request__listener_8hpp.html#a90c02145b5cd815e02e40f63650be0e2">ROAR_ROUTE_I</a>(HandlerName, get)</td></tr>
-<tr class="memdesc:a105374cb60deb97ed4a46e100941b470"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define a new route.  <a href="include_2roar_2routing_2request__listener_8hpp.html#a105374cb60deb97ed4a46e100941b470">More...</a><br /></td></tr>
+<tr class="memdesc:a105374cb60deb97ed4a46e100941b470"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define a route. route.  <a href="include_2roar_2routing_2request__listener_8hpp.html#a105374cb60deb97ed4a46e100941b470">More...</a><br /></td></tr>
 <tr class="separator:a105374cb60deb97ed4a46e100941b470"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd3d1448761f63dee4d0b461312e6cf8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="include_2roar_2routing_2request__listener_8hpp.html#abd3d1448761f63dee4d0b461312e6cf8">ROAR_GET</a>(HandlerName)&#160;&#160;&#160;<a class="el" href="include_2roar_2routing_2request__listener_8hpp.html#a90c02145b5cd815e02e40f63650be0e2">ROAR_ROUTE_I</a>(HandlerName, get)</td></tr>
-<tr class="memdesc:abd3d1448761f63dee4d0b461312e6cf8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Some default verbs, others can be accessed via ROAR_ROUTE({.verb = ..., .path = ""})  <a href="include_2roar_2routing_2request__listener_8hpp.html#abd3d1448761f63dee4d0b461312e6cf8">More...</a><br /></td></tr>
+<tr class="memdesc:abd3d1448761f63dee4d0b461312e6cf8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define route for GET, others can be accessed via ROAR_ROUTE({.verb = ..., .path = ""})  <a href="include_2roar_2routing_2request__listener_8hpp.html#abd3d1448761f63dee4d0b461312e6cf8">More...</a><br /></td></tr>
 <tr class="separator:abd3d1448761f63dee4d0b461312e6cf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e4f86c46a1885b239e7937606e38aa3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="include_2roar_2routing_2request__listener_8hpp.html#a8e4f86c46a1885b239e7937606e38aa3">ROAR_POST</a>(HandlerName)&#160;&#160;&#160;<a class="el" href="include_2roar_2routing_2request__listener_8hpp.html#a90c02145b5cd815e02e40f63650be0e2">ROAR_ROUTE_I</a>(HandlerName, post)</td></tr>
+<tr class="memdesc:a8e4f86c46a1885b239e7937606e38aa3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define route for POST, others can be accessed via ROAR_ROUTE({.verb = ..., .path = ""})  <a href="include_2roar_2routing_2request__listener_8hpp.html#a8e4f86c46a1885b239e7937606e38aa3">More...</a><br /></td></tr>
 <tr class="separator:a8e4f86c46a1885b239e7937606e38aa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af701452d0637fb3ca2d6afcc999b5afe"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="include_2roar_2routing_2request__listener_8hpp.html#af701452d0637fb3ca2d6afcc999b5afe">ROAR_PUT</a>(HandlerName)&#160;&#160;&#160;<a class="el" href="include_2roar_2routing_2request__listener_8hpp.html#a90c02145b5cd815e02e40f63650be0e2">ROAR_ROUTE_I</a>(HandlerName, put)</td></tr>
+<tr class="memdesc:af701452d0637fb3ca2d6afcc999b5afe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define route for PUT, others can be accessed via ROAR_ROUTE({.verb = ..., .path = ""})  <a href="include_2roar_2routing_2request__listener_8hpp.html#af701452d0637fb3ca2d6afcc999b5afe">More...</a><br /></td></tr>
 <tr class="separator:af701452d0637fb3ca2d6afcc999b5afe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad128f53d27fea3620b71942bbc292eb8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="include_2roar_2routing_2request__listener_8hpp.html#ad128f53d27fea3620b71942bbc292eb8">ROAR_OPTIONS</a>(HandlerName)&#160;&#160;&#160;<a class="el" href="include_2roar_2routing_2request__listener_8hpp.html#a90c02145b5cd815e02e40f63650be0e2">ROAR_ROUTE_I</a>(HandlerName, options)</td></tr>
+<tr class="memdesc:ad128f53d27fea3620b71942bbc292eb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define route for OPTIONS, others can be accessed via ROAR_ROUTE({.verb = ..., .path = ""})  <a href="include_2roar_2routing_2request__listener_8hpp.html#ad128f53d27fea3620b71942bbc292eb8">More...</a><br /></td></tr>
 <tr class="separator:ad128f53d27fea3620b71942bbc292eb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab105e0daf1fa30d7bd28a6a8caa8386a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="include_2roar_2routing_2request__listener_8hpp.html#ab105e0daf1fa30d7bd28a6a8caa8386a">ROAR_TRACE</a>(HandlerName)&#160;&#160;&#160;<a class="el" href="include_2roar_2routing_2request__listener_8hpp.html#a90c02145b5cd815e02e40f63650be0e2">ROAR_ROUTE_I</a>(HandlerName, trace)</td></tr>
+<tr class="memdesc:ab105e0daf1fa30d7bd28a6a8caa8386a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define route for TRACE, others can be accessed via ROAR_ROUTE({.verb = ..., .path = ""})  <a href="include_2roar_2routing_2request__listener_8hpp.html#ab105e0daf1fa30d7bd28a6a8caa8386a">More...</a><br /></td></tr>
 <tr class="separator:ab105e0daf1fa30d7bd28a6a8caa8386a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad13de472c1403057e88714f97b3862fd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="include_2roar_2routing_2request__listener_8hpp.html#ad13de472c1403057e88714f97b3862fd">ROAR_HEAD</a>(HandlerName)&#160;&#160;&#160;<a class="el" href="include_2roar_2routing_2request__listener_8hpp.html#a90c02145b5cd815e02e40f63650be0e2">ROAR_ROUTE_I</a>(HandlerName, head)</td></tr>
+<tr class="memdesc:ad13de472c1403057e88714f97b3862fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define route for HEAD, others can be accessed via ROAR_ROUTE({.verb = ..., .path = ""})  <a href="include_2roar_2routing_2request__listener_8hpp.html#ad13de472c1403057e88714f97b3862fd">More...</a><br /></td></tr>
 <tr class="separator:ad13de472c1403057e88714f97b3862fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09448f4bb9335825d144d533ccd90620"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="include_2roar_2routing_2request__listener_8hpp.html#a09448f4bb9335825d144d533ccd90620">ROAR_DELETE</a>(HandlerName)&#160;&#160;&#160;<a class="el" href="include_2roar_2routing_2request__listener_8hpp.html#a90c02145b5cd815e02e40f63650be0e2">ROAR_ROUTE_I</a>(HandlerName, delete_)</td></tr>
+<tr class="memdesc:a09448f4bb9335825d144d533ccd90620"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define route for DELETE, others can be accessed via ROAR_ROUTE({.verb = ..., .path = ""})  <a href="include_2roar_2routing_2request__listener_8hpp.html#a09448f4bb9335825d144d533ccd90620">More...</a><br /></td></tr>
 <tr class="separator:a09448f4bb9335825d144d533ccd90620"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
@@ -177,6 +184,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Define route for DELETE, others can be accessed via ROAR_ROUTE({.verb = ..., .path = ""}) </p>
+
 </div>
 </div>
 <a id="abd3d1448761f63dee4d0b461312e6cf8" name="abd3d1448761f63dee4d0b461312e6cf8"></a>
@@ -195,7 +204,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Some default verbs, others can be accessed via ROAR_ROUTE({.verb = ..., .path = ""}) </p>
+<p>Define route for GET, others can be accessed via ROAR_ROUTE({.verb = ..., .path = ""}) </p>
 
 </div>
 </div>
@@ -215,6 +224,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Define route for HEAD, others can be accessed via ROAR_ROUTE({.verb = ..., .path = ""}) </p>
+
 </div>
 </div>
 <a id="af3f206c9dd3d0fa06b2e7f5ac15b5b77" name="af3f206c9dd3d0fa06b2e7f5ac15b5b77"></a>
@@ -232,6 +243,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Necessary to make pointer to members. </p>
 
 </div>
 </div>
@@ -251,6 +264,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Define route for OPTIONS, others can be accessed via ROAR_ROUTE({.verb = ..., .path = ""}) </p>
+
 </div>
 </div>
 <a id="a8e4f86c46a1885b239e7937606e38aa3" name="a8e4f86c46a1885b239e7937606e38aa3"></a>
@@ -268,6 +283,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Define route for POST, others can be accessed via ROAR_ROUTE({.verb = ..., .path = ""}) </p>
 
 </div>
 </div>
@@ -287,6 +304,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Define route for PUT, others can be accessed via ROAR_ROUTE({.verb = ..., .path = ""}) </p>
+
 </div>
 </div>
 <a id="a105374cb60deb97ed4a46e100941b470" name="a105374cb60deb97ed4a46e100941b470"></a>
@@ -305,7 +324,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Define a new route. </p>
+<p>Define a route. route. </p>
 
 </div>
 </div>
@@ -338,8 +357,8 @@ Functions</h2></td></tr>
 <div class="line">    inline <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">auto</span> roar_##HandlerName = <a class="code hl_function" href="namespaceRoar.html#a76b7f4470cff6ef999dcef8ec4527fa2">\</a></div>
 <div class="line"><a class="code hl_function" href="namespaceRoar.html#a76b7f4470cff6ef999dcef8ec4527fa2">        Roar::extendRouteInfo</a>({.verb = boost::beast::http::verb::DefaultVerb}, &amp;this_type::HandlerName)</div>
 <div class="ttc" id="aclassRoar_1_1Request_html"><div class="ttname"><a href="classRoar_1_1Request.html">Roar::Request</a></div><div class="ttdoc">This class extends the boost::beast::http::request&lt;BodyT&gt; with additional convenience.</div><div class="ttdef"><b>Definition:</b> request.hpp:41</div></div>
-<div class="ttc" id="aclassRoar_1_1Session_html"><div class="ttname"><a href="classRoar_1_1Session.html">Roar::Session</a></div><div class="ttdef"><b>Definition:</b> session.hpp:32</div></div>
-<div class="ttc" id="anamespaceRoar_html_a76b7f4470cff6ef999dcef8ec4527fa2"><div class="ttname"><a href="namespaceRoar.html#a76b7f4470cff6ef999dcef8ec4527fa2">Roar::extendRouteInfo</a></div><div class="ttdeci">auto extendRouteInfo(RouteInfo&lt; RequestListenerT &gt; info, HandlerType&lt; RequestListenerT &gt; handler)</div><div class="ttdef"><b>Definition:</b> request_listener.hpp:63</div></div>
+<div class="ttc" id="aclassRoar_1_1Session_html"><div class="ttname"><a href="classRoar_1_1Session.html">Roar::Session</a></div><div class="ttdef"><b>Definition:</b> session.hpp:37</div></div>
+<div class="ttc" id="anamespaceRoar_html_a76b7f4470cff6ef999dcef8ec4527fa2"><div class="ttname"><a href="namespaceRoar.html#a76b7f4470cff6ef999dcef8ec4527fa2">Roar::extendRouteInfo</a></div><div class="ttdeci">auto extendRouteInfo(RouteInfo&lt; RequestListenerT &gt; info, HandlerType&lt; RequestListenerT &gt; handler)</div><div class="ttdef"><b>Definition:</b> request_listener.hpp:65</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -358,6 +377,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Define route for TRACE, others can be accessed via ROAR_ROUTE({.verb = ..., .path = ""}) </p>
 
 </div>
 </div>

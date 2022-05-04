@@ -46,7 +46,7 @@ if (edges && edges.length) {
         </defs>
 
 <script type="text/javascript">
-var viewWidth = 937;
+var viewWidth = 927;
 var viewHeight = 171;
 var sectionId = 'dynsection-0';
 </script>
@@ -58,12 +58,12 @@ var sectionId = 'dynsection-0';
 <g id="node1" class="node">
 <title>Node1</title>
 <g id="a_node1"><a xlink:title=" ">
-<polygon fill="#bfbfbf" stroke="black" points="294.5,-0.5 294.5,-57.5 475.5,-57.5 475.5,-0.5 294.5,-0.5"/>
-<text text-anchor="middle" x="385" y="-45.5" font-family="Helvetica,sans-Serif" font-size="10.00">Roar::Server::ConstructionArguments</text>
-<polyline fill="none" stroke="black" points="294.5,-38.5 475.5,-38.5 "/>
-<text text-anchor="middle" x="385" y="-26.5" font-family="Helvetica,sans-Serif" font-size="10.00"> </text>
-<polyline fill="none" stroke="black" points="294.5,-19.5 475.5,-19.5 "/>
-<text text-anchor="middle" x="385" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00"> </text>
+<polygon fill="#bfbfbf" stroke="black" points="284.5,-0.5 284.5,-57.5 465.5,-57.5 465.5,-0.5 284.5,-0.5"/>
+<text text-anchor="middle" x="375" y="-45.5" font-family="Helvetica,sans-Serif" font-size="10.00">Roar::Server::ConstructionArguments</text>
+<polyline fill="none" stroke="black" points="284.5,-38.5 465.5,-38.5 "/>
+<text text-anchor="middle" x="375" y="-26.5" font-family="Helvetica,sans-Serif" font-size="10.00"> </text>
+<polyline fill="none" stroke="black" points="284.5,-19.5 465.5,-19.5 "/>
+<text text-anchor="middle" x="375" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00"> </text>
 </a>
 </g>
 </g>
@@ -71,101 +71,101 @@ var sectionId = 'dynsection-0';
 <g id="node2" class="node">
 <title>Node2</title>
 <g id="a_node2"><a xlink:title=" ">
-<polygon fill="none" stroke="black" points="0,-105.5 0,-162.5 98,-162.5 98,-105.5 0,-105.5"/>
-<text text-anchor="middle" x="49" y="-150.5" font-family="Helvetica,sans-Serif" font-size="10.00">any_io_executor &amp;</text>
-<polyline fill="none" stroke="black" points="0,-143.5 98,-143.5 "/>
-<text text-anchor="middle" x="49" y="-131.5" font-family="Helvetica,sans-Serif" font-size="10.00"> </text>
-<polyline fill="none" stroke="black" points="0,-124.5 98,-124.5 "/>
-<text text-anchor="middle" x="49" y="-112.5" font-family="Helvetica,sans-Serif" font-size="10.00"> </text>
+<polygon fill="none" stroke="black" points="0,-105.5 0,-162.5 88,-162.5 88,-105.5 0,-105.5"/>
+<text text-anchor="middle" x="44" y="-150.5" font-family="Helvetica,sans-Serif" font-size="10.00">any_io_executor</text>
+<polyline fill="none" stroke="black" points="0,-143.5 88,-143.5 "/>
+<text text-anchor="middle" x="44" y="-131.5" font-family="Helvetica,sans-Serif" font-size="10.00"> </text>
+<polyline fill="none" stroke="black" points="0,-124.5 88,-124.5 "/>
+<text text-anchor="middle" x="44" y="-112.5" font-family="Helvetica,sans-Serif" font-size="10.00"> </text>
 </a>
 </g>
 </g>
 <!-- Node2&#45;&gt;Node1 -->
 <g id="edge1" class="edge">
 <title>Node2&#45;&gt;Node1</title>
-<path fill="none" stroke="#404040" d="M98.09,-108.53C101.08,-107.28 104.07,-106.09 107,-105 163.94,-83.79 229.49,-65.81 282.63,-52.78"/>
-<polygon fill="none" stroke="#404040" points="282.8,-52.73 287.69,-47.43 294.46,-49.9 289.57,-55.21 282.8,-52.73"/>
-<text text-anchor="middle" x="213.5" y="-79" font-family="Helvetica,sans-Serif" font-size="10.00"> +executor</text>
+<path fill="none" stroke="#404040" d="M88.19,-108.74C91.14,-107.4 94.09,-106.14 97,-105 153.66,-82.71 219.32,-64.66 272.61,-51.85"/>
+<polygon fill="none" stroke="#404040" points="272.8,-51.81 277.71,-46.53 284.47,-49.04 279.56,-54.31 272.8,-51.81"/>
+<text text-anchor="middle" x="203.5" y="-79" font-family="Helvetica,sans-Serif" font-size="10.00"> +executor</text>
 </g>
 <!-- Node3 -->
 <g id="node3" class="node">
 <title>Node3</title>
 <g id="a_node3"><a xlink:title=" ">
-<polygon fill="none" stroke="black" points="116.5,-105.5 116.5,-162.5 289.5,-162.5 289.5,-105.5 116.5,-105.5"/>
-<text text-anchor="middle" x="203" y="-150.5" font-family="Helvetica,sans-Serif" font-size="10.00">optional&lt; boost::asio::ssl::context &gt;</text>
-<polyline fill="none" stroke="black" points="116.5,-143.5 289.5,-143.5 "/>
-<text text-anchor="middle" x="203" y="-131.5" font-family="Helvetica,sans-Serif" font-size="10.00"> </text>
-<polyline fill="none" stroke="black" points="116.5,-124.5 289.5,-124.5 "/>
-<text text-anchor="middle" x="203" y="-112.5" font-family="Helvetica,sans-Serif" font-size="10.00"> </text>
+<polygon fill="none" stroke="black" points="106.5,-105.5 106.5,-162.5 279.5,-162.5 279.5,-105.5 106.5,-105.5"/>
+<text text-anchor="middle" x="193" y="-150.5" font-family="Helvetica,sans-Serif" font-size="10.00">optional&lt; boost::asio::ssl::context &gt;</text>
+<polyline fill="none" stroke="black" points="106.5,-143.5 279.5,-143.5 "/>
+<text text-anchor="middle" x="193" y="-131.5" font-family="Helvetica,sans-Serif" font-size="10.00"> </text>
+<polyline fill="none" stroke="black" points="106.5,-124.5 279.5,-124.5 "/>
+<text text-anchor="middle" x="193" y="-112.5" font-family="Helvetica,sans-Serif" font-size="10.00"> </text>
 </a>
 </g>
 </g>
 <!-- Node3&#45;&gt;Node1 -->
 <g id="edge2" class="edge">
 <title>Node3&#45;&gt;Node1</title>
-<path fill="none" stroke="#404040" d="M251.77,-105.4C274.42,-92.58 301.54,-77.23 325.39,-63.73"/>
-<polygon fill="none" stroke="#404040" points="325.65,-63.59 328.9,-57.15 336.09,-57.68 332.84,-64.11 325.65,-63.59"/>
-<text text-anchor="middle" x="328.5" y="-79" font-family="Helvetica,sans-Serif" font-size="10.00"> +sslContext</text>
+<path fill="none" stroke="#404040" d="M241.77,-105.4C264.42,-92.58 291.54,-77.23 315.39,-63.73"/>
+<polygon fill="none" stroke="#404040" points="315.65,-63.59 318.9,-57.15 326.09,-57.68 322.84,-64.11 315.65,-63.59"/>
+<text text-anchor="middle" x="318.5" y="-79" font-family="Helvetica,sans-Serif" font-size="10.00"> +sslContext</text>
 </g>
 <!-- Node4 -->
 <g id="node4" class="node">
 <title>Node4</title>
 <g id="a_node4"><a xlink:title=" ">
-<polygon fill="none" stroke="black" points="307.5,-105.5 307.5,-162.5 462.5,-162.5 462.5,-105.5 307.5,-105.5"/>
-<text text-anchor="middle" x="385" y="-150.5" font-family="Helvetica,sans-Serif" font-size="10.00">function&lt; void(Roar::Error &amp;&amp;)&gt;</text>
-<polyline fill="none" stroke="black" points="307.5,-143.5 462.5,-143.5 "/>
-<text text-anchor="middle" x="385" y="-131.5" font-family="Helvetica,sans-Serif" font-size="10.00"> </text>
-<polyline fill="none" stroke="black" points="307.5,-124.5 462.5,-124.5 "/>
-<text text-anchor="middle" x="385" y="-112.5" font-family="Helvetica,sans-Serif" font-size="10.00"> </text>
+<polygon fill="none" stroke="black" points="297.5,-105.5 297.5,-162.5 452.5,-162.5 452.5,-105.5 297.5,-105.5"/>
+<text text-anchor="middle" x="375" y="-150.5" font-family="Helvetica,sans-Serif" font-size="10.00">function&lt; void(Roar::Error &amp;&amp;)&gt;</text>
+<polyline fill="none" stroke="black" points="297.5,-143.5 452.5,-143.5 "/>
+<text text-anchor="middle" x="375" y="-131.5" font-family="Helvetica,sans-Serif" font-size="10.00"> </text>
+<polyline fill="none" stroke="black" points="297.5,-124.5 452.5,-124.5 "/>
+<text text-anchor="middle" x="375" y="-112.5" font-family="Helvetica,sans-Serif" font-size="10.00"> </text>
 </a>
 </g>
 </g>
 <!-- Node4&#45;&gt;Node1 -->
 <g id="edge3" class="edge">
 <title>Node4&#45;&gt;Node1</title>
-<path fill="none" stroke="#404040" d="M385,-105.4C385,-94.55 385,-81.87 385,-70.05"/>
-<polygon fill="none" stroke="#404040" points="385,-69.68 381,-63.68 385,-57.68 389,-63.68 385,-69.68"/>
-<text text-anchor="middle" x="405.5" y="-79" font-family="Helvetica,sans-Serif" font-size="10.00"> +onError</text>
+<path fill="none" stroke="#404040" d="M375,-105.4C375,-94.55 375,-81.87 375,-70.05"/>
+<polygon fill="none" stroke="#404040" points="375,-69.68 371,-63.68 375,-57.68 379,-63.68 375,-69.68"/>
+<text text-anchor="middle" x="395.5" y="-79" font-family="Helvetica,sans-Serif" font-size="10.00"> +onError</text>
 </g>
 <!-- Node5 -->
 <g id="node5" class="node">
 <title>Node5</title>
 <g id="a_node5"><a xlink:title=" ">
-<polygon fill="none" stroke="black" points="481,-105.5 481,-162.5 685,-162.5 685,-105.5 481,-105.5"/>
-<text text-anchor="middle" x="583" y="-150.5" font-family="Helvetica,sans-Serif" font-size="10.00">function&lt; void(boost::system::error_code)&gt;</text>
-<polyline fill="none" stroke="black" points="481,-143.5 685,-143.5 "/>
-<text text-anchor="middle" x="583" y="-131.5" font-family="Helvetica,sans-Serif" font-size="10.00"> </text>
-<polyline fill="none" stroke="black" points="481,-124.5 685,-124.5 "/>
-<text text-anchor="middle" x="583" y="-112.5" font-family="Helvetica,sans-Serif" font-size="10.00"> </text>
+<polygon fill="none" stroke="black" points="471,-105.5 471,-162.5 675,-162.5 675,-105.5 471,-105.5"/>
+<text text-anchor="middle" x="573" y="-150.5" font-family="Helvetica,sans-Serif" font-size="10.00">function&lt; void(boost::system::error_code)&gt;</text>
+<polyline fill="none" stroke="black" points="471,-143.5 675,-143.5 "/>
+<text text-anchor="middle" x="573" y="-131.5" font-family="Helvetica,sans-Serif" font-size="10.00"> </text>
+<polyline fill="none" stroke="black" points="471,-124.5 675,-124.5 "/>
+<text text-anchor="middle" x="573" y="-112.5" font-family="Helvetica,sans-Serif" font-size="10.00"> </text>
 </a>
 </g>
 </g>
 <!-- Node5&#45;&gt;Node1 -->
 <g id="edge4" class="edge">
 <title>Node5&#45;&gt;Node1</title>
-<path fill="none" stroke="#404040" d="M529.94,-105.4C505.08,-92.47 475.26,-76.95 449.15,-63.37"/>
-<polygon fill="none" stroke="#404040" points="448.85,-63.22 441.68,-64 438.21,-57.68 445.38,-56.9 448.85,-63.22"/>
-<text text-anchor="middle" x="527" y="-79" font-family="Helvetica,sans-Serif" font-size="10.00"> +onAcceptAbort</text>
+<path fill="none" stroke="#404040" d="M519.94,-105.4C495.08,-92.47 465.26,-76.95 439.15,-63.37"/>
+<polygon fill="none" stroke="#404040" points="438.85,-63.22 431.68,-64 428.21,-57.68 435.38,-56.9 438.85,-63.22"/>
+<text text-anchor="middle" x="517" y="-79" font-family="Helvetica,sans-Serif" font-size="10.00"> +onAcceptAbort</text>
 </g>
 <!-- Node6 -->
 <g id="node6" class="node">
 <title>Node6</title>
 <g id="a_node6"><a xlink:title=" ">
-<polygon fill="none" stroke="black" points="703,-105.5 703,-162.5 929,-162.5 929,-105.5 703,-105.5"/>
-<text text-anchor="middle" x="816" y="-150.5" font-family="Helvetica,sans-Serif" font-size="10.00">unique_ptr&lt; Roar::StandardResponseProvider &gt;</text>
-<polyline fill="none" stroke="black" points="703,-143.5 929,-143.5 "/>
-<text text-anchor="middle" x="816" y="-131.5" font-family="Helvetica,sans-Serif" font-size="10.00"> </text>
-<polyline fill="none" stroke="black" points="703,-124.5 929,-124.5 "/>
-<text text-anchor="middle" x="816" y="-112.5" font-family="Helvetica,sans-Serif" font-size="10.00"> </text>
+<polygon fill="none" stroke="black" points="693,-105.5 693,-162.5 919,-162.5 919,-105.5 693,-105.5"/>
+<text text-anchor="middle" x="806" y="-150.5" font-family="Helvetica,sans-Serif" font-size="10.00">unique_ptr&lt; Roar::StandardResponseProvider &gt;</text>
+<polyline fill="none" stroke="black" points="693,-143.5 919,-143.5 "/>
+<text text-anchor="middle" x="806" y="-131.5" font-family="Helvetica,sans-Serif" font-size="10.00"> </text>
+<polyline fill="none" stroke="black" points="693,-124.5 919,-124.5 "/>
+<text text-anchor="middle" x="806" y="-112.5" font-family="Helvetica,sans-Serif" font-size="10.00"> </text>
 </a>
 </g>
 </g>
 <!-- Node6&#45;&gt;Node1 -->
 <g id="edge5" class="edge">
 <title>Node6&#45;&gt;Node1</title>
-<path fill="none" stroke="#404040" d="M702.76,-105.94C636.08,-90 552.39,-70 487.64,-54.53"/>
-<polygon fill="none" stroke="#404040" points="487.45,-54.48 480.68,-56.98 475.78,-51.69 482.54,-49.2 487.45,-54.48"/>
-<text text-anchor="middle" x="676.5" y="-79" font-family="Helvetica,sans-Serif" font-size="10.00"> +standardResponseProvider</text>
+<path fill="none" stroke="#404040" d="M692.76,-105.94C626.08,-90 542.39,-70 477.64,-54.53"/>
+<polygon fill="none" stroke="#404040" points="477.45,-54.48 470.68,-56.98 465.78,-51.69 472.54,-49.2 477.45,-54.48"/>
+<text text-anchor="middle" x="666.5" y="-79" font-family="Helvetica,sans-Serif" font-size="10.00"> +standardResponseProvider</text>
 </g>
 </g>
 </svg>

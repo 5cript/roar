@@ -101,10 +101,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4047a28b9e95264123da17af3feafe95"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html">ReadIntermediate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html#a4047a28b9e95264123da17af3feafe95">noBodyLimit</a> ()</td></tr>
 <tr class="memdesc:a4047a28b9e95264123da17af3feafe95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accept a body of any length.  <a href="classRoar_1_1Session_1_1ReadIntermediate.html#a4047a28b9e95264123da17af3feafe95">More...</a><br /></td></tr>
 <tr class="separator:a4047a28b9e95264123da17af3feafe95"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae8f6050fd0c189a34c9a201fdfd490f1"><td class="memTemplParams" colspan="2">template&lt;typename... Forwards&gt; </td></tr>
-<tr class="memitem:ae8f6050fd0c189a34c9a201fdfd490f1"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html#ae8f6050fd0c189a34c9a201fdfd490f1">start</a> (std::function&lt; void(<a class="el" href="classRoar_1_1Session.html">Session</a> &amp;session, <a class="el" href="classRoar_1_1Request.html">Request</a>&lt; BodyT &gt; const &amp;)&gt; onReadComplete)</td></tr>
-<tr class="memdesc:ae8f6050fd0c189a34c9a201fdfd490f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start reading here. If you dont call this function, nothing is read.  <a href="classRoar_1_1Session_1_1ReadIntermediate.html#ae8f6050fd0c189a34c9a201fdfd490f1">More...</a><br /></td></tr>
-<tr class="separator:ae8f6050fd0c189a34c9a201fdfd490f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75894a5bdd5d98d279ea4ada1f1c9e05"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html">ReadIntermediate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html#a75894a5bdd5d98d279ea4ada1f1c9e05">onReadSome</a> (std::function&lt; bool(boost::beast::flat_buffer &amp;, std::size_t)&gt; onChunkFunc)</td></tr>
+<tr class="memdesc:a75894a5bdd5d98d279ea4ada1f1c9e05"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a callback function that is called whenever some data was read.  <a href="classRoar_1_1Session_1_1ReadIntermediate.html#a75894a5bdd5d98d279ea4ada1f1c9e05">More...</a><br /></td></tr>
+<tr class="separator:a75894a5bdd5d98d279ea4ada1f1c9e05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2cf0e8f4e6b1a1852877ca806fafff7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Detail_1_1PromiseTypeBind.html">Detail::PromiseTypeBind</a>&lt; <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindThen.html">Detail::PromiseTypeBindThen</a>&lt; <a class="el" href="structRoar_1_1Detail_1_1PromiseReferenceWrap.html">Detail::PromiseReferenceWrap</a>&lt; <a class="el" href="classRoar_1_1Session.html">Session</a> &gt;, <a class="el" href="structRoar_1_1Detail_1_1PromiseReferenceWrap.html">Detail::PromiseReferenceWrap</a>&lt; <a class="el" href="classRoar_1_1Request.html">Request</a>&lt; BodyT &gt; const &gt; &gt;, <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindFail.html">Detail::PromiseTypeBindFail</a>&lt; <a class="el" href="structRoar_1_1Error.html">Error</a> const &amp; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html#ae2cf0e8f4e6b1a1852877ca806fafff7">commit</a> ()</td></tr>
+<tr class="memdesc:ae2cf0e8f4e6b1a1852877ca806fafff7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start reading here. If you dont call this function, nothing is read.  <a href="classRoar_1_1Session_1_1ReadIntermediate.html#ae2cf0e8f4e6b1a1852877ca806fafff7">More...</a><br /></td></tr>
+<tr class="separator:ae2cf0e8f4e6b1a1852877ca806fafff7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb2b4435d1a7750eb59e8eabac91f1b2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html">ReadIntermediate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html#acb2b4435d1a7750eb59e8eabac91f1b2">useFixedTimeout</a> (std::chrono::milliseconds timeout)</td></tr>
+<tr class="memdesc:acb2b4435d1a7750eb59e8eabac91f1b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a timeout for the whole read operation.  <a href="classRoar_1_1Session_1_1ReadIntermediate.html#acb2b4435d1a7750eb59e8eabac91f1b2">More...</a><br /></td></tr>
+<tr class="separator:acb2b4435d1a7750eb59e8eabac91f1b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -123,10 +128,14 @@ Private Attributes</h2></td></tr>
 <tr class="separator:afe4ee00428c46cd458ca846de250f0f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f9f67599b3891cbeab7a353cf6546b4"><td class="memItemLeft" align="right" valign="top">boost::beast::http::request_parser&lt; BodyT &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html#a0f9f67599b3891cbeab7a353cf6546b4">req_</a></td></tr>
 <tr class="separator:a0f9f67599b3891cbeab7a353cf6546b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d32c2f4b721b5323137b2edd1ddca79"><td class="memItemLeft" align="right" valign="top">std::function&lt; void(<a class="el" href="classRoar_1_1Session.html">Session</a> &amp;session, <a class="el" href="classRoar_1_1Request.html">Request</a>&lt; BodyT &gt; const  &amp;)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html#a6d32c2f4b721b5323137b2edd1ddca79">onReadComplete_</a></td></tr>
-<tr class="separator:a6d32c2f4b721b5323137b2edd1ddca79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f2979e4781b2b618c32948d152e03cb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structRoar_1_1Detail_1_1RequestExtensions.html">Detail::RequestExtensions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html#a0f2979e4781b2b618c32948d152e03cb">originalExtensions_</a></td></tr>
 <tr class="separator:a0f2979e4781b2b618c32948d152e03cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd4a94306c0ec360b3c0390d3239185a"><td class="memItemLeft" align="right" valign="top">std::function&lt; bool(boost::beast::flat_buffer &amp;, std::size_t)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html#acd4a94306c0ec360b3c0390d3239185a">onChunk_</a></td></tr>
+<tr class="separator:acd4a94306c0ec360b3c0390d3239185a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a844125ab157ca2a7fc38522b2b24f1fe"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; promise::Promise &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html#a844125ab157ca2a7fc38522b2b24f1fe">promise_</a></td></tr>
+<tr class="separator:a844125ab157ca2a7fc38522b2b24f1fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a786df2dcb3852294147452e73d5db773"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::chrono::milliseconds &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html#a786df2dcb3852294147452e73d5db773">overallTimeout_</a></td></tr>
+<tr class="separator:a786df2dcb3852294147452e73d5db773"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;typename BodyT&gt;<br />
@@ -287,6 +296,36 @@ template&lt;typename BodyT &gt; </div>
 
 </div>
 </div>
+<a id="ae2cf0e8f4e6b1a1852877ca806fafff7" name="ae2cf0e8f4e6b1a1852877ca806fafff7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2cf0e8f4e6b1a1852877ca806fafff7">&#9670;&nbsp;</a></span>commit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename BodyT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classRoar_1_1Detail_1_1PromiseTypeBind.html">Detail::PromiseTypeBind</a>&lt; <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindThen.html">Detail::PromiseTypeBindThen</a>&lt; <a class="el" href="structRoar_1_1Detail_1_1PromiseReferenceWrap.html">Detail::PromiseReferenceWrap</a>&lt; <a class="el" href="classRoar_1_1Session.html">Session</a> &gt;, <a class="el" href="structRoar_1_1Detail_1_1PromiseReferenceWrap.html">Detail::PromiseReferenceWrap</a>&lt; <a class="el" href="classRoar_1_1Request.html">Request</a>&lt; BodyT &gt; const  &gt; &gt;, <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindFail.html">Detail::PromiseTypeBindFail</a>&lt; <a class="el" href="structRoar_1_1Error.html">Error</a> const  &amp; &gt; &gt; <a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html">Roar::Session::ReadIntermediate</a>&lt; BodyT &gt;::commit </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Start reading here. If you dont call this function, nothing is read. </p>
+<dl class="section return"><dt>Returns</dt><dd>Promise that can be used to await the read. Promise is called with &lt;<a class="el" href="classRoar_1_1Session.html">Session</a>&amp; session, Request&lt;BodyT&gt; req&gt;. </dd></dl>
+
+</div>
+</div>
 <a id="a4047a28b9e95264123da17af3feafe95" name="a4047a28b9e95264123da17af3feafe95"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4047a28b9e95264123da17af3feafe95">&#9670;&nbsp;</a></span>noBodyLimit()</h2>
 
@@ -313,6 +352,43 @@ template&lt;typename BodyT &gt; </div>
 </div><div class="memdoc">
 
 <p>Accept a body of any length. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html" title="Utility class to build up read operations.">ReadIntermediate</a>&amp; Returns itself for chaining. </dd></dl>
+
+</div>
+</div>
+<a id="a75894a5bdd5d98d279ea4ada1f1c9e05" name="a75894a5bdd5d98d279ea4ada1f1c9e05"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75894a5bdd5d98d279ea4ada1f1c9e05">&#9670;&nbsp;</a></span>onReadSome()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename BodyT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html">ReadIntermediate</a> &amp; <a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html">Roar::Session::ReadIntermediate</a>&lt; BodyT &gt;::onReadSome </td>
+          <td>(</td>
+          <td class="paramtype">std::function&lt; bool(boost::beast::flat_buffer &amp;, std::size_t)&gt;&#160;</td>
+          <td class="paramname"><em>onChunkFunc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set a callback function that is called whenever some data was read. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">onChunkFunc</td><td>The function to be called. Is called with the buffer and amount of bytes transferred. Return false in this function to stop reading. </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html" title="Utility class to build up read operations.">ReadIntermediate</a>&amp; Returns itself for chaining. </dd></dl>
 
 </div>
@@ -374,24 +450,22 @@ template&lt;typename BodyT &gt; </div>
 
 </div>
 </div>
-<a id="ae8f6050fd0c189a34c9a201fdfd490f1" name="ae8f6050fd0c189a34c9a201fdfd490f1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae8f6050fd0c189a34c9a201fdfd490f1">&#9670;&nbsp;</a></span>start()</h2>
+<a id="acb2b4435d1a7750eb59e8eabac91f1b2" name="acb2b4435d1a7750eb59e8eabac91f1b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb2b4435d1a7750eb59e8eabac91f1b2">&#9670;&nbsp;</a></span>useFixedTimeout()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename BodyT &gt; </div>
-<div class="memtemplate">
-template&lt;typename... Forwards&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html">Roar::Session::ReadIntermediate</a>&lt; BodyT &gt;::start </td>
+          <td class="memname"><a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html">ReadIntermediate</a> &amp; <a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html">Roar::Session::ReadIntermediate</a>&lt; BodyT &gt;::useFixedTimeout </td>
           <td>(</td>
-          <td class="paramtype">std::function&lt; void(<a class="el" href="classRoar_1_1Session.html">Session</a> &amp;session, <a class="el" href="classRoar_1_1Request.html">Request</a>&lt; BodyT &gt; const &amp;)&gt;&#160;</td>
-          <td class="paramname"><em>onReadComplete</em></td><td>)</td>
+          <td class="paramtype">std::chrono::milliseconds&#160;</td>
+          <td class="paramname"><em>timeout</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -402,25 +476,20 @@ template&lt;typename... Forwards&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Start reading here. If you dont call this function, nothing is read. </p>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">Forwards</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
+<p>Set a timeout for the whole read operation. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">onReadComplete</td><td>A function that is called when the read operation completes in entirety. </td></tr>
+    <tr><td class="paramname">timeout</td><td>The timeout as a std::chrono::duration. </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html" title="Utility class to build up read operations.">ReadIntermediate</a>&amp; Returns itself for chaining. </dd></dl>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a6d32c2f4b721b5323137b2edd1ddca79" name="a6d32c2f4b721b5323137b2edd1ddca79"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6d32c2f4b721b5323137b2edd1ddca79">&#9670;&nbsp;</a></span>onReadComplete_</h2>
+<a id="acd4a94306c0ec360b3c0390d3239185a" name="acd4a94306c0ec360b3c0390d3239185a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd4a94306c0ec360b3c0390d3239185a">&#9670;&nbsp;</a></span>onChunk_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -431,7 +500,7 @@ template&lt;typename BodyT &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::function&lt;void(<a class="el" href="classRoar_1_1Session.html">Session</a>&amp; session, <a class="el" href="classRoar_1_1Request.html">Request</a>&lt;BodyT&gt; const&amp;)&gt; <a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html">Roar::Session::ReadIntermediate</a>&lt; BodyT &gt;::onReadComplete_</td>
+          <td class="memname">std::function&lt;bool(boost::beast::flat_buffer&amp;, std::size_t)&gt; <a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html">Roar::Session::ReadIntermediate</a>&lt; BodyT &gt;::onChunk_</td>
         </tr>
       </table>
   </td>
@@ -456,6 +525,54 @@ template&lt;typename BodyT &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="structRoar_1_1Detail_1_1RequestExtensions.html">Detail::RequestExtensions</a> <a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html">Roar::Session::ReadIntermediate</a>&lt; BodyT &gt;::originalExtensions_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a786df2dcb3852294147452e73d5db773" name="a786df2dcb3852294147452e73d5db773"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a786df2dcb3852294147452e73d5db773">&#9670;&nbsp;</a></span>overallTimeout_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename BodyT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;std::chrono::milliseconds&gt; <a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html">Roar::Session::ReadIntermediate</a>&lt; BodyT &gt;::overallTimeout_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a844125ab157ca2a7fc38522b2b24f1fe" name="a844125ab157ca2a7fc38522b2b24f1fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a844125ab157ca2a7fc38522b2b24f1fe">&#9670;&nbsp;</a></span>promise_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename BodyT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt;promise::Promise&gt; <a class="el" href="classRoar_1_1Session_1_1ReadIntermediate.html">Roar::Session::ReadIntermediate</a>&lt; BodyT &gt;::promise_</td>
         </tr>
       </table>
   </td>

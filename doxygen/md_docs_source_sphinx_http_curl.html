@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>roar: Curl bla</title>
+<title>roar: Curl</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -62,10 +62,32 @@ $(function() {
 
 </div><!-- top -->
 <div><div class="header">
-  <div class="headertitle"><div class="title">Curl bla </div></div>
+  <div class="headertitle"><div class="title">Curl </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"></div></div><!-- contents -->
+<div class="textblock"><p ><a class="el" href="namespaceRoar.html">Roar</a> provides a wrapper around libcurl. The most important object is the <a href="/doxygen/classRoar_1_1Curl_1_1Request.html">Curl::Request</a>. With that you can build requests and "curl_perform" them. Reference the doxygen documentation for details, but here is an example:</p>
+<div class="fragment"><div class="line">---</div>
+<div class="line">lineno-start: 1</div>
+<div class="line">caption: Curl::Request</div>
+<div class="line">---</div>
+<div class="line">#include &lt;roar/curl/request.hpp&gt;</div>
+<div class="line">#include &lt;iostream&gt;</div>
+<div class="line"> </div>
+<div class="line">int main()</div>
+<div class="line">{</div>
+<div class="line">    std::string responseBody;</div>
+<div class="line">    const auto response = Roar::Curl::Request{}</div>
+<div class="line">        .sink(responseBody)</div>
+<div class="line">        .verbose()</div>
+<div class="line">        .setHeaderField(&quot;Content-Type&quot;, &quot;text/plain&quot;)</div>
+<div class="line">        .source(&quot;Hi&quot;)</div>
+<div class="line">        .post(&quot;https://localhost:8080&quot;)</div>
+<div class="line">    ;</div>
+<div class="line"> </div>
+<div class="line">    std::cout &lt;&lt; responseBody &lt;&lt; &quot;\n&quot;;</div>
+<div class="line">    return response.code();</div>
+<div class="line">}</div>
+</div><!-- fragment --> </div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

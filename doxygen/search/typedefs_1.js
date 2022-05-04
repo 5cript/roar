@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['emptybodyrequest_0',['EmptyBodyRequest',['../namespaceRoar.html#ab598fb110e75803c00fb724ff377c7d7',1,'Roar']]]
+  ['const_5fbuffers_5ftype_0',['const_buffers_type',['../classRoar_1_1VoidBody.html#aaa17d16cf00904c167d2a03e225bfb17',1,'Roar::VoidBody']]]
 ];

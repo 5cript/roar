@@ -85,6 +85,9 @@ Macros</h2></td></tr>
 <tr class="memitem:a7c3cc15c5007bb746e14b5b79ed3dae5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pimpl__special__functions_8hpp.html#a7c3cc15c5007bb746e14b5b79ed3dae5">ROAR_PIMPL_SPECIAL_FUNCTIONS</a>(Name)</td></tr>
 <tr class="memdesc:a7c3cc15c5007bb746e14b5b79ed3dae5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utility function for rule of 5 abidance in pimpl classes.  <a href="pimpl__special__functions_8hpp.html#a7c3cc15c5007bb746e14b5b79ed3dae5">More...</a><br /></td></tr>
 <tr class="separator:a7c3cc15c5007bb746e14b5b79ed3dae5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a213b4d60d2a546f5079da364db3b081d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pimpl__special__functions_8hpp.html#a213b4d60d2a546f5079da364db3b081d">ROAR_PIMPL_SPECIAL_FUNCTIONS_NO_MOVE</a>(Name)</td></tr>
+<tr class="memdesc:a213b4d60d2a546f5079da364db3b081d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utility function for rule of 5 abidance in pimpl classes.  <a href="pimpl__special__functions_8hpp.html#a213b4d60d2a546f5079da364db3b081d">More...</a><br /></td></tr>
+<tr class="separator:a213b4d60d2a546f5079da364db3b081d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a235c7c1d55ec241bcec5790b6dd0e09e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pimpl__special__functions_8hpp.html#a235c7c1d55ec241bcec5790b6dd0e09e">ROAR_PIMPL_SPECIAL_FUNCTIONS_IMPL</a>(Name)</td></tr>
 <tr class="memdesc:a235c7c1d55ec241bcec5790b6dd0e09e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utility function for rule of 5 abidance in pimpl classes.  <a href="pimpl__special__functions_8hpp.html#a235c7c1d55ec241bcec5790b6dd0e09e">More...</a><br /></td></tr>
 <tr class="separator:a235c7c1d55ec241bcec5790b6dd0e09e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -133,6 +136,31 @@ Macros</h2></td></tr>
 <b>Value:</b><div class="fragment"><div class="line">    Name::~Name() = <span class="keywordflow">default</span>; \</div>
 <div class="line">    Name::Name(Name&amp;&amp;) = <span class="keywordflow">default</span>; \</div>
 <div class="line">    Name&amp; Name::operator=(Name&amp;&amp;) = <span class="keywordflow">default</span></div>
+</div><!-- fragment -->
+<p>Utility function for rule of 5 abidance in pimpl classes. </p>
+
+</div>
+</div>
+<a id="a213b4d60d2a546f5079da364db3b081d" name="a213b4d60d2a546f5079da364db3b081d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a213b4d60d2a546f5079da364db3b081d">&#9670;&nbsp;</a></span>ROAR_PIMPL_SPECIAL_FUNCTIONS_NO_MOVE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ROAR_PIMPL_SPECIAL_FUNCTIONS_NO_MOVE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">Name</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    ~Name(); \</div>
+<div class="line">    Name(Name <span class="keyword">const</span>&amp;) = <span class="keyword">delete</span>; \</div>
+<div class="line">    Name(Name&amp;&amp;) = <span class="keyword">delete</span>; \</div>
+<div class="line">    Name&amp; operator=(Name <span class="keyword">const</span>&amp;) = <span class="keyword">delete</span>; \</div>
+<div class="line">    Name&amp; operator=(Name&amp;&amp;) = <span class="keyword">delete</span>;</div>
 </div><!-- fragment -->
 <p>Utility function for rule of 5 abidance in pimpl classes. </p>
 

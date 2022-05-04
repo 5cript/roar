@@ -118,10 +118,10 @@
 <!-- Node6&#45;&gt;Node5 -->
 <g id="edge5" class="edge">
 <title>Node6&#45;&gt;Node5</title>
-<path fill="none" stroke="#404040" d="M825.79,-232.33C828.41,-219.63 832.46,-204.62 838.5,-192 840.73,-187.33 843.43,-182.68 846.35,-178.18"/>
-<polygon fill="none" stroke="#404040" points="846.56,-177.87 846.73,-170.66 853.45,-168.04 853.28,-175.25 846.56,-177.87"/>
-<text text-anchor="middle" x="875" y="-206" font-family="Helvetica,sans-Serif" font-size="10.00"> +allowInsecure</text>
-<text text-anchor="middle" x="875" y="-195" font-family="Helvetica,sans-Serif" font-size="10.00">+expectUpgrade</text>
+<path fill="none" stroke="#404040" d="M825.24,-232.29C827.65,-219.58 831.49,-204.58 837.5,-192 839.72,-187.35 842.42,-182.72 845.36,-178.25"/>
+<polygon fill="none" stroke="#404040" points="845.56,-177.97 845.78,-170.76 852.52,-168.2 852.3,-175.4 845.56,-177.97"/>
+<text text-anchor="middle" x="874.5" y="-206" font-family="Helvetica,sans-Serif" font-size="10.00"> +allowUnsecure</text>
+<text text-anchor="middle" x="874.5" y="-195" font-family="Helvetica,sans-Serif" font-size="10.00">+expectUpgrade</text>
 </g>
 <!-- Node7 -->
 <g id="node7" class="node">

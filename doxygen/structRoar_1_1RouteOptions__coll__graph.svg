@@ -37,10 +37,10 @@
 <!-- Node2&#45;&gt;Node1 -->
 <g id="edge1" class="edge">
 <title>Node2&#45;&gt;Node1</title>
-<path fill="none" stroke="#404040" d="M21.48,-116.17C24.03,-103.44 28.11,-88.45 34.5,-76 35.97,-73.13 37.66,-70.28 39.48,-67.5"/>
-<polygon fill="none" stroke="#404040" points="39.51,-67.45 39.79,-60.25 46.55,-57.74 46.27,-64.94 39.51,-67.45"/>
-<text text-anchor="middle" x="71" y="-90" font-family="Helvetica,sans-Serif" font-size="10.00"> +allowInsecure</text>
-<text text-anchor="middle" x="71" y="-79" font-family="Helvetica,sans-Serif" font-size="10.00">+expectUpgrade</text>
+<path fill="none" stroke="#404040" d="M20.87,-116.47C23.2,-103.66 27.09,-88.52 33.5,-76 34.99,-73.1 36.7,-70.23 38.55,-67.42"/>
+<polygon fill="none" stroke="#404040" points="38.65,-67.28 39,-60.08 45.78,-57.62 45.43,-64.83 38.65,-67.28"/>
+<text text-anchor="middle" x="70.5" y="-90" font-family="Helvetica,sans-Serif" font-size="10.00"> +allowUnsecure</text>
+<text text-anchor="middle" x="70.5" y="-79" font-family="Helvetica,sans-Serif" font-size="10.00">+expectUpgrade</text>
 </g>
 <!-- Node3 -->
 <g id="node3" class="node">

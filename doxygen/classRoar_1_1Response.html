@@ -92,11 +92,8 @@ Public Types</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a03f28e8e6a78b7223dfb282c2671f11d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Response.html#a03f28e8e6a78b7223dfb282c2671f11d">Response</a> ()</td></tr>
 <tr class="separator:a03f28e8e6a78b7223dfb282c2671f11d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c6825da2cf94bb9062e36a9fc98b076"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Response.html">Response</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Response.html#a6c6825da2cf94bb9062e36a9fc98b076">result</a> (boost::beast::http::status <a class="el" href="classRoar_1_1Response.html#a4d08dd4fd2a39bac7fbf6d123b1a0851">status</a>)</td></tr>
-<tr class="memdesc:a6c6825da2cf94bb9062e36a9fc98b076"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the result code of the response_.  <a href="classRoar_1_1Response.html#a6c6825da2cf94bb9062e36a9fc98b076">More...</a><br /></td></tr>
-<tr class="separator:a6c6825da2cf94bb9062e36a9fc98b076"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d08dd4fd2a39bac7fbf6d123b1a0851"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Response.html">Response</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Response.html#a4d08dd4fd2a39bac7fbf6d123b1a0851">status</a> (boost::beast::http::status status)</td></tr>
-<tr class="memdesc:a4d08dd4fd2a39bac7fbf6d123b1a0851"><td class="mdescLeft">&#160;</td><td class="mdescRight">Alias for result.  <a href="classRoar_1_1Response.html#a4d08dd4fd2a39bac7fbf6d123b1a0851">More...</a><br /></td></tr>
+<tr class="memdesc:a4d08dd4fd2a39bac7fbf6d123b1a0851"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the response status code.  <a href="classRoar_1_1Response.html#a4d08dd4fd2a39bac7fbf6d123b1a0851">More...</a><br /></td></tr>
 <tr class="separator:a4d08dd4fd2a39bac7fbf6d123b1a0851"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a6d5d17d5dc2946831df6c3d194a485"><td class="memItemLeft" align="right" valign="top">auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Response.html#a6a6d5d17d5dc2946831df6c3d194a485">body</a> ()</td></tr>
 <tr class="memdesc:a6a6d5d17d5dc2946831df6c3d194a485"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the response body object.  <a href="classRoar_1_1Response.html#a6a6d5d17d5dc2946831df6c3d194a485">More...</a><br /></td></tr>
@@ -127,10 +124,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6a82b7575861772cfd2a2f0a6e5adade"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Response.html">Response</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classRoar_1_1Response.html#a6a82b7575861772cfd2a2f0a6e5adade">enableCors</a> (<a class="el" href="classRoar_1_1Request.html">Request</a>&lt; RequestBodyT &gt; const &amp;req, std::optional&lt; <a class="el" href="structRoar_1_1CorsSettings.html">CorsSettings</a> &gt; cors=std::nullopt)</td></tr>
 <tr class="memdesc:a6a82b7575861772cfd2a2f0a6e5adade"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets cors headers.  <a href="classRoar_1_1Response.html#a6a82b7575861772cfd2a2f0a6e5adade">More...</a><br /></td></tr>
 <tr class="separator:a6a82b7575861772cfd2a2f0a6e5adade"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4dd7674c73eecb2aade3f0ad9777743c"><td class="memTemplParams" colspan="2">template&lt;typename SessionT &gt; </td></tr>
-<tr class="memitem:a4dd7674c73eecb2aade3f0ad9777743c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classRoar_1_1Response.html#a4dd7674c73eecb2aade3f0ad9777743c">send</a> (SessionT &amp;session)</td></tr>
-<tr class="memdesc:a4dd7674c73eecb2aade3f0ad9777743c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends this response on a given session. This invalides this response object.  <a href="classRoar_1_1Response.html#a4dd7674c73eecb2aade3f0ad9777743c">More...</a><br /></td></tr>
-<tr class="separator:a4dd7674c73eecb2aade3f0ad9777743c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a698fa8f61bb5f903b83172315d96b134"><td class="memTemplParams" colspan="2">template&lt;typename SessionT &gt; </td></tr>
+<tr class="memitem:a698fa8f61bb5f903b83172315d96b134"><td class="memTemplItemLeft" align="right" valign="top">promise::Promise&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classRoar_1_1Response.html#a698fa8f61bb5f903b83172315d96b134">send</a> (SessionT &amp;session)</td></tr>
+<tr class="memdesc:a698fa8f61bb5f903b83172315d96b134"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends this response on a given session. This invalides this response object.  <a href="classRoar_1_1Response.html#a698fa8f61bb5f903b83172315d96b134">More...</a><br /></td></tr>
+<tr class="separator:a698fa8f61bb5f903b83172315d96b134"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a194fbb22202fec559625cbca97f414a5"><td class="memTemplParams" colspan="2">template&lt;typename SessionT &gt; </td></tr>
+<tr class="memitem:a194fbb22202fec559625cbca97f414a5"><td class="memTemplItemLeft" align="right" valign="top">promise::Promise&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classRoar_1_1Response.html#a194fbb22202fec559625cbca97f414a5">send</a> (std::shared_ptr&lt; SessionT &gt; &amp;session)</td></tr>
+<tr class="memdesc:a194fbb22202fec559625cbca97f414a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send overload for shared_ptr. This invalides this response object.  <a href="classRoar_1_1Response.html#a194fbb22202fec559625cbca97f414a5">More...</a><br /></td></tr>
+<tr class="separator:a194fbb22202fec559625cbca97f414a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad66e9648c996f753e17ee9622d17a371"><td class="memItemLeft" align="right" valign="top">boost::beast::http::response&lt; BodyT &gt; &amp;&amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Response.html#ad66e9648c996f753e17ee9622d17a371">response</a> () &amp;&amp;</td></tr>
 <tr class="memdesc:ad66e9648c996f753e17ee9622d17a371"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ejects the underlying boost response.  <a href="classRoar_1_1Response.html#ad66e9648c996f753e17ee9622d17a371">More...</a><br /></td></tr>
 <tr class="separator:ad66e9648c996f753e17ee9622d17a371"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -513,44 +514,8 @@ template&lt;typename BodyT &gt; </div>
 
 </div>
 </div>
-<a id="a6c6825da2cf94bb9062e36a9fc98b076" name="a6c6825da2cf94bb9062e36a9fc98b076"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6c6825da2cf94bb9062e36a9fc98b076">&#9670;&nbsp;</a></span>result()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename BodyT &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classRoar_1_1Response.html">Response</a> &amp; <a class="el" href="classRoar_1_1Response.html">Roar::Response</a>&lt; BodyT &gt;::result </td>
-          <td>(</td>
-          <td class="paramtype">boost::beast::http::status&#160;</td>
-          <td class="paramname"><em>status</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Sets the result code of the response_. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">status</td><td>A status code. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a4dd7674c73eecb2aade3f0ad9777743c" name="a4dd7674c73eecb2aade3f0ad9777743c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4dd7674c73eecb2aade3f0ad9777743c">&#9670;&nbsp;</a></span>send()</h2>
+<a id="a698fa8f61bb5f903b83172315d96b134" name="a698fa8f61bb5f903b83172315d96b134"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a698fa8f61bb5f903b83172315d96b134">&#9670;&nbsp;</a></span>send() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -563,7 +528,7 @@ template&lt;typename SessionT &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classRoar_1_1Response.html">Roar::Response</a>&lt; BodyT &gt;::send </td>
+          <td class="memname">promise::Promise <a class="el" href="classRoar_1_1Response.html">Roar::Response</a>&lt; BodyT &gt;::send </td>
           <td>(</td>
           <td class="paramtype">SessionT &amp;&#160;</td>
           <td class="paramname"><em>session</em></td><td>)</td>
@@ -578,6 +543,50 @@ template&lt;typename SessionT &gt; </div>
 </div><div class="memdoc">
 
 <p>Sends this response on a given session. This invalides this response object. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">SessionT</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">session</td><td>The session to send this on. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a194fbb22202fec559625cbca97f414a5" name="a194fbb22202fec559625cbca97f414a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a194fbb22202fec559625cbca97f414a5">&#9670;&nbsp;</a></span>send() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename BodyT &gt; </div>
+<div class="memtemplate">
+template&lt;typename SessionT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">promise::Promise <a class="el" href="classRoar_1_1Response.html">Roar::Response</a>&lt; BodyT &gt;::send </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; SessionT &gt; &amp;&#160;</td>
+          <td class="paramname"><em>session</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Send overload for shared_ptr. This invalides this response object. </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">SessionT</td><td></td></tr>
@@ -701,7 +710,7 @@ template&lt;typename BodyT &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Alias for result. </p>
+<p>Sets the response status code. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">status</td><td>A status code. </td></tr>

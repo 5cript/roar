@@ -76,7 +76,7 @@ $(function() {
 <div class="dynheader">
 Collaboration diagram for Roar::Router::Implementation:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="structRoar_1_1Router_1_1Implementation__coll__graph.svg" width="100%" height="482"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="structRoar_1_1Router_1_1Implementation__coll__graph.svg" width="100%" height="504"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 <table class="memberdecls">
@@ -84,6 +84,8 @@ Collaboration diagram for Roar::Router::Implementation:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a17cbc623e7f0b4ec01ef709d2590a217"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1Router_1_1Implementation.html#a17cbc623e7f0b4ec01ef709d2590a217">Implementation</a> (std::shared_ptr&lt; const <a class="el" href="classRoar_1_1StandardResponseProvider.html">StandardResponseProvider</a> &gt; <a class="el" href="structRoar_1_1Router_1_1Implementation.html#adce95f6598ccb01e3a0c628accf1feff">standardResponseProvider</a>)</td></tr>
 <tr class="separator:a17cbc623e7f0b4ec01ef709d2590a217"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e4ca7e6c1045f1ee1cfb40e0984e8e4"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::pair&lt; <a class="el" href="classRoar_1_1Route.html">Route</a> const &amp;, std::vector&lt; std::string &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1Router_1_1Implementation.html#a9e4ca7e6c1045f1ee1cfb40e0984e8e4">findRouteImpl</a> (boost::beast::http::verb method, std::string const &amp;path, std::unordered_multimap&lt; boost::beast::http::verb, <a class="el" href="classRoar_1_1Route.html">Route</a> &gt; const &amp;routeContainer) const</td></tr>
+<tr class="separator:a9e4ca7e6c1045f1ee1cfb40e0984e8e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6fcf2bb0d5d4cc39fdbaf031f2fdc095"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::pair&lt; <a class="el" href="classRoar_1_1Route.html">Route</a> const &amp;, std::vector&lt; std::string &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1Router_1_1Implementation.html#a6fcf2bb0d5d4cc39fdbaf031f2fdc095">findRoute</a> (boost::beast::http::verb method, std::string const &amp;path) const</td></tr>
 <tr class="separator:a6fcf2bb0d5d4cc39fdbaf031f2fdc095"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -91,8 +93,10 @@ Public Member Functions</h2></td></tr>
 Public Attributes</h2></td></tr>
 <tr class="memitem:aa04485f7326375e0cc4397dfe95a6752"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1Router_1_1Implementation.html#aa04485f7326375e0cc4397dfe95a6752">routesMutex</a></td></tr>
 <tr class="separator:aa04485f7326375e0cc4397dfe95a6752"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a317f4d0ddcbc94aef1fbe68fad07bce6"><td class="memItemLeft" align="right" valign="top">std::unordered_multimap&lt; boost::beast::http::verb, <a class="el" href="classRoar_1_1Route.html">Route</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1Router_1_1Implementation.html#a317f4d0ddcbc94aef1fbe68fad07bce6">routes</a></td></tr>
-<tr class="separator:a317f4d0ddcbc94aef1fbe68fad07bce6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ddd2a2a458587b54bd34754499c8eb3"><td class="memItemLeft" align="right" valign="top">std::unordered_multimap&lt; boost::beast::http::verb, <a class="el" href="classRoar_1_1Route.html">Route</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1Router_1_1Implementation.html#a6ddd2a2a458587b54bd34754499c8eb3">stringRoutes</a></td></tr>
+<tr class="separator:a6ddd2a2a458587b54bd34754499c8eb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5295e951248a207afca70f32485ba703"><td class="memItemLeft" align="right" valign="top">std::unordered_multimap&lt; boost::beast::http::verb, <a class="el" href="classRoar_1_1Route.html">Route</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1Router_1_1Implementation.html#a5295e951248a207afca70f32485ba703">regexRoutes</a></td></tr>
+<tr class="separator:a5295e951248a207afca70f32485ba703"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adce95f6598ccb01e3a0c628accf1feff"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; const <a class="el" href="classRoar_1_1StandardResponseProvider.html">StandardResponseProvider</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1Router_1_1Implementation.html#adce95f6598ccb01e3a0c628accf1feff">standardResponseProvider</a></td></tr>
 <tr class="separator:adce95f6598ccb01e3a0c628accf1feff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -160,15 +164,57 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a9e4ca7e6c1045f1ee1cfb40e0984e8e4" name="a9e4ca7e6c1045f1ee1cfb40e0984e8e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e4ca7e6c1045f1ee1cfb40e0984e8e4">&#9670;&nbsp;</a></span>findRouteImpl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; std::pair&lt; <a class="el" href="classRoar_1_1Route.html">Route</a> const  &amp;, std::vector&lt; std::string &gt; &gt; &gt; Roar::Router::Implementation::findRouteImpl </td>
+          <td>(</td>
+          <td class="paramtype">boost::beast::http::verb&#160;</td>
+          <td class="paramname"><em>method</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramname"><em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::unordered_multimap&lt; boost::beast::http::verb, <a class="el" href="classRoar_1_1Route.html">Route</a> &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>routeContainer</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a317f4d0ddcbc94aef1fbe68fad07bce6" name="a317f4d0ddcbc94aef1fbe68fad07bce6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a317f4d0ddcbc94aef1fbe68fad07bce6">&#9670;&nbsp;</a></span>routes</h2>
+<a id="a5295e951248a207afca70f32485ba703" name="a5295e951248a207afca70f32485ba703"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5295e951248a207afca70f32485ba703">&#9670;&nbsp;</a></span>regexRoutes</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_multimap&lt;boost::beast::http::verb, <a class="el" href="classRoar_1_1Route.html">Route</a>&gt; Roar::Router::Implementation::routes</td>
+          <td class="memname">std::unordered_multimap&lt;boost::beast::http::verb, <a class="el" href="classRoar_1_1Route.html">Route</a>&gt; Roar::Router::Implementation::regexRoutes</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -205,6 +251,20 @@ Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">std::shared_ptr&lt;const <a class="el" href="classRoar_1_1StandardResponseProvider.html">StandardResponseProvider</a>&gt; Roar::Router::Implementation::standardResponseProvider</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6ddd2a2a458587b54bd34754499c8eb3" name="a6ddd2a2a458587b54bd34754499c8eb3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ddd2a2a458587b54bd34754499c8eb3">&#9670;&nbsp;</a></span>stringRoutes</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_multimap&lt;boost::beast::http::verb, <a class="el" href="classRoar_1_1Route.html">Route</a>&gt; Roar::Router::Implementation::stringRoutes</td>
         </tr>
       </table>
 </div><div class="memdoc">

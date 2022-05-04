@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['firsttype_5ft_0',['FirstType_t',['../namespaceRoar_1_1Detail.html#ac75587e841aaa1148e586c7781c57c20',1,'Roar::Detail']]]
+  ['emptybodyrequest_0',['EmptyBodyRequest',['../namespaceRoar.html#ab598fb110e75803c00fb724ff377c7d7',1,'Roar']]]
 ];

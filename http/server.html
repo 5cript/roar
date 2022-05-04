@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Server bla &mdash; roar 1.0.0 documentation</title>
+  <title>HTTP Server &mdash; roar 1.0.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/override.css" type="text/css" />
@@ -23,7 +23,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="Curl bla" href="curl.html" />
+    <link rel="next" title="Websocket Client" href="../websocket/client.html" />
+    <link rel="prev" title="Curl" href="curl.html" />
 <link href="../ _static/override.css" rel="stylesheet" type="text/css">
 
 </head>
@@ -50,10 +51,27 @@
 </ul>
 </li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">HTTP Utilities</span></p>
+<p class="caption" role="heading"><span class="caption-text">HTTP</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="curl.html">Curl bla</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Server bla</a></li>
+<li class="toctree-l1"><a class="reference internal" href="curl.html">Curl</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">HTTP Server</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#tutorial">Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#requestlistener">RequestListener</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#routing">Routing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#string-paths">String Paths</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#regex-paths">Regex Paths</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#sending-responses">Sending Responses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reading-a-body">Reading a Body</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rate-limiting">Rate Limiting</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Websocket</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../websocket/client.html">Websocket Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../websocket/server.html">Websocket Server</a></li>
 </ul>
 
         </div>
@@ -70,7 +88,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Server bla</li>
+      <li>HTTP Server</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/http/server.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -80,15 +98,306 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="server-bla">
-<h1>Server bla<a class="headerlink" href="#server-bla" title="Permalink to this headline"></a></h1>
+  <section id="http-server">
+<h1>HTTP Server<a class="headerlink" href="#http-server" title="Permalink to this headline"></a></h1>
+<section id="tutorial">
+<h2>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline"></a></h2>
+<p>Lets start with the following example:</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">Most Minimal Example</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;boost/asio/any_io_executor.hpp&gt;</span><span class="cp"></span>
+<span class="linenos"> 2</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;boost/asio/thread_pool.hpp&gt;</span><span class="cp"></span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;roar/server.hpp&gt;</span><span class="cp"></span>
+<span class="linenos"> 5</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;roar/utility/scope_exit.hpp&gt;</span><span class="cp"></span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"></span>
+<span class="linenos">10</span><span class="p">{</span><span class="w"></span>
+<span class="linenos">11</span><span class="w">    </span><span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">thread_pool</span><span class="w"> </span><span class="n">pool</span><span class="p">{</span><span class="mi">4</span><span class="p">};</span><span class="w"></span>
+<span class="linenos">12</span>
+<span class="linenos">13</span><span class="w">    </span><span class="c1">// Create server.</span>
+<span class="linenos">14</span><span class="w">    </span><span class="n">Roar</span><span class="o">::</span><span class="n">Server</span><span class="w"> </span><span class="n">server</span><span class="p">{{.</span><span class="n">executor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pool</span><span class="p">.</span><span class="n">executor</span><span class="p">()}};</span><span class="w"></span>
+<span class="linenos">15</span>
+<span class="linenos">16</span><span class="w">    </span><span class="c1">// stop the thread_pool on scope exit to guarantee that all asynchronous tasks are finished before the server is</span>
+<span class="linenos">17</span><span class="w">    </span><span class="c1">// destroyed.</span>
+<span class="linenos">18</span><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">shutdownPool</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Roar</span><span class="o">::</span><span class="n">ScopeExit</span><span class="p">{[</span><span class="o">&amp;</span><span class="n">pool</span><span class="p">]()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">19</span><span class="w">        </span><span class="n">pool</span><span class="p">.</span><span class="n">stop</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">20</span><span class="w">        </span><span class="n">pool</span><span class="p">.</span><span class="n">join</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">21</span><span class="w">    </span><span class="p">}};</span><span class="w"></span>
+<span class="linenos">22</span>
+<span class="linenos">23</span><span class="w">    </span><span class="c1">// Start server and bind on port &quot;port&quot;.</span>
+<span class="linenos">24</span><span class="w">    </span><span class="n">server</span><span class="p">.</span><span class="n">start</span><span class="p">(</span><span class="mi">8081</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">25</span>
+<span class="linenos">26</span><span class="w">    </span><span class="c1">// Prevent exit somehow:</span>
+<span class="linenos">27</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">get</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">28</span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<p>In this example we are creating an asio thread pool for the asynchronous actions of our server,
+the server itself and then start the server by binding and accepting on port 8081.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Important: The Roar::ScopeExit construct ensures that the threads are shutdown before the server or request listeners are destroyed.
+This way we do not need to ensure their survival in asynchronous handlers and do not need to use shared pointers.</p>
+</div>
+<p>This example is not very useful though, because any requests would be greeted by 404.
+This is where the RequestListener concept comes into play.
+Lets define one:</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">basic_request_listener.hpp</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#pragma once</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;roar/routing/request_listener.hpp&gt;</span><span class="cp"></span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;boost/describe/class.hpp&gt;</span><span class="cp"></span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="k">class</span><span class="w"> </span><span class="nc">MyRequestListener</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="p">{</span><span class="w"></span>
+<span class="linenos"> 9</span><span class="w">  </span><span class="k">private</span><span class="o">:</span><span class="w"></span>
+<span class="linenos">10</span><span class="w">    </span><span class="n">ROAR_MAKE_LISTENER</span><span class="p">(</span><span class="n">MyRequestListener</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="w">    </span><span class="c1">// Use the ROAR_GET, ... macro to define a route. Routes are basically mappings of paths to handlers.</span>
+<span class="hll"><span class="linenos">13</span><span class="w">    </span><span class="n">ROAR_GET</span><span class="p">(</span><span class="n">index</span><span class="p">)(</span><span class="s">&quot;/&quot;</span><span class="p">);</span><span class="w"></span>
+</span><span class="linenos">14</span>
+<span class="linenos">15</span><span class="w">  </span><span class="k">private</span><span class="o">:</span><span class="w"></span>
+<span class="linenos">16</span><span class="w">    </span><span class="c1">// This makes routes visible to the library. For as long as we have to wait for native reflection...</span>
+<span class="hll"><span class="linenos">17</span><span class="w">    </span><span class="n">BOOST_DESCRIBE_CLASS</span><span class="p">(</span><span class="n">MyRequestListener</span><span class="p">,</span><span class="w"> </span><span class="p">(),</span><span class="w"> </span><span class="p">(),</span><span class="w"> </span><span class="p">(),</span><span class="w"> </span><span class="p">(</span><span class="n">roar_index</span><span class="p">,</span><span class="w"> </span><span class="n">roar_upload</span><span class="p">))</span><span class="w"></span>
+</span><span class="linenos">18</span><span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">basic_request_listener.cpp</span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;basic_request_listener.hpp&quot;</span><span class="cp"></span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">boost</span><span class="o">::</span><span class="nn">beast</span><span class="o">::</span><span class="nn">http</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="kt">void</span><span class="w"> </span><span class="nf">RequestListener::index</span><span class="p">(</span><span class="n">Roar</span><span class="o">::</span><span class="n">Session</span><span class="o">&amp;</span><span class="w"> </span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="n">Roar</span><span class="o">::</span><span class="n">EmptyBodyRequest</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"></span>
+<span class="linenos"> 6</span><span class="p">{</span><span class="w"></span>
+<span class="linenos"> 7</span><span class="w">    </span><span class="n">session</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="w">        </span><span class="p">.</span><span class="n">send</span><span class="o">&lt;</span><span class="n">string_body</span><span class="o">&gt;</span><span class="p">(</span><span class="n">request</span><span class="p">)</span><span class="w"></span>
+<span class="linenos"> 9</span><span class="w">        </span><span class="o">-&gt;</span><span class="n">status</span><span class="p">(</span><span class="n">status</span><span class="o">::</span><span class="n">ok</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">10</span><span class="w">        </span><span class="p">.</span><span class="n">contentType</span><span class="p">(</span><span class="s">&quot;text/plain&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">11</span><span class="w">        </span><span class="p">.</span><span class="n">body</span><span class="p">(</span><span class="s">&quot;Hi&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">12</span><span class="w">        </span><span class="p">.</span><span class="n">commit</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">13</span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<p>This is our first request listener. It is a class that is able to accept http requests for predefined paths.
+In this case the “/” path will get routed to the index member function that can now handle this request.
+If the function is empty, the Roar::Session will run out of scope and will be closed and destroyed.</p>
+<p>ROAR_GET, ROAR_PUT, …, ROAR_ROUTE is a macro that create some boilerplate in the class.
+More about them is in the RequestListener section.
+Doxygen about all defined macros:
+<a href="/doxygen/include_2roar_2routing_2request__listener_8hpp.html#route">ROAR_ROUTE</a>.</p>
+<p>Now if we can add this listener to our server:</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Adding the request listener to our</span><a class="headerlink" href="#id4" title="Permalink to this code"></a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">// Other includes as before</span>
+<span class="linenos"> 2</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;basic_request_listener.hpp&quot;</span><span class="cp"></span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"></span>
+<span class="linenos"> 5</span><span class="p">{</span><span class="w"></span>
+<span class="linenos"> 6</span><span class="w">    </span><span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">thread_pool</span><span class="w"> </span><span class="n">pool</span><span class="p">{</span><span class="mi">4</span><span class="p">};</span><span class="w"></span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="w">    </span><span class="c1">// Create server.</span>
+<span class="linenos"> 9</span><span class="w">    </span><span class="n">Roar</span><span class="o">::</span><span class="n">Server</span><span class="w"> </span><span class="n">server</span><span class="p">{{.</span><span class="n">executor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pool</span><span class="p">.</span><span class="n">executor</span><span class="p">()}};</span><span class="w"></span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="w">    </span><span class="c1">// stop the thread_pool on scope exit to guarantee that all asynchronous tasks are finished before the server is</span>
+<span class="linenos">12</span><span class="w">    </span><span class="c1">// destroyed.</span>
+<span class="linenos">13</span><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">shutdownPool</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Roar</span><span class="o">::</span><span class="n">ScopeExit</span><span class="p">{[</span><span class="o">&amp;</span><span class="n">pool</span><span class="p">]()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">14</span><span class="w">        </span><span class="n">pool</span><span class="p">.</span><span class="n">stop</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">15</span><span class="w">        </span><span class="n">pool</span><span class="p">.</span><span class="n">join</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">16</span><span class="w">    </span><span class="p">}};</span><span class="w"></span>
+<span class="linenos">17</span><span class="w">    </span>
+<span class="hll"><span class="linenos">18</span><span class="w">    </span><span class="n">server</span><span class="p">.</span><span class="n">installRequestListener</span><span class="o">&lt;</span><span class="n">RequestListener</span><span class="o">&gt;</span><span class="p">();</span><span class="w"></span>
+</span><span class="linenos">19</span>
+<span class="linenos">20</span><span class="w">    </span><span class="c1">// Start server and bind on port &quot;port&quot;.</span>
+<span class="linenos">21</span><span class="w">    </span><span class="n">server</span><span class="p">.</span><span class="n">start</span><span class="p">(</span><span class="mi">8081</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">22</span>
+<span class="linenos">23</span><span class="w">    </span><span class="c1">// Prevent exit somehow:</span>
+<span class="linenos">24</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">get</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">25</span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<p>After this, making requests to the server on “/” will yield a response:</p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">Curl</span><a class="headerlink" href="#id5" title="Permalink to this code"></a></div>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>$ curl -v localhost:8081/
+<span class="linenos"> 2</span>*   Trying <span class="m">127</span>.0.0.1:8081...
+<span class="linenos"> 3</span>* Connected to localhost <span class="o">(</span><span class="m">127</span>.0.0.1<span class="o">)</span> port <span class="m">8081</span> <span class="o">(</span><span class="c1">#0)</span>
+<span class="linenos"> 4</span>&gt; GET / HTTP/1.1
+<span class="linenos"> 5</span>&gt; Host: localhost:8081
+<span class="linenos"> 6</span>&gt; User-Agent: curl/7.83.0
+<span class="linenos"> 7</span>&gt; Accept: */*
+<span class="linenos"> 8</span>&gt;
+<span class="linenos"> 9</span>* Mark bundle as not supporting multiuse
+<span class="linenos">10</span>&lt; HTTP/1.1 <span class="m">200</span> OK
+<span class="linenos">11</span>&lt; Server: Roar+Boost.Beast/330
+<span class="linenos">12</span>&lt; Content-Type: text/plain
+<span class="linenos">13</span>&lt; Content-Length: <span class="m">2</span>
+<span class="linenos">14</span>&lt;
+<span class="linenos">15</span>Hi* Connection <span class="c1">#0 to host localhost left intact</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="requestlistener">
+<h2>RequestListener<a class="headerlink" href="#requestlistener" title="Permalink to this headline"></a></h2>
+<p>A request listener is a class that maps paths to request handlers.
+The following snippet shows a more detailed example.</p>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text">More sophisticated request listener.</span><a class="headerlink" href="#id6" title="Permalink to this code"></a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#pragma once</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;roar/routing/request_listener.hpp&gt;</span><span class="cp"></span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;boost/describe/class.hpp&gt;</span><span class="cp"></span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="k">class</span><span class="w"> </span><span class="nc">MyRequestListener</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="p">{</span><span class="w"></span>
+<span class="linenos"> 9</span><span class="w">  </span><span class="k">private</span><span class="o">:</span><span class="w"></span>
+<span class="linenos">10</span><span class="w">    </span><span class="n">ROAR_MAKE_LISTENER</span><span class="p">(</span><span class="n">MyRequestListener</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="w">    </span><span class="c1">// This is an abbreviation, where only the path is specified.</span>
+<span class="linenos">13</span><span class="w">    </span><span class="n">ROAR_GET</span><span class="p">(</span><span class="n">index</span><span class="p">)(</span><span class="s">&quot;/&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">14</span>
+<span class="linenos">15</span><span class="w">    </span><span class="c1">// This here sets more options:</span>
+<span class="linenos">16</span><span class="w">    </span><span class="n">ROAR_GET</span><span class="p">(</span><span class="n">images</span><span class="p">)({</span><span class="w"></span>
+<span class="linenos">17</span><span class="w">        </span><span class="p">.</span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/img/(.+)&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="linenos">18</span><span class="w">        </span><span class="p">.</span><span class="n">pathType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Roar</span><span class="o">::</span><span class="n">RoutePathType</span><span class="o">::</span><span class="n">Regex</span><span class="p">,</span><span class="w">  </span><span class="c1">// Path is a regular expression</span>
+<span class="linenos">19</span><span class="w">        </span><span class="p">.</span><span class="n">routeOptions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">20</span><span class="w">            </span><span class="p">.</span><span class="n">allowUnsecure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="c1">// Allow HTTP request here, even if HTTPS server</span>
+<span class="linenos">21</span><span class="w">            </span><span class="p">.</span><span class="n">expectUpgrade</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="c1">// Expect Websocket upgrade request here?</span>
+<span class="linenos">22</span><span class="w">            </span><span class="p">.</span><span class="n">cors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Roar</span><span class="o">::</span><span class="n">makePermissiveCorsSettings</span><span class="p">(</span><span class="s">&quot;get&quot;</span><span class="p">),</span><span class="w"></span>
+<span class="linenos">23</span><span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="linenos">24</span><span class="w">    </span><span class="p">})</span><span class="w"></span>
+<span class="linenos">25</span>
+<span class="linenos">26</span><span class="w">  </span><span class="k">private</span><span class="o">:</span><span class="w"></span>
+<span class="linenos">27</span><span class="w">    </span><span class="c1">// This makes routes visible to the library. For as long as we have to wait for native reflection...</span>
+<span class="linenos">28</span><span class="w">    </span><span class="n">BOOST_DESCRIBE_CLASS</span><span class="p">(</span><span class="n">MyRequestListener</span><span class="p">,</span><span class="w"> </span><span class="p">(),</span><span class="w"> </span><span class="p">(),</span><span class="w"> </span><span class="p">(),</span><span class="w"> </span><span class="p">(</span><span class="n">roar_index</span><span class="p">,</span><span class="w"> </span><span class="n">roar_images</span><span class="p">))</span><span class="w"></span>
+<span class="linenos">29</span><span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<p>Available options for routes are documented here:
+<a href="/doxygen/structRoar_1_1RouteInfo.html">RouteInfo</a>.</p>
+<div class="admonition-head-requests admonition">
+<p class="admonition-title">Head Requests</p>
+<p>Head requests are not automatically possible on get requests. Because the library cannot formulate responses without running user code.
+If you want to support head requests, you have to specify them explicitely.</p>
+</div>
+<p>The BOOST_DESCRIBE_CLASS macro is used to make generated decorations for the handlers visible to the roar library.
+Add all routes you have to the last list and prefix them with “roar_”.
+Forgetting them here will result in them not being found.</p>
+</section>
+<section id="routing">
+<h2>Routing<a class="headerlink" href="#routing" title="Permalink to this headline"></a></h2>
+<p>Routing is the process of taking a path and finding the appropriate handler for it.
+Roar supports two kinds: simple string matches of paths and regex paths.</p>
+<section id="string-paths">
+<h3>String Paths<a class="headerlink" href="#string-paths" title="Permalink to this headline"></a></h3>
+<p>String paths take precedence over regex paths.</p>
+</section>
+<section id="regex-paths">
+<h3>Regex Paths<a class="headerlink" href="#regex-paths" title="Permalink to this headline"></a></h3>
+<p>Regex routes are taken when a path of a request matches with the given regex.
+These matches can be obtained in the handler like so:</p>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text">More sophisticated request listener.</span><a class="headerlink" href="#id7" title="Permalink to this code"></a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;basic_request_listener.hpp&quot;</span><span class="cp"></span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">boost</span><span class="o">::</span><span class="nn">beast</span><span class="o">::</span><span class="nn">http</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="kt">void</span><span class="w"> </span><span class="nf">RequestListener::image</span><span class="p">(</span><span class="n">Roar</span><span class="o">::</span><span class="n">Session</span><span class="o">&amp;</span><span class="w"> </span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="n">Roar</span><span class="o">::</span><span class="n">EmptyBodyRequest</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"></span>
+<span class="linenos"> 6</span><span class="p">{</span><span class="w"></span>
+<span class="hll"><span class="linenos"> 7</span><span class="w">    </span><span class="c1">// Does not return the full path match.</span>
+</span><span class="linenos"> 8</span><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">matches</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request</span><span class="p">.</span><span class="n">pathMatches</span><span class="p">();</span><span class="w"></span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span><span class="w">    </span><span class="c1">// Suppose the regex was &quot;/img/(.+)/([a-z])&quot; and the path was &quot;/img/bla/b&quot;.</span>
+<span class="linenos">11</span><span class="w">    </span><span class="c1">// then: matches[0] =&gt; &quot;bla&quot;,</span>
+<span class="linenos">12</span><span class="w">    </span><span class="c1">//       matches[1] =&gt; &quot;b&quot;</span>
+<span class="linenos">13</span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="sending-responses">
+<h2>Sending Responses<a class="headerlink" href="#sending-responses" title="Permalink to this headline"></a></h2>
+<p>Here is an example on how to send a response.
+The session is kept alive over the course of the send operation.</p>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-text">Write Example</span><a class="headerlink" href="#id8" title="Permalink to this code"></a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kt">void</span><span class="w"> </span><span class="nf">RequestListener::index</span><span class="p">(</span><span class="n">Roar</span><span class="o">::</span><span class="n">Session</span><span class="o">&amp;</span><span class="w"> </span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="n">Roar</span><span class="o">::</span><span class="n">EmptyBodyRequest</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="p">{</span><span class="w"></span>
+<span class="linenos"> 3</span><span class="w">    </span><span class="n">session</span><span class="w"></span>
+<span class="linenos"> 4</span><span class="w">        </span><span class="p">.</span><span class="n">send</span><span class="o">&lt;</span><span class="n">string_body</span><span class="o">&gt;</span><span class="p">(</span><span class="n">request</span><span class="p">)</span><span class="w"></span>
+<span class="linenos"> 5</span><span class="w">        </span><span class="o">-&gt;</span><span class="n">status</span><span class="p">(</span><span class="n">status</span><span class="o">::</span><span class="n">ok</span><span class="p">)</span><span class="w"></span>
+<span class="linenos"> 6</span><span class="w">        </span><span class="p">.</span><span class="n">contentType</span><span class="p">(</span><span class="s">&quot;text/plain&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="linenos"> 7</span><span class="w">        </span><span class="p">.</span><span class="n">body</span><span class="p">(</span><span class="s">&quot;Hi&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="w">        </span><span class="p">.</span><span class="n">commit</span><span class="p">()</span><span class="w"> </span><span class="c1">// Actually performs the send operation.</span>
+<span class="linenos"> 9</span><span class="w">        </span><span class="c1">// Javascript-Promise like continuation:</span>
+<span class="linenos">10</span><span class="w">        </span><span class="p">.</span><span class="n">then</span><span class="p">([](</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">req</span><span class="p">){</span><span class="w"></span>
+<span class="linenos">11</span><span class="w">            </span><span class="c1">// Send complete.</span>
+<span class="linenos">12</span><span class="w">        </span><span class="p">})</span><span class="w"></span>
+<span class="linenos">13</span><span class="w">        </span><span class="p">.</span><span class="n">fail</span><span class="p">([](</span><span class="n">Roar</span><span class="o">::</span><span class="n">Error</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">14</span><span class="w">            </span><span class="c1">// Send failed.</span>
+<span class="linenos">15</span><span class="w">        </span><span class="p">})</span><span class="w"></span>
+<span class="linenos">16</span><span class="w">    </span><span class="p">;</span><span class="w"></span>
+<span class="linenos">17</span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="reading-a-body">
+<h2>Reading a Body<a class="headerlink" href="#reading-a-body" title="Permalink to this headline"></a></h2>
+<p>Here is an example on how to read a body.
+The session is kept alive over the course of the read operation.</p>
+<div class="literal-block-wrapper docutils container" id="id9">
+<div class="code-block-caption"><span class="caption-text">Write Example</span><a class="headerlink" href="#id9" title="Permalink to this code"></a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kt">void</span><span class="w"> </span><span class="nf">RequestListener::upload</span><span class="p">(</span><span class="n">Roar</span><span class="o">::</span><span class="n">Session</span><span class="o">&amp;</span><span class="w"> </span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="n">Roar</span><span class="o">::</span><span class="n">EmptyBodyRequest</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="p">{</span><span class="w"></span>
+<span class="linenos"> 3</span><span class="w">    </span><span class="k">namespace</span><span class="w"> </span><span class="nn">http</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nn">boost</span><span class="o">::</span><span class="nn">beast</span><span class="o">::</span><span class="nn">http</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="w">    </span><span class="n">boost</span><span class="o">::</span><span class="n">beast</span><span class="o">::</span><span class="n">error_code</span><span class="w"> </span><span class="n">ec</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 6</span><span class="w">    </span><span class="n">http</span><span class="o">::</span><span class="n">file_body</span><span class="o">::</span><span class="n">value_type</span><span class="w"> </span><span class="n">body</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 7</span><span class="w">    </span><span class="n">body</span><span class="p">.</span><span class="n">open</span><span class="p">(</span><span class="s">&quot;/tmp/bla.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">boost</span><span class="o">::</span><span class="n">beast</span><span class="o">::</span><span class="n">file_mode</span><span class="o">::</span><span class="n">write</span><span class="p">,</span><span class="w"> </span><span class="n">ec</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="w">    </span><span class="c1">// if (ec) reply with error.</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span><span class="w">    </span><span class="n">session</span><span class="p">.</span><span class="k">template</span><span class="w"> </span><span class="n">read</span><span class="o">&lt;</span><span class="n">http</span><span class="o">::</span><span class="n">file_body</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">req</span><span class="p">),</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">body</span><span class="p">))</span><span class="w"></span>
+<span class="linenos">11</span><span class="w">        </span><span class="o">-&gt;</span><span class="n">noBodyLimit</span><span class="p">()</span><span class="w"></span>
+<span class="linenos">12</span><span class="w">        </span><span class="p">.</span><span class="n">commit</span><span class="p">()</span><span class="w"></span>
+<span class="linenos">13</span><span class="w">        </span><span class="p">.</span><span class="n">then</span><span class="p">([](</span><span class="n">Session</span><span class="o">&amp;</span><span class="w"> </span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="n">Request</span><span class="o">&lt;</span><span class="n">http</span><span class="o">::</span><span class="n">file_body</span><span class="o">&gt;</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">req</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">14</span><span class="w">            </span><span class="n">session</span><span class="w"></span>
+<span class="linenos">15</span><span class="w">                </span><span class="p">.</span><span class="n">send</span><span class="o">&lt;</span><span class="n">string_body</span><span class="o">&gt;</span><span class="p">(</span><span class="n">request</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">16</span><span class="w">                </span><span class="o">-&gt;</span><span class="n">status</span><span class="p">(</span><span class="n">status</span><span class="o">::</span><span class="n">ok</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">17</span><span class="w">                </span><span class="p">.</span><span class="n">contentType</span><span class="p">(</span><span class="s">&quot;text/plain&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">18</span><span class="w">                </span><span class="p">.</span><span class="n">body</span><span class="p">(</span><span class="s">&quot;Thank you!&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">19</span><span class="w">                </span><span class="p">.</span><span class="n">commit</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">20</span><span class="w">        </span><span class="p">});</span><span class="w"></span>
+<span class="linenos">21</span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="rate-limiting">
+<h2>Rate Limiting<a class="headerlink" href="#rate-limiting" title="Permalink to this headline"></a></h2>
+<p>Download/Upload speeds can be set on a session using “readLimit” and “writeLimit”.</p>
+</section>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="curl.html" class="btn btn-neutral float-left" title="Curl bla" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="curl.html" class="btn btn-neutral float-left" title="Curl" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../websocket/client.html" class="btn btn-neutral float-right" title="Websocket Client" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

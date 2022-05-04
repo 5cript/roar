@@ -183,10 +183,10 @@ var sectionId = 'dynsection-0';
 <!-- Node7&#45;&gt;Node6 -->
 <g id="edge6" class="edge">
 <title>Node7&#45;&gt;Node6</title>
-<path fill="none" stroke="#404040" d="M825.79,-327.33C828.41,-314.63 832.46,-299.62 838.5,-287 840.73,-282.33 843.43,-277.68 846.35,-273.18"/>
-<polygon fill="none" stroke="#404040" points="846.56,-272.87 846.73,-265.66 853.45,-263.04 853.28,-270.25 846.56,-272.87"/>
-<text text-anchor="middle" x="875" y="-301" font-family="Helvetica,sans-Serif" font-size="10.00"> +allowInsecure</text>
-<text text-anchor="middle" x="875" y="-290" font-family="Helvetica,sans-Serif" font-size="10.00">+expectUpgrade</text>
+<path fill="none" stroke="#404040" d="M825.24,-327.29C827.65,-314.58 831.49,-299.58 837.5,-287 839.72,-282.35 842.42,-277.72 845.36,-273.25"/>
+<polygon fill="none" stroke="#404040" points="845.56,-272.97 845.78,-265.76 852.52,-263.2 852.3,-270.4 845.56,-272.97"/>
+<text text-anchor="middle" x="874.5" y="-301" font-family="Helvetica,sans-Serif" font-size="10.00"> +allowUnsecure</text>
+<text text-anchor="middle" x="874.5" y="-290" font-family="Helvetica,sans-Serif" font-size="10.00">+expectUpgrade</text>
 </g>
 <!-- Node8 -->
 <g id="node8" class="node">

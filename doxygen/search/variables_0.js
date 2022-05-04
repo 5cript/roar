@@ -5,6 +5,6 @@ var searchData=
   ['additionalinfo_2',['additionalInfo',['../structRoar_1_1Error.html#ad2b237c796a2acc8eda4d0a923f71206',1,'Roar::Error']]],
   ['allowcredentials_3',['allowCredentials',['../structRoar_1_1CorsSettings.html#a51c4aa85e1ce2776a534ddf9b58106ac',1,'Roar::CorsSettings']]],
   ['allowedorigin_4',['allowedOrigin',['../structRoar_1_1CorsSettings.html#aca848f707c9a787182a10e04ef9cd508',1,'Roar::CorsSettings']]],
-  ['allowinsecure_5',['allowInsecure',['../structRoar_1_1RouteOptions.html#af8adfbeab43e0e3fe53d8ced47a8faca',1,'Roar::RouteOptions']]],
+  ['allowunsecure_5',['allowUnsecure',['../structRoar_1_1RouteOptions.html#a38e05ab33daa7bfa2699a49d345cf218',1,'Roar::RouteOptions']]],
   ['author_6',['author',['../namespaceconf.html#a637c239d256432248aa8d9f3ab0b8c52',1,'conf']]]
 ];

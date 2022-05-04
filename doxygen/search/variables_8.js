@@ -6,6 +6,7 @@ var searchData=
   ['m_5fsize_3',['m_size',['../classRoar_1_1Detail_1_1FixedString.html#a756da94e5546a4ebfdc40d06c0652eff',1,'Roar::Detail::FixedString']]],
   ['matches_4',['matches',['../structRoar_1_1ProtoRoute.html#a08dda83e83821e4fa543f109c874ef20',1,'Roar::ProtoRoute']]],
   ['memoizedfilesize_5f_5',['memoizedFileSize_',['../classRoar_1_1Curl_1_1FileSource.html#ab23509d1a2d021e6d286a22e3c566c10',1,'Roar::Curl::FileSource']]],
-  ['method_6',['method',['../structRoar_1_1SslContextCreationParameters.html#ae48664e0c97866ab6de0f245183f3b72',1,'Roar::SslContextCreationParameters']]],
-  ['methodallowselection_7',['methodAllowSelection',['../structRoar_1_1CorsSettings.html#a0efd8e6ea86cdb0857370abebff0325d',1,'Roar::CorsSettings']]]
+  ['message_6',['message',['../structRoar_1_1WebsocketReadResult.html#a33055da3c64e7f27cb86af8e9f9a09d4',1,'Roar::WebsocketReadResult']]],
+  ['method_7',['method',['../structRoar_1_1SslContextCreationParameters.html#ae48664e0c97866ab6de0f245183f3b72',1,'Roar::SslContextCreationParameters']]],
+  ['methodallowselection_8',['methodAllowSelection',['../structRoar_1_1CorsSettings.html#a0efd8e6ea86cdb0857370abebff0325d',1,'Roar::CorsSettings']]]
 ];

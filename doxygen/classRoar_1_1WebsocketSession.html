@@ -82,7 +82,7 @@ $(function() {
 <div class="dynheader">
 Collaboration diagram for Roar::WebsocketSession:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classRoar_1_1WebsocketSession__coll__graph.svg" width="100%" height="493"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classRoar_1_1WebsocketSession__coll__graph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 <table class="memberdecls">
@@ -93,24 +93,81 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a5b649eeac965c66a99d256f8011a622f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketSession.html#a5b649eeac965c66a99d256f8011a622f">WebsocketSession</a> (std::variant&lt; boost::beast::tcp_stream, boost::beast::ssl_stream&lt; boost::beast::tcp_stream &gt; &gt; &amp;&amp;stream)</td></tr>
-<tr class="separator:a5b649eeac965c66a99d256f8011a622f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68a40c65e3739b6a6c2aea9593e79f02"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketSession.html#a68a40c65e3739b6a6c2aea9593e79f02">ROAR_PIMPL_SPECIAL_FUNCTIONS</a> (<a class="el" href="classRoar_1_1WebsocketSession.html">WebsocketSession</a>)</td></tr>
-<tr class="separator:a68a40c65e3739b6a6c2aea9593e79f02"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f11a8f1ed30d7bcf52b74f5f66fb7f8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketSession.html#a1f11a8f1ed30d7bcf52b74f5f66fb7f8">accept</a> (<a class="el" href="classRoar_1_1Request.html">Request</a>&lt; boost::beast::http::empty_body &gt; const &amp;req)</td></tr>
-<tr class="memdesc:a1f11a8f1ed30d7bcf52b74f5f66fb7f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accept an upgrade request and performs the necessary websocket handshake.  <a href="classRoar_1_1WebsocketSession.html#a1f11a8f1ed30d7bcf52b74f5f66fb7f8">More...</a><br /></td></tr>
-<tr class="separator:a1f11a8f1ed30d7bcf52b74f5f66fb7f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7be5ce410a3ebae01ead4c71e148a5c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketSession.html#ad7be5ce410a3ebae01ead4c71e148a5c">WebsocketSession</a> (std::variant&lt; <a class="el" href="namespaceRoar_1_1Detail.html#a8e1019c93671b3a5eaf95e69c7b8c4b2">Detail::StreamType</a>, boost::beast::ssl_stream&lt; <a class="el" href="namespaceRoar_1_1Detail.html#a8e1019c93671b3a5eaf95e69c7b8c4b2">Detail::StreamType</a> &gt; &gt; &amp;&amp;stream)</td></tr>
+<tr class="separator:ad7be5ce410a3ebae01ead4c71e148a5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae08bfc2238debdaeef22770bc56a896f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketSession.html#ae08bfc2238debdaeef22770bc56a896f">ROAR_PIMPL_SPECIAL_FUNCTIONS_NO_MOVE</a> (<a class="el" href="classRoar_1_1WebsocketSession.html">WebsocketSession</a>)</td></tr>
+<tr class="separator:ae08bfc2238debdaeef22770bc56a896f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38c85e37074b99021909f33d3c080064"><td class="memItemLeft" align="right" valign="top">promise::Promise&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketSession.html#a38c85e37074b99021909f33d3c080064">accept</a> (<a class="el" href="classRoar_1_1Request.html">Request</a>&lt; boost::beast::http::empty_body &gt; const &amp;req)</td></tr>
+<tr class="memdesc:a38c85e37074b99021909f33d3c080064"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accept an upgrade request and performs the necessary websocket handshake.  <a href="classRoar_1_1WebsocketSession.html#a38c85e37074b99021909f33d3c080064">More...</a><br /></td></tr>
+<tr class="separator:a38c85e37074b99021909f33d3c080064"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_structRoar_1_1Detail_1_1SharedFromBase"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_structRoar_1_1Detail_1_1SharedFromBase')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="structRoar_1_1Detail_1_1SharedFromBase.html">Roar::Detail::SharedFromBase&lt; WebsocketBase, WebsocketSession &gt;</a></td></tr>
+<tr class="memitem:a533a468f734eec26f47c2c806ae62db0 inherit pub_methods_structRoar_1_1Detail_1_1SharedFromBase"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classRoar_1_1WebsocketSession.html">WebsocketSession</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1Detail_1_1SharedFromBase.html#a533a468f734eec26f47c2c806ae62db0">shared_from_this</a> ()</td></tr>
+<tr class="separator:a533a468f734eec26f47c2c806ae62db0 inherit pub_methods_structRoar_1_1Detail_1_1SharedFromBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classRoar_1_1WebsocketBase"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classRoar_1_1WebsocketBase')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classRoar_1_1WebsocketBase.html">Roar::WebsocketBase</a></td></tr>
+<tr class="memitem:a44ea3c6e3330d5e1fb14a576cd27adec inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketBase.html#a44ea3c6e3330d5e1fb14a576cd27adec">WebsocketBase</a> (std::variant&lt; <a class="el" href="namespaceRoar_1_1Detail.html#a8e1019c93671b3a5eaf95e69c7b8c4b2">Detail::StreamType</a>, boost::beast::ssl_stream&lt; <a class="el" href="namespaceRoar_1_1Detail.html#a8e1019c93671b3a5eaf95e69c7b8c4b2">Detail::StreamType</a> &gt; &gt; &amp;&amp;stream)</td></tr>
+<tr class="separator:a44ea3c6e3330d5e1fb14a576cd27adec inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03c7f43a90278a661e17dfd7a5b7b377 inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketBase.html#a03c7f43a90278a661e17dfd7a5b7b377">WebsocketBase</a> (std::variant&lt; boost::beast::websocket::stream&lt; boost::beast::ssl_stream&lt; <a class="el" href="namespaceRoar_1_1Detail.html#a8e1019c93671b3a5eaf95e69c7b8c4b2">Detail::StreamType</a> &gt; &gt;, boost::beast::websocket::stream&lt; <a class="el" href="namespaceRoar_1_1Detail.html#a8e1019c93671b3a5eaf95e69c7b8c4b2">Detail::StreamType</a> &gt; &gt; &amp;&amp;ws)</td></tr>
+<tr class="separator:a03c7f43a90278a661e17dfd7a5b7b377 inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e592b593083421fb1c07a4bcb23ead9 inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketBase.html#a5e592b593083421fb1c07a4bcb23ead9">WebsocketBase</a> (<a class="el" href="classRoar_1_1WebsocketBase.html">WebsocketBase</a> &amp;&amp;)=delete</td></tr>
+<tr class="separator:a5e592b593083421fb1c07a4bcb23ead9 inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d27456b234d84c0f75fb8ffddba88a8 inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1WebsocketBase.html">WebsocketBase</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketBase.html#a0d27456b234d84c0f75fb8ffddba88a8">operator=</a> (<a class="el" href="classRoar_1_1WebsocketBase.html">WebsocketBase</a> &amp;&amp;)=delete</td></tr>
+<tr class="separator:a0d27456b234d84c0f75fb8ffddba88a8 inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c1422500668b0592ab4f6eb52a49572 inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketBase.html#a8c1422500668b0592ab4f6eb52a49572">WebsocketBase</a> (<a class="el" href="classRoar_1_1WebsocketBase.html">WebsocketBase</a> const &amp;)=delete</td></tr>
+<tr class="separator:a8c1422500668b0592ab4f6eb52a49572 inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59841f8e6267d18d44996dab0245d551 inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1WebsocketBase.html">WebsocketBase</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketBase.html#a59841f8e6267d18d44996dab0245d551">operator=</a> (<a class="el" href="classRoar_1_1WebsocketBase.html">WebsocketBase</a> const &amp;)=delete</td></tr>
+<tr class="separator:a59841f8e6267d18d44996dab0245d551 inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4fc8b56b0eb0fc6efcdada0dcb4e06ae inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketBase.html#a4fc8b56b0eb0fc6efcdada0dcb4e06ae">~WebsocketBase</a> ()</td></tr>
+<tr class="separator:a4fc8b56b0eb0fc6efcdada0dcb4e06ae inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d3044fe058b90636303cddb1031e4cf inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memTemplParams" colspan="2">template&lt;typename FunctionT &gt; </td></tr>
+<tr class="memitem:a8d3044fe058b90636303cddb1031e4cf inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketBase.html#a8d3044fe058b90636303cddb1031e4cf">withStreamDo</a> (FunctionT &amp;&amp;func)</td></tr>
+<tr class="separator:a8d3044fe058b90636303cddb1031e4cf inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2574d44f72b789c93ad985b1228b2e1b inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memTemplParams" colspan="2">template&lt;typename FunctionT &gt; </td></tr>
+<tr class="memitem:a2574d44f72b789c93ad985b1228b2e1b inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketBase.html#a2574d44f72b789c93ad985b1228b2e1b">withStreamDo</a> (FunctionT &amp;&amp;func) const</td></tr>
+<tr class="separator:a2574d44f72b789c93ad985b1228b2e1b inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae91282a8651a7e055b006c74afe2e39e inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketBase.html#ae91282a8651a7e055b006c74afe2e39e">readMessageMax</a> (std::size_t amount)</td></tr>
+<tr class="memdesc:ae91282a8651a7e055b006c74afe2e39e inherit pub_methods_classRoar_1_1WebsocketBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the maximum incoming message size option.  <a href="classRoar_1_1WebsocketBase.html#ae91282a8651a7e055b006c74afe2e39e">More...</a><br /></td></tr>
+<tr class="separator:ae91282a8651a7e055b006c74afe2e39e inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ac5c9f2d3e393b483c5f7d94065ac0c inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketBase.html#a5ac5c9f2d3e393b483c5f7d94065ac0c">readMessageMax</a> () const</td></tr>
+<tr class="memdesc:a5ac5c9f2d3e393b483c5f7d94065ac0c inherit pub_methods_classRoar_1_1WebsocketBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the maximum incoming message size setting.  <a href="classRoar_1_1WebsocketBase.html#a5ac5c9f2d3e393b483c5f7d94065ac0c">More...</a><br /></td></tr>
+<tr class="separator:a5ac5c9f2d3e393b483c5f7d94065ac0c inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16291861b25dbbcccd609481f28e8f45 inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketBase.html#a16291861b25dbbcccd609481f28e8f45">binary</a> (bool enable)</td></tr>
+<tr class="memdesc:a16291861b25dbbcccd609481f28e8f45 inherit pub_methods_classRoar_1_1WebsocketBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable/Disable binary for next send message.  <a href="classRoar_1_1WebsocketBase.html#a16291861b25dbbcccd609481f28e8f45">More...</a><br /></td></tr>
+<tr class="separator:a16291861b25dbbcccd609481f28e8f45 inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeecd5f8b4761b58f245dc0ca0a46cc74 inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketBase.html#aeecd5f8b4761b58f245dc0ca0a46cc74">binary</a> () const</td></tr>
+<tr class="memdesc:aeecd5f8b4761b58f245dc0ca0a46cc74 inherit pub_methods_classRoar_1_1WebsocketBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the binary message write option is set.  <a href="classRoar_1_1WebsocketBase.html#aeecd5f8b4761b58f245dc0ca0a46cc74">More...</a><br /></td></tr>
+<tr class="separator:aeecd5f8b4761b58f245dc0ca0a46cc74 inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6442aa1693b7d2de17be5953469feb4 inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memItemLeft" align="right" valign="top">promise::Promise&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketBase.html#ae6442aa1693b7d2de17be5953469feb4">send</a> (std::string message)</td></tr>
+<tr class="memdesc:ae6442aa1693b7d2de17be5953469feb4 inherit pub_methods_classRoar_1_1WebsocketBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends a string to the server.  <a href="classRoar_1_1WebsocketBase.html#ae6442aa1693b7d2de17be5953469feb4">More...</a><br /></td></tr>
+<tr class="separator:ae6442aa1693b7d2de17be5953469feb4 inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ae82e00019e2e6faed14b5ffc9d305c inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Detail_1_1PromiseTypeBind.html">Detail::PromiseTypeBind</a>&lt; <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindThen.html">Detail::PromiseTypeBindThen</a>&lt; <a class="el" href="structRoar_1_1WebsocketReadResult.html">WebsocketReadResult</a> &gt;, <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindFail.html">Detail::PromiseTypeBindFail</a>&lt; <a class="el" href="structRoar_1_1Error.html">Error</a> const &amp; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketBase.html#a0ae82e00019e2e6faed14b5ffc9d305c">read</a> ()</td></tr>
+<tr class="memdesc:a0ae82e00019e2e6faed14b5ffc9d305c inherit pub_methods_classRoar_1_1WebsocketBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads something from the server.  <a href="classRoar_1_1WebsocketBase.html#a0ae82e00019e2e6faed14b5ffc9d305c">More...</a><br /></td></tr>
+<tr class="separator:a0ae82e00019e2e6faed14b5ffc9d305c inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9d0343f4512f91e04e9b4d0094f3c5a inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketBase.html#ad9d0343f4512f91e04e9b4d0094f3c5a">autoFragment</a> (bool enable)</td></tr>
+<tr class="memdesc:ad9d0343f4512f91e04e9b4d0094f3c5a inherit pub_methods_classRoar_1_1WebsocketBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the automatic fragmentation option.  <a href="classRoar_1_1WebsocketBase.html#ad9d0343f4512f91e04e9b4d0094f3c5a">More...</a><br /></td></tr>
+<tr class="separator:ad9d0343f4512f91e04e9b4d0094f3c5a inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa187a12dce747e5ce167a3b8c2ad9c61 inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketBase.html#aa187a12dce747e5ce167a3b8c2ad9c61">autoFragment</a> () const</td></tr>
+<tr class="memdesc:aa187a12dce747e5ce167a3b8c2ad9c61 inherit pub_methods_classRoar_1_1WebsocketBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the automatic fragmentation option is set.  <a href="classRoar_1_1WebsocketBase.html#aa187a12dce747e5ce167a3b8c2ad9c61">More...</a><br /></td></tr>
+<tr class="separator:aa187a12dce747e5ce167a3b8c2ad9c61 inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a381774715bc84135a37e3a537d78e3ab inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketBase.html#a381774715bc84135a37e3a537d78e3ab">close</a> (std::chrono::seconds closeWaitTimeout=std::chrono::seconds{3})</td></tr>
+<tr class="memdesc:a381774715bc84135a37e3a537d78e3ab inherit pub_methods_classRoar_1_1WebsocketBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Closes the websocket connection.  <a href="classRoar_1_1WebsocketBase.html#a381774715bc84135a37e3a537d78e3ab">More...</a><br /></td></tr>
+<tr class="separator:a381774715bc84135a37e3a537d78e3ab inherit pub_methods_classRoar_1_1WebsocketBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a34c6e34b09e16addf0151f93b61004ab"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="structRoar_1_1WebsocketSession_1_1Implementation.html">Implementation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketSession.html#a34c6e34b09e16addf0151f93b61004ab">impl_</a></td></tr>
 <tr class="separator:a34c6e34b09e16addf0151f93b61004ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pro_attribs_classRoar_1_1WebsocketBase"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classRoar_1_1WebsocketBase')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classRoar_1_1WebsocketBase.html">Roar::WebsocketBase</a></td></tr>
+<tr class="memitem:a6405bbad14683e173a9bef4adab98668 inherit pro_attribs_classRoar_1_1WebsocketBase"><td class="memItemLeft" align="right" valign="top">std::variant&lt; boost::beast::websocket::stream&lt; boost::beast::ssl_stream&lt; <a class="el" href="namespaceRoar_1_1Detail.html#a8e1019c93671b3a5eaf95e69c7b8c4b2">Detail::StreamType</a> &gt; &gt;, boost::beast::websocket::stream&lt; <a class="el" href="namespaceRoar_1_1Detail.html#a8e1019c93671b3a5eaf95e69c7b8c4b2">Detail::StreamType</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketBase.html#a6405bbad14683e173a9bef4adab98668">ws_</a></td></tr>
+<tr class="separator:a6405bbad14683e173a9bef4adab98668 inherit pro_attribs_classRoar_1_1WebsocketBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >A <a class="el" href="classRoar_1_1WebsocketSession.html" title="A WebsocketSession allows you to interact with a client via websocket protocol.">WebsocketSession</a> allows you to interact with a client via websocket protocol. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a5b649eeac965c66a99d256f8011a622f" name="a5b649eeac965c66a99d256f8011a622f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5b649eeac965c66a99d256f8011a622f">&#9670;&nbsp;</a></span>WebsocketSession()</h2>
+<a id="ad7be5ce410a3ebae01ead4c71e148a5c" name="ad7be5ce410a3ebae01ead4c71e148a5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7be5ce410a3ebae01ead4c71e148a5c">&#9670;&nbsp;</a></span>WebsocketSession()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -118,7 +175,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">Roar::WebsocketSession::WebsocketSession </td>
           <td>(</td>
-          <td class="paramtype">std::variant&lt; boost::beast::tcp_stream, boost::beast::ssl_stream&lt; boost::beast::tcp_stream &gt; &gt; &amp;&amp;&#160;</td>
+          <td class="paramtype">std::variant&lt; <a class="el" href="namespaceRoar_1_1Detail.html#a8e1019c93671b3a5eaf95e69c7b8c4b2">Detail::StreamType</a>, boost::beast::ssl_stream&lt; <a class="el" href="namespaceRoar_1_1Detail.html#a8e1019c93671b3a5eaf95e69c7b8c4b2">Detail::StreamType</a> &gt; &gt; &amp;&amp;&#160;</td>
           <td class="paramname"><em>stream</em></td><td>)</td>
           <td></td>
         </tr>
@@ -128,14 +185,14 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a1f11a8f1ed30d7bcf52b74f5f66fb7f8" name="a1f11a8f1ed30d7bcf52b74f5f66fb7f8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1f11a8f1ed30d7bcf52b74f5f66fb7f8">&#9670;&nbsp;</a></span>accept()</h2>
+<a id="a38c85e37074b99021909f33d3c080064" name="a38c85e37074b99021909f33d3c080064"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a38c85e37074b99021909f33d3c080064">&#9670;&nbsp;</a></span>accept()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void Roar::WebsocketSession::accept </td>
+          <td class="memname">promise::Promise Roar::WebsocketSession::accept </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classRoar_1_1Request.html">Request</a>&lt; boost::beast::http::empty_body &gt; const &amp;&#160;</td>
           <td class="paramname"><em>req</em></td><td>)</td>
@@ -154,14 +211,14 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a68a40c65e3739b6a6c2aea9593e79f02" name="a68a40c65e3739b6a6c2aea9593e79f02"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a68a40c65e3739b6a6c2aea9593e79f02">&#9670;&nbsp;</a></span>ROAR_PIMPL_SPECIAL_FUNCTIONS()</h2>
+<a id="ae08bfc2238debdaeef22770bc56a896f" name="ae08bfc2238debdaeef22770bc56a896f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae08bfc2238debdaeef22770bc56a896f">&#9670;&nbsp;</a></span>ROAR_PIMPL_SPECIAL_FUNCTIONS_NO_MOVE()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Roar::WebsocketSession::ROAR_PIMPL_SPECIAL_FUNCTIONS </td>
+          <td class="memname">Roar::WebsocketSession::ROAR_PIMPL_SPECIAL_FUNCTIONS_NO_MOVE </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classRoar_1_1WebsocketSession.html">WebsocketSession</a>&#160;</td>
           <td class="paramname"></td><td>)</td>

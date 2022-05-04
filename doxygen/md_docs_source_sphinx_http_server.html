@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>roar: Server bla</title>
+<title>roar: HTTP Server</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -62,10 +62,260 @@ $(function() {
 
 </div><!-- top -->
 <div><div class="header">
-  <div class="headertitle"><div class="title">Server bla </div></div>
+  <div class="headertitle"><div class="title">HTTP Server </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"></div></div><!-- contents -->
+<div class="textblock"><h1><a class="anchor" id="autotoc_md5"></a>
+Tutorial</h1>
+<p >Lets start with the following example: </p><div class="fragment"><div class="line">---</div>
+<div class="line">lineno-start: 1</div>
+<div class="line">caption: Most Minimal Example</div>
+<div class="line">---</div>
+<div class="line">#include &lt;boost/asio/any_io_executor.hpp&gt;</div>
+<div class="line">#include &lt;boost/asio/thread_pool.hpp&gt;</div>
+<div class="line"> </div>
+<div class="line">#include &lt;roar/server.hpp&gt;</div>
+<div class="line">#include &lt;roar/utility/scope_exit.hpp&gt;</div>
+<div class="line"> </div>
+<div class="line">#include &lt;iostream&gt;</div>
+<div class="line"> </div>
+<div class="line">int main()</div>
+<div class="line">{</div>
+<div class="line">    boost::asio::thread_pool pool{4};</div>
+<div class="line"> </div>
+<div class="line">    // Create server.</div>
+<div class="line">    Roar::Server server{{.executor = pool.executor()}};</div>
+<div class="line"> </div>
+<div class="line">    // stop the thread_pool on scope exit to guarantee that all asynchronous tasks are finished before the server is</div>
+<div class="line">    // destroyed.</div>
+<div class="line">    const auto shutdownPool = Roar::ScopeExit{[&amp;pool]() {</div>
+<div class="line">        pool.stop();</div>
+<div class="line">        pool.join();</div>
+<div class="line">    }};</div>
+<div class="line"> </div>
+<div class="line">    // Start server and bind on port &quot;port&quot;.</div>
+<div class="line">    server.start(8081);</div>
+<div class="line"> </div>
+<div class="line">    // Prevent exit somehow:</div>
+<div class="line">    std::cin.get();</div>
+<div class="line">}</div>
+</div><!-- fragment --><p> In this example we are creating an asio thread pool for the asynchronous actions of our server, the server itself and then start the server by binding and accepting on port 8081. </p><div class="fragment"><div class="line">Important: The Roar::ScopeExit construct ensures that the threads are shutdown before the server or request listeners are destroyed.</div>
+<div class="line">This way we do not need to ensure their survival in asynchronous handlers and do not need to use shared pointers.</div>
+</div><!-- fragment --><p> This example is not very useful though, because any requests would be greeted by 404. This is where the <a class="el" href="classRequestListener.html">RequestListener</a> concept comes into play. Lets define one: </p><div class="fragment"><div class="line">---</div>
+<div class="line">lineno-start: 1</div>
+<div class="line">caption: basic_request_listener.hpp</div>
+<div class="line">emphasize-lines: 13, 17</div>
+<div class="line">---</div>
+<div class="line">#pragma once</div>
+<div class="line"> </div>
+<div class="line">#include &lt;roar/routing/request_listener.hpp&gt;</div>
+<div class="line"> </div>
+<div class="line">#include &lt;boost/describe/class.hpp&gt;</div>
+<div class="line"> </div>
+<div class="line">class MyRequestListener</div>
+<div class="line">{</div>
+<div class="line">  private:</div>
+<div class="line">    ROAR_MAKE_LISTENER(MyRequestListener);</div>
+<div class="line"> </div>
+<div class="line">    // Use the ROAR_GET, ... macro to define a route. Routes are basically mappings of paths to handlers.</div>
+<div class="line">    ROAR_GET(index)(&quot;/&quot;);</div>
+<div class="line"> </div>
+<div class="line">  private:</div>
+<div class="line">    // This makes routes visible to the library. For as long as we have to wait for native reflection...</div>
+<div class="line">    BOOST_DESCRIBE_CLASS(MyRequestListener, (), (), (), (roar_index, roar_upload))</div>
+<div class="line">};</div>
+</div><!-- fragment --> <div class="fragment"><div class="line">---</div>
+<div class="line">lineno-start: 1</div>
+<div class="line">caption: basic_request_listener.cpp</div>
+<div class="line">---</div>
+<div class="line">#include &quot;basic_request_listener.hpp&quot;</div>
+<div class="line"> </div>
+<div class="line">using namespace boost::beast::http;</div>
+<div class="line"> </div>
+<div class="line">void RequestListener::index(Roar::Session&amp; session, Roar::EmptyBodyRequest&amp;&amp; request)</div>
+<div class="line">{</div>
+<div class="line">    session</div>
+<div class="line">        .send&lt;string_body&gt;(request)</div>
+<div class="line">        -&gt;status(status::ok)</div>
+<div class="line">        .contentType(&quot;text/plain&quot;)</div>
+<div class="line">        .body(&quot;Hi&quot;)</div>
+<div class="line">        .commit();</div>
+<div class="line">}</div>
+</div><!-- fragment --><p >This is our first request listener. It is a class that is able to accept http requests for predefined paths. In this case the "/" path will get routed to the index member function that can now handle this request. If the function is empty, the <a class="el" href="classRoar_1_1Session.html">Roar::Session</a> will run out of scope and will be closed and destroyed.</p>
+<p >ROAR_GET, ROAR_PUT, ..., ROAR_ROUTE is a macro that create some boilerplate in the class. More about them is in the <a class="el" href="classRequestListener.html">RequestListener</a> section. Doxygen about all defined macros: <a href="/doxygen/include_2roar_2routing_2request__listener_8hpp.html#route">ROAR_ROUTE</a>.</p>
+<p >Now if we can add this listener to our server: </p><div class="fragment"><div class="line">---</div>
+<div class="line">lineno-start: 1</div>
+<div class="line">caption: Adding the request listener to our</div>
+<div class="line">emphasize-lines: 18</div>
+<div class="line">---</div>
+<div class="line">// Other includes as before</div>
+<div class="line">#include &quot;basic_request_listener.hpp&quot;</div>
+<div class="line"> </div>
+<div class="line">int main()</div>
+<div class="line">{</div>
+<div class="line">    boost::asio::thread_pool pool{4};</div>
+<div class="line"> </div>
+<div class="line">    // Create server.</div>
+<div class="line">    Roar::Server server{{.executor = pool.executor()}};</div>
+<div class="line"> </div>
+<div class="line">    // stop the thread_pool on scope exit to guarantee that all asynchronous tasks are finished before the server is</div>
+<div class="line">    // destroyed.</div>
+<div class="line">    const auto shutdownPool = Roar::ScopeExit{[&amp;pool]() {</div>
+<div class="line">        pool.stop();</div>
+<div class="line">        pool.join();</div>
+<div class="line">    }};</div>
+<div class="line">    </div>
+<div class="line">    server.installRequestListener&lt;RequestListener&gt;();</div>
+<div class="line"> </div>
+<div class="line">    // Start server and bind on port &quot;port&quot;.</div>
+<div class="line">    server.start(8081);</div>
+<div class="line"> </div>
+<div class="line">    // Prevent exit somehow:</div>
+<div class="line">    std::cin.get();</div>
+<div class="line">}</div>
+</div><!-- fragment --><p >After this, making requests to the server on "/" will yield a response: </p><div class="fragment"><div class="line">---</div>
+<div class="line">lineno-start: 1</div>
+<div class="line">caption: Curl</div>
+<div class="line">emphasize-lines: 17</div>
+<div class="line">---</div>
+<div class="line">$ curl -v localhost:8081/</div>
+<div class="line">*   Trying 127.0.0.1:8081...</div>
+<div class="line">* Connected to localhost (127.0.0.1) port 8081 (#0)</div>
+<div class="line">&gt; GET / HTTP/1.1</div>
+<div class="line">&gt; Host: localhost:8081</div>
+<div class="line">&gt; User-Agent: curl/7.83.0</div>
+<div class="line">&gt; Accept: */*</div>
+<div class="line">&gt;</div>
+<div class="line">* Mark bundle as not supporting multiuse</div>
+<div class="line">&lt; HTTP/1.1 200 OK</div>
+<div class="line">&lt; Server: Roar+Boost.Beast/330</div>
+<div class="line">&lt; Content-Type: text/plain</div>
+<div class="line">&lt; Content-Length: 2</div>
+<div class="line">&lt;</div>
+<div class="line">Hi* Connection #0 to host localhost left intact</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md6"></a>
+RequestListener</h1>
+<p >A request listener is a class that maps paths to request handlers. The following snippet shows a more detailed example.</p>
+<div class="fragment"><div class="line">---</div>
+<div class="line">lineno-start: 1</div>
+<div class="line">caption: More sophisticated request listener.</div>
+<div class="line">---</div>
+<div class="line">#pragma once</div>
+<div class="line"> </div>
+<div class="line">#include &lt;roar/routing/request_listener.hpp&gt;</div>
+<div class="line"> </div>
+<div class="line">#include &lt;boost/describe/class.hpp&gt;</div>
+<div class="line"> </div>
+<div class="line">class MyRequestListener</div>
+<div class="line">{</div>
+<div class="line">  private:</div>
+<div class="line">    ROAR_MAKE_LISTENER(MyRequestListener);</div>
+<div class="line"> </div>
+<div class="line">    // This is an abbreviation, where only the path is specified.</div>
+<div class="line">    ROAR_GET(index)(&quot;/&quot;);</div>
+<div class="line"> </div>
+<div class="line">    // This here sets more options:</div>
+<div class="line">    ROAR_GET(images)({</div>
+<div class="line">        .path = &quot;/img/(.+)&quot;,</div>
+<div class="line">        .pathType = Roar::RoutePathType::Regex,  // Path is a regular expression</div>
+<div class="line">        .routeOptions = {</div>
+<div class="line">            .allowUnsecure = true, // Allow HTTP request here, even if HTTPS server</div>
+<div class="line">            .expectUpgrade = false, // Expect Websocket upgrade request here?</div>
+<div class="line">            .cors = Roar::makePermissiveCorsSettings(&quot;get&quot;),</div>
+<div class="line">        }</div>
+<div class="line">    })</div>
+<div class="line"> </div>
+<div class="line">  private:</div>
+<div class="line">    // This makes routes visible to the library. For as long as we have to wait for native reflection...</div>
+<div class="line">    BOOST_DESCRIBE_CLASS(MyRequestListener, (), (), (), (roar_index, roar_images))</div>
+<div class="line">};</div>
+</div><!-- fragment --><p> Available options for routes are documented here: <a href="/doxygen/structRoar_1_1RouteInfo.html">RouteInfo</a>.</p>
+<div class="fragment"><div class="line">Head requests are not automatically possible on get requests. Because the library cannot formulate responses without running user code.</div>
+<div class="line">If you want to support head requests, you have to specify them explicitely.</div>
+</div><!-- fragment --><p >The BOOST_DESCRIBE_CLASS macro is used to make generated decorations for the handlers visible to the roar library. Add all routes you have to the last list and prefix them with "roar_". Forgetting them here will result in them not being found.</p>
+<h1><a class="anchor" id="autotoc_md7"></a>
+Routing</h1>
+<p >Routing is the process of taking a path and finding the appropriate handler for it. <a class="el" href="namespaceRoar.html">Roar</a> supports two kinds: simple string matches of paths and regex paths.</p>
+<h2><a class="anchor" id="autotoc_md8"></a>
+String Paths</h2>
+<p >String paths take precedence over regex paths.</p>
+<h2><a class="anchor" id="autotoc_md9"></a>
+Regex Paths</h2>
+<p >Regex routes are taken when a path of a request matches with the given regex. These matches can be obtained in the handler like so:</p>
+<div class="fragment"><div class="line">---</div>
+<div class="line">lineno-start: 1</div>
+<div class="line">caption: More sophisticated request listener.</div>
+<div class="line">emphasize-lines: 7</div>
+<div class="line">---</div>
+<div class="line">#include &quot;basic_request_listener.hpp&quot;</div>
+<div class="line"> </div>
+<div class="line">using namespace boost::beast::http;</div>
+<div class="line"> </div>
+<div class="line">void RequestListener::image(Roar::Session&amp; session, Roar::EmptyBodyRequest&amp;&amp; request)</div>
+<div class="line">{</div>
+<div class="line">    // Does not return the full path match.</div>
+<div class="line">    auto const&amp; matches = request.pathMatches();</div>
+<div class="line"> </div>
+<div class="line">    // Suppose the regex was &quot;/img/(.+)/([a-z])&quot; and the path was &quot;/img/bla/b&quot;.</div>
+<div class="line">    // then: matches[0] =&gt; &quot;bla&quot;,</div>
+<div class="line">    //       matches[1] =&gt; &quot;b&quot;</div>
+<div class="line">}</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md10"></a>
+Sending Responses</h1>
+<p >Here is an example on how to send a response. The session is kept alive over the course of the send operation.</p>
+<div class="fragment"><div class="line">---</div>
+<div class="line">lineno-start: 1</div>
+<div class="line">caption: Write Example</div>
+<div class="line">---</div>
+<div class="line">void RequestListener::index(Roar::Session&amp; session, Roar::EmptyBodyRequest&amp;&amp; request)</div>
+<div class="line">{</div>
+<div class="line">    session</div>
+<div class="line">        .send&lt;string_body&gt;(request)</div>
+<div class="line">        -&gt;status(status::ok)</div>
+<div class="line">        .contentType(&quot;text/plain&quot;)</div>
+<div class="line">        .body(&quot;Hi&quot;)</div>
+<div class="line">        .commit() // Actually performs the send operation.</div>
+<div class="line">        // Javascript-Promise like continuation:</div>
+<div class="line">        .then([](auto&amp; session, auto const&amp; req){</div>
+<div class="line">            // Send complete.</div>
+<div class="line">        })</div>
+<div class="line">        .fail([](Roar::Error const&amp;) {</div>
+<div class="line">            // Send failed.</div>
+<div class="line">        })</div>
+<div class="line">    ;</div>
+<div class="line">}</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md11"></a>
+Reading a Body</h1>
+<p >Here is an example on how to read a body. The session is kept alive over the course of the read operation.</p>
+<div class="fragment"><div class="line">---</div>
+<div class="line">lineno-start: 1</div>
+<div class="line">caption: Write Example</div>
+<div class="line">---</div>
+<div class="line">void RequestListener::upload(Roar::Session&amp; session, Roar::EmptyBodyRequest&amp;&amp; request)</div>
+<div class="line">{</div>
+<div class="line">    namespace http = boost::beast::http;</div>
+<div class="line"> </div>
+<div class="line">    boost::beast::error_code ec;</div>
+<div class="line">    http::file_body::value_type body;</div>
+<div class="line">    body.open(&quot;/tmp/bla.txt&quot;, boost::beast::file_mode::write, ec);</div>
+<div class="line">    // if (ec) reply with error.</div>
+<div class="line"> </div>
+<div class="line">    session.template read&lt;http::file_body&gt;(std::move(req), std::move(body))</div>
+<div class="line">        -&gt;noBodyLimit()</div>
+<div class="line">        .commit()</div>
+<div class="line">        .then([](Session&amp; session, Request&lt;http::file_body&gt; const&amp; req) {</div>
+<div class="line">            session</div>
+<div class="line">                .send&lt;string_body&gt;(request)</div>
+<div class="line">                -&gt;status(status::ok)</div>
+<div class="line">                .contentType(&quot;text/plain&quot;)</div>
+<div class="line">                .body(&quot;Thank you!&quot;)</div>
+<div class="line">                .commit();</div>
+<div class="line">        });</div>
+<div class="line">}</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md12"></a>
+Rate Limiting</h1>
+<p >Download/Upload speeds can be set on a session using "readLimit" and "writeLimit". </p>
+</div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

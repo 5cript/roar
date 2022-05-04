@@ -1,5 +1,10 @@
 <map id="Roar::WebsocketSession" name="Roar::WebsocketSession">
-<area shape="rect" id="node1" title="A WebsocketSession allows you to interact with a client via websocket protocol." alt="" coords="212,145,491,252"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,335,83"/>
-<area shape="rect" id="node3" title=" " alt="" coords="359,5,709,83"/>
+<area shape="rect" id="node1" title="A WebsocketSession allows you to interact with a client via websocket protocol." alt="" coords="787,587,1138,693"/>
+<area shape="rect" id="node2" href="$structRoar_1_1Detail_1_1SharedFromBase.html" title=" " alt="" coords="533,447,973,524"/>
+<area shape="rect" id="node3" href="$classRoar_1_1WebsocketBase.html" title=" " alt="" coords="523,160,677,384"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,13,317,90"/>
+<area shape="rect" id="node5" title=" " alt="" coords="341,5,859,97"/>
+<area shape="rect" id="node6" href="$structRoar_1_1Detail_1_1SharedFromBase.html" title=" " alt="" coords="727,233,1035,311"/>
+<area shape="rect" id="node7" href="$classBase.html" title=" " alt="" coords="882,13,934,90"/>
+<area shape="rect" id="node8" title=" " alt="" coords="998,447,1349,524"/>
 </map>

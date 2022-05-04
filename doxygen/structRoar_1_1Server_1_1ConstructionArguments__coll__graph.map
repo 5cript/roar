@@ -1,8 +1,8 @@
 <map id="Roar::Server::ConstructionArguments" name="Roar::Server::ConstructionArguments">
-<area shape="rect" id="node1" title=" " alt="" coords="398,145,639,223"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,136,83"/>
-<area shape="rect" id="node3" title=" " alt="" coords="161,5,391,83"/>
-<area shape="rect" id="node4" title=" " alt="" coords="415,5,622,83"/>
-<area shape="rect" id="node5" title=" " alt="" coords="647,5,919,83"/>
-<area shape="rect" id="node6" title=" " alt="" coords="943,5,1244,83"/>
+<area shape="rect" id="node1" title=" " alt="" coords="385,145,626,223"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,123,83"/>
+<area shape="rect" id="node3" title=" " alt="" coords="147,5,378,83"/>
+<area shape="rect" id="node4" title=" " alt="" coords="402,5,609,83"/>
+<area shape="rect" id="node5" title=" " alt="" coords="633,5,905,83"/>
+<area shape="rect" id="node6" title=" " alt="" coords="929,5,1231,83"/>
 </map>

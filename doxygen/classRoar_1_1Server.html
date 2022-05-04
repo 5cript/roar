@@ -80,7 +80,7 @@ $(function() {
 <div class="dynheader">
 Collaboration diagram for Roar::Server:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classRoar_1_1Server__coll__graph.svg" width="290" height="390"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classRoar_1_1Server__coll__graph.svg" width="290" height="419"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 <table class="memberdecls">
@@ -122,6 +122,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a57d6a791d4703d729ad4f1469d38d827"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; RequestListenerT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classRoar_1_1Server.html#a57d6a791d4703d729ad4f1469d38d827">installRequestListener</a> (ConstructionArgsT &amp;&amp;... args)</td></tr>
 <tr class="memdesc:a57d6a791d4703d729ad4f1469d38d827"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attach a request listener to this server to receive requests.  <a href="classRoar_1_1Server.html#a57d6a791d4703d729ad4f1469d38d827">More...</a><br /></td></tr>
 <tr class="separator:a57d6a791d4703d729ad4f1469d38d827"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb16a97d0d39b31b111650e1c83fa552"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Server.html#afb16a97d0d39b31b111650e1c83fa552">isSecure</a> () const</td></tr>
+<tr class="memdesc:afb16a97d0d39b31b111650e1c83fa552"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether this server has a certificate and key and is therefore a HTTPS server.  <a href="classRoar_1_1Server.html#afb16a97d0d39b31b111650e1c83fa552">More...</a><br /></td></tr>
+<tr class="separator:afb16a97d0d39b31b111650e1c83fa552"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e791c3023228ed259e75a1f65420df9"><td class="memItemLeft" align="right" valign="top">boost::asio::any_io_executor&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Server.html#a3e791c3023228ed259e75a1f65420df9">getExecutor</a> () const</td></tr>
+<tr class="memdesc:a3e791c3023228ed259e75a1f65420df9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the Executor object.  <a href="classRoar_1_1Server.html#a3e791c3023228ed259e75a1f65420df9">More...</a><br /></td></tr>
+<tr class="separator:a3e791c3023228ed259e75a1f65420df9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -256,6 +262,26 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a3e791c3023228ed259e75a1f65420df9" name="a3e791c3023228ed259e75a1f65420df9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e791c3023228ed259e75a1f65420df9">&#9670;&nbsp;</a></span>getExecutor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::asio::any_io_executor Roar::Server::getExecutor </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the Executor object. </p>
+<dl class="section return"><dt>Returns</dt><dd>boost::asio::any_io_executor&amp; The ASIO any_io_executor. </dd></dl>
+
+</div>
+</div>
 <a id="a7e39fb44b093c0a4e84728d167b50b71" name="a7e39fb44b093c0a4e84728d167b50b71"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7e39fb44b093c0a4e84728d167b50b71">&#9670;&nbsp;</a></span>getLocalEndpoint()</h2>
 
@@ -309,6 +335,28 @@ template&lt;typename RequestListenerT , typename... ConstructionArgsT&gt; </div>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="afb16a97d0d39b31b111650e1c83fa552" name="afb16a97d0d39b31b111650e1c83fa552"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb16a97d0d39b31b111650e1c83fa552">&#9670;&nbsp;</a></span>isSecure()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Roar::Server::isSecure </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns whether this server has a certificate and key and is therefore a HTTPS server. </p>
+<dl class="section return"><dt>Returns</dt><dd>true is HTTPS. </dd>
+<dd>
+false is not HTTPS. </dd></dl>
 
 </div>
 </div>

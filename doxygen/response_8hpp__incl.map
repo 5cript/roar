@@ -1,13 +1,14 @@
 <map id="include/roar/response.hpp" name="include/roar/response.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="1314,5,1485,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="1443,5,1614,32"/>
 <area shape="rect" id="node2" href="$cors_8hpp.html" title=" " alt="" coords="458,80,557,107"/>
 <area shape="rect" id="node9" href="$request_8hpp.html" title=" " alt="" coords="1004,80,1120,107"/>
 <area shape="rect" id="node10" title=" " alt="" coords="732,155,931,181"/>
 <area shape="rect" id="node18" href="$first__type_8hpp.html" title=" " alt="" coords="1144,80,1399,107"/>
 <area shape="rect" id="node19" title=" " alt="" coords="1423,80,1634,107"/>
-<area shape="rect" id="node20" title=" " alt="" coords="1658,80,1741,107"/>
-<area shape="rect" id="node21" title=" " alt="" coords="1765,80,1833,107"/>
-<area shape="rect" id="node22" title=" " alt="" coords="1857,80,1920,107"/>
+<area shape="rect" id="node20" title=" " alt="" coords="1658,80,1826,107"/>
+<area shape="rect" id="node21" title=" " alt="" coords="1850,80,1933,107"/>
+<area shape="rect" id="node22" title=" " alt="" coords="1957,80,2025,107"/>
+<area shape="rect" id="node23" title=" " alt="" coords="2049,80,2112,107"/>
 <area shape="rect" id="node3" title=" " alt="" coords="5,155,175,181"/>
 <area shape="rect" id="node4" title=" " alt="" coords="199,155,370,181"/>
 <area shape="rect" id="node5" title=" " alt="" coords="480,155,535,181"/>
