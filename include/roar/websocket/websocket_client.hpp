@@ -1,7 +1,9 @@
 #pragma once
 
-#include <roar/error.hpp>
 #include <roar/detail/pimpl_special_functions.hpp>
+#include <roar/detail/shared_from_base.hpp>
+#include <roar/websocket/websocket_base.hpp>
+
 #include <boost/asio/any_io_executor.hpp>
 #include <boost/asio/ssl/context.hpp>
 #include <boost/beast/http/field.hpp>
@@ -14,7 +16,7 @@
 
 namespace Roar
 {
-    class WebSocketClient
+    class WebSocketClient : public Detail::SharedFromBase<WebSocketBase, WebSocketClient>
     {
       public:
         constexpr static std::chrono::seconds defaultTimeout{10};
@@ -29,7 +31,11 @@ namespace Roar
         };
 
         WebSocketClient(ConstructionArguments&& args);
-        ROAR_PIMPL_SPECIAL_FUNCTIONS(WebSocketClient);
+        ~WebSocketClient();
+        WebSocketClient(WebSocketClient&&) = delete;
+        WebSocketClient& operator=(WebSocketClient&&) = delete;
+        WebSocketClient(WebSocketClient const&) = delete;
+        WebSocketClient& operator=(WebSocketClient const&) = delete;
 
         struct ConnectParameters
         {
@@ -48,7 +54,6 @@ namespace Roar
             // Additional WebSocket handshake headers.
             std::unordered_map<boost::beast::http::field, std::string> headers = {};
         };
-
         /**
          * @brief Connects the websocket to a server.
          *
@@ -58,33 +63,8 @@ namespace Roar
          */
         promise::Promise connect(ConnectParameters&& connectParameters);
 
-        /**
-         * @brief Sends a string to the server.
-         *
-         * @param message A message to send.
-         * @return promise::Promise Promise::then is called with the amount of bytes sent, Promise::fail with a
-         * Roar::Error.
-         */
-        promise::Promise send(std::string message);
-
-        /**
-         * @brief Reads something from the server.
-         *
-         * @return promise::Promise Promise::then is called with a std::string, Promise::fail with
-         * a Roar::Error.
-         */
-        promise::Promise read();
-
-        /**
-         * @brief Closes the websocket connection.
-         *
-         * @return true Returns true when the timeout was not reached.
-         * @return false Returns false when the timeout was reached.
-         */
-        bool close(std::chrono::seconds closeWaitTimeout = std::chrono::seconds{3});
-
       private:
         struct Implementation;
-        std::shared_ptr<Implementation> impl_;
+        std::unique_ptr<Implementation> impl_;
     };
 }

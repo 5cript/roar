@@ -13,6 +13,16 @@
 /**
  * @brief Utility function for rule of 5 abidance in pimpl classes.
  */
+#define ROAR_PIMPL_SPECIAL_FUNCTIONS_NO_MOVE(Name) \
+    ~Name(); \
+    Name(Name const&) = delete; \
+    Name(Name&&) = delete; \
+    Name& operator=(Name const&) = delete; \
+    Name& operator=(Name&&) = delete;
+
+/**
+ * @brief Utility function for rule of 5 abidance in pimpl classes.
+ */
 #define ROAR_PIMPL_SPECIAL_FUNCTIONS_IMPL(Name) \
     Name::~Name() = default; \
     Name::Name(Name&&) = default; \

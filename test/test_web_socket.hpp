@@ -4,7 +4,7 @@
 #include "util/common_listeners.hpp"
 
 #include <roar/routing/request_listener.hpp>
-#include <roar/websocket/client.hpp>
+#include <roar/websocket/websocket_client.hpp>
 #include <roar/curl/request.hpp>
 
 #include <gtest/gtest.h>
@@ -89,10 +89,10 @@ namespace Roar::Tests
             synchronizer2.set_value();
         };
 
-        WebSocketClient client{
-            WebSocketClient::ConstructionArguments{.executor = server_->getExecutor(), .sslContext = std::nullopt}};
+        auto client = std::make_shared<WebSocketClient>(
+            WebSocketClient::ConstructionArguments{.executor = server_->getExecutor(), .sslContext = std::nullopt});
         client
-            .connect({
+            ->connect({
                 .host = "localhost",
                 .port = std::to_string(server_->getLocalEndpoint().port()),
                 .path = "/ws",
@@ -116,10 +116,10 @@ namespace Roar::Tests
     {
         std::promise<bool> synchronizer;
 
-        WebSocketClient client{
-            WebSocketClient::ConstructionArguments{.executor = server_->getExecutor(), .sslContext = std::nullopt}};
+        auto client = std::make_shared<WebSocketClient>(
+            WebSocketClient::ConstructionArguments{.executor = server_->getExecutor(), .sslContext = std::nullopt});
         client
-            .connect({
+            ->connect({
                 .host = "localhost",
                 .port = "65000",
                 .path = "/ws",
@@ -141,10 +141,10 @@ namespace Roar::Tests
     {
         std::promise<bool> synchronizer;
 
-        WebSocketClient client{
-            WebSocketClient::ConstructionArguments{.executor = server_->getExecutor(), .sslContext = std::nullopt}};
+        auto client = std::make_shared<WebSocketClient>(
+            WebSocketClient::ConstructionArguments{.executor = server_->getExecutor(), .sslContext = std::nullopt});
         client
-            .connect({
+            ->connect({
                 .host = "localhost",
                 .port = std::to_string(server_->getLocalEndpoint().port()),
                 .path = "/",
@@ -165,10 +165,10 @@ namespace Roar::Tests
     {
         std::promise<bool> synchronizer;
 
-        WebSocketClient client{
-            WebSocketClient::ConstructionArguments{.executor = server_->getExecutor(), .sslContext = std::nullopt}};
+        auto client = std::make_shared<WebSocketClient>(
+            WebSocketClient::ConstructionArguments{.executor = server_->getExecutor(), .sslContext = std::nullopt});
         client
-            .connect({
+            ->connect({
                 .host = "localhost",
                 .port = std::to_string(server_->getLocalEndpoint().port()),
                 .path = "/",
@@ -191,22 +191,22 @@ namespace Roar::Tests
         std::promise<bool> synchronizer;
 
         listener_->onAccept = [&, this]() {
-            listener_->ws->read().then([&](std::string const& msg) {
-                recv = msg;
+            listener_->ws->read().then([&](auto const& msg) {
+                recv = msg.message;
                 synchronizer.set_value(true);
             });
         };
 
-        WebSocketClient client{
-            WebSocketClient::ConstructionArguments{.executor = server_->getExecutor(), .sslContext = std::nullopt}};
+        auto client = std::make_shared<WebSocketClient>(
+            WebSocketClient::ConstructionArguments{.executor = server_->getExecutor(), .sslContext = std::nullopt});
         client
-            .connect({
+            ->connect({
                 .host = "localhost",
                 .port = std::to_string(server_->getLocalEndpoint().port()),
                 .path = "/ws",
             })
-            .then([&synchronizer, &client, &recv, this]() {
-                client.send("Hello You!");
+            .then([&synchronizer, client, &recv, this]() {
+                client->send("Hello You!");
             });
 
         auto future = synchronizer.get_future();

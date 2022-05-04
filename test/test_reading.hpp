@@ -22,9 +22,10 @@ namespace Roar::Tests
         ROAR_MAKE_LISTENER(ReadingTestListener);
 
         ROAR_POST(staticString)({.path = "/staticString"});
+        ROAR_PUT(failPut)({.path = "/failPut"});
 
       private:
-        BOOST_DESCRIBE_CLASS(ReadingTestListener, (), (), (), (roar_staticString))
+        BOOST_DESCRIBE_CLASS(ReadingTestListener, (), (), (), (roar_staticString, roar_failPut))
     };
     inline void ReadingTestListener::staticString(Session& session, EmptyBodyRequest&& req)
     {
@@ -37,6 +38,12 @@ namespace Roar::Tests
             .then([this](auto& session, auto const& req) {
                 body = req.body();
             });
+    }
+    inline void ReadingTestListener::failPut(Session& session, EmptyBodyRequest&& req)
+    {
+        using namespace boost::beast::http;
+        session.sendStandardResponse(boost::beast::http::status::bad_request);
+        session.awaitClientClose(std::move(req));
     }
 
     class ReadingTests
@@ -87,5 +94,14 @@ namespace Roar::Tests
             allSame &= (i == gen());
 
         EXPECT_TRUE(allSame);
+    }
+
+    TEST_F(ReadingTests, ImmediateErrorResponseResults)
+    {
+        using namespace Roar::Literals;
+        auto now = std::chrono::system_clock::now();
+        const auto res = Curl::Request{}.emplaceSource<ChunkedSource>(1_MiB).put(url("/failPut"));
+        EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
+        EXPECT_LT(std::chrono::system_clock::now() - now, std::chrono::seconds{1});
     }
 }

@@ -52,6 +52,7 @@ namespace Roar::Tests
           .routeOptions = {
               .allowUnsecure = true,
           }});
+        ROAR_GET(sendIntermediate)("/sendIntermediate");
 
       private:
         void justOk(Session& session, EmptyBodyRequest&& req)
@@ -74,7 +75,8 @@ namespace Roar::Tests
              roar_headHere,
              roar_anything,
              roar_ab,
-             roar_unsecure))
+             roar_unsecure,
+             roar_sendIntermediate))
     };
     inline void SimpleRoutes::index(Session& session, EmptyBodyRequest&& req)
     {
@@ -137,5 +139,10 @@ namespace Roar::Tests
     {
         using namespace boost::beast::http;
         session.prepareResponse<string_body>(req).status(status::no_content).send(session);
+    }
+    inline void SimpleRoutes::sendIntermediate(Session& session, EmptyBodyRequest&& req)
+    {
+        using namespace boost::beast::http;
+        session.send<string_body>(req)->status(status::ok).body("Hi").start();
     }
 }

@@ -6,6 +6,7 @@
 
 #include <boost/beast/http/message.hpp>
 #include <boost/beast/http/string_body.hpp>
+#include <promise-cpp/promise.hpp>
 
 #ifdef ROAR_ENABLE_NLOHMANN_JSON
 #    include <nlohmann/json.hpp>
@@ -30,18 +31,7 @@ namespace Roar
         }
 
         /**
-         * @brief Sets the result code of the response_
-         *
-         * @param status A status code.
-         */
-        Response& result(boost::beast::http::status status)
-        {
-            response_.result(status);
-            return *this;
-        }
-
-        /**
-         * @brief Alias for result.
+         * @brief Sets the response status code.
          *
          * @param status A status code.
          */
@@ -225,9 +215,9 @@ namespace Roar
          * @param session The session to send this on.
          */
         template <typename SessionT>
-        void send(SessionT& session)
+        promise::Promise send(SessionT& session)
         {
-            session.send(std::move(response_));
+            return session.send(std::move(response_));
         }
 
         /**
@@ -237,9 +227,9 @@ namespace Roar
          * @param session The session to send this on.
          */
         template <typename SessionT>
-        void send(std::shared_ptr<SessionT>& session)
+        promise::Promise send(std::shared_ptr<SessionT>& session)
         {
-            session->send(std::move(response_));
+            return session->send(std::move(response_));
         }
 
         /**

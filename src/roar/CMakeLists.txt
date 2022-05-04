@@ -5,8 +5,9 @@ add_library(roar STATIC
   session/factory.cpp
   session/session.cpp
   ssl/make_ssl_context.cpp
-  websocket/web_socket_session.cpp
-  websocket/client.cpp
+  websocket/websocket_session.cpp
+  websocket/websocket_client.cpp
+  websocket/websocket_base.cpp
   curl/sources/file_source.cpp
   curl/sources/string_source.cpp
   curl/global_curl_context.cpp

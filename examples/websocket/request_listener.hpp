@@ -1,8 +1,11 @@
 #pragma once
 
 #include <roar/routing/request_listener.hpp>
+#include <roar/websocket/websocket_session.hpp>
 
-class RequestListener
+#include <memory>
+
+class RequestListener : public std::enable_shared_from_this<RequestListener>
 {
   private:
     ROAR_MAKE_LISTENER(RequestListener);
@@ -15,6 +18,9 @@ class RequestListener
                 .expectUpgrade = true,
             },
     });
+
+  private:
+    std::shared_ptr<Roar::WebSocketSession> ws_;
 
   private:
     BOOST_DESCRIBE_CLASS(RequestListener, (), (), (), (roar_ws))

@@ -190,7 +190,10 @@ namespace Roar
         return *impl_->standardResponseProvider;
     }
     //------------------------------------------------------------------------------------------------------------------
-    promise::Promise Session::upgrade(Request<boost::beast::http::empty_body> const& req)
+    Detail::PromiseTypeBind<
+        Detail::PromiseTypeBindThen<std::shared_ptr<WebSocketSession>>,
+        Detail::PromiseTypeBindFail<Error const&>>
+    Session::upgrade(Request<boost::beast::http::empty_body> const& req)
     {
         return promise::newPromise([this, &req](promise::Defer d) {
             if (req.isWebsocketUpgrade())
@@ -213,13 +216,17 @@ namespace Roar
         });
     }
     //------------------------------------------------------------------------------------------------------------------
-    void Session::onWriteComplete(bool expectsClose, boost::beast::error_code ec, std::size_t)
+    bool Session::onWriteComplete(bool expectsClose, boost::beast::error_code ec, std::size_t)
     {
         if (ec && ec != boost::beast::http::error::end_of_stream)
             impl_->onError({.error = ec, .additionalInfo = "Error during write."});
 
         if (ec || expectsClose)
-            return close();
+        {
+            close();
+            return true;
+        }
+        return false;
     }
     //------------------------------------------------------------------------------------------------------------------
     void Session::close()
@@ -229,7 +236,7 @@ namespace Roar
         {
             std::get<boost::beast::tcp_stream>(impl_->stream)
                 .socket()
-                .shutdown(boost::asio::ip::tcp::socket::shutdown_send, ec);
+                .shutdown(boost::asio::ip::tcp::socket::shutdown_both, ec);
         }
         else
         {
@@ -246,7 +253,9 @@ namespace Roar
     //------------------------------------------------------------------------------------------------------------------
     void Session::sendStandardResponse(boost::beast::http::status status, std::string_view additionalInfo)
     {
-        send(impl_->standardResponseProvider->makeStandardResponse(*this, status, additionalInfo));
+        auto res = impl_->standardResponseProvider->makeStandardResponse(*this, status, additionalInfo);
+        res.set(boost::beast::http::field::connection, "close");
+        send(std::move(res));
     }
     //------------------------------------------------------------------------------------------------------------------
     void Session::sendStrictTransportSecurityResponse()

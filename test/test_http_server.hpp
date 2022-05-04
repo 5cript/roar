@@ -84,4 +84,12 @@ namespace Roar::Tests
         auto res = Curl::Request{}.get(urlEncryptedServer("/unsecure", {.secure = false}));
         EXPECT_EQ(res.code(), boost::beast::http::status::no_content);
     }
+
+    TEST_F(HttpServerTests, CanSendUsingSendIntermediate)
+    {
+        std::string body;
+        auto res = Curl::Request{}.sink(body).get(url("/sendIntermediate", {.secure = false}));
+        EXPECT_EQ(res.code(), boost::beast::http::status::ok);
+        EXPECT_EQ(body, "Hi");
+    }
 }
