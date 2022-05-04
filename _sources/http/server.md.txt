@@ -99,7 +99,7 @@ If the function is empty, the Roar::Session will run out of scope and will be cl
 ROAR_GET, ROAR_PUT, ..., ROAR_ROUTE is a macro that create some boilerplate in the class.
 More about them is in the RequestListener section.
 Doxygen about all defined macros:
-<a href="/doxygen/include_2roar_2routing_2request__listener_8hpp.html#route">ROAR_ROUTE</a>.
+<a href="/roar/doxygen/include_2roar_2routing_2request__listener_8hpp.html#route">ROAR_ROUTE</a>.
 
 Now if we can add this listener to our server:
 ```{code-block} c++
@@ -200,7 +200,7 @@ class MyRequestListener
 };
 ```
 Available options for routes are documented here: 
-<a href="/doxygen/structRoar_1_1RouteInfo.html">RouteInfo</a>.
+<a href="/roar/doxygen/structRoar_1_1RouteInfo.html">RouteInfo</a>.
 
 ```{admonition} Head Requests
 Head requests are not automatically possible on get requests. Because the library cannot formulate responses without running user code.
@@ -311,3 +311,4 @@ void RequestListener::upload(Roar::Session& session, Roar::EmptyBodyRequest&& re
 ## Rate Limiting
 
 Download/Upload speeds can be set on a session using "readLimit" and "writeLimit".
+<a href="/roar/doxygen/classRoar_1_1Session.html">Session class</a>.
