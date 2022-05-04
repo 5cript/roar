@@ -9,6 +9,7 @@
   },
   "scripts": {
     "build": "bash ./scripts/build.sh",
+    "build:docs": "bash ./scripts/build_docs.sh",
     "request_listener": "npm run build && bash ./scripts/runexe.sh ./build/clang_debug/bin/request_listener",
     "simple_server": "npm run build && bash ./scripts/runexe.sh ./build/clang_debug/bin/simple_server",
     "websocket": "npm run build && bash ./scripts/runexe.sh ./build/clang_debug/bin/websocket",

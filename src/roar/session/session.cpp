@@ -191,14 +191,14 @@ namespace Roar
     }
     //------------------------------------------------------------------------------------------------------------------
     Detail::PromiseTypeBind<
-        Detail::PromiseTypeBindThen<std::shared_ptr<WebSocketSession>>,
+        Detail::PromiseTypeBindThen<std::shared_ptr<WebsocketSession>>,
         Detail::PromiseTypeBindFail<Error const&>>
     Session::upgrade(Request<boost::beast::http::empty_body> const& req)
     {
         return promise::newPromise([this, &req](promise::Defer d) {
             if (req.isWebsocketUpgrade())
             {
-                auto ws = std::make_shared<WebSocketSession>(std::move(impl_->stream));
+                auto ws = std::make_shared<WebsocketSession>(std::move(impl_->stream));
                 ws->accept(req)
                     .then([ws, d]() {
                         d.resolve(ws);

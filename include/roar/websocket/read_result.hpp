@@ -4,7 +4,7 @@
 
 namespace Roar
 {
-    struct WebSocketReadResult
+    struct WebsocketReadResult
     {
         /// Is received data binary?
         bool isBinary;

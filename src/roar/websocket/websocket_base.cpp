@@ -7,7 +7,7 @@ namespace Roar
     using namespace promise;
 
     //##################################################################################################################
-    WebSocketBase::WebSocketBase(
+    WebsocketBase::WebsocketBase(
         std::variant<boost::beast::tcp_stream, boost::beast::ssl_stream<boost::beast::tcp_stream>>&& stream)
         : ws_{[&stream]() {
             return std::visit(
@@ -22,43 +22,43 @@ namespace Roar
         }()}
     {}
     //------------------------------------------------------------------------------------------------------------------
-    WebSocketBase::WebSocketBase(std::variant<
+    WebsocketBase::WebsocketBase(std::variant<
                                  boost::beast::websocket::stream<boost::beast::ssl_stream<boost::beast::tcp_stream>>,
                                  boost::beast::websocket::stream<boost::beast::tcp_stream>>&& ws)
         : ws_{std::move(ws)}
     {}
     //------------------------------------------------------------------------------------------------------------------
-    WebSocketBase::~WebSocketBase() = default;
+    WebsocketBase::~WebsocketBase() = default;
     //------------------------------------------------------------------------------------------------------------------
-    void WebSocketBase::readMessageMax(std::size_t amount)
+    void WebsocketBase::readMessageMax(std::size_t amount)
     {
         withStreamDo([amount](auto& stream) {
             stream.read_message_max(amount);
         });
     }
     //------------------------------------------------------------------------------------------------------------------
-    std::size_t WebSocketBase::readMessageMax() const
+    std::size_t WebsocketBase::readMessageMax() const
     {
         return withStreamDo([](auto& stream) {
             return stream.read_message_max();
         });
     }
     //------------------------------------------------------------------------------------------------------------------
-    void WebSocketBase::binary(bool enable)
+    void WebsocketBase::binary(bool enable)
     {
         withStreamDo([enable](auto& stream) {
             stream.binary(enable);
         });
     }
     //------------------------------------------------------------------------------------------------------------------
-    bool WebSocketBase::binary() const
+    bool WebsocketBase::binary() const
     {
-        return WebSocketBase::withStreamDo([](auto& stream) {
+        return WebsocketBase::withStreamDo([](auto& stream) {
             return stream.binary();
         });
     }
     //------------------------------------------------------------------------------------------------------------------
-    promise::Promise WebSocketBase::send(std::string message)
+    promise::Promise WebsocketBase::send(std::string message)
     {
         return newPromise([this, message = std::move(message)](Defer d) {
             withStreamDo([&, this](auto& ws) {
@@ -66,15 +66,15 @@ namespace Roar
                     boost::asio::buffer(message),
                     [d, self = shared_from_this()](auto ec, std::size_t bytesTransferred) {
                         if (ec)
-                            return d.reject(Error{.error = ec, .additionalInfo = "WebSocket write failed."});
+                            return d.reject(Error{.error = ec, .additionalInfo = "Websocket write failed."});
                         d.resolve(bytesTransferred);
                     });
             });
         });
     }
     //------------------------------------------------------------------------------------------------------------------
-    Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<WebSocketReadResult>, Detail::PromiseTypeBindFail<Error const&>>
-    WebSocketBase::read()
+    Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<WebsocketReadResult>, Detail::PromiseTypeBindFail<Error const&>>
+    WebsocketBase::read()
     {
         return newPromise([this](Defer d) {
             withStreamDo([&, this](auto& ws) {
@@ -87,9 +87,9 @@ namespace Roar
                 auto buf = std::make_shared<Buf>();
                 ws.async_read(buf->buf, [d, self = shared_from_this(), buf](auto ec, std::size_t bytesTransferred) {
                     if (ec)
-                        return d.reject(Error{.error = ec, .additionalInfo = "WebSocket read failed."});
+                        return d.reject(Error{.error = ec, .additionalInfo = "Websocket read failed."});
                     self->withStreamDo([&](auto& ws) {
-                        d.resolve(WebSocketReadResult{
+                        d.resolve(WebsocketReadResult{
                             .isBinary = ws.got_binary(),
                             .isMessageDone = ws.is_message_done(),
                             .message = std::move(buf->data)});
@@ -99,21 +99,21 @@ namespace Roar
         });
     }
     //------------------------------------------------------------------------------------------------------------------
-    void WebSocketBase::autoFragment(bool enable)
+    void WebsocketBase::autoFragment(bool enable)
     {
         withStreamDo([this, enable](auto& ws) {
             ws.auto_fragment(enable);
         });
     }
     //------------------------------------------------------------------------------------------------------------------
-    bool WebSocketBase::autoFragment() const
+    bool WebsocketBase::autoFragment() const
     {
         return withStreamDo([this](auto& ws) {
             return ws.auto_fragment();
         });
     }
     //------------------------------------------------------------------------------------------------------------------
-    bool WebSocketBase::close(std::chrono::seconds closeWaitTimeout)
+    bool WebsocketBase::close(std::chrono::seconds closeWaitTimeout)
     {
         auto waitForClose = std::make_shared<std::promise<void>>();
         withStreamDo([&, this](auto& ws) {

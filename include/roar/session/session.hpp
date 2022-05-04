@@ -164,7 +164,7 @@ namespace Roar
             /**
              * @brief Sends the response and invalidates this object
              */
-            promise::Promise start()
+            promise::Promise commit()
             {
                 response_.preparePayload();
                 return session_->send(std::move(response_));
@@ -314,7 +314,7 @@ namespace Roar
                     Detail::PromiseReferenceWrap<Session>,
                     Detail::PromiseReferenceWrap<Request<BodyT> const>>,
                 Detail::PromiseTypeBindFail<Error const&>>
-            start()
+            commit()
             {
                 if (overallTimeout_)
                 {
@@ -420,6 +420,7 @@ namespace Roar
         [[nodiscard]] Response<BodyT> prepareResponse(Request<RequestBodyT> const& req)
         {
             auto res = Response<BodyT>{};
+            res.setHeader(boost::beast::http::field::server, "Roar+" BOOST_BEAST_VERSION_STRING);
             if (routeOptions().cors)
                 res.enableCors(req, routeOptions().cors);
             return res;
@@ -445,7 +446,7 @@ namespace Roar
          * @return a promise resolving to std::shared_ptr<WebsocketSession> being the new websocket session or an
          */
         [[nodiscard]] Detail::PromiseTypeBind<
-            Detail::PromiseTypeBindThen<std::shared_ptr<WebSocketSession>>,
+            Detail::PromiseTypeBindThen<std::shared_ptr<WebsocketSession>>,
             Detail::PromiseTypeBindFail<Error const&>>
         upgrade(Request<boost::beast::http::empty_body> const& req);
 
@@ -491,7 +492,7 @@ namespace Roar
             return promise::newPromise([this, &req, &timeout](promise::Defer d) {
                 read<VoidBody>(std::move(req))
                     ->useFixedTimeout(timeout)
-                    .start()
+                    .commit()
                     .then([d](auto&, auto const&) {
                         d.resolve();
                     })

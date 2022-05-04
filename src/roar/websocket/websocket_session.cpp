@@ -11,7 +11,7 @@ namespace Roar
     using namespace promise;
 
     //##################################################################################################################
-    struct WebSocketSession::Implementation
+    struct WebsocketSession::Implementation
     {
         boost::beast::flat_buffer buffer;
 
@@ -19,15 +19,15 @@ namespace Roar
         {}
     };
     //------------------------------------------------------------------------------------------------------------------
-    WebSocketSession::WebSocketSession(
+    WebsocketSession::WebsocketSession(
         std::variant<boost::beast::tcp_stream, boost::beast::ssl_stream<boost::beast::tcp_stream>>&& stream)
         : SharedFromBase(std::move(stream))
         , impl_{std::make_unique<Implementation>()}
     {}
     //------------------------------------------------------------------------------------------------------------------
-    WebSocketSession::~WebSocketSession() = default;
+    WebsocketSession::~WebsocketSession() = default;
     //------------------------------------------------------------------------------------------------------------------
-    promise::Promise WebSocketSession::accept(Request<boost::beast::http::empty_body> const& req)
+    promise::Promise WebsocketSession::accept(Request<boost::beast::http::empty_body> const& req)
     {
         return newPromise([this, &req](Defer d) {
             withStreamDo([this, request = req, &d](auto& ws) {

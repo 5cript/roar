@@ -18,14 +18,14 @@ namespace Roar
     class Request;
 
     /**
-     * @brief A WebSocketSession allows you to interact with a client via websocket protocol.
+     * @brief A WebsocketSession allows you to interact with a client via websocket protocol.
      */
-    class WebSocketSession : public Detail::SharedFromBase<WebSocketBase, WebSocketSession>
+    class WebsocketSession : public Detail::SharedFromBase<WebsocketBase, WebsocketSession>
     {
       public:
-        WebSocketSession(
+        WebsocketSession(
             std::variant<boost::beast::tcp_stream, boost::beast::ssl_stream<boost::beast::tcp_stream>>&& stream);
-        ROAR_PIMPL_SPECIAL_FUNCTIONS_NO_MOVE(WebSocketSession);
+        ROAR_PIMPL_SPECIAL_FUNCTIONS_NO_MOVE(WebsocketSession);
 
         /**
          * @brief Accept an upgrade request and performs the necessary websocket handshake.

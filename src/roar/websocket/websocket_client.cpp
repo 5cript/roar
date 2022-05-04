@@ -17,7 +17,7 @@ namespace Roar
     using namespace promise;
 
     //##################################################################################################################
-    struct WebSocketClient::Implementation
+    struct WebsocketClient::Implementation
     {
         boost::beast::flat_buffer buffer;
         std::function<void(Error&&)> onError;
@@ -40,7 +40,7 @@ namespace Roar
             boost::asio::ip::tcp::resolver::results_type::endpoint_type const& ep,
             std::chrono::seconds timeout,
             std::string passedHost,
-            std::shared_ptr<WebSocketClient> client)
+            std::shared_ptr<WebsocketClient> client)
         {
             host = passedHost + ':' + std::to_string(ep.port());
 
@@ -58,7 +58,7 @@ namespace Roar
                 performWebsocketHandshake(std::move(client));
         }
 
-        void performSslHandshake(std::string const& host, std::shared_ptr<WebSocketClient> client)
+        void performSslHandshake(std::string const& host, std::shared_ptr<WebsocketClient> client)
         {
             auto& wss = std::get<boost::beast::websocket::stream<boost::beast::ssl_stream<boost::beast::tcp_stream>>>(
                 client->ws_);
@@ -76,7 +76,7 @@ namespace Roar
             });
         }
 
-        void onSslHandshake(boost::beast::error_code ec, std::shared_ptr<WebSocketClient> client)
+        void onSslHandshake(boost::beast::error_code ec, std::shared_ptr<WebsocketClient> client)
         {
             if (ec)
                 return onError({.error = ec, .additionalInfo = "SSL handshake failed."});
@@ -84,7 +84,7 @@ namespace Roar
             performWebsocketHandshake(std::move(client));
         }
 
-        void performWebsocketHandshake(std::shared_ptr<WebSocketClient> client)
+        void performWebsocketHandshake(std::shared_ptr<WebsocketClient> client)
         {
             client->withStreamDo([&, this](auto& ws) {
                 boost::beast::get_lowest_layer(ws).expires_never();
@@ -100,20 +100,20 @@ namespace Roar
                     }));
 
                 ws.async_handshake(host, path, [client](boost::beast::error_code ec) {
-                    client->impl_->onWebSocketHandshake(std::move(ec));
+                    client->impl_->onWebsocketHandshake(std::move(ec));
                 });
             });
         }
 
-        void onWebSocketHandshake(boost::beast::error_code ec)
+        void onWebsocketHandshake(boost::beast::error_code ec)
         {
             if (ec)
-                return onError({.error = ec, .additionalInfo = "WebSocket handshake failed."});
+                return onError({.error = ec, .additionalInfo = "Websocket handshake failed."});
             onConnectComplete();
         }
     };
     //------------------------------------------------------------------------------------------------------------------
-    WebSocketClient::WebSocketClient(ConstructionArguments&& args)
+    WebsocketClient::WebsocketClient(ConstructionArguments&& args)
         : SharedFromBase{[&args]() -> decltype(ws_) {
             if (args.sslContext)
                 return boost::beast::websocket::stream<boost::beast::ssl_stream<boost::beast::tcp_stream>>{
@@ -125,9 +125,9 @@ namespace Roar
         , impl_{std::make_unique<Implementation>()}
     {}
     //------------------------------------------------------------------------------------------------------------------
-    WebSocketClient::~WebSocketClient() = default;
+    WebsocketClient::~WebsocketClient() = default;
     //------------------------------------------------------------------------------------------------------------------
-    promise::Promise WebSocketClient::connect(ConnectParameters&& connectParameters)
+    promise::Promise WebsocketClient::connect(ConnectParameters&& connectParameters)
     {
         impl_->handshakeHeaders = std::move(connectParameters.headers);
         impl_->path = std::move(connectParameters.path);

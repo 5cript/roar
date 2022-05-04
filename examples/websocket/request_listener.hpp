@@ -20,7 +20,7 @@ class RequestListener : public std::enable_shared_from_this<RequestListener>
     });
 
   private:
-    std::shared_ptr<Roar::WebSocketSession> ws_;
+    std::shared_ptr<Roar::WebsocketSession> ws_;
 
   private:
     BOOST_DESCRIBE_CLASS(RequestListener, (), (), (), (roar_ws))

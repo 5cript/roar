@@ -16,7 +16,7 @@
 
 namespace Roar
 {
-    class WebSocketClient : public Detail::SharedFromBase<WebSocketBase, WebSocketClient>
+    class WebsocketClient : public Detail::SharedFromBase<WebsocketBase, WebsocketClient>
     {
       public:
         constexpr static std::chrono::seconds defaultTimeout{10};
@@ -30,12 +30,12 @@ namespace Roar
             std::optional<boost::asio::ssl::context> sslContext;
         };
 
-        WebSocketClient(ConstructionArguments&& args);
-        ~WebSocketClient();
-        WebSocketClient(WebSocketClient&&) = delete;
-        WebSocketClient& operator=(WebSocketClient&&) = delete;
-        WebSocketClient(WebSocketClient const&) = delete;
-        WebSocketClient& operator=(WebSocketClient const&) = delete;
+        WebsocketClient(ConstructionArguments&& args);
+        ~WebsocketClient();
+        WebsocketClient(WebsocketClient&&) = delete;
+        WebsocketClient& operator=(WebsocketClient&&) = delete;
+        WebsocketClient(WebsocketClient const&) = delete;
+        WebsocketClient& operator=(WebsocketClient const&) = delete;
 
         struct ConnectParameters
         {
@@ -51,7 +51,7 @@ namespace Roar
             /// A connect and ssl handshake timeout.
             std::chrono::seconds timeout = defaultTimeout;
 
-            // Additional WebSocket handshake headers.
+            // Additional Websocket handshake headers.
             std::unordered_map<boost::beast::http::field, std::string> headers = {};
         };
         /**

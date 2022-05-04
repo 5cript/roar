@@ -16,10 +16,10 @@ namespace Roar::Tests
 {
     using namespace std::literals;
 
-    class WebSocketListener : public std::enable_shared_from_this<WebSocketListener>
+    class WebsocketListener : public std::enable_shared_from_this<WebsocketListener>
     {
       private:
-        ROAR_MAKE_LISTENER(WebSocketListener);
+        ROAR_MAKE_LISTENER(WebsocketListener);
 
         ROAR_GET(wsRoute)
         ({.path = "/ws",
@@ -33,15 +33,15 @@ namespace Roar::Tests
         });
 
       public:
-        std::shared_ptr<WebSocketSession> ws;
+        std::shared_ptr<WebsocketSession> ws;
         std::function<void()> onAccept;
 
       private:
-        BOOST_DESCRIBE_CLASS(WebSocketListener, (), (), (), (roar_wsRoute, roar_notWsRoute))
+        BOOST_DESCRIBE_CLASS(WebsocketListener, (), (), (), (roar_wsRoute, roar_notWsRoute))
     };
-    inline void WebSocketListener::wsRoute(Session& session, EmptyBodyRequest&& req)
+    inline void WebsocketListener::wsRoute(Session& session, EmptyBodyRequest&& req)
     {
-        session.upgrade(req).then([weak = weak_from_this()](std::shared_ptr<WebSocketSession> ws) {
+        session.upgrade(req).then([weak = weak_from_this()](std::shared_ptr<WebsocketSession> ws) {
             auto self = weak.lock();
             if (!self)
                 return;
@@ -51,12 +51,12 @@ namespace Roar::Tests
                 self->onAccept();
         });
     }
-    inline void WebSocketListener::notWsRoute(Session& session, EmptyBodyRequest&& req)
+    inline void WebsocketListener::notWsRoute(Session& session, EmptyBodyRequest&& req)
     {
         session.sendStandardResponse(boost::beast::http::status::ok);
     }
 
-    class WebSocketTests
+    class WebsocketTests
         : public CommonServerSetup
         , public ::testing::Test
     {
@@ -65,22 +65,22 @@ namespace Roar::Tests
         {
             makeDefaultServer();
             makeSecureServer();
-            listener_ = server_->installRequestListener<WebSocketListener>();
-            secureServer_->installRequestListener<WebSocketListener>();
+            listener_ = server_->installRequestListener<WebsocketListener>();
+            secureServer_->installRequestListener<WebsocketListener>();
         }
 
       protected:
-        std::shared_ptr<WebSocketListener> listener_;
+        std::shared_ptr<WebsocketListener> listener_;
     };
 
-    TEST_F(WebSocketTests, RegularRequestsAreRejectedWhenWebSocketUpgradeIsExpected)
+    TEST_F(WebsocketTests, RegularRequestsAreRejectedWhenWebsocketUpgradeIsExpected)
     {
         namespace http = boost::beast::http;
         auto res = Curl::Request{}.get(url("/ws"));
         EXPECT_EQ(res.code(), http::status::upgrade_required);
     }
 
-    TEST_F(WebSocketTests, CanUpgradeToWebSocketSession)
+    TEST_F(WebsocketTests, CanUpgradeToWebsocketSession)
     {
         std::promise<bool> synchronizer;
         std::promise<void> synchronizer2;
@@ -89,8 +89,8 @@ namespace Roar::Tests
             synchronizer2.set_value();
         };
 
-        auto client = std::make_shared<WebSocketClient>(
-            WebSocketClient::ConstructionArguments{.executor = server_->getExecutor(), .sslContext = std::nullopt});
+        auto client = std::make_shared<WebsocketClient>(
+            WebsocketClient::ConstructionArguments{.executor = server_->getExecutor(), .sslContext = std::nullopt});
         client
             ->connect({
                 .host = "localhost",
@@ -112,12 +112,12 @@ namespace Roar::Tests
         EXPECT_TRUE(listener_->ws) << "Websocket session in listener was not valid.";
     }
 
-    TEST_F(WebSocketTests, FailingToConnectCallsTheRejectionFunction)
+    TEST_F(WebsocketTests, FailingToConnectCallsTheRejectionFunction)
     {
         std::promise<bool> synchronizer;
 
-        auto client = std::make_shared<WebSocketClient>(
-            WebSocketClient::ConstructionArguments{.executor = server_->getExecutor(), .sslContext = std::nullopt});
+        auto client = std::make_shared<WebsocketClient>(
+            WebsocketClient::ConstructionArguments{.executor = server_->getExecutor(), .sslContext = std::nullopt});
         client
             ->connect({
                 .host = "localhost",
@@ -137,12 +137,12 @@ namespace Roar::Tests
         EXPECT_FALSE(future.get()) << "Websocket client failed to connect.";
     }
 
-    TEST_F(WebSocketTests, FailingToUpgradeCallsTheRejectionFunction)
+    TEST_F(WebsocketTests, FailingToUpgradeCallsTheRejectionFunction)
     {
         std::promise<bool> synchronizer;
 
-        auto client = std::make_shared<WebSocketClient>(
-            WebSocketClient::ConstructionArguments{.executor = server_->getExecutor(), .sslContext = std::nullopt});
+        auto client = std::make_shared<WebsocketClient>(
+            WebsocketClient::ConstructionArguments{.executor = server_->getExecutor(), .sslContext = std::nullopt});
         client
             ->connect({
                 .host = "localhost",
@@ -161,12 +161,12 @@ namespace Roar::Tests
         EXPECT_FALSE(future.get()) << "Websocket client failed to connect.";
     }
 
-    TEST_F(WebSocketTests, HttpResponseCallsTheRejectionFunction)
+    TEST_F(WebsocketTests, HttpResponseCallsTheRejectionFunction)
     {
         std::promise<bool> synchronizer;
 
-        auto client = std::make_shared<WebSocketClient>(
-            WebSocketClient::ConstructionArguments{.executor = server_->getExecutor(), .sslContext = std::nullopt});
+        auto client = std::make_shared<WebsocketClient>(
+            WebsocketClient::ConstructionArguments{.executor = server_->getExecutor(), .sslContext = std::nullopt});
         client
             ->connect({
                 .host = "localhost",
@@ -185,7 +185,7 @@ namespace Roar::Tests
         EXPECT_FALSE(future.get()) << "Websocket client failed to connect.";
     }
 
-    TEST_F(WebSocketTests, CanSendStringToServer)
+    TEST_F(WebsocketTests, CanSendStringToServer)
     {
         std::string recv;
         std::promise<bool> synchronizer;
@@ -197,8 +197,8 @@ namespace Roar::Tests
             });
         };
 
-        auto client = std::make_shared<WebSocketClient>(
-            WebSocketClient::ConstructionArguments{.executor = server_->getExecutor(), .sslContext = std::nullopt});
+        auto client = std::make_shared<WebsocketClient>(
+            WebsocketClient::ConstructionArguments{.executor = server_->getExecutor(), .sslContext = std::nullopt});
         client
             ->connect({
                 .host = "localhost",

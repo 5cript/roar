@@ -14,19 +14,19 @@
 
 namespace Roar
 {
-    class WebSocketBase : public std::enable_shared_from_this<WebSocketBase>
+    class WebsocketBase : public std::enable_shared_from_this<WebsocketBase>
     {
       public:
-        WebSocketBase(
+        WebsocketBase(
             std::variant<boost::beast::tcp_stream, boost::beast::ssl_stream<boost::beast::tcp_stream>>&& stream);
-        WebSocketBase(std::variant<
+        WebsocketBase(std::variant<
                       boost::beast::websocket::stream<boost::beast::ssl_stream<boost::beast::tcp_stream>>,
                       boost::beast::websocket::stream<boost::beast::tcp_stream>>&& ws);
-        WebSocketBase(WebSocketBase&&) = delete;
-        WebSocketBase& operator=(WebSocketBase&&) = delete;
-        WebSocketBase(WebSocketBase const&) = delete;
-        WebSocketBase& operator=(WebSocketBase const&) = delete;
-        virtual ~WebSocketBase();
+        WebsocketBase(WebsocketBase&&) = delete;
+        WebsocketBase& operator=(WebsocketBase&&) = delete;
+        WebsocketBase(WebsocketBase const&) = delete;
+        WebsocketBase& operator=(WebsocketBase const&) = delete;
+        virtual ~WebsocketBase();
 
         template <typename FunctionT>
         auto withStreamDo(FunctionT&& func)
@@ -81,11 +81,11 @@ namespace Roar
         /**
          * @brief Reads something from the server.
          *
-         * @return promise::Promise Promise::then is called with a WebSocketReadResult, Promise::fail with
+         * @return promise::Promise Promise::then is called with a WebsocketReadResult, Promise::fail with
          * a Roar::Error.
          */
         Detail::
-            PromiseTypeBind<Detail::PromiseTypeBindThen<WebSocketReadResult>, Detail::PromiseTypeBindFail<Error const&>>
+            PromiseTypeBind<Detail::PromiseTypeBindThen<WebsocketReadResult>, Detail::PromiseTypeBindFail<Error const&>>
             read();
 
         /**

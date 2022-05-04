@@ -5,6 +5,7 @@
 #include <roar/routing/request_listener.hpp>
 #include <roar/server.hpp>
 #include <roar/error.hpp>
+#include <roar/utility/scope_exit.hpp>
 
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/asio/thread_pool.hpp>
@@ -27,12 +28,15 @@ int main()
     };
 
     boost::asio::thread_pool pool{4};
-    boost::asio::any_io_executor executor = pool.executor();
 
     // Create server.
     Roar::Server server{{
-        .executor = executor,
+        .executor = pool.executor(),
         .onError = onAsynchronousError,
+    }};
+    const auto shutdownPool = Roar::ScopeExit{[&pool]() {
+        pool.stop();
+        pool.join();
     }};
 
     // Start server and bind on port "port".
@@ -43,9 +47,4 @@ int main()
 
     std::cout << "Server bound to port " << port << std::endl;
     std::cin.get();
-
-    // stop the thread_pool manually to guarantee that all asynchronous tasks are finished before the server is
-    // destroyed.
-    pool.stop();
-    pool.join();
 }

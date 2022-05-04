@@ -1,5 +1,7 @@
 #pragma once
 
+/** @file */
+
 #include <roar/routing/proto_route.hpp>
 #include <roar/detail/overloaded.hpp>
 #include <roar/detail/literals/regex.hpp>
@@ -92,6 +94,7 @@ namespace Roar
             }};
     }
 
+/// Necessary to make pointer to members.
 #define ROAR_MAKE_LISTENER(ListenerType) using this_type = ListenerType
 
 #define ROAR_ROUTE_I(HandlerName, DefaultVerb) \
@@ -99,16 +102,31 @@ namespace Roar
     inline static const auto roar_##HandlerName = \
         Roar::extendRouteInfo({.verb = boost::beast::http::verb::DefaultVerb}, &this_type::HandlerName)
 
-/// Define a new route.
+/**
+ * @brief Define a route.
+ * @ref route
+ */
 #define ROAR_ROUTE(HandlerName) ROAR_ROUTE_I(HandlerName, get)
 
-/// Some default verbs, others can be accessed via ROAR_ROUTE({.verb = ..., .path = ""})
+/// Define route for GET, others can be accessed via ROAR_ROUTE({.verb = ..., .path = ""})
 #define ROAR_GET(HandlerName) ROAR_ROUTE_I(HandlerName, get)
+
+/// Define route for POST, others can be accessed via ROAR_ROUTE({.verb = ..., .path = ""})
 #define ROAR_POST(HandlerName) ROAR_ROUTE_I(HandlerName, post)
+
+/// Define route for PUT, others can be accessed via ROAR_ROUTE({.verb = ..., .path = ""})
 #define ROAR_PUT(HandlerName) ROAR_ROUTE_I(HandlerName, put)
+
+/// Define route for OPTIONS, others can be accessed via ROAR_ROUTE({.verb = ..., .path = ""})
 #define ROAR_OPTIONS(HandlerName) ROAR_ROUTE_I(HandlerName, options)
+
+/// Define route for TRACE, others can be accessed via ROAR_ROUTE({.verb = ..., .path = ""})
 #define ROAR_TRACE(HandlerName) ROAR_ROUTE_I(HandlerName, trace)
+
+/// Define route for HEAD, others can be accessed via ROAR_ROUTE({.verb = ..., .path = ""})
 #define ROAR_HEAD(HandlerName) ROAR_ROUTE_I(HandlerName, head)
+
+/// Define route for DELETE, others can be accessed via ROAR_ROUTE({.verb = ..., .path = ""})
 #define ROAR_DELETE(HandlerName) ROAR_ROUTE_I(HandlerName, delete_)
 
 } // namespace Roar

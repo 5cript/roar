@@ -31,7 +31,7 @@ namespace Roar
         struct ConstructionArguments
         {
             /// Required io executor for boost::asio.
-            boost::asio::any_io_executor& executor;
+            boost::asio::any_io_executor executor;
 
             /// Supply for SSL support.
             std::optional<boost::asio::ssl::context> sslContext;

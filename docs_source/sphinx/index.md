@@ -11,11 +11,20 @@ home
 
 ```{toctree}
 ---
-   caption: HTTP Utilities
+   caption: HTTP
    glob:
    hidden:
 ---
 http/*
+```
+
+```{toctree}
+---
+   caption: Websocket
+   glob:
+   hidden:
+---
+websocket/*
 ```
 
 [Start Here](home.md)

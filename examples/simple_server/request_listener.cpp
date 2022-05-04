@@ -2,14 +2,11 @@
 
 #include <iostream>
 
+using namespace boost::beast::http;
+
 void RequestListener::index(Roar::Session& session, Roar::EmptyBodyRequest&& request)
 {
-    session.template prepareResponse<boost::beast::http::string_body>(request)
-        .contentType("text/plain")
-        .status(boost::beast::http::status::ok)
-        .body("Hello World!")
-        .preparePayload()
-        .send(session);
+    session.send<string_body>(request)->status(status::ok).contentType("text/plain").body("Hi").commit();
 }
 
 void RequestListener::upload(Roar::Session& session, Roar::EmptyBodyRequest&& request)
@@ -17,7 +14,7 @@ void RequestListener::upload(Roar::Session& session, Roar::EmptyBodyRequest&& re
     using namespace Roar;
     session.template read<boost::beast::http::string_body>(std::move(request))
         ->noBodyLimit()
-        .start()
+        .commit()
         .then([](auto& session, auto const& request) {
             std::cout << request.json().dump() << "\n";
 

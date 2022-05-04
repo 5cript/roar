@@ -92,7 +92,7 @@ namespace Roar::Tests
         using namespace boost::beast::http;
         session.template read<string_body>(std::move(req))
             ->noBodyLimit()
-            .start()
+            .commit()
             .then([](Session& session, Request<string_body> const& req) {
                 session.template prepareResponse<string_body>(req)
                     .contentType("text/plain")
@@ -143,6 +143,6 @@ namespace Roar::Tests
     inline void SimpleRoutes::sendIntermediate(Session& session, EmptyBodyRequest&& req)
     {
         using namespace boost::beast::http;
-        session.send<string_body>(req)->status(status::ok).body("Hi").start();
+        session.send<string_body>(req)->status(status::ok).body("Hi").commit();
     }
 }
