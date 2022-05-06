@@ -13,7 +13,8 @@ var searchData=
   ['home_2emd_10',['home.md',['../home_8md.html',1,'']]],
   ['host_11',['host',['../structRoar_1_1Url_1_1Remote.html#a5e900dca7034d238d25174e9b64b2323',1,'Roar::Url::Remote::host()'],['../structRoar_1_1WebsocketClient_1_1ConnectParameters.html#aa7ce431fcaf35242a9be6d002f224ef0',1,'Roar::WebsocketClient::ConnectParameters::host()'],['../structRoar_1_1WebsocketClient_1_1Implementation.html#ae839395f3a5748f5494beaf336bfde2e',1,'Roar::WebsocketClient::Implementation::host()']]],
   ['html_5fcss_5ffiles_12',['html_css_files',['../namespaceconf.html#a6f28557bb41c23eaa415a2476682af3e',1,'conf']]],
-  ['html_5ftheme_13',['html_theme',['../namespaceconf.html#a6c3bfcc1a44546c1c75ce20f55bd0fd6',1,'conf']]],
-  ['html_5ftheme_5foptions_14',['html_theme_options',['../namespaceconf.html#aeaafa42217d24810edc9b116b88a4585',1,'conf']]],
-  ['http_20server_15',['HTTP Server',['../md_docs_source_sphinx_http_server.html',1,'']]]
+  ['html_5fjs_5ffiles_13',['html_js_files',['../namespaceconf.html#ab6375baea213a912022ee6fe80c17ee8',1,'conf']]],
+  ['html_5ftheme_14',['html_theme',['../namespaceconf.html#a6c3bfcc1a44546c1c75ce20f55bd0fd6',1,'conf']]],
+  ['html_5ftheme_5foptions_15',['html_theme_options',['../namespaceconf.html#aeaafa42217d24810edc9b116b88a4585',1,'conf']]],
+  ['http_20server_16',['HTTP Server',['../md_docs_source_sphinx_http_server.html',1,'']]]
 ];

@@ -67,6 +67,11 @@ $(function() {
 <div class="contents">
 <div class="textblock"><h1><a class="anchor" id="autotoc_md5"></a>
 Tutorial</h1>
+<blockquote class="doxtable">
+<p >&zwj;{sub-ref}<code>today</code> | {sub-ref}<code>wordcount-minutes</code> min read </p>
+</blockquote>
+<h2><a class="anchor" id="autotoc_md6"></a>
+Minimal Setup Example</h2>
 <p >Lets start with the following example: </p><div class="fragment"><div class="line">---</div>
 <div class="line">lineno-start: 1</div>
 <div class="line">caption: Most Minimal Example</div>
@@ -101,7 +106,10 @@ Tutorial</h1>
 <div class="line">}</div>
 </div><!-- fragment --><p> In this example we are creating an asio thread pool for the asynchronous actions of our server, the server itself and then start the server by binding and accepting on port 8081. </p><div class="fragment"><div class="line">Important: The Roar::ScopeExit construct ensures that the threads are shutdown before the server or request listeners are destroyed.</div>
 <div class="line">This way we do not need to ensure their survival in asynchronous handlers and do not need to use shared pointers.</div>
-</div><!-- fragment --><p> This example is not very useful though, because any requests would be greeted by 404. This is where the <a class="el" href="classRequestListener.html">RequestListener</a> concept comes into play. Lets define one: </p><div class="fragment"><div class="line">---</div>
+</div><!-- fragment --><p> This example is not very useful though, because any requests would be greeted by 404. This is where the <a class="el" href="classRequestListener.html">RequestListener</a> concept comes into play.</p>
+<h2><a class="anchor" id="autotoc_md7"></a>
+The Request Listener</h2>
+<p >Lets define one: </p><div class="fragment"><div class="line">---</div>
 <div class="line">lineno-start: 1</div>
 <div class="line">caption: basic_request_listener.hpp</div>
 <div class="line">emphasize-lines: 13, 17</div>
@@ -193,7 +201,7 @@ Tutorial</h1>
 <div class="line">&lt; Content-Length: 2</div>
 <div class="line">&lt;</div>
 <div class="line">Hi* Connection #0 to host localhost left intact</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md6"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md8"></a>
 RequestListener</h1>
 <p >A request listener is a class that maps paths to request handlers. The following snippet shows a more detailed example.</p>
 <div class="fragment"><div class="line">---</div>
@@ -233,13 +241,13 @@ RequestListener</h1>
 <div class="fragment"><div class="line">Head requests are not automatically possible on get requests. Because the library cannot formulate responses without running user code.</div>
 <div class="line">If you want to support head requests, you have to specify them explicitely.</div>
 </div><!-- fragment --><p >The BOOST_DESCRIBE_CLASS macro is used to make generated decorations for the handlers visible to the roar library. Add all routes you have to the last list and prefix them with "roar_". Forgetting them here will result in them not being found.</p>
-<h1><a class="anchor" id="autotoc_md7"></a>
+<h1><a class="anchor" id="autotoc_md9"></a>
 Routing</h1>
 <p >Routing is the process of taking a path and finding the appropriate handler for it. <a class="el" href="namespaceRoar.html">Roar</a> supports two kinds: simple string matches of paths and regex paths.</p>
-<h2><a class="anchor" id="autotoc_md8"></a>
+<h2><a class="anchor" id="autotoc_md10"></a>
 String Paths</h2>
 <p >String paths take precedence over regex paths.</p>
-<h2><a class="anchor" id="autotoc_md9"></a>
+<h2><a class="anchor" id="autotoc_md11"></a>
 Regex Paths</h2>
 <p >Regex routes are taken when a path of a request matches with the given regex. These matches can be obtained in the handler like so:</p>
 <div class="fragment"><div class="line">---</div>
@@ -260,7 +268,7 @@ Regex Paths</h2>
 <div class="line">    // then: matches[0] =&gt; &quot;bla&quot;,</div>
 <div class="line">    //       matches[1] =&gt; &quot;b&quot;</div>
 <div class="line">}</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md10"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md12"></a>
 Sending Responses</h1>
 <p >Here is an example on how to send a response. The session is kept alive over the course of the send operation.</p>
 <div class="fragment"><div class="line">---</div>
@@ -284,7 +292,7 @@ Sending Responses</h1>
 <div class="line">        })</div>
 <div class="line">    ;</div>
 <div class="line">}</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md11"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md13"></a>
 Reading a Body</h1>
 <p >Here is an example on how to read a body. The session is kept alive over the course of the read operation.</p>
 <div class="fragment"><div class="line">---</div>
@@ -312,7 +320,7 @@ Reading a Body</h1>
 <div class="line">                .commit();</div>
 <div class="line">        });</div>
 <div class="line">}</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md12"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md14"></a>
 Rate Limiting</h1>
 <p >Download/Upload speeds can be set on a session using "readLimit" and "writeLimit". <a href="/roar/doxygen/classRoar_1_1Session.html">Session class</a>. </p>
 </div></div><!-- contents -->

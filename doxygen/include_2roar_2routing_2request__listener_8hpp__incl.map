@@ -1,63 +1,64 @@
 <map id="include/roar/routing/request_listener.hpp" name="include/roar/routing/request_listener.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="569,5,823,32"/>
-<area shape="rect" id="node2" href="$proto__route_8hpp.html" title=" " alt="" coords="477,155,659,181"/>
-<area shape="rect" id="node3" title=" " alt="" coords="3058,304,3273,331"/>
-<area shape="rect" id="node6" title=" " alt="" coords="656,304,827,331"/>
-<area shape="rect" id="node7" title=" " alt="" coords="1162,379,1217,405"/>
-<area shape="rect" id="node10" title=" " alt="" coords="831,379,897,405"/>
-<area shape="rect" id="node11" href="$regex_8hpp.html" title=" " alt="" coords="195,229,378,256"/>
-<area shape="rect" id="node13" title=" " alt="" coords="238,304,293,331"/>
-<area shape="rect" id="node15" title=" " alt="" coords="3548,379,3609,405"/>
-<area shape="rect" id="node16" href="$overloaded_8hpp.html" title=" " alt="" coords="784,80,955,107"/>
-<area shape="rect" id="node17" href="$session_8hpp.html" title=" " alt="" coords="3563,80,3730,107"/>
-<area shape="rect" id="node21" title=" " alt="" coords="3436,379,3524,405"/>
-<area shape="rect" id="node39" href="$request_8hpp.html" title=" " alt="" coords="1843,229,1959,256"/>
-<area shape="rect" id="node61" title=" " alt="" coords="3754,80,3921,107"/>
-<area shape="rect" id="node4" href="$cors_8hpp.html" title=" " alt="" coords="893,229,992,256"/>
-<area shape="rect" id="node14" title=" " alt="" coords="3865,379,3943,405"/>
-<area shape="rect" id="node5" title=" " alt="" coords="1038,304,1207,331"/>
-<area shape="rect" id="node8" title=" " alt="" coords="1283,304,1341,331"/>
-<area shape="rect" id="node9" title=" " alt="" coords="952,304,1013,331"/>
-<area shape="rect" id="node12" title=" " alt="" coords="317,304,379,331"/>
-<area shape="rect" id="node18" href="$error_8hpp.html" title=" " alt="" coords="3788,304,3887,331"/>
-<area shape="rect" id="node19" href="$forward_8hpp.html" title=" " alt="" coords="3968,379,4120,405"/>
-<area shape="rect" id="node22" href="$websocket__session_8hpp.html" title=" " alt="" coords="4707,155,4962,181"/>
-<area shape="rect" id="node23" href="$pimpl__special__functions_8hpp.html" title=" " alt="" coords="4235,229,4482,256"/>
-<area shape="rect" id="node25" title=" " alt="" coords="4113,304,4183,331"/>
-<area shape="rect" id="node28" href="$promise__compat_8hpp.html" title=" " alt="" coords="4487,304,4691,331"/>
-<area shape="rect" id="node29" title=" " alt="" coords="4645,379,4813,405"/>
-<area shape="rect" id="node30" href="$stream__type_8hpp.html" title=" " alt="" coords="5583,304,5763,331"/>
-<area shape="rect" id="node31" title=" " alt="" coords="5745,379,5959,405"/>
-<area shape="rect" id="node35" title=" " alt="" coords="5303,304,5507,331"/>
-<area shape="rect" id="node38" href="$response_8hpp.html" title=" " alt="" coords="3346,155,3473,181"/>
-<area shape="rect" id="node40" title=" " alt="" coords="2835,304,3034,331"/>
-<area shape="rect" id="node52" href="$memory_8hpp.html" title=" " alt="" coords="3549,155,3745,181"/>
-<area shape="rect" id="node53" href="$standard__response__provider_8hpp.html" title=" " alt="" coords="2985,229,3221,256"/>
-<area shape="rect" id="node55" href="$void__body_8hpp.html" title=" " alt="" coords="1045,229,1208,256"/>
-<area shape="rect" id="node56" title=" " alt="" coords="3769,155,3951,181"/>
-<area shape="rect" id="node57" title=" " alt="" coords="3975,155,4148,181"/>
-<area shape="rect" id="node58" title=" " alt="" coords="4324,155,4495,181"/>
-<area shape="rect" id="node59" title=" " alt="" coords="4519,155,4580,181"/>
-<area shape="rect" id="node60" title=" " alt="" coords="4605,155,4683,181"/>
-<area shape="rect" id="node20" title=" " alt="" coords="3634,379,3841,405"/>
-<area shape="rect" id="node24" href="$shared__from__base_8hpp.html" title=" " alt="" coords="4658,229,4873,256"/>
-<area shape="rect" id="node26" href="$websocket__base_8hpp.html" title=" " alt="" coords="4949,229,5187,256"/>
-<area shape="rect" id="node27" href="$read__result_8hpp.html" title=" " alt="" coords="4207,304,4411,331"/>
-<area shape="rect" id="node36" title=" " alt="" coords="4767,304,4950,331"/>
-<area shape="rect" id="node37" title=" " alt="" coords="4975,304,5177,331"/>
-<area shape="rect" id="node32" title=" " alt="" coords="5113,379,5324,405"/>
-<area shape="rect" id="node33" title=" " alt="" coords="5347,379,5490,405"/>
-<area shape="rect" id="node34" title=" " alt="" coords="5514,379,5721,405"/>
-<area shape="rect" id="node47" href="$first__type_8hpp.html" title=" " alt="" coords="3682,229,3937,256"/>
-<area shape="rect" id="node48" title=" " alt="" coords="3553,304,3764,331"/>
-<area shape="rect" id="node49" title=" " alt="" coords="3396,229,3479,256"/>
-<area shape="rect" id="node50" title=" " alt="" coords="3503,229,3571,256"/>
-<area shape="rect" id="node51" title=" " alt="" coords="3595,229,3658,256"/>
-<area shape="rect" id="node41" title=" " alt="" coords="2078,304,2330,331"/>
-<area shape="rect" id="node42" title=" " alt="" coords="2354,304,2587,331"/>
-<area shape="rect" id="node43" title=" " alt="" coords="2612,304,2812,331"/>
-<area shape="rect" id="node44" title=" " alt="" coords="1466,304,1665,331"/>
-<area shape="rect" id="node45" title=" " alt="" coords="1689,304,1919,331"/>
-<area shape="rect" id="node46" title=" " alt="" coords="1943,304,2054,331"/>
-<area shape="rect" id="node54" title=" " alt="" coords="3297,304,3479,331"/>
+<area shape="rect" id="node1" title=" " alt="" coords="839,5,1092,32"/>
+<area shape="rect" id="node2" href="$proto__route_8hpp.html" title=" " alt="" coords="747,155,928,181"/>
+<area shape="rect" id="node3" title=" " alt="" coords="2870,304,3085,331"/>
+<area shape="rect" id="node6" title=" " alt="" coords="224,304,395,331"/>
+<area shape="rect" id="node7" title=" " alt="" coords="651,379,706,405"/>
+<area shape="rect" id="node10" title=" " alt="" coords="399,379,465,405"/>
+<area shape="rect" id="node11" href="$regex_8hpp.html" title=" " alt="" coords="355,229,538,256"/>
+<area shape="rect" id="node13" title=" " alt="" coords="145,304,199,331"/>
+<area shape="rect" id="node15" title=" " alt="" coords="3793,379,3855,405"/>
+<area shape="rect" id="node16" href="$overloaded_8hpp.html" title=" " alt="" coords="1053,80,1224,107"/>
+<area shape="rect" id="node17" href="$session_8hpp.html" title=" " alt="" coords="3945,80,4111,107"/>
+<area shape="rect" id="node21" title=" " alt="" coords="4327,379,4415,405"/>
+<area shape="rect" id="node39" href="$request_8hpp.html" title=" " alt="" coords="1758,229,1874,256"/>
+<area shape="rect" id="node62" title=" " alt="" coords="4591,80,4758,107"/>
+<area shape="rect" id="node4" href="$cors_8hpp.html" title=" " alt="" coords="653,229,752,256"/>
+<area shape="rect" id="node14" title=" " alt="" coords="2263,379,2342,405"/>
+<area shape="rect" id="node5" title=" " alt="" coords="657,304,826,331"/>
+<area shape="rect" id="node8" title=" " alt="" coords="1003,304,1061,331"/>
+<area shape="rect" id="node9" title=" " alt="" coords="571,304,632,331"/>
+<area shape="rect" id="node12" title=" " alt="" coords="2251,304,2312,331"/>
+<area shape="rect" id="node18" href="$error_8hpp.html" title=" " alt="" coords="4052,304,4151,331"/>
+<area shape="rect" id="node19" href="$forward_8hpp.html" title=" " alt="" coords="4151,379,4303,405"/>
+<area shape="rect" id="node22" href="$websocket__session_8hpp.html" title=" " alt="" coords="5194,155,5449,181"/>
+<area shape="rect" id="node23" href="$pimpl__special__functions_8hpp.html" title=" " alt="" coords="4590,229,4837,256"/>
+<area shape="rect" id="node25" title=" " alt="" coords="5575,304,5644,331"/>
+<area shape="rect" id="node28" href="$promise__compat_8hpp.html" title=" " alt="" coords="4277,304,4481,331"/>
+<area shape="rect" id="node29" title=" " alt="" coords="5072,379,5240,405"/>
+<area shape="rect" id="node30" href="$stream__type_8hpp.html" title=" " alt="" coords="5821,304,6001,331"/>
+<area shape="rect" id="node31" title=" " alt="" coords="5568,379,5781,405"/>
+<area shape="rect" id="node35" title=" " alt="" coords="5346,304,5550,331"/>
+<area shape="rect" id="node38" href="$response_8hpp.html" title=" " alt="" coords="3099,155,3226,181"/>
+<area shape="rect" id="node40" title=" " alt="" coords="3109,304,3307,331"/>
+<area shape="rect" id="node53" href="$memory_8hpp.html" title=" " alt="" coords="3250,155,3446,181"/>
+<area shape="rect" id="node54" href="$standard__response__provider_8hpp.html" title=" " alt="" coords="3146,229,3382,256"/>
+<area shape="rect" id="node56" href="$void__body_8hpp.html" title=" " alt="" coords="2757,229,2920,256"/>
+<area shape="rect" id="node57" title=" " alt="" coords="3471,155,3652,181"/>
+<area shape="rect" id="node58" title=" " alt="" coords="3676,155,3849,181"/>
+<area shape="rect" id="node59" title=" " alt="" coords="3873,155,4044,181"/>
+<area shape="rect" id="node60" title=" " alt="" coords="4068,155,4129,181"/>
+<area shape="rect" id="node61" title=" " alt="" coords="4154,155,4233,181"/>
+<area shape="rect" id="node20" title=" " alt="" coords="3919,379,4126,405"/>
+<area shape="rect" id="node24" href="$shared__from__base_8hpp.html" title=" " alt="" coords="5327,229,5542,256"/>
+<area shape="rect" id="node26" href="$websocket__base_8hpp.html" title=" " alt="" coords="4911,229,5150,256"/>
+<area shape="rect" id="node27" href="$read__result_8hpp.html" title=" " alt="" coords="3823,304,4027,331"/>
+<area shape="rect" id="node36" title=" " alt="" coords="4709,304,4891,331"/>
+<area shape="rect" id="node37" title=" " alt="" coords="4916,304,5119,331"/>
+<area shape="rect" id="node32" title=" " alt="" coords="5805,379,6016,405"/>
+<area shape="rect" id="node33" title=" " alt="" coords="6039,379,6182,405"/>
+<area shape="rect" id="node34" title=" " alt="" coords="6206,379,6413,405"/>
+<area shape="rect" id="node48" href="$first__type_8hpp.html" title=" " alt="" coords="3406,229,3661,256"/>
+<area shape="rect" id="node49" title=" " alt="" coords="3537,304,3748,331"/>
+<area shape="rect" id="node50" title=" " alt="" coords="3685,229,3768,256"/>
+<area shape="rect" id="node51" title=" " alt="" coords="3793,229,3861,256"/>
+<area shape="rect" id="node52" title=" " alt="" coords="3885,229,3947,256"/>
+<area shape="rect" id="node41" title=" " alt="" coords="1974,304,2226,331"/>
+<area shape="rect" id="node42" title=" " alt="" coords="2337,304,2570,331"/>
+<area shape="rect" id="node43" title=" " alt="" coords="2595,304,2795,331"/>
+<area shape="rect" id="node44" title=" " alt="" coords="1186,304,1385,331"/>
+<area shape="rect" id="node45" title=" " alt="" coords="1409,304,1639,331"/>
+<area shape="rect" id="node46" title=" " alt="" coords="1663,304,1815,331"/>
+<area shape="rect" id="node47" title=" " alt="" coords="1839,304,1950,331"/>
+<area shape="rect" id="node55" title=" " alt="" coords="3332,304,3513,331"/>
 </map>

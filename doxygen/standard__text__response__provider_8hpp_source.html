@@ -84,13 +84,14 @@ $(function() {
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>            <span class="comment">// TODO: this once used prepareReply, can do better.</span></div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>            <span class="keyword">auto</span> res = boost::beast::http::response&lt;boost::beast::http::string_body&gt;(status, 11);</div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>            res.set(boost::beast::http::field::content_type, <span class="stringliteral">&quot;text/html&quot;</span>);</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>            <span class="keywordflow">if</span> (status != boost::beast::http::status::no_content)</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>                res.body() = std::string{obsolete_reason(status)} + <span class="stringliteral">&quot;\n&quot;</span> + std::string{additionalInfo};</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>            res.prepare_payload();</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>            <span class="keywordflow">return</span> res;</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        }</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    };</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>}</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>            res.set(boost::beast::http::field::connection, <span class="stringliteral">&quot;close&quot;</span>);</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>            <span class="keywordflow">if</span> (status != boost::beast::http::status::no_content)</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>                res.body() = std::string{obsolete_reason(status)} + <span class="stringliteral">&quot;\n&quot;</span> + std::string{additionalInfo};</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>            res.prepare_payload();</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>            <span class="keywordflow">return</span> res;</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        }</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    };</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>}</div>
 <div class="ttc" id="aclassRoar_1_1Session_html"><div class="ttname"><a href="classRoar_1_1Session.html">Roar::Session</a></div><div class="ttdef"><b>Definition:</b> session.hpp:37</div></div>
 <div class="ttc" id="aclassRoar_1_1StandardResponseProvider_html"><div class="ttname"><a href="classRoar_1_1StandardResponseProvider.html">Roar::StandardResponseProvider</a></div><div class="ttdoc">Implement your own StandardResponseProvider to make custom 404 pages etc.</div><div class="ttdef"><b>Definition:</b> standard_response_provider.hpp:21</div></div>
 <div class="ttc" id="aclassRoar_1_1StandardTextResponseProvider_html"><div class="ttname"><a href="classRoar_1_1StandardTextResponseProvider.html">Roar::StandardTextResponseProvider</a></div><div class="ttdoc">This standard response provider implementation produces very simple text responses.</div><div class="ttdef"><b>Definition:</b> standard_text_response_provider.hpp:11</div></div>

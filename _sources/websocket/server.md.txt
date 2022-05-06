@@ -1,6 +1,6 @@
 # Websocket Server
 
-There is no pure websocket server. Instead you have to setup an http server and use upgrade your session to a websocket session.
+There is no pure websocket server. Instead you have to setup an http server and upgrade your session to a websocket session.
 Here is an example:
 
 ```{code-block} c++

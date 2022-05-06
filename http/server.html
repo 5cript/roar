@@ -18,13 +18,14 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/js/custom.js"></script>
         <script src="../_static/dark_mode_js/default_dark.js"></script>
         <script src="../_static/dark_mode_js/theme_switcher.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Websocket Client" href="../websocket/client.html" />
-    <link rel="prev" title="Curl" href="curl.html" />
+    <link rel="next" title="Curl" href="curl.html" />
+    <link rel="prev" title="The Roar Networking Library" href="../home.html" />
 <link href="../ _static/override.css" rel="stylesheet" type="text/css">
 
 </head>
@@ -53,9 +54,12 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">HTTP</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="curl.html">Curl</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">HTTP Server</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#tutorial">Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tutorial">Tutorial</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#minimal-setup-example">Minimal Setup Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-request-listener">The Request Listener</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#requestlistener">RequestListener</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#routing">Routing</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#string-paths">String Paths</a></li>
@@ -67,11 +71,21 @@
 <li class="toctree-l2"><a class="reference internal" href="#rate-limiting">Rate Limiting</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="curl.html">Curl</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Websocket</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../websocket/client.html">Websocket Client</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../websocket/server.html">Websocket Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../websocket/client.html">Websocket Client</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Dependencies</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../libraries.html">Depdendencies</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../libraries.html#xhawk18-promise-cpp">Xhawk18 promise-cpp:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../libraries.html#googletest">googletest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../libraries.html#boost">boost</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -102,6 +116,11 @@
 <h1>HTTP Server<a class="headerlink" href="#http-server" title="Permalink to this headline"></a></h1>
 <section id="tutorial">
 <h2>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline"></a></h2>
+<blockquote>
+<div><p>May 06, 2022 | 2 min read</p>
+</div></blockquote>
+<section id="minimal-setup-example">
+<h3>Minimal Setup Example<a class="headerlink" href="#minimal-setup-example" title="Permalink to this headline"></a></h3>
 <p>Lets start with the following example:</p>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">Most Minimal Example</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
@@ -144,8 +163,11 @@ the server itself and then start the server by binding and accepting on port 808
 This way we do not need to ensure their survival in asynchronous handlers and do not need to use shared pointers.</p>
 </div>
 <p>This example is not very useful though, because any requests would be greeted by 404.
-This is where the RequestListener concept comes into play.
-Lets define one:</p>
+This is where the RequestListener concept comes into play.</p>
+</section>
+<section id="the-request-listener">
+<h3>The Request Listener<a class="headerlink" href="#the-request-listener" title="Permalink to this headline"></a></h3>
+<p>Lets define one:</p>
 <div class="literal-block-wrapper docutils container" id="id2">
 <div class="code-block-caption"><span class="caption-text">basic_request_listener.hpp</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#pragma once</span>
@@ -246,6 +268,7 @@ Doxygen about all defined macros:
 </pre></div>
 </div>
 </div>
+</section>
 </section>
 <section id="requestlistener">
 <h2>RequestListener<a class="headerlink" href="#requestlistener" title="Permalink to this headline"></a></h2>
@@ -397,8 +420,8 @@ The session is kept alive over the course of the read operation.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="curl.html" class="btn btn-neutral float-left" title="Curl" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../websocket/client.html" class="btn btn-neutral float-right" title="Websocket Client" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../home.html" class="btn btn-neutral float-left" title="The Roar Networking Library" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="curl.html" class="btn btn-neutral float-right" title="Curl" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

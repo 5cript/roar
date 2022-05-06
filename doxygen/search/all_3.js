@@ -6,5 +6,6 @@ var searchData=
   ['defaultheaderlimit_3',['defaultHeaderLimit',['../classRoar_1_1Session.html#ad98bef3f572044a21aa7e101ddbf67f2',1,'Roar::Session']]],
   ['defaulttimeout_4',['defaultTimeout',['../classRoar_1_1WebsocketClient.html#a7551ccaf8b7375e64a67eda2d9950ae8',1,'Roar::WebsocketClient']]],
   ['del_5',['del',['../classRoar_1_1Curl_1_1Request.html#a55f0323ee56145f00496179ef5f95aab',1,'Roar::Curl::Request']]],
-  ['diffiehellmanparameters_6',['diffieHellmanParameters',['../structRoar_1_1SslContextCreationParameters.html#a628da0f738788548cbdc71778954cc69',1,'Roar::SslContextCreationParameters']]]
+  ['depdendencies_6',['Depdendencies',['../md_docs_source_sphinx_libraries.html',1,'']]],
+  ['diffiehellmanparameters_7',['diffieHellmanParameters',['../structRoar_1_1SslContextCreationParameters.html#a628da0f738788548cbdc71778954cc69',1,'Roar::SslContextCreationParameters']]]
 ];

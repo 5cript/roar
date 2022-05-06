@@ -18,12 +18,13 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/js/custom.js"></script>
         <script src="_static/dark_mode_js/default_dark.js"></script>
         <script src="_static/dark_mode_js/theme_switcher.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Curl" href="http/curl.html" />
+    <link rel="next" title="HTTP Server" href="http/server.html" />
     <link rel="prev" title="&lt;no title&gt;" href="index.html" />
 <link href=" _static/override.css" rel="stylesheet" type="text/css">
 
@@ -53,9 +54,12 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">HTTP</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="http/curl.html">Curl</a></li>
 <li class="toctree-l1"><a class="reference internal" href="http/server.html">HTTP Server</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="http/server.html#tutorial">Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="http/server.html#tutorial">Tutorial</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="http/server.html#minimal-setup-example">Minimal Setup Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="http/server.html#the-request-listener">The Request Listener</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="http/server.html#requestlistener">RequestListener</a></li>
 <li class="toctree-l2"><a class="reference internal" href="http/server.html#routing">Routing</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="http/server.html#string-paths">String Paths</a></li>
@@ -67,11 +71,21 @@
 <li class="toctree-l2"><a class="reference internal" href="http/server.html#rate-limiting">Rate Limiting</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="http/curl.html">Curl</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Websocket</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="websocket/client.html">Websocket Client</a></li>
 <li class="toctree-l1"><a class="reference internal" href="websocket/server.html">Websocket Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="websocket/client.html">Websocket Client</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Dependencies</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="libraries.html">Depdendencies</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="libraries.html#xhawk18-promise-cpp">Xhawk18 promise-cpp:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="libraries.html#googletest">googletest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="libraries.html#boost">boost</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -100,9 +114,6 @@
              
   <section id="the-roar-networking-library">
 <h1>The Roar Networking Library<a class="headerlink" href="#the-roar-networking-library" title="Permalink to this headline"></a></h1>
-<blockquote>
-<div><p>May 04, 2022 | 0 min read</p>
-</div></blockquote>
 <p>The Roar network library provides the following:
 - A HTTPS server with Websocket capabilities built on top of boost beast.
 - A curl http client wrapper.
@@ -123,7 +134,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="index.html" class="btn btn-neutral float-left" title="&lt;no title&gt;" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="http/curl.html" class="btn btn-neutral float-right" title="Curl" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="http/server.html" class="btn btn-neutral float-right" title="HTTP Server" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -116,9 +116,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aeecd5f8b4761b58f245dc0ca0a46cc74"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketBase.html#aeecd5f8b4761b58f245dc0ca0a46cc74">binary</a> () const</td></tr>
 <tr class="memdesc:aeecd5f8b4761b58f245dc0ca0a46cc74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the binary message write option is set.  <a href="classRoar_1_1WebsocketBase.html#aeecd5f8b4761b58f245dc0ca0a46cc74">More...</a><br /></td></tr>
 <tr class="separator:aeecd5f8b4761b58f245dc0ca0a46cc74"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6442aa1693b7d2de17be5953469feb4"><td class="memItemLeft" align="right" valign="top">promise::Promise&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketBase.html#ae6442aa1693b7d2de17be5953469feb4">send</a> (std::string message)</td></tr>
-<tr class="memdesc:ae6442aa1693b7d2de17be5953469feb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends a string to the server.  <a href="classRoar_1_1WebsocketBase.html#ae6442aa1693b7d2de17be5953469feb4">More...</a><br /></td></tr>
-<tr class="separator:ae6442aa1693b7d2de17be5953469feb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab95433028c78cf57b52035afb41dd0e7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Detail_1_1PromiseTypeBind.html">Detail::PromiseTypeBind</a>&lt; <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindThen.html">Detail::PromiseTypeBindThen</a>&lt; std::size_t &gt;, <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindFail.html">Detail::PromiseTypeBindFail</a>&lt; <a class="el" href="structRoar_1_1Error.html">Error</a> const &amp; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketBase.html#ab95433028c78cf57b52035afb41dd0e7">send</a> (std::string message)</td></tr>
+<tr class="memdesc:ab95433028c78cf57b52035afb41dd0e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends a string to the server.  <a href="classRoar_1_1WebsocketBase.html#ab95433028c78cf57b52035afb41dd0e7">More...</a><br /></td></tr>
+<tr class="separator:ab95433028c78cf57b52035afb41dd0e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ae82e00019e2e6faed14b5ffc9d305c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Detail_1_1PromiseTypeBind.html">Detail::PromiseTypeBind</a>&lt; <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindThen.html">Detail::PromiseTypeBindThen</a>&lt; <a class="el" href="structRoar_1_1WebsocketReadResult.html">WebsocketReadResult</a> &gt;, <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindFail.html">Detail::PromiseTypeBindFail</a>&lt; <a class="el" href="structRoar_1_1Error.html">Error</a> const &amp; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1WebsocketBase.html#a0ae82e00019e2e6faed14b5ffc9d305c">read</a> ()</td></tr>
 <tr class="memdesc:a0ae82e00019e2e6faed14b5ffc9d305c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads something from the server.  <a href="classRoar_1_1WebsocketBase.html#a0ae82e00019e2e6faed14b5ffc9d305c">More...</a><br /></td></tr>
 <tr class="separator:a0ae82e00019e2e6faed14b5ffc9d305c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -439,7 +439,7 @@ false Returns false when the timeout was reached. </dd></dl>
 </div><div class="memdoc">
 
 <p>Reads something from the server. </p>
-<dl class="section return"><dt>Returns</dt><dd>promise::Promise Promise::then is called with a <a class="el" href="structRoar_1_1WebsocketReadResult.html">WebsocketReadResult</a>, Promise::fail with a <a class="el" href="structRoar_1_1Error.html" title="Holds errors that are produced asynchronously anywhere.">Roar::Error</a>. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A promise to continue after reading </dd></dl>
 
 </div>
 </div>
@@ -489,14 +489,14 @@ false Returns false when the timeout was reached. </dd></dl>
 
 </div>
 </div>
-<a id="ae6442aa1693b7d2de17be5953469feb4" name="ae6442aa1693b7d2de17be5953469feb4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae6442aa1693b7d2de17be5953469feb4">&#9670;&nbsp;</a></span>send()</h2>
+<a id="ab95433028c78cf57b52035afb41dd0e7" name="ab95433028c78cf57b52035afb41dd0e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab95433028c78cf57b52035afb41dd0e7">&#9670;&nbsp;</a></span>send()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">promise::Promise Roar::WebsocketBase::send </td>
+          <td class="memname"><a class="el" href="classRoar_1_1Detail_1_1PromiseTypeBind.html">Detail::PromiseTypeBind</a>&lt; <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindThen.html">Detail::PromiseTypeBindThen</a>&lt; std::size_t &gt;, <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindFail.html">Detail::PromiseTypeBindFail</a>&lt; <a class="el" href="structRoar_1_1Error.html">Error</a> const &amp; &gt; &gt; Roar::WebsocketBase::send </td>
           <td>(</td>
           <td class="paramtype">std::string&#160;</td>
           <td class="paramname"><em>message</em></td><td>)</td>
@@ -512,7 +512,7 @@ false Returns false when the timeout was reached. </dd></dl>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>promise::Promise Promise::then is called with the amount of bytes sent, Promise::fail with a <a class="el" href="structRoar_1_1Error.html" title="Holds errors that are produced asynchronously anywhere.">Roar::Error</a>. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A promise that is called with the amount of bytes sent, Promise::fail with a <a class="el" href="structRoar_1_1Error.html" title="Holds errors that are produced asynchronously anywhere.">Roar::Error</a>. </dd></dl>
 
 </div>
 </div>

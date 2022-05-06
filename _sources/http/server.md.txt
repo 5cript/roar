@@ -2,6 +2,10 @@
 
 ## Tutorial
 
+> {sub-ref}`today` | {sub-ref}`wordcount-minutes` min read
+
+### Minimal Setup Example
+
 Lets start with the following example:
 ```{code-block} c++
 ---
@@ -45,6 +49,9 @@ This way we do not need to ensure their survival in asynchronous handlers and do
 ```
 This example is not very useful though, because any requests would be greeted by 404.
 This is where the RequestListener concept comes into play.
+
+### The Request Listener
+
 Lets define one:
 ```{code-block} c++
 ---

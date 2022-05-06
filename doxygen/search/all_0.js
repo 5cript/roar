@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['accept_0',['accept',['../classRoar_1_1WebsocketSession.html#a38c85e37074b99021909f33d3c080064',1,'Roar::WebsocketSession']]],
+  ['accept_0',['accept',['../classRoar_1_1WebsocketSession.html#a94dd097a52881a96389a7359924e939a',1,'Roar::WebsocketSession']]],
   ['acceptencoding_1',['acceptEncoding',['../classRoar_1_1Curl_1_1Request.html#a90aa0f984b45e03db77f63531449df90',1,'Roar::Curl::Request']]],
   ['acceptonce_2',['acceptOnce',['../structRoar_1_1Server_1_1Implementation.html#ac6f04d86073410efba17a87d2d90dfbd',1,'Roar::Server::Implementation']]],
   ['acceptor_3',['acceptor',['../structRoar_1_1Server_1_1Implementation.html#a0a1cdced501c455b936fb20401c65379',1,'Roar::Server::Implementation']]],
@@ -14,5 +14,5 @@ var searchData=
   ['allowunsecure_11',['allowUnsecure',['../structRoar_1_1RouteOptions.html#a38e05ab33daa7bfa2699a49d345cf218',1,'Roar::RouteOptions']]],
   ['author_12',['author',['../namespaceconf.html#a637c239d256432248aa8d9f3ab0b8c52',1,'conf']]],
   ['autofragment_13',['autoFragment',['../classRoar_1_1WebsocketBase.html#ad9d0343f4512f91e04e9b4d0094f3c5a',1,'Roar::WebsocketBase::autoFragment(bool enable)'],['../classRoar_1_1WebsocketBase.html#aa187a12dce747e5ce167a3b8c2ad9c61',1,'Roar::WebsocketBase::autoFragment() const']]],
-  ['awaitclientclose_14',['awaitClientClose',['../classRoar_1_1Session.html#ae2b20a1b72999a36f64d74006839ed38',1,'Roar::Session']]]
+  ['awaitclientclose_14',['awaitClientClose',['../classRoar_1_1Session.html#a72a62c5c8d71a96b9ead989ae2c42f3f',1,'Roar::Session']]]
 ];
