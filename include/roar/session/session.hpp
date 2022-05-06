@@ -107,6 +107,7 @@ namespace Roar
             SendIntermediate& body(T&& toAssign)
             {
                 response_.body() = std::forward<T>(toAssign);
+                preparePayload();
                 return *this;
             }
 
@@ -162,12 +163,17 @@ namespace Roar
                 return *this;
             }
 
+            void preparePayload()
+            {
+                response_.preparePayload();
+            }
+
             /**
              * @brief Sends the response and invalidates this object
              */
-            promise::Promise commit()
+            Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error const&>>
+            commit()
             {
-                response_.preparePayload();
                 return session_->send(std::move(response_));
             }
 
@@ -190,7 +196,8 @@ namespace Roar
          * @return Returns a promise that resolves with whether or not the connection was auto-closed.
          */
         template <typename BodyT>
-        promise::Promise send(boost::beast::http::response<BodyT>&& response)
+        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error const&>>
+        send(boost::beast::http::response<BodyT>&& response)
         {
             return promise::newPromise([&, this](promise::Defer d) {
                 withStreamDo([this, &response, &d](auto& stream) {
@@ -200,9 +207,8 @@ namespace Roar
                         *res,
                         [self = shared_from_this(), res = std::move(res), d](
                             boost::beast::error_code ec, std::size_t bytesTransferred) {
-                            auto wasClosed = self->onWriteComplete(res->need_eof(), ec, bytesTransferred);
                             if (!ec)
-                                d.resolve(wasClosed);
+                                d.resolve(self->onWriteComplete(res->need_eof(), ec, bytesTransferred));
                             else
                                 d.reject(Error{.error = ec, .additionalInfo = "Failed to send response"});
                         });
@@ -217,7 +223,8 @@ namespace Roar
          * @param response A response object.
          */
         template <typename BodyT>
-        promise::Promise send(Response<BodyT>&& response)
+        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error const&>>
+        send(Response<BodyT>&& response)
         {
             return std::move(response).send(*this);
         }

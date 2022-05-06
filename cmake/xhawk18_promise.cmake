@@ -12,4 +12,6 @@ FetchContent_MakeAvailable(promise)
 if (WIN32)
   # MS SOCK
   target_link_libraries(promise PUBLIC -lws2_32 -lmswsock -lbcrypt)
+
+  target_compile_definitions(promise PUBLIC -DPROMISE_MULTITHREAD=1)
 endif()

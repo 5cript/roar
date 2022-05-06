@@ -16,6 +16,7 @@ namespace Roar
             // TODO: this once used prepareReply, can do better.
             auto res = boost::beast::http::response<boost::beast::http::string_body>(status, 11);
             res.set(boost::beast::http::field::content_type, "text/html");
+            res.set(boost::beast::http::field::connection, "close");
             if (status != boost::beast::http::status::no_content)
                 res.body() = std::string{obsolete_reason(status)} + "\n" + std::string{additionalInfo};
             res.prepare_payload();

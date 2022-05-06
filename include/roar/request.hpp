@@ -7,6 +7,7 @@
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/beast/websocket/rfc6455.hpp>
+#include <boost/lexical_cast.hpp>
 
 #ifdef ROAR_ENABLE_NLOHMANN_JSON
 #    include <nlohmann/json.hpp>
@@ -161,6 +162,25 @@ namespace Roar
             return {.regexMatches_ = std::move(regexMatches_), .path_ = std::move(path_), .query_ = std::move(query_)};
         }
 #endif
+
+        bool expectsContinue() const
+        {
+            auto iter = this->find(boost::beast::http::field::expect);
+            if (iter == std::end(*this))
+                return false;
+            else
+                return iter->value() == "100-continue";
+        }
+
+        std::optional<std::size_t> contentLength() const
+        {
+            bool allow = false;
+            auto contentLength = this->find("Content-Length");
+            if (contentLength == std::end(*this))
+                return std::nullopt;
+            else
+                return boost::lexical_cast<std::size_t>(contentLength->value());
+        }
 
       private:
         /**

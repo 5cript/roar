@@ -1,5 +1,6 @@
-#pragma once
+1 #pragma once
 
+#include <roar/detail/promise_compat.hpp>
 #include <roar/cors.hpp>
 #include <roar/request.hpp>
 #include <roar/detail/template_utility/first_type.hpp>
@@ -16,7 +17,7 @@
 #include <numeric>
 #include <iterator>
 
-namespace Roar
+    namespace Roar
 {
     template <typename BodyT>
     class Response
@@ -215,7 +216,8 @@ namespace Roar
          * @param session The session to send this on.
          */
         template <typename SessionT>
-        promise::Promise send(SessionT& session)
+        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error const&>>
+        send(SessionT& session)
         {
             return session.send(std::move(response_));
         }
@@ -227,7 +229,8 @@ namespace Roar
          * @param session The session to send this on.
          */
         template <typename SessionT>
-        promise::Promise send(std::shared_ptr<SessionT>& session)
+        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error const&>>
+        send(std::shared_ptr<SessionT>& session)
         {
             return session->send(std::move(response_));
         }

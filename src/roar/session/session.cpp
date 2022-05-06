@@ -238,9 +238,6 @@ namespace Roar
     //------------------------------------------------------------------------------------------------------------------
     bool Session::onWriteComplete(bool expectsClose, boost::beast::error_code ec, std::size_t)
     {
-        if (ec && ec != boost::beast::http::error::end_of_stream)
-            impl_->onError({.error = ec, .additionalInfo = "Error during write."});
-
         if (ec || expectsClose)
         {
             close();
