@@ -15,7 +15,8 @@ home
    glob:
    hidden:
 ---
-http/*
+http/server.md
+http/curl.md
 ```
 
 ```{toctree}
@@ -24,7 +25,15 @@ http/*
    glob:
    hidden:
 ---
-websocket/*
+websocket/server.md
+websocket/client.md
 ```
 
-[Start Here](home.md)
+```{toctree}
+---
+   caption: Dependencies
+   glob:
+   hidden:
+---
+libraries.md
+```

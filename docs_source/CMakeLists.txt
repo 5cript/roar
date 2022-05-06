@@ -34,7 +34,7 @@ add_custom_command(
 add_custom_command(
     OUTPUT ${SPHINX_INDEX_FILE}
     DEPENDS ${SPHINX_DIR}
-    DEPENDS ${DOXYGEN_INDEX_FILE}
+    # DEPENDS ${DOXYGEN_INDEX_FILE}
     COMMAND sphinx-build -M "html" "${CMAKE_CURRENT_SOURCE_DIR}/sphinx"
             "${DOCS_DIR}"
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${SPHINX_DIR}/html ${DOCS_DIR}
@@ -49,6 +49,6 @@ add_custom_target(
             "${DOCS_DIR}/.nojekyll"
   DEPENDS ${SPHINX_INDEX_FILE})
 
-  add_custom_target(
+add_custom_target(
     doxygen
     DEPENDS ${DOXYGEN_INDEX_FILE})
