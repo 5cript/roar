@@ -42,4 +42,15 @@ void RequestListener::putHere(Roar::Session& session, Roar::EmptyBodyRequest&& r
                 });
         }
     }
+    else
+    {
+        session.send<string_body>(request)
+            ->status(status::expectation_failed)
+            .setHeader(field::connection, "close")
+            .body("Set Expect: 100-continue")
+            .commit()
+            .fail([](Roar::Error const&) {
+                std::cout << "Failed to send expectation failure.\n";
+            });
+    }
 }
