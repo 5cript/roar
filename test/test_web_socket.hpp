@@ -100,7 +100,7 @@ namespace Roar::Tests
             .then([&synchronizer]() {
                 synchronizer.set_value(true);
             })
-            .fail([&synchronizer](boost::beast::error_code ec) {
+            .fail([&synchronizer](auto ec) {
                 synchronizer.set_value(false);
             });
 
@@ -128,7 +128,7 @@ namespace Roar::Tests
             .then([&synchronizer]() {
                 synchronizer.set_value(true);
             })
-            .fail([&synchronizer](Error const& err) {
+            .fail([&synchronizer](auto) {
                 synchronizer.set_value(false);
             });
 
@@ -152,7 +152,7 @@ namespace Roar::Tests
             .then([&synchronizer]() {
                 synchronizer.set_value(true);
             })
-            .fail([&synchronizer](Error const& err) {
+            .fail([&synchronizer](auto) {
                 synchronizer.set_value(false);
             });
 
@@ -176,7 +176,7 @@ namespace Roar::Tests
             .then([&synchronizer]() {
                 synchronizer.set_value(true);
             })
-            .fail([&synchronizer](Error const& err) {
+            .fail([&synchronizer](auto) {
                 synchronizer.set_value(false);
             });
 

@@ -10,4 +10,5 @@ export BUILD_DOCS=on
 ./scripts/build.sh
 
 cd ./build/clang_debug
+cmake --build . --target doxygen
 cmake --build . --target documentation

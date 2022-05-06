@@ -32,7 +32,8 @@ namespace Roar
          *
          * @param req An http->ws upgrade request.
          */
-        promise::Promise accept(Request<boost::beast::http::empty_body> const& req);
+        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<>, Detail::PromiseTypeBindFail<Error const&>>
+        accept(Request<boost::beast::http::empty_body> const& req);
 
       private:
         struct Implementation;

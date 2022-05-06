@@ -58,10 +58,10 @@ namespace Roar
          * @brief Connects the websocket to a server.
          *
          * @param connectParameters see ConnectParameters
-         * @return promise::Promise Promise::then is called with no parameter, Promise::fail with a
-         * "Roar::Error".
+         * @return A promise to continue after the connect.
          */
-        promise::Promise connect(ConnectParameters&& connectParameters);
+        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<>, Detail::PromiseTypeBindFail<boost::beast::error_code>>
+        connect(ConnectParameters&& connectParameters);
 
       private:
         struct Implementation;

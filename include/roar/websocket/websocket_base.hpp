@@ -73,16 +73,16 @@ namespace Roar
          * @brief Sends a string to the server.
          *
          * @param message A message to send.
-         * @return promise::Promise Promise::then is called with the amount of bytes sent, Promise::fail with a
+         * @return A promise that is called with the amount of bytes sent, Promise::fail with a
          * Roar::Error.
          */
-        promise::Promise send(std::string message);
+        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<std::size_t>, Detail::PromiseTypeBindFail<Error const&>>
+        send(std::string message);
 
         /**
          * @brief Reads something from the server.
          *
-         * @return promise::Promise Promise::then is called with a WebsocketReadResult, Promise::fail with
-         * a Roar::Error.
+         * @return A promise to continue after reading
          */
         Detail::
             PromiseTypeBind<Detail::PromiseTypeBindThen<WebsocketReadResult>, Detail::PromiseTypeBindFail<Error const&>>

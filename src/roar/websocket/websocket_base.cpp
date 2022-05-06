@@ -58,7 +58,8 @@ namespace Roar
         });
     }
     //------------------------------------------------------------------------------------------------------------------
-    promise::Promise WebsocketBase::send(std::string message)
+    Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<std::size_t>, Detail::PromiseTypeBindFail<Error const&>>
+    WebsocketBase::send(std::string message)
     {
         return newPromise([this, message = std::move(message)](Defer d) {
             withStreamDo([&, this](auto& ws) {

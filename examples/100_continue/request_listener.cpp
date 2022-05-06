@@ -16,8 +16,8 @@ void RequestListener::putHere(Roar::Session& session, Roar::EmptyBodyRequest&& r
                 ->status(status::expectation_failed)
                 .setHeader(field::connection, "close")
                 .commit()
-                .fail([](Roar::Error const&) {
-                    std::cout << "Failed to send expectation failure.\n";
+                .fail([](Roar::Error const& err) {
+                    std::cout << "Failed to send expectation failure: " << err << "\n";
                 });
         else
         {
@@ -32,13 +32,13 @@ void RequestListener::putHere(Roar::Session& session, Roar::EmptyBodyRequest&& r
                             std::cout << "Body received: " << req.body() << "\n";
                             session.sendStandardResponse(status::ok);
                         })
-                        .fail([](Roar::Error const&) {
-                            std::cout << "Failed to read body\n";
+                        .fail([](auto const& err) {
+                            std::cout << "Failed to read body: " << err << "\n";
                         });
                     ;
                 })
-                .fail([](Roar::Error const&) {
-                    std::cout << "Failed to write continue\n";
+                .fail([](auto const& err) {
+                    std::cout << "Failed to write continue: " << err << "\n";
                 });
         }
     }
@@ -49,8 +49,8 @@ void RequestListener::putHere(Roar::Session& session, Roar::EmptyBodyRequest&& r
             .setHeader(field::connection, "close")
             .body("Set Expect: 100-continue")
             .commit()
-            .fail([](Roar::Error const&) {
-                std::cout << "Failed to send expectation failure.\n";
+            .fail([](auto const& err) {
+                std::cout << "Failed to send expectation failure: " << err << "\n";
             });
     }
 }

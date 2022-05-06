@@ -508,7 +508,7 @@ namespace Roar
          * @return A promise that resolves to true when the connection was closed by the client.
          */
         template <typename OriginalBodyT>
-        promise::Promise
+        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<>, Detail::PromiseTypeBindFail<Error const&>>
         awaitClientClose(Request<OriginalBodyT> req, std::chrono::milliseconds timeout = std::chrono::seconds{3})
         {
             return promise::newPromise([this, &req, &timeout](promise::Defer d) {

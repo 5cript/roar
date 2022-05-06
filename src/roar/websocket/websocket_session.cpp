@@ -27,7 +27,8 @@ namespace Roar
     //------------------------------------------------------------------------------------------------------------------
     WebsocketSession::~WebsocketSession() = default;
     //------------------------------------------------------------------------------------------------------------------
-    promise::Promise WebsocketSession::accept(Request<boost::beast::http::empty_body> const& req)
+    Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<>, Detail::PromiseTypeBindFail<Error const&>>
+    WebsocketSession::accept(Request<boost::beast::http::empty_body> const& req)
     {
         return newPromise([this, &req](Defer d) {
             withStreamDo([this, request = req, &d](auto& ws) {

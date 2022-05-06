@@ -110,6 +110,8 @@ namespace Roar
             if (ec)
                 return onError({.error = ec, .additionalInfo = "Websocket handshake failed."});
             onConnectComplete();
+            onConnectComplete = []() {};
+            onError = [](Error const&) {};
         }
     };
     //------------------------------------------------------------------------------------------------------------------
@@ -126,7 +128,8 @@ namespace Roar
     //------------------------------------------------------------------------------------------------------------------
     WebsocketClient::~WebsocketClient() = default;
     //------------------------------------------------------------------------------------------------------------------
-    promise::Promise WebsocketClient::connect(ConnectParameters&& connectParameters)
+    Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<>, Detail::PromiseTypeBindFail<boost::beast::error_code>>
+    WebsocketClient::connect(ConnectParameters&& connectParameters)
     {
         impl_->handshakeHeaders = std::move(connectParameters.headers);
         impl_->path = std::move(connectParameters.path);

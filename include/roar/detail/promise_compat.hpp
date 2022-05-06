@@ -5,17 +5,6 @@
 
 namespace Roar::Detail
 {
-    template <typename... List>
-    struct PromiseTypeBindThen
-    {};
-
-    template <typename... List>
-    struct PromiseTypeBindFail
-    {};
-
-    template <typename ThenBind, typename FailBind>
-    class PromiseTypeBind;
-
     template <typename T>
     struct PromiseReferenceWrap : std::reference_wrapper<T>
     {
@@ -69,13 +58,33 @@ namespace Roar::Detail
         }
     };
 
-    template <typename... ThenArgs, typename... FailArgs>
-    class PromiseTypeBind<PromiseTypeBindThen<ThenArgs...>, PromiseTypeBindFail<FailArgs...>>
+    template <typename... List>
+    struct PromiseTypeBindThen
+    {};
+
+    template <typename... List>
+    struct PromiseTypeBindFail
+    {};
+
+    template <typename...>
+    class PromiseTypeBind;
+
+    class PromiseTypeBindBase
     {
       public:
-        PromiseTypeBind(promise::Promise promise)
+        PromiseTypeBindBase(promise::Promise promise)
             : promise_(std::move(promise))
         {}
+        virtual ~PromiseTypeBindBase() = default;
+
+      protected:
+        promise::Promise promise_;
+    };
+
+    template <typename... ThenArgs>
+    struct PromiseTypeBind<PromiseTypeBindThen<ThenArgs...>> : public PromiseTypeBindBase
+    {
+        using PromiseTypeBindBase::PromiseTypeBindBase;
 
         auto then(std::function<void(typename UnpackReferenceWrapper<ThenArgs>::type...)> func)
         {
@@ -84,14 +93,50 @@ namespace Roar::Detail
             });
         }
 
+        auto fail(auto&& func)
+        {
+            return promise_.fail(std::forward<decltype(func)>(func));
+        }
+    };
+
+    template <typename... FailArgs>
+    struct PromiseTypeBind<PromiseTypeBindFail<FailArgs...>> : public PromiseTypeBindBase
+    {
+        using PromiseTypeBindBase::PromiseTypeBindBase;
+
+        auto then(auto&& func)
+        {
+            return promise_.then(std::forward<decltype(func)>(func));
+        }
+
         auto fail(std::function<void(typename UnpackReferenceWrapper<FailArgs>::type...)> func)
         {
             return promise_.fail([func = std::move(func)](FailArgs... args) {
                 func(UnpackReferenceWrapper<FailArgs>::unpack(args)...);
             });
         }
+    };
 
-      private:
-        promise::Promise promise_;
+    template <typename... ThenArgs, typename... FailArgs>
+    struct PromiseTypeBind<PromiseTypeBindThen<ThenArgs...>, PromiseTypeBindFail<FailArgs...>>
+        : public PromiseTypeBindBase
+    {
+        using PromiseTypeBindBase::PromiseTypeBindBase;
+
+        PromiseTypeBind<PromiseTypeBindFail<FailArgs...>>
+        then(std::function<void(typename UnpackReferenceWrapper<ThenArgs>::type...)> func)
+        {
+            return promise_.then([func = std::move(func)](ThenArgs... args) {
+                func(UnpackReferenceWrapper<ThenArgs>::unpack(args)...);
+            });
+        }
+
+        PromiseTypeBind<PromiseTypeBindThen<ThenArgs...>>
+        fail(std::function<void(typename UnpackReferenceWrapper<FailArgs>::type...)> func)
+        {
+            return promise_.fail([func = std::move(func)](FailArgs... args) {
+                func(UnpackReferenceWrapper<FailArgs>::unpack(args)...);
+            });
+        }
     };
 }

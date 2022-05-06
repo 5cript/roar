@@ -1,8 +1,9 @@
-1 #pragma once
+#pragma once
 
 #include <roar/detail/promise_compat.hpp>
 #include <roar/cors.hpp>
 #include <roar/request.hpp>
+#include <roar/error.hpp>
 #include <roar/detail/template_utility/first_type.hpp>
 
 #include <boost/beast/http/message.hpp>
@@ -17,7 +18,7 @@
 #include <numeric>
 #include <iterator>
 
-    namespace Roar
+namespace Roar
 {
     template <typename BodyT>
     class Response
