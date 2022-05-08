@@ -304,7 +304,7 @@ namespace Roar::Curl
          * @param url The target to send this request to.
          * @return Request& Returned for chaining.
          */
-        Response del(std::string const& url);
+        Response delete_(std::string const& url);
 
         /**
          * @brief Finishes and performs the request as a options request.
@@ -321,6 +321,14 @@ namespace Roar::Curl
          * @return Request& Returned for chaining.
          */
         Response head(std::string const& url);
+
+        /**
+         * @brief Finishes and performs the request as a patch request.
+         *
+         * @param url The target to send this request to.
+         * @return Request& Returned for chaining.
+         */
+        Response patch(std::string const& url);
 
       private:
         void verb(std::string const& verb);

@@ -87,6 +87,7 @@ namespace Roar::Tests
         session.prepareResponse<string_body>(req)
             .body("Hello")
             .contentType("text/plain")
+            .preparePayload()
             .status(status::ok)
             .send(session);
     }
@@ -135,6 +136,7 @@ namespace Roar::Tests
                 {"matches", *req.pathMatches()},
             })
             .contentType("text/plain")
+            .preparePayload()
             .status(status::ok)
             .send(session);
     }
@@ -146,6 +148,6 @@ namespace Roar::Tests
     inline void SimpleRoutes::sendIntermediate(Session& session, EmptyBodyRequest&& req)
     {
         using namespace boost::beast::http;
-        session.send<string_body>(req)->status(status::ok).body("Hi").commit();
+        session.send<string_body>(req)->status(status::ok).body("Hi").preparePayload().commit();
     }
 }

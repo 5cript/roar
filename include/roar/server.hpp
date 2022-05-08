@@ -205,6 +205,9 @@ namespace Roar
                 .serveInfo_ = info,
                 .listener_ = listener,
             }};
+            protoRoute.matches = [p = info.path](std::string const& path, std::vector<std::string>&) {
+                return path.starts_with(p);
+            };
             // Add the all regardeless of allowed or not, to give a proper response.
             extractedRoutes.emplace(http::verb::options, protoRoute);
             extractedRoutes.emplace(http::verb::head, protoRoute);

@@ -27,7 +27,7 @@ namespace Roar::Detail
     Jail::relativeToRoot(std::filesystem::path const& other, bool fakeJailAsRoot) const
     {
         std::error_code ec;
-        auto proxi = std::filesystem::proximate(other, jailRoot_, ec);
+        auto proxi = std::filesystem::proximate(jailRoot_ / other, jailRoot_, ec);
         if (ec)
             return std::nullopt;
         for (auto const& part : proxi)
@@ -38,7 +38,15 @@ namespace Roar::Detail
         if (fakeJailAsRoot)
             return this->fakeJailAsRoot(proxi);
         else
-            return {proxi};
+            return proxi;
+    }
+    //---------------------------------------------------------------------------------------------------------------------
+    std::optional<std::filesystem::path> Jail::pathAsIsInJail(std::filesystem::path const& other) const
+    {
+        auto relative = relativeToRoot(other);
+        if (!relative)
+            return relative;
+        return (jailRoot_ / *relative).generic_string();
     }
     //---------------------------------------------------------------------------------------------------------------------
     std::filesystem::path Jail::fakeJailAsRoot(std::filesystem::path const& other) const

@@ -24,6 +24,8 @@ namespace Roar::Detail
         std::optional<std::filesystem::path>
         relativeToRoot(std::filesystem::path const& other, bool fakeJailAsRoot = false) const;
 
+        std::optional<std::filesystem::path> pathAsIsInJail(std::filesystem::path const& other) const;
+
         std::filesystem::path fakeJailAsRoot(std::filesystem::path const& other) const;
 
       private:

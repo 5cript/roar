@@ -175,7 +175,7 @@ namespace Roar::Curl
 
         return perform();
     }
-    Response Request::del(std::string const& url)
+    Response Request::delete_(std::string const& url)
     {
         this->url(url);
         verb("DELETE");
@@ -191,6 +191,12 @@ namespace Roar::Curl
     {
         this->url(url);
         verb("HEAD");
+        return perform();
+    }
+    Response Request::patch(std::string const& url)
+    {
+        this->url(url);
+        verb("PATCH");
         return perform();
     }
     void Request::verb(std::string const& verb)

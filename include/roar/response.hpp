@@ -76,6 +76,7 @@ namespace Roar
             else
 #endif
                 response_.body() = std::forward<T>(toAssign);
+            preparePayload();
             return *this;
         }
 

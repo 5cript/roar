@@ -1,9 +1,11 @@
 #pragma once
 
+#include <roar/detail/filesystem/special_paths.hpp>
 #include <roar/mime_type.hpp>
 #include <roar/detail/filesystem/jail.hpp>
 #include <roar/routing/request_listener.hpp>
 #include <roar/session/session.hpp>
+#include <roar/detail/overloaded.hpp>
 
 #include <boost/beast/http/file_body.hpp>
 
@@ -31,7 +33,7 @@ namespace Roar::Detail
       public:
         DirectoryServer(DirectoryServerConstructionArgs<RequestListenerT>&& args)
             : DirectoryServerConstructionArgs<RequestListenerT>{std::move(args)}
-            , jail_{this->serveInfo_.serveOptions.pathProvider(*this->listener_.lock())}
+            , jail_{resolvePath()}
             , basePath_{this->serveInfo_.path}
         {}
 
@@ -55,6 +57,8 @@ namespace Roar::Detail
             {
                 case (http::verb::head):
                 {
+                    if (!this->serveInfo_.serveOptions.allowDownload)
+                        return session.sendStandardResponse(http::status::method_not_allowed);
                     return sendHeadResponse(session, req, fileAndStatus);
                 }
                 case (http::verb::options):
@@ -86,7 +90,7 @@ namespace Roar::Detail
             }
 
             // Handle not found files and directories:
-            if (fileAndStatus.status.type() == std::filesystem::file_type::none)
+            if (fileAndStatus.status.type() == std::filesystem::file_type::none && req.method() != http::verb::put)
                 return session.sendStandardResponse(http::status::not_found);
 
             // File is found, method is allowed, now ask the library user for final permissions:
@@ -101,12 +105,44 @@ namespace Roar::Detail
             };
         }
 
+      private:
+        std::filesystem::path resolvePath()
+        {
+            auto listener = this->listener_.lock();
+            if (!listener)
+                return {};
+
+            const auto rawPath = std::visit(
+                Detail::overloaded{
+                    [&listener](std::function<std::filesystem::path(RequestListenerT & requestListener)> const& fn) {
+                        return fn(*listener);
+                    },
+                    [&listener](std::filesystem::path (RequestListenerT::*fn)()) {
+                        return (listener.get()->*fn)();
+                    },
+                    [&listener](std::filesystem::path (RequestListenerT::*fn)() const) {
+                        return (listener.get()->*fn)();
+                    },
+                    [&listener](std::filesystem::path RequestListenerT::*mem) {
+                        return listener.get()->*mem;
+                    },
+                },
+                this->serveInfo_.serveOptions.pathProvider);
+
+            return Detail::resolvePath(rawPath);
+        }
+
         FileAndStatus getFileAndStatus(boost::beast::string_view target)
         {
             auto analyzeFile = [this](boost::beast::string_view target) -> FileAndStatus {
-                auto relative = jail_.relativeToRoot(std::filesystem::path{std::string{target}});
-                if (relative && std::filesystem::exists(*relative))
-                    return {.file = *relative, .status = std::filesystem::status(*relative)};
+                auto relative = jail_.pathAsIsInJail(std::filesystem::path{std::string{target}});
+                if (relative)
+                {
+                    if (std::filesystem::exists(*relative))
+                        return {.file = *relative, .status = std::filesystem::status(*relative)};
+                    else
+                        return {.file = *relative, .status = std::filesystem::file_status{}};
+                }
                 return {.file = {}, .status = std::filesystem::file_status{}};
             };
 
@@ -137,16 +173,30 @@ namespace Roar::Detail
                 case (http::verb::delete_):
                 {
                     std::error_code ec;
-                    if (fileAndStatus.status.type() == std::filesystem::file_type::directory &&
-                        !this->serveInfo_.serveOptions.allowDeleteOfNonEmptyDirectories)
+                    auto type = fileAndStatus.status.type();
+                    if (type == std::filesystem::file_type::regular || type == std::filesystem::file_type::symlink)
                     {
-                        std::filesystem::remove_all(fileAndStatus.file, ec);
+                        std::filesystem::remove(fileAndStatus.file, ec);
+                    }
+                    else if (fileAndStatus.status.type() == std::filesystem::file_type::directory)
+                    {
+                        if (this->serveInfo_.serveOptions.allowDeleteOfNonEmptyDirectories)
+                            std::filesystem::remove_all(fileAndStatus.file, ec);
+                        else
+                        {
+                            if (std::filesystem::is_empty(fileAndStatus.file))
+                                std::filesystem::remove(fileAndStatus.file, ec);
+                            else
+                                return session.sendStandardResponse(http::status::forbidden);
+                        }
                     }
                     else
-                        std::filesystem::remove(fileAndStatus.file, ec);
+                    {
+                        ec = std::make_error_code(std::errc::operation_not_supported);
+                    }
 
                     if (ec)
-                        return session.sendStandardResponse(http::status::internal_server_error, ec.message());
+                        return session.sendStandardResponse(http::status::bad_request, ec.message());
                     else
                         return (void)session.send<http::empty_body>(req)->status(http::status::no_content).commit();
                 }
@@ -171,7 +221,21 @@ namespace Roar::Detail
 
         void sendOptionsResponse(Session& session, EmptyBodyRequest const& req, FileAndStatus const&)
         {
-            // TODO: Implement
+            // TODO: cors
+
+            namespace http = boost::beast::http;
+            std::string allow = "OPTIONS";
+            if (this->serveInfo_.serveOptions.allowDownload)
+                allow += ", GET, HEAD";
+            if (this->serveInfo_.serveOptions.allowUpload)
+                allow += ", PUT";
+            if (this->serveInfo_.serveOptions.allowDelete)
+                allow += ", DELETE";
+
+            session.send<http::empty_body>(req)
+                ->status(http::status::no_content)
+                .setHeader(http::field::allow, allow)
+                .commit();
         }
 
         void makeListing(Session& session, EmptyBodyRequest const& req, FileAndStatus const& fileAndStatus)
@@ -190,11 +254,28 @@ namespace Roar::Detail
             namespace http = boost::beast::http;
             if (!req.expectsContinue())
             {
-                session.send<http::string_body>(req)
+                return (void)session.send<http::string_body>(req)
                     ->status(http::status::expectation_failed)
                     .setHeader(http::field::connection, "close")
                     .body("Set Expect: 100-continue")
                     .commit();
+            }
+
+            switch (fileAndStatus.status.type())
+            {
+                case (std::filesystem::file_type::none):
+                    break;
+                case (std::filesystem::file_type::not_found):
+                    break;
+                case (std::filesystem::file_type::regular):
+                {
+                    if (this->serveInfo_.serveOptions.allowOverwrite)
+                        break;
+                }
+                default:
+                {
+                    return session.sendStandardResponse(http::status::forbidden);
+                }
             }
 
             auto contentLength = req.contentLength();
@@ -216,7 +297,15 @@ namespace Roar::Detail
                     if (closed)
                         return;
 
-                    session->read<http::file_body>(req, std::move(*body))->bodyLimit(*contentLength).commit();
+                    session->read<http::file_body>(req, std::move(*body))
+                        ->bodyLimit(*contentLength)
+                        .commit()
+                        .then([](auto& session, auto const& req) {
+                            session.sendStandardResponse(http::status::ok);
+                        })
+                        .fail([session](Error const& e) {
+                            session->sendStandardResponse(http::status::internal_server_error, e.toString());
+                        });
                 });
         }
 
@@ -231,13 +320,13 @@ namespace Roar::Detail
                 return session.sendStandardResponse(
                     http::status::internal_server_error, "Cannot open file for reading.");
 
-            auto&& intermediate = session.send<http::file_body>(req, std::move(body))
-                                      ->preparePayload()
-                                      .enableCors(req, this->serveInfo_.routeOptions.cors);
+            auto intermediate = session.send<http::file_body>(req, std::move(body));
+            intermediate->preparePayload();
+            intermediate->enableCors(req, this->serveInfo_.routeOptions.cors);
             auto contentType = extensionToMime(fileAndStatus.file.extension().string());
             if (contentType)
-                intermediate.contentType(*contentType);
-            intermediate.commit();
+                intermediate->contentType(*contentType);
+            intermediate->commit();
         }
 
       private:

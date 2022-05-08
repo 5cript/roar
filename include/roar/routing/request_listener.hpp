@@ -70,6 +70,9 @@ namespace Roar
         /// Allow PUT requests to upload files.
         bool allowUpload = false;
 
+        /// Allow PUT requests to overwrite existing files.
+        bool allowOverwrite = false;
+
         /// Allow DELETE requests to delete files.
         bool allowDelete = false;
 
@@ -80,7 +83,12 @@ namespace Roar
         bool allowListing = false;
 
         /// Serve files from the directory given by this function.
-        std::function<std::filesystem::path(RequestListenerT& requestListener)> pathProvider = {};
+        std::variant<
+            std::function<std::filesystem::path(RequestListenerT& requestListener)>,
+            std::filesystem::path (RequestListenerT::*)(),
+            std::filesystem::path (RequestListenerT::*)() const,
+            std::filesystem::path RequestListenerT::*>
+            pathProvider = {};
     };
 
     /**
@@ -194,7 +202,29 @@ namespace Roar
                     handler,
                 };
             },
-            [info, handler](char const* path, std::function<std::filesystem::path(RequestListenerT&)> rootProvider)
+            [info, handler](char const* path, std::filesystem::path (RequestListenerT::*rootProvider)())
+                -> ServeInfo<RequestListenerT> {
+                return {
+                    {
+                        .path = path,
+                        .routeOptions = info.routeOptions,
+                    },
+                    ServeOptions<RequestListenerT>{.pathProvider = rootProvider},
+                    handler,
+                };
+            },
+            [info, handler](char const* path, std::filesystem::path (RequestListenerT::*rootProvider)() const)
+                -> ServeInfo<RequestListenerT> {
+                return {
+                    {
+                        .path = path,
+                        .routeOptions = info.routeOptions,
+                    },
+                    ServeOptions<RequestListenerT>{.pathProvider = rootProvider},
+                    handler,
+                };
+            },
+            [info, handler](char const* path, std::filesystem::path RequestListenerT::*rootProvider)
                 -> ServeInfo<RequestListenerT> {
                 return {
                     {

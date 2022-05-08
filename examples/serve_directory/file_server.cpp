@@ -11,3 +11,11 @@ Roar::ServeDecision FileServer::serve(
 {
     return Roar::ServeDecision::Deny;
 }
+
+Roar::ServeDecision FileServer::serveAppdata(
+    Roar::Session& session,
+    Roar::EmptyBodyRequest const& request,
+    Roar::FileAndStatus const& fileAndStatus)
+{
+    return Roar::ServeDecision::Deny;
+}

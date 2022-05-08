@@ -15,6 +15,7 @@ namespace Roar
         // TODO: improve performance by using a cleverer structure.
         std::unordered_multimap<boost::beast::http::verb, Route> stringRoutes;
         std::unordered_multimap<boost::beast::http::verb, Route> regexRoutes;
+        std::unordered_multimap<boost::beast::http::verb, Route> serveRoutes;
         std::shared_ptr<const StandardResponseProvider> standardResponseProvider;
 
         Implementation(std::shared_ptr<const StandardResponseProvider> standardResponseProvider)
@@ -48,7 +49,10 @@ namespace Roar
             if (res)
                 return res;
             const auto res2 = findRouteImpl(method, path, regexRoutes);
-            return res2;
+            if (res2)
+                return res2;
+            const auto res3 = findRouteImpl(method, path, serveRoutes);
+            return res3;
         }
     };
     //##################################################################################################################
@@ -65,6 +69,8 @@ namespace Roar
         {
             if (std::holds_alternative<std::string>(proto.path))
                 impl_->stringRoutes.insert(std::make_pair(key, Route{std::move(proto)}));
+            else if (std::holds_alternative<Detail::ServedPath>(proto.path))
+                impl_->serveRoutes.insert(std::make_pair(key, Route{std::move(proto)}));
             else
                 impl_->regexRoutes.insert(std::make_pair(key, Route{std::move(proto)}));
         }
