@@ -9,19 +9,34 @@
 #include <fstream>
 #include <random>
 #include <algorithm>
+#include <iostream>
 
 class FileServer
 {
+  public:
+    FileServer()
+    {
+        auto p = Roar::resolvePath("~/roar");
+        if (!std::filesystem::exists(p))
+            std::filesystem::create_directory(p);
+        std::cout << p << "\n";
+
+        p = Roar::resolvePath("%appdata%/roar");
+        if (!std::filesystem::exists(p))
+            std::filesystem::create_directory(p);
+        std::cout << p << "\n";
+    }
+
   private:
     ROAR_MAKE_LISTENER(FileServer);
 
     // Use the ROAR_GET, ... macro to define a route. Routes are basically mappings of paths to handlers.
     // If you lead with a tilde, this tilde will be replaced with the user home on linux and with the user directory on
     // windows.
-    ROAR_SERVE(serve)("/bla", "~/bla");
+    ROAR_SERVE(serve)("/bla", "~/roar");
 
     // This will resolve to home on linux and to the appdata/Roaming on windows.
-    ROAR_SERVE(serveAppdata)("/blub", "%appdata%/blub");
+    ROAR_SERVE(serveAppdata)("/blub", "%appdata%/roar");
 
     std::filesystem::path getServePath()
     {
