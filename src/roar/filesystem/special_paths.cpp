@@ -79,7 +79,7 @@ namespace Roar
         auto path = unresolvedPath;
 
         auto tryAndMap = [&path, &unresolvedPath](auto needle, std::filesystem::path (*func)()) {
-            if (to_lower_copy(unresolvedPath.string()).starts_with("%appdata%"))
+            if (to_lower_copy(path.string()).starts_with(needle))
             {
                 path = std::accumulate(
                     std::next(std::begin(unresolvedPath)),
