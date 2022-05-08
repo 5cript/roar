@@ -156,7 +156,12 @@ namespace Roar::Detail
 
             std::pair<std::filesystem::file_type, std::filesystem::path> fileAndStatus;
             if (target.size() <= basePath_.size() + 1)
-                return analyzeFile("index.html");
+            {
+                if (this->serveInfo_.serveOptions.allowListing)
+                    return analyzeFile("");
+                else
+                    return analyzeFile("index.html");
+            }
             target.remove_prefix(basePath_.size() + 1);
             return analyzeFile(target);
         }
@@ -256,12 +261,66 @@ namespace Roar::Detail
             document << "<head>\n";
             document << "<meta charset='utf-8'>\n";
             document << "<meta http-equiv='X-UA-Compatible' content='IE=edge'>\n";
+            document << "<style>\n";
+            document << "a { text-decoration: none; }\n";
+            document << "a:hover { text-decoration: underline; }\n";
+            document << "a:visited { color: #23f5fc; }\n";
+            document << "a:active { color: #23fc7e; }\n";
+            document << "a:link { color: #83a8f2; }\n";
+            document << R"css(
+body { 
+    font-family: sans-serif; 
+    font-size: 0.8em;
+    width: 100%;
+    margin: 0;
+    padding: 8px;
+    background-color: #303030;
+    color: #eee;
+}
+
+.styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    min-width: 400px;
+    width: calc(100% - 16px);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.styled-table thead tr {
+    background-color: #0a5778;
+    color: #ffffff;
+    text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+}
+
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #505050;
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #0a5778;
+}
+
+.styled-table tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
+}
+            )css";
+            document << "</style>\n";
             document << "<title>Roar Listing of " << fileAndStatus.relative.string() << "</title>\n";
             document << "<meta name='viewport' content='width=device-width, initial-scale=1'>\n";
             document << "</head>\n";
             document << "<body>\n";
             document << "<h1>Index of " << fileAndStatus.relative.string() << "</h1>\n";
-            document << "<table>\n";
+            document << "<table class=\"styled-table\">\n";
             document << "<thead>\n";
             document << "<tr>\n";
             document << "<th>"
@@ -288,16 +347,34 @@ namespace Roar::Detail
                     return std::to_string(size / 1024 / 1024 / 1024) + " GB";
             };
 
-            for (auto const& entry : std::filesystem::directory_iterator{fileAndStatus.file})
+            try
             {
-                document << "<tr>\n";
-                document << "<td>\n";
-                document << "<a href='" << entry.path().filename().string() << "'>" << entry.path().filename().string()
-                         << "</a>\n";
-                document << "<td>" << to_string(entry.last_write_time()) << "</td>\n";
-                document << "<td>" << toHumanReadableSize(entry.file_size()) << "</td>\n";
-                document << "</td>\n";
-                document << "</tr>\n";
+                for (auto const& entry : std::filesystem::directory_iterator{fileAndStatus.file})
+                {
+                    document << "<tr>\n";
+                    document << "<td>\n";
+                    document << "<a href='" << basePath_ << "/" << fileAndStatus.relative.string() << "/"
+                             << entry.path().filename().string() << "'>" << entry.path().filename().string()
+                             << "</a>\n";
+                    if (entry.is_regular_file())
+                    {
+                        document << "<td>" << to_string(entry.last_write_time()) << "</td>\n";
+                        document << "<td>" << toHumanReadableSize(entry.file_size()) << "</td>\n";
+                    }
+                    else
+                    {
+                        document << "<td>"
+                                 << "</td>\n";
+                        document << "<td>"
+                                 << "</td>\n";
+                    }
+                    document << "</td>\n";
+                    document << "</tr>\n";
+                }
+            }
+            catch (std::exception const& exc)
+            {
+                return session.sendStandardResponse(boost::beast::http::status::internal_server_error, exc.what());
             }
 
             document << "</table>\n";
@@ -305,11 +382,10 @@ namespace Roar::Detail
             document << "</body>\n";
             document << "</html>\n";
 
-            // TODO: Implement
             session.send<http::string_body>(req)
                 ->status(http::status::ok)
-                .contentType("text/plain")
-                .body("You will see a dir listing here at some point")
+                .contentType("text/html")
+                .body(document.str())
                 .commit();
         }
 
