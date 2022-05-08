@@ -1,4 +1,4 @@
-#include <roar/detail/filesystem/jail.hpp>
+#include <roar/filesystem/jail.hpp>
 
 #include <string>
 
@@ -10,7 +10,7 @@ using namespace std::string_literals;
  *      /a///b is the same as /a/b
  */
 //#####################################################################################################################
-namespace Roar::Detail
+namespace Roar
 {
     //#####################################################################################################################
     Jail::Jail(std::filesystem::path const& jailRoot)

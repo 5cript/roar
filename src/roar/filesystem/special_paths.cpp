@@ -1,4 +1,4 @@
-#include <roar/detail/filesystem/special_paths.hpp>
+#include <roar/filesystem/special_paths.hpp>
 
 #include <boost/algorithm/string.hpp>
 
@@ -13,7 +13,7 @@
 #include <numeric>
 #include <iterator>
 
-namespace Roar::Detail
+namespace Roar
 {
     namespace
     {

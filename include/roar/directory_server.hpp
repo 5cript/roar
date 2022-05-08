@@ -1,8 +1,8 @@
 #pragma once
 
-#include <roar/detail/filesystem/special_paths.hpp>
+#include <roar/filesystem/special_paths.hpp>
 #include <roar/mime_type.hpp>
-#include <roar/detail/filesystem/jail.hpp>
+#include <roar/filesystem/jail.hpp>
 #include <roar/routing/request_listener.hpp>
 #include <roar/session/session.hpp>
 #include <roar/detail/overloaded.hpp>
@@ -129,7 +129,7 @@ namespace Roar::Detail
                 },
                 this->serveInfo_.serveOptions.pathProvider);
 
-            return Detail::resolvePath(rawPath);
+            return resolvePath(rawPath);
         }
 
         FileAndStatus getFileAndStatus(boost::beast::string_view target)
@@ -330,7 +330,7 @@ namespace Roar::Detail
         }
 
       private:
-        Detail::Jail jail_;
+        Jail jail_;
         std::string basePath_;
     };
 }

@@ -9,7 +9,7 @@ Roar::ServeDecision FileServer::serve(
     Roar::EmptyBodyRequest const& request,
     Roar::FileAndStatus const& fileAndStatus)
 {
-    return Roar::ServeDecision::Deny;
+    return Roar::ServeDecision::Continue;
 }
 
 Roar::ServeDecision FileServer::serveAppdata(
@@ -17,5 +17,13 @@ Roar::ServeDecision FileServer::serveAppdata(
     Roar::EmptyBodyRequest const& request,
     Roar::FileAndStatus const& fileAndStatus)
 {
-    return Roar::ServeDecision::Deny;
+    return Roar::ServeDecision::Continue;
+}
+
+Roar::ServeDecision FileServer::customServeOptions(
+    Roar::Session& session,
+    Roar::EmptyBodyRequest const& request,
+    Roar::FileAndStatus const& fileAndStatus)
+{
+    return Roar::ServeDecision::Continue;
 }

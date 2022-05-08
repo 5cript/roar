@@ -2,7 +2,7 @@
 
 #include <filesystem>
 
-namespace Roar::Detail
+namespace Roar
 {
     /**
      * @brief Will replace prefixes like "~" and "%appdata%" with actual directories on linux and windows.
