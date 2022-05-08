@@ -35,7 +35,7 @@ namespace Roar::Detail
     {
         bool serverIsSecure_;
         ServeInfo<RequestListenerT> serveInfo_;
-        std::weak_ptr<RequestListenerT> listener_;
+        std::shared_ptr<RequestListenerT> listener_;
     };
 
     /**
@@ -56,11 +56,6 @@ namespace Roar::Detail
         void operator()(Session& session, EmptyBodyRequest const& req)
         {
             namespace http = boost::beast::http;
-
-            // Listener not allive? Fringe Moment on shutdown? This likely indicates missuse.
-            auto listener = this->listener_.lock();
-            if (!listener)
-                return session.sendStandardResponse(http::status::service_unavailable);
 
             // Do now allow unsecure connections if not explicitly allowed
             if (this->serverIsSecure_ && !session.isSecure() && !this->serveInfo_.routeOptions.allowUnsecure)
@@ -110,7 +105,7 @@ namespace Roar::Detail
                 return session.sendStandardResponse(http::status::not_found);
 
             // File is found, method is allowed, now ask the library user for final permissions:
-            switch (std::invoke(this->serveInfo_.handler, *listener, session, req, fileAndStatus))
+            switch (std::invoke(this->serveInfo_.handler, *this->listener_, session, req, fileAndStatus))
             {
                 case (ServeDecision::Continue):
                     return handleFileServe(session, req, fileAndStatus);
@@ -124,23 +119,19 @@ namespace Roar::Detail
       private:
         std::filesystem::path resolvePath()
         {
-            auto listener = this->listener_.lock();
-            if (!listener)
-                return {};
-
             const auto rawPath = std::visit(
                 Detail::overloaded{
-                    [&listener](std::function<std::filesystem::path(RequestListenerT & requestListener)> const& fn) {
-                        return fn(*listener);
+                    [this](std::function<std::filesystem::path(RequestListenerT & requestListener)> const& fn) {
+                        return fn(*this->listener_);
                     },
-                    [&listener](std::filesystem::path (RequestListenerT::*fn)()) {
-                        return (listener.get()->*fn)();
+                    [this](std::filesystem::path (RequestListenerT::*fn)()) {
+                        return (this->listener_.get()->*fn)();
                     },
-                    [&listener](std::filesystem::path (RequestListenerT::*fn)() const) {
-                        return (listener.get()->*fn)();
+                    [this](std::filesystem::path (RequestListenerT::*fn)() const) {
+                        return (this->listener_.get()->*fn)();
                     },
-                    [&listener](std::filesystem::path RequestListenerT::*mem) {
-                        return listener.get()->*mem;
+                    [this](std::filesystem::path RequestListenerT::*mem) {
+                        return this->listener_.get()->*mem;
                     },
                 },
                 this->serveInfo_.serveOptions.pathProvider);
