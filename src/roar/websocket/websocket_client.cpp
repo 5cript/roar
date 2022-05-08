@@ -128,7 +128,7 @@ namespace Roar
     //------------------------------------------------------------------------------------------------------------------
     WebsocketClient::~WebsocketClient() = default;
     //------------------------------------------------------------------------------------------------------------------
-    Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<>, Detail::PromiseTypeBindFail<boost::beast::error_code>>
+    Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<>, Detail::PromiseTypeBindFail<Error>>
     WebsocketClient::connect(ConnectParameters&& connectParameters)
     {
         impl_->handshakeHeaders = std::move(connectParameters.headers);
@@ -138,7 +138,7 @@ namespace Roar
             impl_->onConnectComplete = [d]() {
                 d.resolve();
             };
-            impl_->onError = [d](auto const& error) {
+            impl_->onError = [d](Error const& error) {
                 d.reject(error);
             };
             withStreamDo([&, this](auto& ws) {

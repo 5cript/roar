@@ -1,5 +1,6 @@
 #pragma once
 
+#include "roar/detail/promise_compat.hpp"
 #include <roar/detail/pimpl_special_functions.hpp>
 #include <roar/detail/shared_from_base.hpp>
 #include <roar/websocket/websocket_base.hpp>
@@ -60,7 +61,7 @@ namespace Roar
          * @param connectParameters see ConnectParameters
          * @return A promise to continue after the connect.
          */
-        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<>, Detail::PromiseTypeBindFail<boost::beast::error_code>>
+        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<>, Detail::PromiseTypeBindFail<Error>>
         connect(ConnectParameters&& connectParameters);
 
       private:
