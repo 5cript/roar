@@ -11,6 +11,8 @@
 #include <boost/asio/thread_pool.hpp>
 
 #include <iostream>
+#include <chrono>
+#include <thread>
 
 constexpr static int port = 8081;
 
@@ -32,5 +34,8 @@ int main()
     server.installRequestListener<FileServer>();
 
     std::cout << "Server bound to port " << port << std::endl;
-    std::cin.get();
+    while (true)
+    {
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
 }
