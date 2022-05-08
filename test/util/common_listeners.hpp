@@ -48,10 +48,13 @@ namespace Roar::Tests
         ROAR_OPTIONS(optionsHere)("/optionsHere");
         ROAR_HEAD(headHere)("/headHere");
         ROAR_GET(unsecure)
-        ({.path = "/unsecure",
-          .routeOptions = {
-              .allowUnsecure = true,
-          }});
+        ({{
+            .path = "/unsecure",
+            .routeOptions =
+                {
+                    .allowUnsecure = true,
+                },
+        }});
         ROAR_GET(sendIntermediate)("/sendIntermediate");
 
       private:

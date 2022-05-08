@@ -17,19 +17,70 @@
 #include <variant>
 #include <regex>
 #include <string>
+#include <filesystem>
 
 namespace Roar
 {
     class Server;
 
+    enum class ServeDecision
+    {
+        /// Continue to serve/delete/upload the file.
+        Continue,
+
+        /// Will respond with a standard forbidden response.
+        Deny,
+
+        /// You handled the response, so just end the connection if necessary.
+        JustClose
+    };
+
     template <typename RequestListenerT>
     using HandlerType = void (RequestListenerT::*)(Session&, Request<boost::beast::http::empty_body>&&);
+
+    struct FileAndStatus
+    {
+        std::filesystem::path file;
+        std::filesystem::file_status status;
+    };
+    template <typename RequestListenerT>
+    using ServeHandlerType = ServeDecision (
+        RequestListenerT::*)(Session&, Request<boost::beast::http::empty_body> const&, FileAndStatus const&);
 
     enum class RoutePathType
     {
         Unspecified,
+
+        /// Take precedence over any other path
         RegularString,
-        Regex
+
+        /// Take precedence over serve paths
+        Regex,
+
+        /// Taken into account last.
+        ServedDirectory
+    };
+
+    template <typename RequestListenerT>
+    struct ServeOptions
+    {
+        /// Allow GET requests to download files.
+        bool allowDownload = true;
+
+        /// Allow PUT requests to upload files.
+        bool allowUpload = false;
+
+        /// Allow DELETE requests to delete files.
+        bool allowDelete = false;
+
+        /// Allow DELETE for directories that are non empty?
+        bool allowDeleteOfNonEmptyDirectories = false;
+
+        /// Requests on directories become listings.
+        bool allowListing = false;
+
+        /// Serve files from the directory given by this function.
+        std::function<std::filesystem::path(RequestListenerT& requestListener)> pathProvider = {};
     };
 
     /**
@@ -39,16 +90,10 @@ namespace Roar
      * @tparam RequestListenerT The request listener class that the route belongs to.
      */
     template <typename RequestListenerT>
-    struct RouteInfo
+    struct RouteInfoBase
     {
-        /// What verb for this route?
-        std::optional<boost::beast::http::verb> verb = std::nullopt;
-
         /// A path to route to.
         char const* path = nullptr;
-
-        /// Is the path a string or a regex, ...?
-        RoutePathType pathType = RoutePathType::RegularString;
 
         /// Some options of this route. See documentation for RouteOptions.
         RouteOptions routeOptions = {
@@ -56,9 +101,29 @@ namespace Roar
             .expectUpgrade = false,
             .cors = std::nullopt,
         };
+    };
+
+    template <typename RequestListenerT>
+    struct RouteInfo : RouteInfoBase<RequestListenerT>
+    {
+        /// What verb for this route?
+        std::optional<boost::beast::http::verb> verb = std::nullopt;
+
+        /// Is the path a string or a regex, ...?
+        RoutePathType pathType = RoutePathType::RegularString;
 
         /// Set automatically by the macro.
         HandlerType<RequestListenerT> handler = nullptr;
+    };
+
+    template <typename RequestListenerT>
+    struct ServeInfo : RouteInfoBase<RequestListenerT>
+    {
+        /// Options needed for serving files.
+        ServeOptions<RequestListenerT> serveOptions = {};
+
+        /// Set automatically by the macro.
+        ServeHandlerType<RequestListenerT> handler = nullptr;
     };
 
     template <typename RequestListenerT>
@@ -67,29 +132,77 @@ namespace Roar
         return Detail::overloaded{
             [info, handler](RouteInfo<RequestListenerT> userInfo) -> RouteInfo<RequestListenerT> {
                 return {
-                    .verb = userInfo.verb ? userInfo.verb : info.verb,
-                    .path = userInfo.path,
-                    .pathType = userInfo.pathType == RoutePathType::Unspecified ? info.pathType : userInfo.pathType,
-                    .routeOptions = userInfo.routeOptions,
-                    .handler = handler,
+                    {
+                        .path = userInfo.path,
+                        .routeOptions = userInfo.routeOptions,
+                    },
+                    userInfo.verb ? userInfo.verb : info.verb,
+                    userInfo.pathType,
+                    handler,
                 };
             },
             [info, handler](char const* path) -> RouteInfo<RequestListenerT> {
                 return {
-                    .verb = info.verb,
-                    .path = path,
-                    .pathType = RoutePathType::RegularString,
-                    .routeOptions = info.routeOptions,
-                    .handler = handler,
+                    {
+                        .path = path,
+                        .routeOptions = info.routeOptions,
+                    },
+                    info.verb,
+                    info.pathType,
+                    handler,
                 };
             },
             [info, handler](PseudoRegex path) -> RouteInfo<RequestListenerT> {
                 return {
-                    .verb = info.verb,
-                    .path = path.pattern,
-                    .pathType = RoutePathType::Regex,
-                    .routeOptions = info.routeOptions,
-                    .handler = handler,
+                    {
+                        .path = path.pattern,
+                        .routeOptions = info.routeOptions,
+                    },
+                    info.verb,
+                    RoutePathType::Regex,
+                    handler,
+                };
+            },
+        };
+    }
+
+    template <typename RequestListenerT>
+    auto extendRouteInfoForServe(ServeInfo<RequestListenerT> info, ServeHandlerType<RequestListenerT> handler)
+    {
+        return Detail::overloaded{
+            [info, handler](ServeInfo<RequestListenerT> userInfo) -> ServeInfo<RequestListenerT> {
+                return {
+                    {
+                        .path = userInfo.path,
+                        .routeOptions = userInfo.routeOptions,
+                    },
+                    userInfo.serveOptions,
+                    handler,
+                };
+            },
+            [info, handler](char const* path, std::filesystem::path const& root) -> ServeInfo<RequestListenerT> {
+                return {
+                    {
+                        .path = path,
+                        .routeOptions = info.routeOptions,
+                    },
+                    ServeOptions<RequestListenerT>{
+                        .pathProvider =
+                            [root](RequestListenerT&) {
+                                return root;
+                            }},
+                    handler,
+                };
+            },
+            [info, handler](char const* path, std::function<std::filesystem::path(RequestListenerT&)> rootProvider)
+                -> ServeInfo<RequestListenerT> {
+                return {
+                    {
+                        .path = path,
+                        .routeOptions = info.routeOptions,
+                    },
+                    ServeOptions<RequestListenerT>{.pathProvider = rootProvider},
+                    handler,
                 };
             }};
     }
@@ -98,9 +211,17 @@ namespace Roar
 #define ROAR_MAKE_LISTENER(ListenerType) using this_type = ListenerType
 
 #define ROAR_ROUTE_I(HandlerName, DefaultVerb) \
-    void HandlerName(Roar::Session& session, Roar::Request<boost::beast::http::empty_body>&& request); \
+    Roar::ServeDecision HandlerName(Roar::Session& session, Roar::Request<boost::beast::http::empty_body>&& request); \
+    inline static const auto roar_##HandlerName = Roar::extendRouteInfo( \
+        Roar::RouteInfo<this_type>{{}, boost::beast::http::verb::DefaultVerb}, &this_type::HandlerName)
+
+#define ROAR_SERVE(HandlerName) \
+    void HandlerName( \
+        Roar::Session& session, \
+        Roar::Request<boost::beast::http::empty_body> const& request, \
+        FileAndStatus const& fileAndStatus); \
     inline static const auto roar_##HandlerName = \
-        Roar::extendRouteInfo({.verb = boost::beast::http::verb::DefaultVerb}, &this_type::HandlerName)
+        Roar::extendRouteInfoForServe(Roar::ServeInfo<this_type>{}, &this_type::HandlerName)
 
 /**
  * @brief Define a route.

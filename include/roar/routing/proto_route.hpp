@@ -26,6 +26,14 @@ namespace Roar
         std::optional<CorsSettings> cors;
     };
 
+    namespace Detail
+    {
+        struct ServedPath
+        {
+            std::string basePath;
+        };
+    }
+
     class Session;
     template <typename>
     class Request;
@@ -35,7 +43,7 @@ namespace Roar
      */
     struct ProtoRoute
     {
-        std::variant<std::string, std::regex> path;
+        std::variant<std::string, std::regex, Detail::ServedPath> path;
         std::function<void(Session& session, Request<boost::beast::http::empty_body>&& req)> callRoute;
         std::function<bool(std::string const&, std::vector<std::string>&)> matches;
         RouteOptions routeOptions;

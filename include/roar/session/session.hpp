@@ -65,10 +65,10 @@ namespace Roar
         class SendIntermediate : public std::enable_shared_from_this<SendIntermediate<BodyT>>
         {
           public:
-            template <typename OriginalBodyT>
-            SendIntermediate(Session& session, Request<OriginalBodyT> const& req)
+            template <typename OriginalBodyT, typename... Forwards>
+            SendIntermediate(Session& session, Request<OriginalBodyT> const& req, Forwards&&... forwards)
                 : session_(session.shared_from_this())
-                , response_{session_->prepareResponse<BodyT>(req)}
+                , response_{session_->prepareResponse<BodyT>(req), std::forward<Forwards>(forwards)...}
             {}
             SendIntermediate(SendIntermediate&&) = default;
             SendIntermediate(SendIntermediate const&) = delete;
@@ -163,9 +163,10 @@ namespace Roar
                 return *this;
             }
 
-            void preparePayload()
+            SendIntermediate& preparePayload()
             {
                 response_.preparePayload();
+                return *this;
             }
 
             /**
@@ -182,10 +183,12 @@ namespace Roar
             Response<BodyT> response_;
         };
 
-        template <typename BodyT, typename OriginalBodyT>
-        [[nodiscard]] std::shared_ptr<SendIntermediate<BodyT>> send(Request<OriginalBodyT> const& req)
+        template <typename BodyT, typename OriginalBodyT, typename... Forwards>
+        [[nodiscard]] std::shared_ptr<SendIntermediate<BodyT>>
+        send(Request<OriginalBodyT> const& req, Forwards&&... forwards)
         {
-            return std::shared_ptr<SendIntermediate<BodyT>>(new SendIntermediate<BodyT>{*this, req});
+            return std::shared_ptr<SendIntermediate<BodyT>>(
+                new SendIntermediate<BodyT>{*this, req, std::forward<Forwards>(forwards)...});
         }
 
         /**

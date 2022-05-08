@@ -1,4 +1,6 @@
 #pragma once
+
+#include <roar/directory_server.hpp>
 #include <roar/beast/forward.hpp>
 #include <roar/routing/proto_route.hpp>
 #include <roar/error.hpp>
@@ -7,6 +9,8 @@
 #include <roar/routing/request_listener.hpp>
 #include <roar/standard_response_provider.hpp>
 #include <roar/standard_text_response_provider.hpp>
+#include <roar/detail/filesystem/jail.hpp>
+#include <roar/detail/type_equal_compare.hpp>
 
 #include <boost/describe/modifiers.hpp>
 #include <boost/asio/ssl/context.hpp>
@@ -101,60 +105,7 @@ namespace Roar
                 describe_members<RequestListenerT, boost::describe::mod_any_access | boost::describe::mod_static>;
             std::unordered_multimap<boost::beast::http::verb, ProtoRoute> extractedRoutes;
             boost::mp11::mp_for_each<routes>([&extractedRoutes, &listener, this]<typename T>(T route) {
-                ProtoRoute protoRoute{};
-                switch (route.pointer->pathType)
-                {
-                    case (RoutePathType::RegularString):
-                    {
-                        protoRoute.path = std::string{route.pointer->path};
-                        protoRoute.matches =
-                            [p = route.pointer->path](std::string const& path, std::vector<std::string>& regexMatches) {
-                                return path == p;
-                            };
-                        break;
-                    }
-                    case (RoutePathType::Regex):
-                    {
-                        protoRoute.path = std::regex{route.pointer->path};
-                        protoRoute.matches = [p = route.pointer->path](
-                                                 std::string const& path, std::vector<std::string>& regexMatches) {
-                            std::smatch smatch;
-                            auto result = std::regex_match(path, smatch, std::regex{p});
-                            regexMatches.reserve(smatch.size());
-                            for (auto submatch = std::next(std::begin(smatch)), end = std::end(smatch); submatch < end;
-                                 ++submatch)
-                                regexMatches.push_back(submatch->str());
-                            return result;
-                        };
-                        break;
-                    }
-                    default:
-                        throw std::runtime_error("Invalid path type for route.");
-                }
-                protoRoute.routeOptions = route.pointer->routeOptions;
-                protoRoute.callRoute = [serverIsSecure = isSecure(),
-                                        listener,
-                                        handler = route.pointer->handler,
-                                        allowUnsecure = protoRoute.routeOptions.allowUnsecure](
-                                           Session& session, Request<boost::beast::http::empty_body> req) {
-                    if (serverIsSecure && !session.isSecure() && !allowUnsecure)
-                        return session.sendStrictTransportSecurityResponse();
-                    std::invoke(handler, *listener, session, std::move(req));
-                };
-                extractedRoutes.emplace(*route.pointer->verb, protoRoute);
-
-                if (protoRoute.routeOptions.cors && protoRoute.routeOptions.cors->generatePreflightOptionsRoute)
-                {
-                    auto preflightRoute = protoRoute;
-                    protoRoute.callRoute = [serverIsSecure = isSecure(),
-                                            allowUnsecure = protoRoute.routeOptions.allowUnsecure](
-                                               Session& session, Request<boost::beast::http::empty_body> const& req) {
-                        if (serverIsSecure && !session.isSecure() && !allowUnsecure)
-                            return session.sendStrictTransportSecurityResponse();
-                        session.send(session.prepareResponse(req));
-                    };
-                    extractedRoutes.emplace(boost::beast::http::verb::options, preflightRoute);
-                }
+                addRoute(listener, extractedRoutes, *route.pointer);
             });
             addRequestListenerToRouter(std::move(extractedRoutes));
             return listener;
@@ -176,6 +127,92 @@ namespace Roar
         boost::asio::any_io_executor getExecutor() const;
 
       private:
+        template <typename RequestListenerT>
+        void addRoute(
+            std::shared_ptr<RequestListenerT> listener,
+            std::unordered_multimap<boost::beast::http::verb, ProtoRoute>& extractedRoutes,
+            RouteInfo<RequestListenerT> const& info)
+        {
+            ProtoRoute protoRoute{};
+            switch (info.pathType)
+            {
+                case (RoutePathType::RegularString):
+                {
+                    protoRoute.path = std::string{info.path};
+                    protoRoute.matches =
+                        [p = info.path](std::string const& path, std::vector<std::string>& regexMatches) {
+                            return path == p;
+                        };
+                    break;
+                }
+                case (RoutePathType::Regex):
+                {
+                    protoRoute.path = std::regex{info.path};
+                    protoRoute.matches =
+                        [p = info.path](std::string const& path, std::vector<std::string>& regexMatches) {
+                            std::smatch smatch;
+                            auto result = std::regex_match(path, smatch, std::regex{p});
+                            regexMatches.reserve(smatch.size());
+                            for (auto submatch = std::next(std::begin(smatch)), end = std::end(smatch); submatch < end;
+                                 ++submatch)
+                                regexMatches.push_back(submatch->str());
+                            return result;
+                        };
+                    break;
+                }
+                default:
+                    throw std::runtime_error("Invalid path type for route.");
+            }
+            protoRoute.routeOptions = info.routeOptions;
+            protoRoute.callRoute = [serverIsSecure = isSecure(),
+                                    listener,
+                                    handler = info.handler,
+                                    allowUnsecure = protoRoute.routeOptions.allowUnsecure](
+                                       Session& session, Request<boost::beast::http::empty_body> req) {
+                if (serverIsSecure && !session.isSecure() && !allowUnsecure)
+                    return session.sendStrictTransportSecurityResponse();
+                std::invoke(handler, *listener, session, std::move(req));
+            };
+            extractedRoutes.emplace(*info.verb, protoRoute);
+
+            if (protoRoute.routeOptions.cors && protoRoute.routeOptions.cors->generatePreflightOptionsRoute)
+            {
+                auto preflightRoute = protoRoute;
+                protoRoute.callRoute = [serverIsSecure = isSecure(),
+                                        allowUnsecure = protoRoute.routeOptions.allowUnsecure](
+                                           Session& session, Request<boost::beast::http::empty_body> const& req) {
+                    if (serverIsSecure && !session.isSecure() && !allowUnsecure)
+                        return session.sendStrictTransportSecurityResponse();
+                    session.send(session.prepareResponse(req));
+                };
+                extractedRoutes.emplace(boost::beast::http::verb::options, preflightRoute);
+            }
+        }
+
+        template <typename RequestListenerT>
+        void addRoute(
+            std::shared_ptr<RequestListenerT> listener,
+            std::unordered_multimap<boost::beast::http::verb, ProtoRoute>& extractedRoutes,
+            ServeInfo<RequestListenerT> const& info)
+        {
+            namespace http = boost::beast::http;
+
+            ProtoRoute protoRoute{};
+            protoRoute.path = Detail::ServedPath{std::string{info.path}};
+            protoRoute.routeOptions = info.routeOptions;
+            protoRoute.callRoute = Detail::DirectoryServer<RequestListenerT>{{
+                .serverIsSecure_ = isSecure(),
+                .serveInfo_ = info,
+                .listener_ = listener,
+            }};
+            // Add the all regardeless of allowed or not, to give a proper response.
+            extractedRoutes.emplace(http::verb::options, protoRoute);
+            extractedRoutes.emplace(http::verb::head, protoRoute);
+            extractedRoutes.emplace(http::verb::get, protoRoute);
+            extractedRoutes.emplace(http::verb::put, protoRoute);
+            extractedRoutes.emplace(http::verb::delete_, protoRoute);
+        }
+
         void addRequestListenerToRouter(std::unordered_multimap<boost::beast::http::verb, ProtoRoute>&& routes);
 
       private:
