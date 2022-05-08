@@ -31,7 +31,7 @@ namespace Roar::Detail
       public:
         DirectoryServer(DirectoryServerConstructionArgs<RequestListenerT>&& args)
             : DirectoryServerConstructionArgs<RequestListenerT>{std::move(args)}
-            , jail_{this->serveInfo_.serveOptions.pathProvider(*this->listener_)}
+            , jail_{this->serveInfo_.serveOptions.pathProvider(*this->listener_.lock())}
             , basePath_{this->serveInfo_.path}
         {}
 
@@ -48,7 +48,7 @@ namespace Roar::Detail
             if (this->serverIsSecure_ && !session.isSecure() && !this->serveInfo_.routeOptions.allowUnsecure)
                 return session.sendStrictTransportSecurityResponse();
 
-            const auto fileAndStatus = getFileAndStatus();
+            const auto fileAndStatus = getFileAndStatus(req.target());
 
             // Filter allowed methods
             switch (req.method())
@@ -63,19 +63,19 @@ namespace Roar::Detail
                 }
                 case (http::verb::get):
                 {
-                    if (!this->serveOptions_.allowDownload)
+                    if (!this->serveInfo_.serveOptions.allowDownload)
                         return session.sendStandardResponse(http::status::method_not_allowed);
                     break;
                 }
                 case (http::verb::delete_):
                 {
-                    if (!this->serveOptions_.allowDelete)
+                    if (!this->serveInfo_.serveOptions.allowDelete)
                         return session.sendStandardResponse(http::status::method_not_allowed);
                     break;
                 }
                 case (http::verb::put):
                 {
-                    if (!this->serveOptions_.allowUpload)
+                    if (!this->serveInfo_.serveOptions.allowUpload)
                         return session.sendStandardResponse(http::status::method_not_allowed);
                     break;
                 }
@@ -90,7 +90,7 @@ namespace Roar::Detail
                 return session.sendStandardResponse(http::status::not_found);
 
             // File is found, method is allowed, now ask the library user for final permissions:
-            switch (std::invoke(this->serverInfo_.handler, *listener, session, req, fileAndStatus))
+            switch (std::invoke(this->serveInfo_.handler, *listener, session, req, fileAndStatus))
             {
                 case (ServeDecision::Continue):
                     return handleFileServe(session, req, fileAndStatus);
@@ -162,11 +162,10 @@ namespace Roar::Detail
 
         void sendHeadResponse(Session& session, EmptyBodyRequest const& req, FileAndStatus const&)
         {
-            // TODO:
             namespace http = boost::beast::http;
             session.send<http::empty_body>(req)
                 ->status(http::status::ok)
-                .setHeader(http::field::accept_ranges, "bytes")
+                // TODO: .setHeader(http::field::accept_ranges, "bytes")
                 .commit();
         }
 
@@ -189,13 +188,42 @@ namespace Roar::Detail
         void upload(Session& session, EmptyBodyRequest const& req, FileAndStatus const& fileAndStatus)
         {
             namespace http = boost::beast::http;
-            // TODO: Implement
+            if (!req.expectsContinue())
+            {
+                session.send<http::string_body>(req)
+                    ->status(http::status::expectation_failed)
+                    .setHeader(http::field::connection, "close")
+                    .body("Set Expect: 100-continue")
+                    .commit();
+            }
+
+            auto contentLength = req.contentLength();
+            if (!contentLength)
+                return session.sendStandardResponse(http::status::bad_request, "Require Content-Length.");
+
+            // TODO: Range Requests
+            auto body = std::make_shared<http::file_body::value_type>();
+            boost::beast::error_code ec;
+            body->open(fileAndStatus.file.string().c_str(), boost::beast::file_mode::write, ec);
+            if (ec)
+                return session.sendStandardResponse(
+                    http::status::internal_server_error, "Cannot open file for writing.");
+
+            session.send<http::empty_body>(req)
+                ->status(http::status::continue_)
+                .commit()
+                .then([session = session.shared_from_this(), req, body = std::move(body), contentLength](bool closed) {
+                    if (closed)
+                        return;
+
+                    session->read<http::file_body>(req, std::move(*body))->bodyLimit(*contentLength).commit();
+                });
         }
 
         void download(Session& session, EmptyBodyRequest const& req, FileAndStatus const& fileAndStatus)
         {
             namespace http = boost::beast::http;
-            // TODO: Implement
+            // TODO: Range Requests
             http::file_body::value_type body;
             boost::beast::error_code ec;
             body.open(fileAndStatus.file.string().c_str(), boost::beast::file_mode::read, ec);

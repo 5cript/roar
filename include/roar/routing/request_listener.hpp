@@ -211,15 +211,15 @@ namespace Roar
 #define ROAR_MAKE_LISTENER(ListenerType) using this_type = ListenerType
 
 #define ROAR_ROUTE_I(HandlerName, DefaultVerb) \
-    Roar::ServeDecision HandlerName(Roar::Session& session, Roar::Request<boost::beast::http::empty_body>&& request); \
+    void HandlerName(Roar::Session& session, Roar::Request<boost::beast::http::empty_body>&& request); \
     inline static const auto roar_##HandlerName = Roar::extendRouteInfo( \
         Roar::RouteInfo<this_type>{{}, boost::beast::http::verb::DefaultVerb}, &this_type::HandlerName)
 
 #define ROAR_SERVE(HandlerName) \
-    void HandlerName( \
+    Roar::ServeDecision HandlerName( \
         Roar::Session& session, \
         Roar::Request<boost::beast::http::empty_body> const& request, \
-        FileAndStatus const& fileAndStatus); \
+        Roar::FileAndStatus const& fileAndStatus); \
     inline static const auto roar_##HandlerName = \
         Roar::extendRouteInfoForServe(Roar::ServeInfo<this_type>{}, &this_type::HandlerName)
 

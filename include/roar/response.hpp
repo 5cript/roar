@@ -32,6 +32,13 @@ namespace Roar
             response_.version(11);
         }
 
+        template <typename... Forwards>
+        Response(Forwards... forwards)
+            : response_{std::piecewise_construct, std::forward_as_tuple(std::forward<Forwards>(forwards)...)}
+        {
+            response_.version(11);
+        }
+
         /**
          * @brief Sets the response status code.
          *

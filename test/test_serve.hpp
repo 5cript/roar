@@ -137,6 +137,11 @@ namespace Roar::Tests
         // TODO:
     }
 
+    TEST_F(ServeTests, CannotUploadFileWithout100ContinueHandling)
+    {
+        // TODO:
+    }
+
     TEST_F(ServeTests, CannotAccessFileOutsideOfJail)
     {
         // TODO:

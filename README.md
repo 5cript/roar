@@ -20,6 +20,7 @@ This is a network library that has:
     - [ ] Upload
     - [ ] Deletion
     - [ ] Directory Listing
+    - [ ] Range Requests
   - [ ] Resumeable requests (upload/download).
 - [x] Websocket
   - [x] Websocket Server Support (SSL and Plain)

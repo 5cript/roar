@@ -68,7 +68,7 @@ namespace Roar
             template <typename OriginalBodyT, typename... Forwards>
             SendIntermediate(Session& session, Request<OriginalBodyT> const& req, Forwards&&... forwards)
                 : session_(session.shared_from_this())
-                , response_{session_->prepareResponse<BodyT>(req), std::forward<Forwards>(forwards)...}
+                , response_{session_->prepareResponse<BodyT>(req, std::forward<Forwards>(forwards)...)}
             {}
             SendIntermediate(SendIntermediate&&) = default;
             SendIntermediate(SendIntermediate const&) = delete;
@@ -246,7 +246,7 @@ namespace Roar
             template <typename OriginalBodyT, typename... Forwards>
             ReadIntermediate(Session& session, Request<OriginalBodyT> req, Forwards&&... forwardArgs)
                 : session_{session.shared_from_this()}
-                , req_{[&]() -> decltype(req_) {
+                , req_{[&session, &forwardArgs...]() -> decltype(req_) {
                     if constexpr (std::is_same_v<BodyT, boost::beast::http::empty_body>)
                         throw std::runtime_error("Attempting to read with empty_body type.");
                     else
@@ -441,10 +441,10 @@ namespace Roar
          * @tparam BodyT
          * @return Response<BodyT>
          */
-        template <typename BodyT = boost::beast::http::empty_body, typename RequestBodyT>
-        [[nodiscard]] Response<BodyT> prepareResponse(Request<RequestBodyT> const& req)
+        template <typename BodyT = boost::beast::http::empty_body, typename RequestBodyT, typename... Forwards>
+        [[nodiscard]] Response<BodyT> prepareResponse(Request<RequestBodyT> const& req, Forwards&&... forwardArgs)
         {
-            auto res = Response<BodyT>{};
+            auto res = Response<BodyT>{std::forward<Forwards>(forwardArgs)...};
             res.setHeader(boost::beast::http::field::server, "Roar+" BOOST_BEAST_VERSION_STRING);
             if (routeOptions().cors)
                 res.enableCors(req, routeOptions().cors);
