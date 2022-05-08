@@ -2,8 +2,13 @@
 
 #include <roar/routing/request_listener.hpp>
 #include <roar/filesystem/special_paths.hpp>
+#include <roar/literals/memory.hpp>
 
 #include <boost/describe/class.hpp>
+
+#include <fstream>
+#include <random>
+#include <algorithm>
 
 class FileServer
 {
@@ -24,8 +29,28 @@ class FileServer
         if (!std::filesystem::exists(tempPath))
             std::filesystem::create_directory(tempPath);
 
+        std::filesystem::create_directory(tempPath / "dir");
+        createDummyFile(tempPath / "dir" / "file1.txt");
+        createDummyFile(tempPath / "dir" / "file2.txt");
+        createDummyFile(tempPath / "file_A.txt");
+        createDummyFile(tempPath / "file_B.txt");
+        createDummyFile(tempPath / "file_C.txt");
+        createDummyFile(tempPath / "file_D.txt");
+        createDummyFile(tempPath / "file_E.txt");
+        createDummyFile(tempPath / "file_F.txt");
+
         // path is also automatically resolved from here.
         return "%temp%/roarFileServerExample";
+    }
+    void createDummyFile(std::filesystem::path const& where)
+    {
+        using namespace Roar::Literals;
+
+        std::ofstream writer{where, std::ios_base::binary};
+        std::mt19937 gen(0);
+        std::uniform_int_distribution<int> letters(1, 2_MiB);
+        std::string str(letters(gen), 'a');
+        writer << str;
     }
 
     ROAR_SERVE(customServeOptions)

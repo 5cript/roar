@@ -11,9 +11,25 @@
 
 #include <utility>
 #include <filesystem>
+#include <sstream>
+#include <chrono>
 
 namespace Roar::Detail
 {
+    namespace
+    {
+        static std::string to_string(std::filesystem::file_time_type const& ftime)
+        {
+            auto tp = std::chrono::file_clock::to_sys(ftime);
+            auto cftime =
+                std::chrono::system_clock::to_time_t(std::chrono::time_point_cast<std::chrono::system_clock::duration>(
+                    std::chrono::file_clock::to_sys(ftime)));
+            std::string str = std::asctime(std::localtime(&cftime));
+            str.pop_back(); // rm the trailing '\n' put by `asctime`
+            return str;
+        }
+    }
+
     template <typename RequestListenerT>
     struct DirectoryServerConstructionArgs
     {
@@ -129,19 +145,20 @@ namespace Roar::Detail
                 },
                 this->serveInfo_.serveOptions.pathProvider);
 
-            return resolvePath(rawPath);
+            return Roar::resolvePath(rawPath);
         }
 
         FileAndStatus getFileAndStatus(boost::beast::string_view target)
         {
             auto analyzeFile = [this](boost::beast::string_view target) -> FileAndStatus {
-                auto relative = jail_.pathAsIsInJail(std::filesystem::path{std::string{target}});
-                if (relative)
+                const auto absolute = jail_.pathAsIsInJail(std::filesystem::path{std::string{target}});
+                if (absolute)
                 {
-                    if (std::filesystem::exists(*relative))
-                        return {.file = *relative, .status = std::filesystem::status(*relative)};
+                    const auto relative = jail_.relativeToRoot(std::filesystem::path{std::string{target}});
+                    if (std::filesystem::exists(*absolute))
+                        return {.file = *absolute, .relative = *relative, .status = std::filesystem::status(*absolute)};
                     else
-                        return {.file = *relative, .status = std::filesystem::file_status{}};
+                        return {.file = *absolute, .relative = *relative, .status = std::filesystem::file_status{}};
                 }
                 return {.file = {}, .status = std::filesystem::file_status{}};
             };
@@ -215,7 +232,8 @@ namespace Roar::Detail
             namespace http = boost::beast::http;
             session.send<http::empty_body>(req)
                 ->status(http::status::ok)
-                // TODO: .setHeader(http::field::accept_ranges, "bytes")
+                // TODO:
+                //.setHeader(http::field::accept_ranges, "bytes")
                 .commit();
         }
 
@@ -240,8 +258,63 @@ namespace Roar::Detail
 
         void makeListing(Session& session, EmptyBodyRequest const& req, FileAndStatus const& fileAndStatus)
         {
-            // TODO: Implement
             namespace http = boost::beast::http;
+            std::stringstream document;
+            document << "<!DOCTYPE html>\n";
+            document << "<html>\n";
+            document << "<head>\n";
+            document << "<meta charset='utf-8'>\n";
+            document << "<meta http-equiv='X-UA-Compatible' content='IE=edge'>\n";
+            document << "<title>Roar Listing of " << fileAndStatus.relative.string() << "</title>\n";
+            document << "<meta name='viewport' content='width=device-width, initial-scale=1'>\n";
+            document << "</head>\n";
+            document << "<body>\n";
+            document << "<h1>Index of " << fileAndStatus.relative.string() << "</h1>\n";
+            document << "<table>\n";
+            document << "<thead>\n";
+            document << "<tr>\n";
+            document << "<th>"
+                     << "Name"
+                     << "</th>\n";
+            document << "<th>"
+                     << "Last Modified"
+                     << "</th>\n";
+            document << "<th>"
+                     << "Size"
+                     << "</th>\n";
+            document << "</tr>\n";
+            document << "</thead>\n";
+            document << "<tbody>\n";
+
+            auto toHumanReadableSize = [](auto size) {
+                if (size < 1024)
+                    return std::to_string(size) + " bytes";
+                else if (size < 1024 * 1024)
+                    return std::to_string(size / 1024) + " KB";
+                else if (size < 1024 * 1024 * 1024)
+                    return std::to_string(size / 1024 / 1024) + " MB";
+                else
+                    return std::to_string(size / 1024 / 1024 / 1024) + " GB";
+            };
+
+            for (auto const& entry : std::filesystem::directory_iterator{fileAndStatus.file})
+            {
+                document << "<tr>\n";
+                document << "<td>\n";
+                document << "<a href='" << entry.path().filename().string() << "'>" << entry.path().filename().string()
+                         << "</a>\n";
+                document << "<td>" << to_string(entry.last_write_time()) << "</td>\n";
+                document << "<td>" << toHumanReadableSize(entry.file_size()) << "</td>\n";
+                document << "</td>\n";
+                document << "</tr>\n";
+            }
+
+            document << "</table>\n";
+            document << "</tbody>\n";
+            document << "</body>\n";
+            document << "</html>\n";
+
+            // TODO: Implement
             session.send<http::string_body>(req)
                 ->status(http::status::ok)
                 .contentType("text/plain")

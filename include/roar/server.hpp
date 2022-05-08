@@ -9,7 +9,7 @@
 #include <roar/routing/request_listener.hpp>
 #include <roar/standard_response_provider.hpp>
 #include <roar/standard_text_response_provider.hpp>
-#include <roar/detail/filesystem/jail.hpp>
+#include <roar/filesystem/jail.hpp>
 #include <roar/detail/type_equal_compare.hpp>
 
 #include <boost/describe/modifiers.hpp>

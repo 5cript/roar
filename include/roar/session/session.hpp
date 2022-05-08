@@ -6,7 +6,7 @@
 #include <roar/response.hpp>
 #include <roar/beast/forward.hpp>
 #include <roar/detail/pimpl_special_functions.hpp>
-#include <roar/detail/literals/memory.hpp>
+#include <roar/literals/memory.hpp>
 #include <roar/routing/proto_route.hpp>
 #include <roar/standard_response_provider.hpp>
 #include <roar/detail/promise_compat.hpp>

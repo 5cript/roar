@@ -2,7 +2,7 @@
 
 #include <boost/beast/http/empty_body.hpp>
 #include <roar/cors.hpp>
-#include <roar/detail/literals/regex.hpp>
+#include <roar/literals/regex.hpp>
 
 #include <string>
 #include <functional>

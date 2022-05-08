@@ -4,7 +4,7 @@
 
 #include <roar/routing/proto_route.hpp>
 #include <roar/detail/overloaded.hpp>
-#include <roar/detail/literals/regex.hpp>
+#include <roar/literals/regex.hpp>
 #include <roar/session/session.hpp>
 #include <roar/request.hpp>
 
@@ -41,6 +41,7 @@ namespace Roar
     struct FileAndStatus
     {
         std::filesystem::path file;
+        std::filesystem::path relative;
         std::filesystem::file_status status;
     };
     template <typename RequestListenerT>
