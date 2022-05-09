@@ -11,6 +11,8 @@
 #include <algorithm>
 #include <iostream>
 
+using namespace Roar::Literals;
+
 class FileServer
 {
   public:
@@ -59,11 +61,7 @@ class FileServer
     }
     void createDummyFile(std::filesystem::path const& where)
     {
-        using namespace Roar::Literals;
-
         std::ofstream writer{where, std::ios_base::binary};
-        std::mt19937 gen(0);
-        std::uniform_int_distribution<int> letters(1, 2_MiB);
         std::string str(letters(gen), 'a');
         writer << str;
     }
@@ -84,6 +82,10 @@ class FileServer
             .pathProvider = &FileServer::getServePath,
         },
     });
+
+  private:
+    std::mt19937 gen{0};
+    std::uniform_int_distribution<int> letters{1, 2_MiB};
 
   private:
     // This makes routes visible to the library. For as long as we have to wait for native reflection...

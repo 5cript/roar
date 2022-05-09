@@ -1,6 +1,6 @@
 #pragma once
 
-#include <roar/directory_server.hpp>
+#include <roar/directory_server/directory_server.hpp>
 #include <roar/beast/forward.hpp>
 #include <roar/routing/proto_route.hpp>
 #include <roar/error.hpp>
@@ -200,11 +200,14 @@ namespace Roar
             ProtoRoute protoRoute{};
             protoRoute.path = Detail::ServedPath{std::string{info.path}};
             protoRoute.routeOptions = info.routeOptions;
-            protoRoute.callRoute = Detail::DirectoryServer<RequestListenerT>{{
-                .serverIsSecure_ = isSecure(),
-                .serveInfo_ = info,
-                .listener_ = listener,
-            }};
+            protoRoute.callRoute = [dserver = Detail::DirectoryServer<RequestListenerT>{{
+                                        .serverIsSecure_ = isSecure(),
+                                        .serveInfo_ = info,
+                                        .listener_ = listener,
+                                    }}](Session& session, Request<http::empty_body> const& req) {
+                auto dserverCpy = dserver;
+                dserverCpy(session, req);
+            };
             protoRoute.matches = [p = info.path](std::string const& path, std::vector<std::string>&) {
                 return path.starts_with(p);
             };
