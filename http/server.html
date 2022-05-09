@@ -69,6 +69,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#sending-responses">Sending Responses</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#reading-a-body">Reading a Body</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#rate-limiting">Rate Limiting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#serving-directories">Serving Directories</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="curl.html">Curl</a></li>
@@ -76,7 +77,10 @@
 <p class="caption" role="heading"><span class="caption-text">Websocket</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../websocket/server.html">Websocket Server</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../websocket/client.html">Websocket Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../websocket/client.html">Websocket Client</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../websocket/client.html#example">Example</a></li>
+</ul>
+</li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Dependencies</span></p>
 <ul>
@@ -117,7 +121,7 @@
 <section id="tutorial">
 <h2>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline"></a></h2>
 <blockquote>
-<div><p>May 06, 2022 | 2 min read</p>
+<div><p>May 09, 2022 | 3 min read</p>
 </div></blockquote>
 <section id="minimal-setup-example">
 <h3>Minimal Setup Example<a class="headerlink" href="#minimal-setup-example" title="Permalink to this headline"></a></h3>
@@ -413,6 +417,117 @@ The session is kept alive over the course of the read operation.</p>
 <h2>Rate Limiting<a class="headerlink" href="#rate-limiting" title="Permalink to this headline"></a></h2>
 <p>Download/Upload speeds can be set on a session using “readLimit” and “writeLimit”.
 <a href="/roar/doxygen/classRoar_1_1Session.html">Session class</a>.</p>
+</section>
+<section id="serving-directories">
+<h2>Serving Directories<a class="headerlink" href="#serving-directories" title="Permalink to this headline"></a></h2>
+<p>Serving directories for file download, upload and deletion can be done in the following way:
+(Also see the serve_directory example for a more).</p>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-text">A class that gives access to the filesystem</span><a class="headerlink" href="#id10" title="Permalink to this code"></a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">class</span><span class="w"> </span><span class="nc">FileServer</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="p">{</span><span class="w"></span>
+<span class="linenos"> 3</span><span class="w">  </span><span class="k">private</span><span class="o">:</span><span class="w"></span>
+<span class="linenos"> 4</span><span class="w">    </span><span class="n">ROAR_MAKE_LISTENER</span><span class="p">(</span><span class="n">FileServer</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="w">    </span><span class="n">ROAR_SERVE</span><span class="p">(</span><span class="n">serveMyDirectory</span><span class="p">)</span><span class="w"></span>
+<span class="linenos"> 7</span><span class="w">    </span><span class="p">({</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="w">        </span><span class="c1">// RouteOptions, that are also present in normal routes.</span>
+<span class="linenos"> 9</span><span class="w">        </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">10</span><span class="w">            </span><span class="p">.</span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="linenos">11</span><span class="w">            </span><span class="p">.</span><span class="n">routeOptions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{.</span><span class="n">allowUnsecure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">},</span><span class="w"></span>
+<span class="linenos">12</span><span class="w">        </span><span class="p">},</span><span class="w"></span>
+<span class="linenos">13</span><span class="w">        </span><span class="c1">// ServeOptions, these can also be set on a per session basis. Provide defaults here:</span>
+<span class="linenos">14</span><span class="w">        </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">15</span><span class="w">            </span><span class="c1">// Allow GET requests for file downloads?</span>
+<span class="linenos">16</span><span class="w">            </span><span class="p">.</span><span class="n">allowDownload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">,</span><span class="w"></span>
+<span class="linenos">17</span>
+<span class="linenos">18</span><span class="w">            </span><span class="c1">// Allow PUT requests for file uploads? Defaults to false.</span>
+<span class="linenos">19</span><span class="w">            </span><span class="p">.</span><span class="n">allowUpload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"></span>
+<span class="linenos">20</span>
+<span class="linenos">21</span><span class="w">            </span><span class="c1">// Allow PUT requests to overwrite existing files? Defaults to false.</span>
+<span class="linenos">22</span><span class="w">            </span><span class="p">.</span><span class="n">allowOverwrite</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"></span>
+<span class="linenos">23</span>
+<span class="linenos">24</span><span class="w">            </span><span class="c1">// Allow DELETE requests to delete existing files (and empty directories)? Defaults to false.</span>
+<span class="linenos">25</span><span class="w">            </span><span class="p">.</span><span class="n">allowDelete</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"></span>
+<span class="linenos">26</span>
+<span class="linenos">27</span><span class="w">            </span><span class="c1">// Allow DELETE requests to recursively delete directories? Defaults to false.</span>
+<span class="linenos">28</span><span class="w">            </span><span class="p">.</span><span class="n">allowDeleteOfNonEmptyDirectories</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"></span>
+<span class="linenos">29</span>
+<span class="linenos">30</span><span class="w">            </span><span class="c1">// If this option is set, requests to directories do not try to serve an index.html, </span>
+<span class="linenos">31</span><span class="w">            </span><span class="c1">// but give a table with all existing files instead. Defaults to true.</span>
+<span class="linenos">32</span><span class="w">            </span><span class="p">.</span><span class="n">allowListing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">,</span><span class="w"></span>
+<span class="linenos">33</span>
+<span class="linenos">34</span><span class="w">            </span><span class="c1">// A path to the filesystem. Special magic prefix values are replaced.</span>
+<span class="linenos">35</span><span class="w">            </span><span class="p">.</span><span class="n">pathProvider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;~/roar&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="linenos">36</span><span class="w">            </span><span class="c1">// Alternatives:</span>
+<span class="linenos">37</span><span class="w">            </span><span class="c1">// .pathProvider = &amp;FileServer::servePath_</span>
+<span class="linenos">38</span><span class="w">            </span><span class="c1">// .pathProvider = &amp;FileServer::servePath</span>
+<span class="linenos">39</span><span class="w">            </span><span class="c1">// .pathProvider = &amp;FileServer::servePath2</span>
+<span class="linenos">40</span>
+<span class="linenos">41</span><span class="w">            </span><span class="c1">// Optional! CSS Style to style the directory listing. I recommend using the default, its pretty ;)</span>
+<span class="linenos">42</span><span class="w">            </span><span class="p">.</span><span class="n">customListingStyle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="linenos">43</span><span class="w">        </span><span class="p">},</span><span class="w"></span>
+<span class="linenos">44</span><span class="w">    </span><span class="p">});</span><span class="w"></span>
+<span class="linenos">45</span>
+<span class="linenos">46</span><span class="w">  </span><span class="k">private</span><span class="o">:</span><span class="w"></span>
+<span class="linenos">47</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">filesystem</span><span class="o">::</span><span class="n">path</span><span class="w"> </span><span class="n">servePath_</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">48</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">filesystem</span><span class="o">::</span><span class="n">path</span><span class="w"> </span><span class="nf">servePath</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">49</span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">servePath_</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">50</span><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="linenos">51</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">filesystem</span><span class="o">::</span><span class="n">path</span><span class="w"> </span><span class="nf">servePath2</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">52</span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">servePath_</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">53</span><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="linenos">54</span>
+<span class="linenos">55</span><span class="w">    </span><span class="n">BOOST_DESCRIBE_CLASS</span><span class="p">(</span><span class="n">FileServer</span><span class="p">,</span><span class="w"> </span><span class="p">(),</span><span class="w"> </span><span class="p">(),</span><span class="w"> </span><span class="p">(),</span><span class="w"> </span><span class="p">(</span><span class="n">roar_serveMyDirectory</span><span class="p">))</span><span class="w"></span>
+<span class="linenos">56</span><span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<p>This class defines a route that gives access to the filesystem using ROAR_SERVE.
+Filesystem paths can be prefixed by one of the following values:</p>
+<ul class="simple">
+<li><p>~ Linux: home. Windows: home</p></li>
+<li><p>%userprofile% Linux: home. Windows: home</p></li>
+<li><p>%appdata% Linux: home. Windows: CSIDL_APPDATA</p></li>
+<li><p>%localappdata% Linux: home. Windows: CSIDL_APPDATA_LOCAL</p></li>
+<li><p>%temp% Linux: /tmp. Windows: %userprofile%\AppData\Local\Temp</p></li>
+</ul>
+<p>A ROAR_SERVE macro also generates a function that you need to define.
+This function can be used to fine-control permissions.</p>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-text">Control permissions.</span><a class="headerlink" href="#id11" title="Permalink to this code"></a></div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="n">Roar</span><span class="o">::</span><span class="n">ServeDecision</span><span class="w"> </span><span class="nf">FileServer::serveMyDirectory</span><span class="p">(</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="n">Roar</span><span class="o">::</span><span class="n">Session</span><span class="o">&amp;</span><span class="w"> </span><span class="n">session</span><span class="p">,</span><span class="w"></span>
+<span class="linenos"> 3</span><span class="w">    </span><span class="n">Roar</span><span class="o">::</span><span class="n">EmptyBodyRequest</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"></span>
+<span class="linenos"> 4</span><span class="w">    </span><span class="n">Roar</span><span class="o">::</span><span class="n">FileAndStatus</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">fileAndStatus</span><span class="p">,</span><span class="w"></span>
+<span class="linenos"> 5</span><span class="w">    </span><span class="n">Roar</span><span class="o">::</span><span class="n">ServeOptions</span><span class="o">&lt;</span><span class="n">FileServer</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">options</span><span class="p">)</span><span class="w"></span>
+<span class="linenos"> 6</span><span class="p">{</span><span class="w"></span>
+<span class="linenos"> 7</span><span class="w">    </span><span class="n">session</span><span class="p">.</span><span class="n">readLimit</span><span class="p">(</span><span class="mi">100&#39;000</span><span class="p">);</span><span class="w"> </span><span class="c1">// 100kb/s</span>
+<span class="linenos"> 8</span><span class="w">    </span><span class="n">session</span><span class="p">.</span><span class="n">writeLimit</span><span class="p">(</span><span class="mi">100&#39;000</span><span class="p">);</span><span class="w"> </span><span class="c1">// 100kb/s</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">fileAndStatus</span><span class="p">.</span><span class="n">file</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">11</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fileAndStatus</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">type</span><span class="p">())</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">12</span>
+<span class="linenos">13</span><span class="w">    </span><span class="c1">// You can do something like:</span>
+<span class="linenos">14</span><span class="w">    </span><span class="cm">/**</span>
+<span class="linenos">15</span><span class="cm">     * if (user has permissions)</span>
+<span class="linenos">16</span><span class="cm">     *   options.allowUpload = true;</span>
+<span class="linenos">17</span><span class="cm">     */</span><span class="w"></span>
+<span class="linenos">18</span><span class="w">    </span><span class="n">options</span><span class="p">.</span><span class="n">allowListing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">19</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Roar</span><span class="o">::</span><span class="n">ServeDecision</span><span class="o">::</span><span class="n">Continue</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">20</span><span class="w">    </span><span class="c1">// return Roar::ServeDecision::Deny;</span>
+<span class="linenos">21</span><span class="w">    </span><span class="c1">// return Roar::ServeDecision::Handled;</span>
+<span class="linenos">22</span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<p>The altered options in the above example are only set for the individual session and do not carry over to other sessions.
+The Return values have the following meaning:</p>
+<ul class="simple">
+<li><p>Continue: continue and handle the request based on the given permissions.</p></li>
+<li><p>Deny: Do not continue and return a forbidden response.</p></li>
+<li><p>Handled: You have handled the request here, the server will only let the session run out of scope (close by reset, if not kept alive by you).</p></li>
+</ul>
 </section>
 </section>
 

@@ -12,5 +12,7 @@ var searchData=
   ['expectupgrade_9',['expectUpgrade',['../structRoar_1_1RouteOptions.html#a2cb0954a6abaa3440576fd86f2d3f0a0',1,'Roar::RouteOptions']]],
   ['exposeheaders_10',['exposeHeaders',['../structRoar_1_1CorsSettings.html#ab33750a5db7bd25ceeb9db2dc318ac2e',1,'Roar::CorsSettings']]],
   ['extendrouteinfo_11',['extendRouteInfo',['../namespaceRoar.html#a76b7f4470cff6ef999dcef8ec4527fa2',1,'Roar']]],
-  ['extensions_12',['extensions',['../namespaceconf.html#ae475e080536acb271a0a0efe56c3ba42',1,'conf']]]
+  ['extendrouteinfoforserve_12',['extendRouteInfoForServe',['../namespaceRoar.html#a4816572b46da82a4eca3f1c824714bc6',1,'Roar']]],
+  ['extensions_13',['extensions',['../namespaceconf.html#ae475e080536acb271a0a0efe56c3ba42',1,'conf']]],
+  ['extensiontomime_14',['extensionToMime',['../namespaceRoar.html#af6ab509a41deb674b0859a6a3590c55c',1,'Roar']]]
 ];

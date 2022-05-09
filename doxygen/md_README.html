@@ -71,7 +71,38 @@ $(function() {
 <li>a CURL easy wrapper http client.</li>
 <li>Javascript Promise like syntax for asynchronous actions provided by xhawk18_promise.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md22"></a>
+<h1><a class="anchor" id="autotoc_md24"></a>
+Features and planed features</h1>
+<ul>
+<li>[x] HTTP Server<ul>
+<li>[x] HTTPS Support (facillitated using boost::asio::ssl_context)<ul>
+<li>[x] Hybrid support, allow marked requests as unsecure.</li>
+</ul>
+</li>
+<li>[x] Routing (verb+path =&gt; handler)</li>
+<li>[x] Custom Error Pages (404, ...)</li>
+<li>[x] Regex paths</li>
+<li>[x] Serving files (easier than using regex paths)<ul>
+<li>[x] Download</li>
+<li>[x] Upload</li>
+<li>[x] Deletion</li>
+<li>[x] Directory Listing</li>
+<li>[ ] Resumeable requests (Range Requests).</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>[x] Websocket<ul>
+<li>[x] Websocket Server Support (SSL and Plain)</li>
+<li>[x] Websocket Client (SSL and Plain)</li>
+<li>[x] Websocket Upgrade from HTTP(S) Server</li>
+</ul>
+</li>
+<li>[x] Synchronous HTTP Client using libcurl.</li>
+<li>[ ] URL Parser</li>
+<li>[ ] HTTP &amp; HTTPS Tunnel Proxy</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md25"></a>
 Developer Notes</h1>
 <p >On msys2 use python (3) and python-pip of your subsystem, otherwise packages are not found </p>
 </div></div><!-- contents -->

@@ -78,8 +78,9 @@ $(function() {
 <div class="contents">
 <div class="textblock"><code>#include &lt;<a class="el" href="proto__route_8hpp_source.html">roar/routing/proto_route.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="overloaded_8hpp_source.html">roar/detail/overloaded.hpp</a>&gt;</code><br />
-<code>#include &lt;<a class="el" href="regex_8hpp_source.html">roar/detail/literals/regex.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="regex_8hpp_source.html">roar/literals/regex.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="session_8hpp_source.html">roar/session/session.hpp</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="flexible__provider_8hpp_source.html">roar/routing/flexible_provider.hpp</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="request_8hpp_source.html">roar/request.hpp</a>&gt;</code><br />
 <code>#include &lt;boost/beast/http/verb.hpp&gt;</code><br />
 <code>#include &lt;boost/beast/http/empty_body.hpp&gt;</code><br />
@@ -89,6 +90,7 @@ $(function() {
 <code>#include &lt;variant&gt;</code><br />
 <code>#include &lt;regex&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
+<code>#include &lt;filesystem&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for request_listener.hpp:</div>
 <div class="dyncontent">
@@ -98,7 +100,7 @@ Include dependency graph for request_listener.hpp:</div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="include_2roar_2routing_2request__listener_8hpp__dep__incl.svg" width="100%" height="440"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="include_2roar_2routing_2request__listener_8hpp__dep__incl.svg" width="100%" height="496"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 </div>
@@ -106,8 +108,16 @@ This graph shows which files directly or indirectly include this file:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1ServeOptions.html">Roar::ServeOptions&lt; RequestListenerT &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1FileAndStatus.html">Roar::FileAndStatus</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1RouteInfoBase.html">Roar::RouteInfoBase&lt; RequestListenerT &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class is what is used in ROAR_GET, ROAR_PUT, ... requests All options you can set for routes behind these macros are part of this object.  <a href="structRoar_1_1RouteInfoBase.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1RouteInfo.html">Roar::RouteInfo&lt; RequestListenerT &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class is what is used in ROAR_GET, ROAR_PUT, ... requests All options you can set for routes behind these macros are part of this object.  <a href="structRoar_1_1RouteInfo.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1ServeInfo.html">Roar::ServeInfo&lt; RequestListenerT &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
@@ -122,6 +132,8 @@ Macros</h2></td></tr>
 <tr class="separator:af3f206c9dd3d0fa06b2e7f5ac15b5b77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a90c02145b5cd815e02e40f63650be0e2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="include_2roar_2routing_2request__listener_8hpp.html#a90c02145b5cd815e02e40f63650be0e2">ROAR_ROUTE_I</a>(HandlerName,  DefaultVerb)</td></tr>
 <tr class="separator:a90c02145b5cd815e02e40f63650be0e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a4daa25bfce1a64a8fdc2cd73ace9df"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="include_2roar_2routing_2request__listener_8hpp.html#a1a4daa25bfce1a64a8fdc2cd73ace9df">ROAR_SERVE</a>(HandlerName)</td></tr>
+<tr class="separator:a1a4daa25bfce1a64a8fdc2cd73ace9df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a105374cb60deb97ed4a46e100941b470"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="include_2roar_2routing_2request__listener_8hpp.html#a105374cb60deb97ed4a46e100941b470">ROAR_ROUTE</a>(HandlerName)&#160;&#160;&#160;<a class="el" href="include_2roar_2routing_2request__listener_8hpp.html#a90c02145b5cd815e02e40f63650be0e2">ROAR_ROUTE_I</a>(HandlerName, get)</td></tr>
 <tr class="memdesc:a105374cb60deb97ed4a46e100941b470"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define a route. route.  <a href="include_2roar_2routing_2request__listener_8hpp.html#a105374cb60deb97ed4a46e100941b470">More...</a><br /></td></tr>
 <tr class="separator:a105374cb60deb97ed4a46e100941b470"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -152,12 +164,21 @@ Typedefs</h2></td></tr>
 <tr class="memitem:aacca13002ced47016c256e5e38970b38"><td class="memTemplParams" colspan="2">template&lt;typename RequestListenerT &gt; </td></tr>
 <tr class="memitem:aacca13002ced47016c256e5e38970b38"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceRoar.html#aacca13002ced47016c256e5e38970b38">Roar::HandlerType</a> = void(RequestListenerT::*)(Session &amp;, Request&lt; boost::beast::http::empty_body &gt; &amp;&amp;)</td></tr>
 <tr class="separator:aacca13002ced47016c256e5e38970b38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afec3f1894635de94e8ce31b28282666c"><td class="memTemplParams" colspan="2">template&lt;typename RequestListenerT &gt; </td></tr>
+<tr class="memitem:afec3f1894635de94e8ce31b28282666c"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceRoar.html#afec3f1894635de94e8ce31b28282666c">Roar::ServeHandlerType</a> = ServeDecision(RequestListenerT::*)(Session &amp;, Request&lt; boost::beast::http::empty_body &gt; const  &amp;, FileAndStatus const  &amp;, ServeOptions&lt; RequestListenerT &gt; &amp;options)</td></tr>
+<tr class="separator:afec3f1894635de94e8ce31b28282666c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
+<tr class="memitem:ae2df35d3664d33fe384b21f4aa70bc00"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRoar.html#ae2df35d3664d33fe384b21f4aa70bc00">Roar::ServeDecision</a> { <a class="el" href="namespaceRoar.html#ae2df35d3664d33fe384b21f4aa70bc00aa0bfb8e59e6c13fc8d990781f77694fe">Roar::Continue</a>
+, <a class="el" href="namespaceRoar.html#ae2df35d3664d33fe384b21f4aa70bc00a3682d1665cf331373000c20680732d3a">Roar::Deny</a>
+, <a class="el" href="namespaceRoar.html#ae2df35d3664d33fe384b21f4aa70bc00a827211270de454ea3e0df8f57995efed">Roar::Handled</a>
+ }</td></tr>
+<tr class="separator:ae2df35d3664d33fe384b21f4aa70bc00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5a6f148a4a38ede639b27cf1a5ee091"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRoar.html#ab5a6f148a4a38ede639b27cf1a5ee091">Roar::RoutePathType</a> { <a class="el" href="namespaceRoar.html#ab5a6f148a4a38ede639b27cf1a5ee091a6fcdc090caeade09d0efd6253932b6f5">Roar::Unspecified</a>
 , <a class="el" href="namespaceRoar.html#ab5a6f148a4a38ede639b27cf1a5ee091a016e64ecaa7adba44ac8e2c731244d6e">Roar::RegularString</a>
 , <a class="el" href="namespaceRoar.html#ab5a6f148a4a38ede639b27cf1a5ee091a86f600672d32a7be1dd6cb035ac61577">Roar::Regex</a>
+, <a class="el" href="namespaceRoar.html#ab5a6f148a4a38ede639b27cf1a5ee091a282537a1c31dd15dd38418014ac94432">Roar::ServedDirectory</a>
  }</td></tr>
 <tr class="separator:ab5a6f148a4a38ede639b27cf1a5ee091"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -166,6 +187,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a76b7f4470cff6ef999dcef8ec4527fa2"><td class="memTemplParams" colspan="2">template&lt;typename RequestListenerT &gt; </td></tr>
 <tr class="memitem:a76b7f4470cff6ef999dcef8ec4527fa2"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceRoar.html#a76b7f4470cff6ef999dcef8ec4527fa2">Roar::extendRouteInfo</a> (RouteInfo&lt; RequestListenerT &gt; info, HandlerType&lt; RequestListenerT &gt; handler)</td></tr>
 <tr class="separator:a76b7f4470cff6ef999dcef8ec4527fa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4816572b46da82a4eca3f1c824714bc6"><td class="memTemplParams" colspan="2">template&lt;typename RequestListenerT &gt; </td></tr>
+<tr class="memitem:a4816572b46da82a4eca3f1c824714bc6"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceRoar.html#a4816572b46da82a4eca3f1c824714bc6">Roar::extendRouteInfoForServe</a> (ServeInfo&lt; RequestListenerT &gt; info, ServeHandlerType&lt; RequestListenerT &gt; handler)</td></tr>
+<tr class="separator:a4816572b46da82a4eca3f1c824714bc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a09448f4bb9335825d144d533ccd90620" name="a09448f4bb9335825d144d533ccd90620"></a>
@@ -354,11 +378,42 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">    <span class="keywordtype">void</span> HandlerName(<a class="code hl_class" href="classRoar_1_1Session.html">Roar::Session</a>&amp; session, <a class="code hl_class" href="classRoar_1_1Request.html">Roar::Request&lt;boost::beast::http::empty_body&gt;</a>&amp;&amp; request); \</div>
-<div class="line">    inline <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">auto</span> roar_##HandlerName = <a class="code hl_function" href="namespaceRoar.html#a76b7f4470cff6ef999dcef8ec4527fa2">\</a></div>
-<div class="line"><a class="code hl_function" href="namespaceRoar.html#a76b7f4470cff6ef999dcef8ec4527fa2">        Roar::extendRouteInfo</a>({.verb = boost::beast::http::verb::DefaultVerb}, &amp;this_type::HandlerName)</div>
+<div class="line">    inline <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">auto</span> roar_##HandlerName = <a class="code hl_function" href="namespaceRoar.html#a76b7f4470cff6ef999dcef8ec4527fa2">Roar::extendRouteInfo</a>( \</div>
+<div class="line">        <a class="code hl_struct" href="structRoar_1_1RouteInfo.html">Roar::RouteInfo&lt;this_type&gt;</a>{{}, boost::beast::http::verb::DefaultVerb}, &amp;this_type::HandlerName)</div>
 <div class="ttc" id="aclassRoar_1_1Request_html"><div class="ttname"><a href="classRoar_1_1Request.html">Roar::Request</a></div><div class="ttdoc">This class extends the boost::beast::http::request&lt;BodyT&gt; with additional convenience.</div><div class="ttdef"><b>Definition:</b> request.hpp:42</div></div>
 <div class="ttc" id="aclassRoar_1_1Session_html"><div class="ttname"><a href="classRoar_1_1Session.html">Roar::Session</a></div><div class="ttdef"><b>Definition:</b> session.hpp:37</div></div>
-<div class="ttc" id="anamespaceRoar_html_a76b7f4470cff6ef999dcef8ec4527fa2"><div class="ttname"><a href="namespaceRoar.html#a76b7f4470cff6ef999dcef8ec4527fa2">Roar::extendRouteInfo</a></div><div class="ttdeci">auto extendRouteInfo(RouteInfo&lt; RequestListenerT &gt; info, HandlerType&lt; RequestListenerT &gt; handler)</div><div class="ttdef"><b>Definition:</b> request_listener.hpp:65</div></div>
+<div class="ttc" id="anamespaceRoar_html_a76b7f4470cff6ef999dcef8ec4527fa2"><div class="ttname"><a href="namespaceRoar.html#a76b7f4470cff6ef999dcef8ec4527fa2">Roar::extendRouteInfo</a></div><div class="ttdeci">auto extendRouteInfo(RouteInfo&lt; RequestListenerT &gt; info, HandlerType&lt; RequestListenerT &gt; handler)</div><div class="ttdef"><b>Definition:</b> request_listener.hpp:141</div></div>
+<div class="ttc" id="astructRoar_1_1RouteInfo_html"><div class="ttname"><a href="structRoar_1_1RouteInfo.html">Roar::RouteInfo</a></div><div class="ttdef"><b>Definition:</b> request_listener.hpp:119</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a1a4daa25bfce1a64a8fdc2cd73ace9df" name="a1a4daa25bfce1a64a8fdc2cd73ace9df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a4daa25bfce1a64a8fdc2cd73ace9df">&#9670;&nbsp;</a></span>ROAR_SERVE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ROAR_SERVE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">HandlerName</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <a class="code hl_enumeration" href="namespaceRoar.html#ae2df35d3664d33fe384b21f4aa70bc00">Roar::ServeDecision</a> HandlerName( \</div>
+<div class="line">        <a class="code hl_class" href="classRoar_1_1Session.html">Roar::Session</a>&amp; session, \</div>
+<div class="line">        <a class="code hl_class" href="classRoar_1_1Request.html">Roar::Request&lt;boost::beast::http::empty_body&gt;</a> <span class="keyword">const</span>&amp; request, \</div>
+<div class="line">        <a class="code hl_struct" href="structRoar_1_1FileAndStatus.html">Roar::FileAndStatus</a> <span class="keyword">const</span>&amp; fileAndStatus, \</div>
+<div class="line">        <a class="code hl_struct" href="structRoar_1_1ServeOptions.html">Roar::ServeOptions&lt;this_type&gt;</a>&amp; options); \</div>
+<div class="line">    inline <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">auto</span> roar_##HandlerName = <a class="code hl_function" href="namespaceRoar.html#a4816572b46da82a4eca3f1c824714bc6">\</a></div>
+<div class="line"><a class="code hl_function" href="namespaceRoar.html#a4816572b46da82a4eca3f1c824714bc6">        Roar::extendRouteInfoForServe</a>(<a class="code hl_struct" href="structRoar_1_1ServeInfo.html">Roar::ServeInfo&lt;this_type&gt;</a>{}, &amp;this_type::HandlerName)</div>
+<div class="ttc" id="anamespaceRoar_html_a4816572b46da82a4eca3f1c824714bc6"><div class="ttname"><a href="namespaceRoar.html#a4816572b46da82a4eca3f1c824714bc6">Roar::extendRouteInfoForServe</a></div><div class="ttdeci">auto extendRouteInfoForServe(ServeInfo&lt; RequestListenerT &gt; info, ServeHandlerType&lt; RequestListenerT &gt; handler)</div><div class="ttdef"><b>Definition:</b> request_listener.hpp:181</div></div>
+<div class="ttc" id="anamespaceRoar_html_ae2df35d3664d33fe384b21f4aa70bc00"><div class="ttname"><a href="namespaceRoar.html#ae2df35d3664d33fe384b21f4aa70bc00">Roar::ServeDecision</a></div><div class="ttdeci">ServeDecision</div><div class="ttdef"><b>Definition:</b> request_listener.hpp:28</div></div>
+<div class="ttc" id="astructRoar_1_1FileAndStatus_html"><div class="ttname"><a href="structRoar_1_1FileAndStatus.html">Roar::FileAndStatus</a></div><div class="ttdef"><b>Definition:</b> request_listener.hpp:85</div></div>
+<div class="ttc" id="astructRoar_1_1ServeInfo_html"><div class="ttname"><a href="structRoar_1_1ServeInfo.html">Roar::ServeInfo</a></div><div class="ttdef"><b>Definition:</b> request_listener.hpp:132</div></div>
+<div class="ttc" id="astructRoar_1_1ServeOptions_html"><div class="ttname"><a href="structRoar_1_1ServeOptions.html">Roar::ServeOptions</a></div><div class="ttdef"><b>Definition:</b> request_listener.hpp:58</div></div>
 </div><!-- fragment -->
 </div>
 </div>

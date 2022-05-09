@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['generatepreflightoptionsroute_0',['generatePreflightOptionsRoute',['../structRoar_1_1CorsSettings.html#aa648e72b66e45a7ca9d47a6985c912e5',1,'Roar::CorsSettings']]]
+  ['file_0',['file',['../structRoar_1_1FileAndStatus.html#a12001a7cfe9725c4a778cc6a77bf2a67',1,'Roar::FileAndStatus']]]
 ];

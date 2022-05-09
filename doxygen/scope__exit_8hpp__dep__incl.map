@@ -1,6 +1,7 @@
 <map id="include/roar/utility/scope_exit.hpp" name="include/roar/utility/scope_exit.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="248,5,464,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="372,5,588,32"/>
 <area shape="rect" id="node2" href="$100__continue_2main_8cpp.html" title=" " alt="" coords="5,80,221,107"/>
 <area shape="rect" id="node3" href="$most__minimal_2main_8cpp.html" title=" " alt="" coords="246,80,466,107"/>
-<area shape="rect" id="node4" href="$simple__server_2main_8cpp.html" title=" " alt="" coords="490,80,710,107"/>
+<area shape="rect" id="node4" href="$serve__directory_2main_8cpp.html" title=" " alt="" coords="490,80,718,107"/>
+<area shape="rect" id="node5" href="$simple__server_2main_8cpp.html" title=" " alt="" coords="742,80,962,107"/>
 </map>

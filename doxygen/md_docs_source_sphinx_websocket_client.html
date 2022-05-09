@@ -65,7 +65,30 @@ $(function() {
   <div class="headertitle"><div class="title">Websocket Client </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"></div></div><!-- contents -->
+<div class="textblock"><h1><a class="anchor" id="autotoc_md21"></a>
+Example</h1>
+<div class="fragment"><div class="line">---</div>
+<div class="line">lineno-start: 1</div>
+<div class="line">caption: A class that gives access to the filesystem</div>
+<div class="line">---</div>
+<div class="line">auto client = std::make_shared&lt;WebsocketClient&gt;(</div>
+<div class="line">    WebsocketClient::ConstructionArguments{.executor = server_-&gt;getExecutor(), .sslContext = std::nullopt});</div>
+<div class="line">client</div>
+<div class="line">    -&gt;connect({</div>
+<div class="line">        .host = &quot;localhost&quot;,</div>
+<div class="line">        .port = std::to_string(server_-&gt;getLocalEndpoint().port()),</div>
+<div class="line">        .path = &quot;/&quot;,</div>
+<div class="line">    })</div>
+<div class="line">    .then([client]() {</div>
+<div class="line">        client-&gt;binary(false);</div>
+<div class="line">        client-&gt;send(&quot;Hello You!&quot;).then([](std::size_t){</div>
+<div class="line">            // sent.</div>
+<div class="line">        });</div>
+<div class="line">    })</div>
+<div class="line">    .fail([](auto) {</div>
+<div class="line">        // Could not connect.</div>
+<div class="line">    });</div>
+</div><!-- fragment --> </div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

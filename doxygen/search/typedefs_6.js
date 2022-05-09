@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['streamtype_0',['StreamType',['../namespaceRoar_1_1Detail.html#a8e1019c93671b3a5eaf95e69c7b8c4b2',1,'Roar::Detail']]]
+  ['makevariantfromretrievers_5fv_0',['MakeVariantFromRetrievers_v',['../namespaceRoar_1_1Detail.html#a26078dd845e94f6365dd759c02f541a1',1,'Roar::Detail']]]
 ];

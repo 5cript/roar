@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['error_0',['Error',['../structRoar_1_1Error.html',1,'Roar']]]
+  ['directoryserver_0',['DirectoryServer',['../classRoar_1_1Detail_1_1DirectoryServer.html',1,'Roar::Detail']]],
+  ['directoryserverconstructionargs_1',['DirectoryServerConstructionArgs',['../structRoar_1_1Detail_1_1DirectoryServerConstructionArgs.html',1,'Roar::Detail']]]
 ];

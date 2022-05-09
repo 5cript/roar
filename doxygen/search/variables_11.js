@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['ws_5f_0',['ws_',['../classRequestListener.html#a681eddd743ff7d580bd89053425ce337',1,'RequestListener::ws_()'],['../classRoar_1_1WebsocketBase.html#a6405bbad14683e173a9bef4adab98668',1,'Roar::WebsocketBase::ws_()']]]
+  ['templates_5fpath_0',['templates_path',['../namespaceconf.html#ae850ae634911b713e036b43894fdd525',1,'conf']]],
+  ['timeout_1',['timeout',['../structRoar_1_1WebsocketClient_1_1ConnectParameters.html#aee7e2ec53607ee692a2a6fbf197e0474',1,'Roar::WebsocketClient::ConnectParameters']]],
+  ['type_2',['type',['../structRoar_1_1Curl_1_1VerboseLogEntry.html#a11f140918eee881cfab8195bd12aaf73',1,'Roar::Curl::VerboseLogEntry::type()'],['../namespaceRoar.html#a7a331395c296b4077a311da601d1f4f7',1,'Roar::type()']]]
 ];

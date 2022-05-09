@@ -1,8 +1,15 @@
 var searchData=
 [
-  ['impl_5f_0',['impl_',['../classRoar_1_1Route.html#a78525e5f4909cf830eee594d8b0e43ca',1,'Roar::Route::impl_()'],['../classRoar_1_1Router.html#ae617b67a52b7d207b127a2009575f0eb',1,'Roar::Router::impl_()'],['../classRoar_1_1Server.html#aba835d0092d29e17a3491cc51435c90b',1,'Roar::Server::impl_()'],['../classRoar_1_1Factory.html#a5dfe0b4f2b7ec09e2efd014e3b448bf1',1,'Roar::Factory::impl_()'],['../classRoar_1_1Session.html#a36182f7af3fc0b15328788a48ef91c78',1,'Roar::Session::impl_()'],['../classRoar_1_1WebsocketClient.html#a32cc142feb3d90a06be23bd4cc4edd40',1,'Roar::WebsocketClient::impl_()'],['../classRoar_1_1WebsocketSession.html#a34c6e34b09e16addf0151f93b61004ab',1,'Roar::WebsocketSession::impl_()']]],
-  ['instance_5f_1',['instance_',['../classRoar_1_1Curl_1_1Instance.html#a76aaf70c11a73a93d018e986a090932e',1,'Roar::Curl::Instance::instance_()'],['../classRoar_1_1Curl_1_1Request.html#a97103b546f3c8af50ac04889d2624c40',1,'Roar::Curl::Request::instance_()'],['../classRoar_1_1Curl_1_1Response.html#a8554b954ee192cf7a95c6710c3824cc6',1,'Roar::Curl::Response::instance_()']]],
-  ['isbinary_2',['isBinary',['../structRoar_1_1WebsocketReadResult.html#ab6c2655ec63f372b30d60ed974992424',1,'Roar::WebsocketReadResult']]],
-  ['ismessagedone_3',['isMessageDone',['../structRoar_1_1WebsocketReadResult.html#a6c5a0d800e4ebd2138f70a063a61c457',1,'Roar::WebsocketReadResult']]],
-  ['issecure_4',['isSecure',['../structRoar_1_1Session_1_1Implementation.html#ad36a3a85af969e4c5180bcc33c6d99af',1,'Roar::Session::Implementation']]]
+  ['handler_0',['handler',['../structRoar_1_1RouteInfo.html#a86e9438d2ca71a7e7ce04554d2a6eb5d',1,'Roar::RouteInfo::handler()'],['../structRoar_1_1ServeInfo.html#a05586ad70b560ff489bf71eed6150125',1,'Roar::ServeInfo::handler()']]],
+  ['handshakeheaders_1',['handshakeHeaders',['../structRoar_1_1WebsocketClient_1_1Implementation.html#a60fdde872fd2d0ff36142c0644ff54a5',1,'Roar::WebsocketClient::Implementation']]],
+  ['headerallowselection_2',['headerAllowSelection',['../structRoar_1_1CorsSettings.html#af60c18d9708dadef28a40d26124bc8e8',1,'Roar::CorsSettings']]],
+  ['headerfields_5f_3',['headerFields_',['../classRoar_1_1Curl_1_1Request.html#a957fae75a4c16e69db8d8f6e8b43ca4b',1,'Roar::Curl::Request']]],
+  ['headerparser_4',['headerParser',['../structRoar_1_1Session_1_1Implementation.html#a00da09b1856a5f0bf9ad5532c7943f3f',1,'Roar::Session::Implementation']]],
+  ['headerreceivers_5f_5',['headerReceivers_',['../classRoar_1_1Curl_1_1Request.html#a8a7c23209ab4a2d02d547ac63a85abc9',1,'Roar::Curl::Request']]],
+  ['headers_6',['headers',['../structRoar_1_1WebsocketClient_1_1ConnectParameters.html#a4c4896bcb151f052835b34b477a8eb76',1,'Roar::WebsocketClient::ConnectParameters']]],
+  ['host_7',['host',['../structRoar_1_1Url_1_1Remote.html#a5e900dca7034d238d25174e9b64b2323',1,'Roar::Url::Remote::host()'],['../structRoar_1_1WebsocketClient_1_1ConnectParameters.html#aa7ce431fcaf35242a9be6d002f224ef0',1,'Roar::WebsocketClient::ConnectParameters::host()'],['../structRoar_1_1WebsocketClient_1_1Implementation.html#ae839395f3a5748f5494beaf336bfde2e',1,'Roar::WebsocketClient::Implementation::host()']]],
+  ['html_5fcss_5ffiles_8',['html_css_files',['../namespaceconf.html#a6f28557bb41c23eaa415a2476682af3e',1,'conf']]],
+  ['html_5fjs_5ffiles_9',['html_js_files',['../namespaceconf.html#ab6375baea213a912022ee6fe80c17ee8',1,'conf']]],
+  ['html_5ftheme_10',['html_theme',['../namespaceconf.html#a6c3bfcc1a44546c1c75ce20f55bd0fd6',1,'conf']]],
+  ['html_5ftheme_5foptions_11',['html_theme_options',['../namespaceconf.html#aeaafa42217d24810edc9b116b88a4585',1,'conf']]]
 ];

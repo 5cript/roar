@@ -46,7 +46,7 @@ if (edges && edges.length) {
         </defs>
 
 <script type="text/javascript">
-var viewWidth = 537;
+var viewWidth = 725;
 var viewHeight = 84;
 var sectionId = 'dynsection-1';
 </script>
@@ -58,8 +58,8 @@ var sectionId = 'dynsection-1';
 <g id="node1" class="node">
 <title>Node1</title>
 <g id="a_node1"><a xlink:title=" ">
-<polygon fill="#bfbfbf" stroke="black" points="182,-56.5 182,-75.5 344,-75.5 344,-56.5 182,-56.5"/>
-<text text-anchor="middle" x="263" y="-63.5" font-family="Helvetica,sans-Serif" font-size="10.00">include/roar/utility/scope_exit.hpp</text>
+<polygon fill="#bfbfbf" stroke="black" points="275,-56.5 275,-75.5 437,-75.5 437,-56.5 275,-56.5"/>
+<text text-anchor="middle" x="356" y="-63.5" font-family="Helvetica,sans-Serif" font-size="10.00">include/roar/utility/scope_exit.hpp</text>
 </a>
 </g>
 </g>
@@ -75,8 +75,8 @@ var sectionId = 'dynsection-1';
 <!-- Node1&#45;&gt;Node2 -->
 <g id="edge1" class="edge">
 <title>Node1&#45;&gt;Node2</title>
-<path fill="none" stroke="midnightblue" d="M224.47,-53.57C190.14,-43.38 140.67,-28.7 109.7,-19.52"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="223.58,-56.95 234.16,-56.44 225.57,-50.24 223.58,-56.95"/>
+<path fill="none" stroke="midnightblue" d="M302.39,-54.47C250.42,-44.27 172.56,-28.98 124.37,-19.52"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="301.94,-57.95 312.43,-56.44 303.29,-51.08 301.94,-57.95"/>
 </g>
 <!-- Node3 -->
 <g id="node3" class="node">
@@ -90,23 +90,38 @@ var sectionId = 'dynsection-1';
 <!-- Node1&#45;&gt;Node3 -->
 <g id="edge2" class="edge">
 <title>Node1&#45;&gt;Node3</title>
-<path fill="none" stroke="midnightblue" d="M263,-45.8C263,-36.91 263,-26.78 263,-19.75"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="259.5,-46.08 263,-56.08 266.5,-46.08 259.5,-46.08"/>
+<path fill="none" stroke="midnightblue" d="M332.19,-51.18C315.08,-41.24 292.53,-28.15 277.9,-19.65"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="330.65,-54.33 341.06,-56.32 334.17,-48.28 330.65,-54.33"/>
 </g>
 <!-- Node4 -->
 <g id="node4" class="node">
 <title>Node4</title>
-<g id="a_node4"><a xlink:href="simple__server_2main_8cpp.html" target="_top" xlink:title=" ">
-<polygon fill="none" stroke="black" points="363.5,-0.5 363.5,-19.5 528.5,-19.5 528.5,-0.5 363.5,-0.5"/>
-<text text-anchor="middle" x="446" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">examples/simple_server/main.cpp</text>
+<g id="a_node4"><a xlink:href="serve__directory_2main_8cpp.html" target="_top" xlink:title=" ">
+<polygon fill="none" stroke="black" points="363.5,-0.5 363.5,-19.5 534.5,-19.5 534.5,-0.5 363.5,-0.5"/>
+<text text-anchor="middle" x="449" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">examples/serve_directory/main.cpp</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node4 -->
 <g id="edge3" class="edge">
 <title>Node1&#45;&gt;Node4</title>
-<path fill="none" stroke="midnightblue" d="M301.74,-53.57C336.26,-43.38 386.01,-28.7 417.14,-19.52"/>
-<polygon fill="midnightblue" stroke="midnightblue" points="300.6,-50.26 292,-56.44 302.58,-56.97 300.6,-50.26"/>
+<path fill="none" stroke="midnightblue" d="M379.81,-51.18C396.92,-41.24 419.47,-28.15 434.1,-19.65"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="377.83,-48.28 370.94,-56.32 381.35,-54.33 377.83,-48.28"/>
+</g>
+<!-- Node5 -->
+<g id="node5" class="node">
+<title>Node5</title>
+<g id="a_node5"><a xlink:href="simple__server_2main_8cpp.html" target="_top" xlink:title=" ">
+<polygon fill="none" stroke="black" points="552.5,-0.5 552.5,-19.5 717.5,-19.5 717.5,-0.5 552.5,-0.5"/>
+<text text-anchor="middle" x="635" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">examples/simple_server/main.cpp</text>
+</a>
+</g>
+</g>
+<!-- Node1&#45;&gt;Node5 -->
+<g id="edge4" class="edge">
+<title>Node1&#45;&gt;Node5</title>
+<path fill="none" stroke="midnightblue" d="M410.06,-54.54C462.79,-44.33 542,-29 591,-19.52"/>
+<polygon fill="midnightblue" stroke="midnightblue" points="409.36,-51.11 400.21,-56.44 410.69,-57.98 409.36,-51.11"/>
 </g>
 </g>
 </svg>

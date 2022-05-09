@@ -1,0 +1,12 @@
+<map id="include/roar/directory_server" name="include/roar/directory_server">
+<area shape="rect" id="node1" href="dir_4790b02813e51e328ad8bf482bbe9ef8.html" title="routing" alt="" coords="27,148,99,196"/>
+<area shape="rect" id="node2" href="dir_e02e715d4fcc5b2d0cb247348a913617.html" title="detail" alt="" coords="123,148,195,196"/>
+<area shape="rect" id="node3" href="dir_a9c5217e99a8765166e39a65ad4fb217.html" title="filesystem" alt="" coords="219,148,301,196"/>
+<area shape="rect" id="node4" href="dir_d88aababb7453dae4e7ad4eaa68f8d89.html" title="session" alt="" coords="325,148,397,196"/>
+<area shape="rect" id="node5" href="dir_4f347cf5ff54a3b1e1eed8fa75e47133.html" title="directory_server" alt="" coords="152,52,267,100"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000006_000021.html" title="1" alt="" coords="115,138,123,152"/>
+<area shape="rect" id="edge4-headlabel" href="dir_000006_000005.html" title="2" alt="" coords="183,129,191,143"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000006_000011.html" title="2" alt="" coords="242,121,250,135"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000006_000025.html" title="1" alt="" coords="310,124,318,139"/>
+<area shape="rect" id="clust1" href="dir_daaeaa3945e32d5e62f76785683556aa.html" title="roar" alt="" coords="16,16,408,207"/>
+</map>

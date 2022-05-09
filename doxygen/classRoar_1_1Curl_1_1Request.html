@@ -147,7 +147,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0eb6c1d7ca68ffcb1347a65d3b780cab"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Curl_1_1Request.html">Request</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Curl_1_1Request.html#a0eb6c1d7ca68ffcb1347a65d3b780cab">unixSocket</a> (std::filesystem::path const &amp;path)</td></tr>
 <tr class="memdesc:a0eb6c1d7ca68ffcb1347a65d3b780cab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use unix socket instead of a tcp socket.  <a href="classRoar_1_1Curl_1_1Request.html#a0eb6c1d7ca68ffcb1347a65d3b780cab">More...</a><br /></td></tr>
 <tr class="separator:a0eb6c1d7ca68ffcb1347a65d3b780cab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a575c7f0d8788ec0efbfea19811771f00"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Curl_1_1Request.html">Request</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Curl_1_1Request.html#a575c7f0d8788ec0efbfea19811771f00">contentType</a> (std::string const &amp;type)</td></tr>
+<tr class="memitem:a575c7f0d8788ec0efbfea19811771f00"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Curl_1_1Request.html">Request</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Curl_1_1Request.html#a575c7f0d8788ec0efbfea19811771f00">contentType</a> (std::string const &amp;<a class="el" href="namespaceRoar.html#a7a331395c296b4077a311da601d1f4f7">type</a>)</td></tr>
 <tr class="memdesc:a575c7f0d8788ec0efbfea19811771f00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the Content-Type header.  <a href="classRoar_1_1Curl_1_1Request.html#a575c7f0d8788ec0efbfea19811771f00">More...</a><br /></td></tr>
 <tr class="separator:a575c7f0d8788ec0efbfea19811771f00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a06d66b7ce451be2aa7dabb8788db759e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Curl_1_1Request.html">Request</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Curl_1_1Request.html#a06d66b7ce451be2aa7dabb8788db759e">verbose</a> (bool enable=true)</td></tr>
@@ -184,15 +184,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8a97dbd49d01af7825ea5f3d75ad5ce6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Curl_1_1Response.html">Response</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Curl_1_1Request.html#a8a97dbd49d01af7825ea5f3d75ad5ce6">post</a> (std::string const &amp;<a class="el" href="classRoar_1_1Curl_1_1Request.html#ae12c9f1e6479424636100a0b0d44a894">url</a>)</td></tr>
 <tr class="memdesc:a8a97dbd49d01af7825ea5f3d75ad5ce6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finishes and performs the request as a post request.  <a href="classRoar_1_1Curl_1_1Request.html#a8a97dbd49d01af7825ea5f3d75ad5ce6">More...</a><br /></td></tr>
 <tr class="separator:a8a97dbd49d01af7825ea5f3d75ad5ce6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a55f0323ee56145f00496179ef5f95aab"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Curl_1_1Response.html">Response</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Curl_1_1Request.html#a55f0323ee56145f00496179ef5f95aab">del</a> (std::string const &amp;<a class="el" href="classRoar_1_1Curl_1_1Request.html#ae12c9f1e6479424636100a0b0d44a894">url</a>)</td></tr>
-<tr class="memdesc:a55f0323ee56145f00496179ef5f95aab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finishes and performs the request as a delete request.  <a href="classRoar_1_1Curl_1_1Request.html#a55f0323ee56145f00496179ef5f95aab">More...</a><br /></td></tr>
-<tr class="separator:a55f0323ee56145f00496179ef5f95aab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe52e5da17602ad23a70db60fa3535db"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Curl_1_1Response.html">Response</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Curl_1_1Request.html#abe52e5da17602ad23a70db60fa3535db">delete_</a> (std::string const &amp;<a class="el" href="classRoar_1_1Curl_1_1Request.html#ae12c9f1e6479424636100a0b0d44a894">url</a>)</td></tr>
+<tr class="memdesc:abe52e5da17602ad23a70db60fa3535db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finishes and performs the request as a delete request.  <a href="classRoar_1_1Curl_1_1Request.html#abe52e5da17602ad23a70db60fa3535db">More...</a><br /></td></tr>
+<tr class="separator:abe52e5da17602ad23a70db60fa3535db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd5bceefd66e3e859ece29a3a8f20ecc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Curl_1_1Response.html">Response</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Curl_1_1Request.html#afd5bceefd66e3e859ece29a3a8f20ecc">options</a> (std::string const &amp;<a class="el" href="classRoar_1_1Curl_1_1Request.html#ae12c9f1e6479424636100a0b0d44a894">url</a>)</td></tr>
 <tr class="memdesc:afd5bceefd66e3e859ece29a3a8f20ecc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finishes and performs the request as a options request.  <a href="classRoar_1_1Curl_1_1Request.html#afd5bceefd66e3e859ece29a3a8f20ecc">More...</a><br /></td></tr>
 <tr class="separator:afd5bceefd66e3e859ece29a3a8f20ecc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab816b6afd490716aca10db686f4af65e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Curl_1_1Response.html">Response</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Curl_1_1Request.html#ab816b6afd490716aca10db686f4af65e">head</a> (std::string const &amp;<a class="el" href="classRoar_1_1Curl_1_1Request.html#ae12c9f1e6479424636100a0b0d44a894">url</a>)</td></tr>
 <tr class="memdesc:ab816b6afd490716aca10db686f4af65e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finishes and performs the request as a head request.  <a href="classRoar_1_1Curl_1_1Request.html#ab816b6afd490716aca10db686f4af65e">More...</a><br /></td></tr>
 <tr class="separator:ab816b6afd490716aca10db686f4af65e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcaaea31e0f5ead34ec740684c1aa0ed"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Curl_1_1Response.html">Response</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Curl_1_1Request.html#abcaaea31e0f5ead34ec740684c1aa0ed">patch</a> (std::string const &amp;<a class="el" href="classRoar_1_1Curl_1_1Request.html#ae12c9f1e6479424636100a0b0d44a894">url</a>)</td></tr>
+<tr class="memdesc:abcaaea31e0f5ead34ec740684c1aa0ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finishes and performs the request as a patch request.  <a href="classRoar_1_1Curl_1_1Request.html#abcaaea31e0f5ead34ec740684c1aa0ed">More...</a><br /></td></tr>
+<tr class="separator:abcaaea31e0f5ead34ec740684c1aa0ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -450,14 +453,14 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a55f0323ee56145f00496179ef5f95aab" name="a55f0323ee56145f00496179ef5f95aab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a55f0323ee56145f00496179ef5f95aab">&#9670;&nbsp;</a></span>del()</h2>
+<a id="abe52e5da17602ad23a70db60fa3535db" name="abe52e5da17602ad23a70db60fa3535db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe52e5da17602ad23a70db60fa3535db">&#9670;&nbsp;</a></span>delete_()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classRoar_1_1Curl_1_1Response.html">Response</a> Roar::Curl::Request::del </td>
+          <td class="memname"><a class="el" href="classRoar_1_1Curl_1_1Response.html">Response</a> Roar::Curl::Request::delete_ </td>
           <td>(</td>
           <td class="paramtype">std::string const &amp;&#160;</td>
           <td class="paramname"><em>url</em></td><td>)</td>
@@ -646,6 +649,33 @@ template&lt;typename SourceT , typename... Args&gt; </div>
 </div><div class="memdoc">
 
 <p>Finishes and performs the request as a options request. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">url</td><td>The target to send this request to. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="classRoar_1_1Curl_1_1Request.html">Request</a>&amp; Returned for chaining. </dd></dl>
+
+</div>
+</div>
+<a id="abcaaea31e0f5ead34ec740684c1aa0ed" name="abcaaea31e0f5ead34ec740684c1aa0ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abcaaea31e0f5ead34ec740684c1aa0ed">&#9670;&nbsp;</a></span>patch()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classRoar_1_1Curl_1_1Response.html">Response</a> Roar::Curl::Request::patch </td>
+          <td>(</td>
+          <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramname"><em>url</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Finishes and performs the request as a patch request. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">url</td><td>The target to send this request to. </td></tr>

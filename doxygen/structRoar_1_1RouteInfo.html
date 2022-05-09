@@ -73,14 +73,11 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>This class is what is used in ROAR_GET, ROAR_PUT, ... requests All options you can set for routes behind these macros are part of this object.  
- <a href="structRoar_1_1RouteInfo.html#details">More...</a></p>
-
 <p><code>#include &lt;<a class="el" href="include_2roar_2routing_2request__listener_8hpp_source.html">request_listener.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for Roar::RouteInfo&lt; RequestListenerT &gt;:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="structRoar_1_1RouteInfo__coll__graph.svg" width="100%" height="587"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="structRoar_1_1RouteInfo__coll__graph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 <table class="memberdecls">
@@ -89,29 +86,21 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:ac6ee45267082612ac8eee577c43517e9"><td class="memItemLeft" align="right" valign="top">std::optional&lt; boost::beast::http::verb &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1RouteInfo.html#ac6ee45267082612ac8eee577c43517e9">verb</a> = std::nullopt</td></tr>
 <tr class="memdesc:ac6ee45267082612ac8eee577c43517e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">What verb for this route?  <a href="structRoar_1_1RouteInfo.html#ac6ee45267082612ac8eee577c43517e9">More...</a><br /></td></tr>
 <tr class="separator:ac6ee45267082612ac8eee577c43517e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3d4fca5375cfae1aa44e650f6efa76cd"><td class="memItemLeft" align="right" valign="top">char const  *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1RouteInfo.html#a3d4fca5375cfae1aa44e650f6efa76cd">path</a> = nullptr</td></tr>
-<tr class="memdesc:a3d4fca5375cfae1aa44e650f6efa76cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">A path to route to.  <a href="structRoar_1_1RouteInfo.html#a3d4fca5375cfae1aa44e650f6efa76cd">More...</a><br /></td></tr>
-<tr class="separator:a3d4fca5375cfae1aa44e650f6efa76cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f3517aee4f4dce7571c45a1b90f6eab"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceRoar.html#ab5a6f148a4a38ede639b27cf1a5ee091">RoutePathType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1RouteInfo.html#a9f3517aee4f4dce7571c45a1b90f6eab">pathType</a> = <a class="el" href="namespaceRoar.html#ab5a6f148a4a38ede639b27cf1a5ee091a016e64ecaa7adba44ac8e2c731244d6e">RoutePathType::RegularString</a></td></tr>
 <tr class="memdesc:a9f3517aee4f4dce7571c45a1b90f6eab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is the path a string or a regex, ...?  <a href="structRoar_1_1RouteInfo.html#a9f3517aee4f4dce7571c45a1b90f6eab">More...</a><br /></td></tr>
 <tr class="separator:a9f3517aee4f4dce7571c45a1b90f6eab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a24dc4af3fc6476932d7150aaa48b0fe7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structRoar_1_1RouteOptions.html">RouteOptions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1RouteInfo.html#a24dc4af3fc6476932d7150aaa48b0fe7">routeOptions</a></td></tr>
-<tr class="memdesc:a24dc4af3fc6476932d7150aaa48b0fe7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Some options of this route. See documentation for <a class="el" href="structRoar_1_1RouteOptions.html" title="Options that modify the server behavior for a given route.">RouteOptions</a>.  <a href="structRoar_1_1RouteInfo.html#a24dc4af3fc6476932d7150aaa48b0fe7">More...</a><br /></td></tr>
-<tr class="separator:a24dc4af3fc6476932d7150aaa48b0fe7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a86e9438d2ca71a7e7ce04554d2a6eb5d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceRoar.html#aacca13002ced47016c256e5e38970b38">HandlerType</a>&lt; RequestListenerT &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1RouteInfo.html#a86e9438d2ca71a7e7ce04554d2a6eb5d">handler</a> = nullptr</td></tr>
 <tr class="memdesc:a86e9438d2ca71a7e7ce04554d2a6eb5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set automatically by the macro.  <a href="structRoar_1_1RouteInfo.html#a86e9438d2ca71a7e7ce04554d2a6eb5d">More...</a><br /></td></tr>
 <tr class="separator:a86e9438d2ca71a7e7ce04554d2a6eb5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_attribs_structRoar_1_1RouteInfoBase"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_structRoar_1_1RouteInfoBase')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="structRoar_1_1RouteInfoBase.html">Roar::RouteInfoBase&lt; RequestListenerT &gt;</a></td></tr>
+<tr class="memitem:ab66548cdb2c4d3c5e0bdef63544d3981 inherit pub_attribs_structRoar_1_1RouteInfoBase"><td class="memItemLeft" align="right" valign="top">char const  *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1RouteInfoBase.html#ab66548cdb2c4d3c5e0bdef63544d3981">path</a> = nullptr</td></tr>
+<tr class="memdesc:ab66548cdb2c4d3c5e0bdef63544d3981 inherit pub_attribs_structRoar_1_1RouteInfoBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">A path to route to.  <a href="structRoar_1_1RouteInfoBase.html#ab66548cdb2c4d3c5e0bdef63544d3981">More...</a><br /></td></tr>
+<tr class="separator:ab66548cdb2c4d3c5e0bdef63544d3981 inherit pub_attribs_structRoar_1_1RouteInfoBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15ede9e1dbf91fde87970420b026b2ef inherit pub_attribs_structRoar_1_1RouteInfoBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structRoar_1_1RouteOptions.html">RouteOptions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1RouteInfoBase.html#a15ede9e1dbf91fde87970420b026b2ef">routeOptions</a></td></tr>
+<tr class="memdesc:a15ede9e1dbf91fde87970420b026b2ef inherit pub_attribs_structRoar_1_1RouteInfoBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Some options of this route. See documentation for <a class="el" href="structRoar_1_1RouteOptions.html" title="Options that modify the server behavior for a given route.">RouteOptions</a>.  <a href="structRoar_1_1RouteInfoBase.html#a15ede9e1dbf91fde87970420b026b2ef">More...</a><br /></td></tr>
+<tr class="separator:a15ede9e1dbf91fde87970420b026b2ef inherit pub_attribs_structRoar_1_1RouteInfoBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><div class="compoundTemplParams">template&lt;typename RequestListenerT&gt;<br />
-struct Roar::RouteInfo&lt; RequestListenerT &gt;</div><p >This class is what is used in ROAR_GET, ROAR_PUT, ... requests All options you can set for routes behind these macros are part of this object. </p>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">RequestListenerT</td><td>The request listener class that the route belongs to. </td></tr>
-  </table>
-  </dd>
-</dl>
-</div><h2 class="groupheader">Member Data Documentation</h2>
+<h2 class="groupheader">Member Data Documentation</h2>
 <a id="a86e9438d2ca71a7e7ce04554d2a6eb5d" name="a86e9438d2ca71a7e7ce04554d2a6eb5d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a86e9438d2ca71a7e7ce04554d2a6eb5d">&#9670;&nbsp;</a></span>handler</h2>
 
@@ -130,24 +119,6 @@ template&lt;typename RequestListenerT &gt; </div>
 
 </div>
 </div>
-<a id="a3d4fca5375cfae1aa44e650f6efa76cd" name="a3d4fca5375cfae1aa44e650f6efa76cd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3d4fca5375cfae1aa44e650f6efa76cd">&#9670;&nbsp;</a></span>path</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename RequestListenerT &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">char const* <a class="el" href="structRoar_1_1RouteInfo.html">Roar::RouteInfo</a>&lt; RequestListenerT &gt;::path = nullptr</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>A path to route to. </p>
-
-</div>
-</div>
 <a id="a9f3517aee4f4dce7571c45a1b90f6eab" name="a9f3517aee4f4dce7571c45a1b90f6eab"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9f3517aee4f4dce7571c45a1b90f6eab">&#9670;&nbsp;</a></span>pathType</h2>
 
@@ -163,29 +134,6 @@ template&lt;typename RequestListenerT &gt; </div>
 </div><div class="memdoc">
 
 <p>Is the path a string or a regex, ...? </p>
-
-</div>
-</div>
-<a id="a24dc4af3fc6476932d7150aaa48b0fe7" name="a24dc4af3fc6476932d7150aaa48b0fe7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a24dc4af3fc6476932d7150aaa48b0fe7">&#9670;&nbsp;</a></span>routeOptions</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename RequestListenerT &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structRoar_1_1RouteOptions.html">RouteOptions</a> <a class="el" href="structRoar_1_1RouteInfo.html">Roar::RouteInfo</a>&lt; RequestListenerT &gt;::routeOptions</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">= {</div>
-<div class="line">            .allowUnsecure = <span class="keyword">false</span>,</div>
-<div class="line">            .expectUpgrade = <span class="keyword">false</span>,</div>
-<div class="line">            .cors = std::nullopt,</div>
-<div class="line">        }</div>
-</div><!-- fragment -->
-<p>Some options of this route. See documentation for <a class="el" href="structRoar_1_1RouteOptions.html" title="Options that modify the server behavior for a given route.">RouteOptions</a>. </p>
 
 </div>
 </div>

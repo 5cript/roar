@@ -46,7 +46,7 @@ if (edges && edges.length) {
         </defs>
 
 <script type="text/javascript">
-var viewWidth = 570;
+var viewWidth = 671;
 var viewHeight = 132;
 var sectionId = 'dynsection-0';
 </script>
@@ -57,40 +57,40 @@ var sectionId = 'dynsection-0';
 <g id="clust1" class="cluster">
 <title>clusterdir_d28a4824dc47e487b107a5db32ef43c4</title>
 <g id="a_clust1"><a xlink:href="dir_d28a4824dc47e487b107a5db32ef43c4.html" target="_top">
-<polygon fill="#edf0f7" stroke="#404040" stroke-width="2" points="8,-64 8,-116 554,-116 554,-64 8,-64"/>
+<polygon fill="#edf0f7" stroke="#404040" stroke-width="2" points="8,-64 8,-116 655,-116 655,-64 8,-64"/>
 </a>
 </g>
 </g>
 <!-- dir_d28a4824dc47e487b107a5db32ef43c4 -->
 <g id="node1" class="node">
 <title>dir_d28a4824dc47e487b107a5db32ef43c4</title>
-<text text-anchor="middle" x="516" y="-87.5" font-family="Helvetica,sans-Serif" font-size="10.00">examples</text>
+<text text-anchor="middle" x="617" y="-87.5" font-family="Helvetica,sans-Serif" font-size="10.00">examples</text>
 </g>
 <!-- dir_ecb73b1ba2fb5c6f9d7028ccda5f1932 -->
 <g id="node2" class="node">
 <title>dir_ecb73b1ba2fb5c6f9d7028ccda5f1932</title>
 <g id="a_node2"><a xlink:href="dir_ecb73b1ba2fb5c6f9d7028ccda5f1932.html" target="_top" xlink:title="100_continue">
-<polygon fill="#a2b4d6" stroke="#404040" points="468,-108 394,-108 394,-72 468,-72 468,-108"/>
-<text text-anchor="middle" x="431" y="-87.5" font-family="Helvetica,sans-Serif" font-size="10.00">100_continue</text>
+<polygon fill="#a2b4d6" stroke="#404040" points="569,-108 495,-108 495,-72 569,-72 569,-108"/>
+<text text-anchor="middle" x="532" y="-87.5" font-family="Helvetica,sans-Serif" font-size="10.00">100_continue</text>
 </a>
 </g>
 </g>
 <!-- dir_d44c64559bbebec7f509842c48db8b23 -->
-<g id="node7" class="node">
+<g id="node8" class="node">
 <title>dir_d44c64559bbebec7f509842c48db8b23</title>
-<g id="a_node7"><a xlink:href="dir_d44c64559bbebec7f509842c48db8b23.html" target="_top" xlink:title="include">
-<polygon fill="none" stroke="red" points="264,-36 210,-36 210,0 264,0 264,-36"/>
-<text text-anchor="middle" x="237" y="-15.5" font-family="Helvetica,sans-Serif" font-size="10.00">include</text>
+<g id="a_node8"><a xlink:href="dir_d44c64559bbebec7f509842c48db8b23.html" target="_top" xlink:title="include">
+<polygon fill="none" stroke="red" points="313,-36 259,-36 259,0 313,0 313,-36"/>
+<text text-anchor="middle" x="286" y="-15.5" font-family="Helvetica,sans-Serif" font-size="10.00">include</text>
 </a>
 </g>
 </g>
 <!-- dir_ecb73b1ba2fb5c6f9d7028ccda5f1932&#45;&gt;dir_d44c64559bbebec7f509842c48db8b23 -->
 <g id="edge1" class="edge">
 <title>dir_ecb73b1ba2fb5c6f9d7028ccda5f1932&#45;&gt;dir_d44c64559bbebec7f509842c48db8b23</title>
-<path fill="none" stroke="black" d="M401.74,-71.96C396.27,-69.1 390.53,-66.32 385,-64 348.17,-48.58 304.19,-35.89 273.8,-27.96"/>
-<polygon fill="black" stroke="black" points="274.6,-24.55 264.04,-25.46 272.86,-31.33 274.6,-24.55"/>
-<g id="a_edge1&#45;headlabel"><a xlink:href="dir_000000_000012.html" target="_top" xlink:title="6">
-<text text-anchor="middle" x="278.78" y="-20.2" font-family="Helvetica,sans-Serif" font-size="10.00">6</text>
+<path fill="none" stroke="black" d="M503.37,-71.87C497.74,-68.96 491.79,-66.17 486,-64 431.14,-43.38 364.11,-30.67 323.26,-24.22"/>
+<polygon fill="black" stroke="black" points="323.63,-20.74 313.21,-22.68 322.57,-27.66 323.63,-20.74"/>
+<g id="a_edge1&#45;headlabel"><a xlink:href="dir_000000_000015.html" target="_top" xlink:title="6">
+<text text-anchor="middle" x="327.61" y="-15.98" font-family="Helvetica,sans-Serif" font-size="10.00">6</text>
 </a>
 </g>
 </g>
@@ -98,18 +98,18 @@ var sectionId = 'dynsection-0';
 <g id="node3" class="node">
 <title>dir_c44c21083cab3b1e0da8414d659cb97a</title>
 <g id="a_node3"><a xlink:href="dir_c44c21083cab3b1e0da8414d659cb97a.html" target="_top" xlink:title="most_minimal">
-<polygon fill="#a2b4d6" stroke="#404040" points="375.5,-108 298.5,-108 298.5,-72 375.5,-72 375.5,-108"/>
-<text text-anchor="middle" x="337" y="-87.5" font-family="Helvetica,sans-Serif" font-size="10.00">most_minimal</text>
+<polygon fill="#a2b4d6" stroke="#404040" points="476.5,-108 399.5,-108 399.5,-72 476.5,-72 476.5,-108"/>
+<text text-anchor="middle" x="438" y="-87.5" font-family="Helvetica,sans-Serif" font-size="10.00">most_minimal</text>
 </a>
 </g>
 </g>
 <!-- dir_c44c21083cab3b1e0da8414d659cb97a&#45;&gt;dir_d44c64559bbebec7f509842c48db8b23 -->
 <g id="edge2" class="edge">
 <title>dir_c44c21083cab3b1e0da8414d659cb97a&#45;&gt;dir_d44c64559bbebec7f509842c48db8b23</title>
-<path fill="none" stroke="black" d="M312.54,-71.88C299.7,-62.89 283.8,-51.76 269.91,-42.03"/>
-<polygon fill="black" stroke="black" points="271.76,-39.06 261.56,-36.19 267.74,-44.79 271.76,-39.06"/>
-<g id="a_edge2&#45;headlabel"><a xlink:href="dir_000014_000012.html" target="_top" xlink:title="2">
-<text text-anchor="middle" x="276.33" y="-36.29" font-family="Helvetica,sans-Serif" font-size="10.00">2</text>
+<path fill="none" stroke="black" d="M405.89,-71.87C400.61,-69.17 395.18,-66.46 390,-64 367.87,-53.46 342.64,-42.52 322.57,-34.07"/>
+<polygon fill="black" stroke="black" points="323.75,-30.77 313.17,-30.13 321.04,-37.22 323.75,-30.77"/>
+<g id="a_edge2&#45;headlabel"><a xlink:href="dir_000017_000015.html" target="_top" xlink:title="2">
+<text text-anchor="middle" x="328.16" y="-27.04" font-family="Helvetica,sans-Serif" font-size="10.00">2</text>
 </a>
 </g>
 </g>
@@ -117,56 +117,75 @@ var sectionId = 'dynsection-0';
 <g id="node4" class="node">
 <title>dir_917a2894d4dd6daa5d751fcd99f005ad</title>
 <g id="a_node4"><a xlink:href="dir_917a2894d4dd6daa5d751fcd99f005ad.html" target="_top" xlink:title="request_listener">
-<polygon fill="#a2b4d6" stroke="#404040" points="280,-108 194,-108 194,-72 280,-72 280,-108"/>
-<text text-anchor="middle" x="237" y="-87.5" font-family="Helvetica,sans-Serif" font-size="10.00">request_listener</text>
+<polygon fill="#a2b4d6" stroke="#404040" points="381,-108 295,-108 295,-72 381,-72 381,-108"/>
+<text text-anchor="middle" x="338" y="-87.5" font-family="Helvetica,sans-Serif" font-size="10.00">request_listener</text>
 </a>
 </g>
 </g>
 <!-- dir_917a2894d4dd6daa5d751fcd99f005ad&#45;&gt;dir_d44c64559bbebec7f509842c48db8b23 -->
 <g id="edge3" class="edge">
 <title>dir_917a2894d4dd6daa5d751fcd99f005ad&#45;&gt;dir_d44c64559bbebec7f509842c48db8b23</title>
-<path fill="none" stroke="black" d="M237,-71.7C237,-63.98 237,-54.71 237,-46.11"/>
-<polygon fill="black" stroke="black" points="240.5,-46.1 237,-36.1 233.5,-46.1 240.5,-46.1"/>
-<g id="a_edge3&#45;headlabel"><a xlink:href="dir_000015_000012.html" target="_top" xlink:title="1">
-<text text-anchor="middle" x="243.34" y="-47.2" font-family="Helvetica,sans-Serif" font-size="10.00">1</text>
+<path fill="none" stroke="black" d="M325.15,-71.7C318.97,-63.39 311.46,-53.28 304.68,-44.14"/>
+<polygon fill="black" stroke="black" points="307.48,-42.04 298.71,-36.1 301.86,-46.22 307.48,-42.04"/>
+<g id="a_edge3&#45;headlabel"><a xlink:href="dir_000018_000015.html" target="_top" xlink:title="1">
+<text text-anchor="middle" x="311.9" y="-40.74" font-family="Helvetica,sans-Serif" font-size="10.00">1</text>
+</a>
+</g>
+</g>
+<!-- dir_7ba1e3c6297749c8d0bbb352930fb109 -->
+<g id="node5" class="node">
+<title>dir_7ba1e3c6297749c8d0bbb352930fb109</title>
+<g id="a_node5"><a xlink:href="dir_7ba1e3c6297749c8d0bbb352930fb109.html" target="_top" xlink:title="serve_directory">
+<polygon fill="#a2b4d6" stroke="#404040" points="276.5,-108 193.5,-108 193.5,-72 276.5,-72 276.5,-108"/>
+<text text-anchor="middle" x="235" y="-87.5" font-family="Helvetica,sans-Serif" font-size="10.00">serve_directory</text>
+</a>
+</g>
+</g>
+<!-- dir_7ba1e3c6297749c8d0bbb352930fb109&#45;&gt;dir_d44c64559bbebec7f509842c48db8b23 -->
+<g id="edge4" class="edge">
+<title>dir_7ba1e3c6297749c8d0bbb352930fb109&#45;&gt;dir_d44c64559bbebec7f509842c48db8b23</title>
+<path fill="none" stroke="black" d="M247.61,-71.7C253.6,-63.47 260.88,-53.48 267.48,-44.42"/>
+<polygon fill="black" stroke="black" points="270.48,-46.25 273.54,-36.1 264.82,-42.13 270.48,-46.25"/>
+<g id="a_edge4&#45;headlabel"><a xlink:href="dir_000024_000015.html" target="_top" xlink:title="7">
+<text text-anchor="middle" x="270.66" y="-48.32" font-family="Helvetica,sans-Serif" font-size="10.00">7</text>
 </a>
 </g>
 </g>
 <!-- dir_12f3c65a7313cb407d07a114e76523fd -->
-<g id="node5" class="node">
+<g id="node6" class="node">
 <title>dir_12f3c65a7313cb407d07a114e76523fd</title>
-<g id="a_node5"><a xlink:href="dir_12f3c65a7313cb407d07a114e76523fd.html" target="_top" xlink:title="simple_server">
+<g id="a_node6"><a xlink:href="dir_12f3c65a7313cb407d07a114e76523fd.html" target="_top" xlink:title="simple_server">
 <polygon fill="#a2b4d6" stroke="#404040" points="175.5,-108 98.5,-108 98.5,-72 175.5,-72 175.5,-108"/>
 <text text-anchor="middle" x="137" y="-87.5" font-family="Helvetica,sans-Serif" font-size="10.00">simple_server</text>
 </a>
 </g>
 </g>
 <!-- dir_12f3c65a7313cb407d07a114e76523fd&#45;&gt;dir_d44c64559bbebec7f509842c48db8b23 -->
-<g id="edge4" class="edge">
+<g id="edge5" class="edge">
 <title>dir_12f3c65a7313cb407d07a114e76523fd&#45;&gt;dir_d44c64559bbebec7f509842c48db8b23</title>
-<path fill="none" stroke="black" d="M161.46,-71.88C174.3,-62.89 190.2,-51.76 204.09,-42.03"/>
-<polygon fill="black" stroke="black" points="206.26,-44.79 212.44,-36.19 202.24,-39.06 206.26,-44.79"/>
-<g id="a_edge4&#45;headlabel"><a xlink:href="dir_000023_000012.html" target="_top" xlink:title="5">
-<text text-anchor="middle" x="204.94" y="-46.68" font-family="Helvetica,sans-Serif" font-size="10.00">5</text>
+<path fill="none" stroke="black" d="M169.14,-71.92C174.41,-69.21 179.84,-66.49 185,-64 206.15,-53.79 230.15,-43.07 249.45,-34.65"/>
+<polygon fill="black" stroke="black" points="251.01,-37.78 258.79,-30.59 248.22,-31.36 251.01,-37.78"/>
+<g id="a_edge5&#45;headlabel"><a xlink:href="dir_000027_000015.html" target="_top" xlink:title="5">
+<text text-anchor="middle" x="248.84" y="-39.32" font-family="Helvetica,sans-Serif" font-size="10.00">5</text>
 </a>
 </g>
 </g>
 <!-- dir_994fd6669eee8ec6b072d578eeaa4060 -->
-<g id="node6" class="node">
+<g id="node7" class="node">
 <title>dir_994fd6669eee8ec6b072d578eeaa4060</title>
-<g id="a_node6"><a xlink:href="dir_994fd6669eee8ec6b072d578eeaa4060.html" target="_top" xlink:title="websocket">
+<g id="a_node7"><a xlink:href="dir_994fd6669eee8ec6b072d578eeaa4060.html" target="_top" xlink:title="websocket">
 <polygon fill="#a2b4d6" stroke="#404040" points="80,-108 16,-108 16,-72 80,-72 80,-108"/>
 <text text-anchor="middle" x="48" y="-87.5" font-family="Helvetica,sans-Serif" font-size="10.00">websocket</text>
 </a>
 </g>
 </g>
 <!-- dir_994fd6669eee8ec6b072d578eeaa4060&#45;&gt;dir_d44c64559bbebec7f509842c48db8b23 -->
-<g id="edge5" class="edge">
+<g id="edge6" class="edge">
 <title>dir_994fd6669eee8ec6b072d578eeaa4060&#45;&gt;dir_d44c64559bbebec7f509842c48db8b23</title>
-<path fill="none" stroke="black" d="M74.6,-71.88C79.61,-69.03 84.88,-66.27 90,-64 126.18,-47.98 169.75,-35.42 200.02,-27.69"/>
-<polygon fill="black" stroke="black" points="200.89,-31.08 209.74,-25.25 199.19,-24.29 200.89,-31.08"/>
-<g id="a_edge5&#45;headlabel"><a xlink:href="dir_000034_000012.html" target="_top" xlink:title="5">
-<text text-anchor="middle" x="198.1" y="-32.21" font-family="Helvetica,sans-Serif" font-size="10.00">5</text>
+<path fill="none" stroke="black" d="M74.02,-71.83C79.17,-68.92 84.64,-66.15 90,-64 143.21,-42.67 208.8,-30.19 249,-23.98"/>
+<polygon fill="black" stroke="black" points="249.52,-27.44 258.89,-22.5 248.48,-20.52 249.52,-27.44"/>
+<g id="a_edge6&#45;headlabel"><a xlink:href="dir_000038_000015.html" target="_top" xlink:title="5">
+<text text-anchor="middle" x="246.38" y="-28.28" font-family="Helvetica,sans-Serif" font-size="10.00">5</text>
 </a>
 </g>
 </g>

@@ -1,14 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" title=" " alt="" coords="5,157,199,184"/>
-<area shape="rect" id="node2" href="$classRequestListener.html" title=" " alt="" coords="327,5,445,32"/>
-<area shape="rect" id="node3" href="$classRoar_1_1Router.html" title="The route routes http requests to their respective handler functions." alt="" coords="337,56,435,83"/>
-<area shape="rect" id="node4" href="$structRoar_1_1Server_1_1Implementation.html" title=" " alt="" coords="289,107,483,133"/>
-<area shape="rect" id="node5" href="$classRoar_1_1Session.html" title=" " alt="" coords="333,157,439,184"/>
-<area shape="rect" id="node6" href="$classRoar_1_1Session_1_1ReadIntermediate.html" title="Utility class to build up read operations." alt="" coords="247,208,525,235"/>
-<area shape="rect" id="node7" href="$classRoar_1_1Session_1_1SendIntermediate.html" title="Helper class to prepare and send a response." alt="" coords="247,259,525,285"/>
-<area shape="rect" id="node8" href="$classRoar_1_1WebsocketBase.html" title=" " alt="" coords="309,309,463,336"/>
-<area shape="rect" id="node9" href="$structRoar_1_1Detail_1_1SharedFromBase.html" title=" " alt="" coords="580,284,1007,311"/>
-<area shape="rect" id="node11" href="$structRoar_1_1Detail_1_1SharedFromBase.html" title=" " alt="" coords="573,335,1013,361"/>
-<area shape="rect" id="node10" href="$classRoar_1_1WebsocketClient.html" title=" " alt="" coords="1068,284,1225,311"/>
-<area shape="rect" id="node12" href="$classRoar_1_1WebsocketSession.html" title="A WebsocketSession allows you to interact with a client via websocket protocol." alt="" coords="1061,335,1232,361"/>
+<area shape="rect" id="node1" href="$structRoar_1_1Url_1_1Remote.html" title=" " alt="" coords="5,5,135,32"/>
 </map>

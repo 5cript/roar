@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structRoar_1_1Url.html" title=" " alt="" coords="5,5,80,32"/>
+<area shape="rect" id="node1" href="$structRoar_1_1RouteInfoBase.html" title="This class is what is used in ROAR_GET, ROAR_PUT, ... requests All options you can set for routes beh..." alt="" coords="5,31,277,57"/>
+<area shape="rect" id="node2" href="$structRoar_1_1RouteInfo.html" title=" " alt="" coords="325,5,568,32"/>
+<area shape="rect" id="node3" href="$structRoar_1_1ServeInfo.html" title=" " alt="" coords="326,56,567,83"/>
 </map>

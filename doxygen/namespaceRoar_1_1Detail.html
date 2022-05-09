@@ -69,18 +69,28 @@ $(function() {
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle"><div class="title">Roar::Detail Namespace Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Detail_1_1DirectoryServer.html">DirectoryServer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal helper class to serve directories.  <a href="classRoar_1_1Detail_1_1DirectoryServer.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1Detail_1_1DirectoryServerConstructionArgs.html">DirectoryServerConstructionArgs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1Detail_1_1FirstType.html">FirstType</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first type of a parameter pack.  <a href="structRoar_1_1Detail_1_1FirstType.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Detail_1_1FixedString.html">FixedString</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utilitarian class to store and modify strings in compile time.  <a href="classRoar_1_1Detail_1_1FixedString.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1Detail_1_1MakeVariantFromRetrievers.html">MakeVariantFromRetrievers</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1Detail_1_1MakeVariantFromRetrievers_3_01true_00_01Retrievers_8_8_8_01_4.html">MakeVariantFromRetrievers&lt; true, Retrievers... &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1Detail_1_1overloaded.html">overloaded</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utility to call std::visit with a set of overloaded functions.  <a href="structRoar_1_1Detail_1_1overloaded.html#details">More...</a><br /></td></tr>
@@ -103,6 +113,8 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1Detail_1_1RequestExtensions.html">RequestExtensions</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1Detail_1_1ServedPath.html">ServedPath</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1Detail_1_1SharedFromBase.html">SharedFromBase</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1Detail_1_1UnpackReferenceWrapper.html">UnpackReferenceWrapper</a></td></tr>
@@ -117,11 +129,17 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a8e1019c93671b3a5eaf95e69c7b8c4b2"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRoar_1_1Detail.html#a8e1019c93671b3a5eaf95e69c7b8c4b2">StreamType</a> = boost::beast::basic_stream&lt; boost::asio::ip::tcp, boost::asio::any_io_executor, boost::beast::simple_rate_policy &gt;</td></tr>
 <tr class="separator:a8e1019c93671b3a5eaf95e69c7b8c4b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac75587e841aaa1148e586c7781c57c20"><td class="memTemplParams" colspan="2">template&lt;typename T , typename... Args&gt; </td></tr>
-<tr class="memitem:ac75587e841aaa1148e586c7781c57c20"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceRoar_1_1Detail.html#ac75587e841aaa1148e586c7781c57c20">FirstType_t</a> = typename <a class="el" href="structRoar_1_1Detail_1_1FirstType.html">FirstType</a>&lt; T, Args... &gt;::type</td></tr>
+<tr class="memitem:ac75587e841aaa1148e586c7781c57c20"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceRoar_1_1Detail.html#ac75587e841aaa1148e586c7781c57c20">FirstType_t</a> = typename <a class="el" href="structRoar_1_1Detail_1_1FirstType.html">FirstType</a>&lt; T, Args... &gt;<a class="el" href="namespaceRoar.html#a7a331395c296b4077a311da601d1f4f7">::type</a></td></tr>
 <tr class="separator:ac75587e841aaa1148e586c7781c57c20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26078dd845e94f6365dd759c02f541a1"><td class="memTemplParams" colspan="2">template&lt;bool Optional, typename... Retrievers&gt; </td></tr>
+<tr class="memitem:a26078dd845e94f6365dd759c02f541a1"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceRoar_1_1Detail.html#a26078dd845e94f6365dd759c02f541a1">MakeVariantFromRetrievers_v</a> = typename <a class="el" href="structRoar_1_1Detail_1_1MakeVariantFromRetrievers.html">MakeVariantFromRetrievers</a>&lt; Optional, Retrievers... &gt;<a class="el" href="namespaceRoar.html#a7a331395c296b4077a311da601d1f4f7">::type</a></td></tr>
+<tr class="separator:a26078dd845e94f6365dd759c02f541a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:afd6e6695ba556fa426ed3e8347937083"><td class="memTemplParams" colspan="2">template&lt;unsigned Base&gt; </td></tr>
+<tr class="memitem:afd6e6695ba556fa426ed3e8347937083"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceRoar_1_1Detail.html#afd6e6695ba556fa426ed3e8347937083">bytesToHumanReadable</a> (std::uint64_t bytes)</td></tr>
+<tr class="separator:afd6e6695ba556fa426ed3e8347937083"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a257d0b1f4bbf664e5b776093abe68ee5"><td class="memTemplParams" colspan="2">template&lt;unsigned N&gt; </td></tr>
 <tr class="memitem:a257d0b1f4bbf664e5b776093abe68ee5"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceRoar_1_1Detail.html#a257d0b1f4bbf664e5b776093abe68ee5">FixedString</a> (char const (&amp;)[N]) -&gt; <a class="el" href="classRoar_1_1Detail_1_1FixedString.html">FixedString</a>&lt; N - 1 &gt;</td></tr>
 <tr class="separator:a257d0b1f4bbf664e5b776093abe68ee5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -138,6 +156,11 @@ Functions</h2></td></tr>
 <tr class="memitem:a6a5a0b70d483c9e603f6b5d441b3ac92"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a6a5a0b70d483c9e603f6b5d441b3ac92"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceRoar_1_1Detail.html#a6a5a0b70d483c9e603f6b5d441b3ac92">cref</a> (T const &amp;thing)</td></tr>
 <tr class="separator:a6a5a0b70d483c9e603f6b5d441b3ac92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:ac282adf6b3e74593238687fc762eec83"><td class="memItemLeft" align="right" valign="top">constexpr char const  *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRoar_1_1Detail.html#ac282adf6b3e74593238687fc762eec83">defaultListingStyle</a></td></tr>
+<tr class="separator:ac282adf6b3e74593238687fc762eec83"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
 <a id="ac75587e841aaa1148e586c7781c57c20" name="ac75587e841aaa1148e586c7781c57c20"></a>
@@ -149,7 +172,23 @@ Functions</h2></td></tr>
 template&lt;typename T , typename... Args&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespaceRoar_1_1Detail.html#ac75587e841aaa1148e586c7781c57c20">Roar::Detail::FirstType_t</a> = typedef typename <a class="el" href="structRoar_1_1Detail_1_1FirstType.html">FirstType</a>&lt;T, Args...&gt;::type</td>
+          <td class="memname">using <a class="el" href="namespaceRoar_1_1Detail.html#ac75587e841aaa1148e586c7781c57c20">Roar::Detail::FirstType_t</a> = typedef typename <a class="el" href="structRoar_1_1Detail_1_1FirstType.html">FirstType</a>&lt;T, Args...&gt;<a class="el" href="namespaceRoar.html#a7a331395c296b4077a311da601d1f4f7">::type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a26078dd845e94f6365dd759c02f541a1" name="a26078dd845e94f6365dd759c02f541a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26078dd845e94f6365dd759c02f541a1">&#9670;&nbsp;</a></span>MakeVariantFromRetrievers_v</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;bool Optional, typename... Retrievers&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespaceRoar_1_1Detail.html#a26078dd845e94f6365dd759c02f541a1">Roar::Detail::MakeVariantFromRetrievers_v</a> = typedef typename <a class="el" href="structRoar_1_1Detail_1_1MakeVariantFromRetrievers.html">MakeVariantFromRetrievers</a>&lt;Optional, Retrievers...&gt;<a class="el" href="namespaceRoar.html#a7a331395c296b4077a311da601d1f4f7">::type</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -171,6 +210,26 @@ template&lt;typename T , typename... Args&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="afd6e6695ba556fa426ed3e8347937083" name="afd6e6695ba556fa426ed3e8347937083"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd6e6695ba556fa426ed3e8347937083">&#9670;&nbsp;</a></span>bytesToHumanReadable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;unsigned Base&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Roar::Detail::bytesToHumanReadable </td>
+          <td>(</td>
+          <td class="paramtype">std::uint64_t&#160;</td>
+          <td class="paramname"><em>bytes</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a6a5a0b70d483c9e603f6b5d441b3ac92" name="a6a5a0b70d483c9e603f6b5d441b3ac92"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6a5a0b70d483c9e603f6b5d441b3ac92">&#9670;&nbsp;</a></span>cref()</h2>
 
@@ -277,6 +336,29 @@ template&lt;typename T &gt; </div>
           <td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="ac282adf6b3e74593238687fc762eec83" name="ac282adf6b3e74593238687fc762eec83"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac282adf6b3e74593238687fc762eec83">&#9670;&nbsp;</a></span>defaultListingStyle</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr char const* Roar::Detail::defaultListingStyle</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

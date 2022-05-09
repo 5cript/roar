@@ -1,5 +1,12 @@
 var searchData=
 [
-  ['query_0',['query',['../structRoar_1_1Url.html#acae290a1581bddd0f81f6ff1c2c7b710',1,'Roar::Url']]],
-  ['query_5f_1',['query_',['../structRoar_1_1Detail_1_1RequestExtensions.html#a74d5f4651edcbd83bb1a178b2bc3fbb3',1,'Roar::Detail::RequestExtensions::query_()'],['../classRoar_1_1Request.html#a7278e78b5310162f61d8ecbef014815f',1,'Roar::Request::query_()']]]
+  ['m_5fbuffer_0',['m_buffer',['../classRoar_1_1Detail_1_1FixedString.html#ac91a660a59980cddcaa6a59593fe782d',1,'Roar::Detail::FixedString']]],
+  ['m_5fcode_1',['m_code',['../classRoar_1_1Curl_1_1CurlError.html#a59399db400598b85cacade8b974039e6',1,'Roar::Curl::CurlError']]],
+  ['m_5fmessage_2',['m_message',['../classRoar_1_1Curl_1_1CurlError.html#a1e2cc920164a97d8818eb79640446e83',1,'Roar::Curl::CurlError']]],
+  ['m_5fsize_3',['m_size',['../classRoar_1_1Detail_1_1FixedString.html#a756da94e5546a4ebfdc40d06c0652eff',1,'Roar::Detail::FixedString']]],
+  ['matches_4',['matches',['../structRoar_1_1ProtoRoute.html#a08dda83e83821e4fa543f109c874ef20',1,'Roar::ProtoRoute']]],
+  ['memoizedfilesize_5f_5',['memoizedFileSize_',['../classRoar_1_1Curl_1_1FileSource.html#ab23509d1a2d021e6d286a22e3c566c10',1,'Roar::Curl::FileSource']]],
+  ['message_6',['message',['../structRoar_1_1WebsocketReadResult.html#a33055da3c64e7f27cb86af8e9f9a09d4',1,'Roar::WebsocketReadResult']]],
+  ['method_7',['method',['../structRoar_1_1SslContextCreationParameters.html#ae48664e0c97866ab6de0f245183f3b72',1,'Roar::SslContextCreationParameters']]],
+  ['methodallowselection_8',['methodAllowSelection',['../structRoar_1_1CorsSettings.html#a0efd8e6ea86cdb0857370abebff0325d',1,'Roar::CorsSettings']]]
 ];

@@ -1,5 +1,8 @@
 var searchData=
 [
-  ['libraries_2emd_0',['libraries.md',['../libraries_8md.html',1,'']]],
-  ['logstype_1',['LogsType',['../classRoar_1_1Curl_1_1Request.html#a10b40b8450e9a6ac62a6b3dea8dc93f3',1,'Roar::Curl::Request']]]
+  ['jail_0',['Jail',['../classRoar_1_1Jail.html#a4ec938eb4ddad383bc06bcc3fd0ae44e',1,'Roar::Jail::Jail()'],['../classRoar_1_1Jail.html',1,'Roar::Jail']]],
+  ['jail_2ecpp_1',['jail.cpp',['../jail_8cpp.html',1,'']]],
+  ['jail_2ehpp_2',['jail.hpp',['../jail_8hpp.html',1,'']]],
+  ['jail_5f_3',['jail_',['../classRoar_1_1Detail_1_1DirectoryServer.html#a1546860562be85f8e71ab4706ef3f62f',1,'Roar::Detail::DirectoryServer']]],
+  ['jailroot_5f_4',['jailRoot_',['../classRoar_1_1Jail.html#a2dd822a444b955a8430d50a3e55cbc1c',1,'Roar::Jail']]]
 ];

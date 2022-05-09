@@ -1,14 +1,11 @@
 var searchData=
 [
-  ['reader_5f_0',['reader_',['../classRoar_1_1Curl_1_1FileSource.html#ad0a5970d9305bf49c07bb3f92664395f',1,'Roar::Curl::FileSource']]],
-  ['regexmatches_5f_1',['regexMatches_',['../structRoar_1_1Detail_1_1RequestExtensions.html#a825f2426345fd74086c985eb1571152c',1,'Roar::Detail::RequestExtensions::regexMatches_()'],['../classRoar_1_1Request.html#a82e7eeb85f378e5c540d5e590e3ce8a7',1,'Roar::Request::regexMatches_()']]],
-  ['regexroutes_2',['regexRoutes',['../structRoar_1_1Router_1_1Implementation.html#a5295e951248a207afca70f32485ba703',1,'Roar::Router::Implementation']]],
-  ['release_3',['release',['../namespaceconf.html#a325dc746d8bf05c54d26351c35a21d90',1,'conf']]],
-  ['remote_4',['remote',['../structRoar_1_1Url.html#af29042e36a1c7dfa3771a637f3099711',1,'Roar::Url']]],
-  ['req_5f_5',['req_',['../classRoar_1_1Session_1_1ReadIntermediate.html#a0f9f67599b3891cbeab7a353cf6546b4',1,'Roar::Session::ReadIntermediate']]],
-  ['resolvedendpoint_6',['resolvedEndpoint',['../structRoar_1_1Server_1_1Implementation.html#aca56727e9623d50df85ff391221f9c2e',1,'Roar::Server::Implementation']]],
-  ['response_5f_7',['response_',['../classRoar_1_1Response.html#a4712e1340c6a0b74e3ff81c0fb22ffb8',1,'Roar::Response::response_()'],['../classRoar_1_1Session_1_1SendIntermediate.html#ab2e258df24d6bf40492508a9b94093c2',1,'Roar::Session::SendIntermediate::response_()']]],
-  ['routeoptions_8',['routeOptions',['../structRoar_1_1ProtoRoute.html#a12dbda1863d2f179ca676ecf3036cb8f',1,'Roar::ProtoRoute::routeOptions()'],['../structRoar_1_1RouteInfo.html#a24dc4af3fc6476932d7150aaa48b0fe7',1,'Roar::RouteInfo::routeOptions()'],['../structRoar_1_1Session_1_1Implementation.html#aae320258bcc9870123bbd02a7060f2d2',1,'Roar::Session::Implementation::routeOptions()']]],
-  ['router_9',['router',['../structRoar_1_1Server_1_1Implementation.html#a37e4b0a52698ebb50ae469b46e753988',1,'Roar::Server::Implementation::router()'],['../structRoar_1_1Session_1_1Implementation.html#a53bf8907fde4a1e361524a1f1ca6bc9e',1,'Roar::Session::Implementation::router()']]],
-  ['routesmutex_10',['routesMutex',['../structRoar_1_1Router_1_1Implementation.html#aa04485f7326375e0cc4397dfe95a6752',1,'Roar::Router::Implementation']]]
+  ['offset_5f_0',['offset_',['../classRoar_1_1Curl_1_1StringSource.html#a590097e9bc3d0a96f74b13d99b7f1897',1,'Roar::Curl::StringSource']]],
+  ['onacceptabort_1',['onAcceptAbort',['../structRoar_1_1Server_1_1ConstructionArguments.html#add27c0fd3a9930d77fef48c79cb51a61',1,'Roar::Server::ConstructionArguments::onAcceptAbort()'],['../structRoar_1_1Server_1_1Implementation.html#ad27633807fd21713978240773ff50461',1,'Roar::Server::Implementation::onAcceptAbort()']]],
+  ['onchunk_5f_2',['onChunk_',['../classRoar_1_1Session_1_1ReadIntermediate.html#acd4a94306c0ec360b3c0390d3239185a',1,'Roar::Session::ReadIntermediate']]],
+  ['onconnectcomplete_3',['onConnectComplete',['../structRoar_1_1WebsocketClient_1_1Implementation.html#a1b03b124ed9e8fa7d8113c4425f22c8c',1,'Roar::WebsocketClient::Implementation']]],
+  ['onerror_4',['onError',['../structRoar_1_1Server_1_1ConstructionArguments.html#ae004b66986d63e9ff1c11f306891ca31',1,'Roar::Server::ConstructionArguments::onError()'],['../structRoar_1_1Server_1_1Implementation.html#a5a2f9e5fbab300459380dfb9f4ed0c0a',1,'Roar::Server::Implementation::onError()'],['../structRoar_1_1Factory_1_1Implementation.html#ab93df8fea9b19f7f427e05a42f943b12',1,'Roar::Factory::Implementation::onError()'],['../structRoar_1_1Session_1_1Implementation.html#a420f1d880cce6f610f51a31b6b2b4a1c',1,'Roar::Session::Implementation::onError()'],['../structRoar_1_1WebsocketClient_1_1Implementation.html#a3c5e430c988a5af7cb35a637dc686d71',1,'Roar::WebsocketClient::Implementation::onError()']]],
+  ['onexit_5f_5',['onExit_',['../classRoar_1_1ScopeExit.html#a86cbe3d780ee841ef8d609139c9fac4a',1,'Roar::ScopeExit']]],
+  ['originalextensions_5f_6',['originalExtensions_',['../classRoar_1_1Session_1_1ReadIntermediate.html#a0f2979e4781b2b618c32948d152e03cb',1,'Roar::Session::ReadIntermediate']]],
+  ['overalltimeout_5f_7',['overallTimeout_',['../classRoar_1_1Session_1_1ReadIntermediate.html#a786df2dcb3852294147452e73d5db773',1,'Roar::Session::ReadIntermediate']]]
 ];

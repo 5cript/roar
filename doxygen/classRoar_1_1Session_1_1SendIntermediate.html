@@ -87,9 +87,9 @@ Collaboration diagram for Roar::Session::SendIntermediate&lt; BodyT &gt;:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af7fd4fec5a0aeee040bc61554030b1ea"><td class="memTemplParams" colspan="2">template&lt;typename OriginalBodyT &gt; </td></tr>
-<tr class="memitem:af7fd4fec5a0aeee040bc61554030b1ea"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session_1_1SendIntermediate.html#af7fd4fec5a0aeee040bc61554030b1ea">SendIntermediate</a> (<a class="el" href="classRoar_1_1Session.html">Session</a> &amp;session, <a class="el" href="classRoar_1_1Request.html">Request</a>&lt; OriginalBodyT &gt; const &amp;req)</td></tr>
-<tr class="separator:af7fd4fec5a0aeee040bc61554030b1ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6f1c99a5afe2d7fabf47a8a3b96227b"><td class="memTemplParams" colspan="2">template&lt;typename OriginalBodyT , typename... Forwards&gt; </td></tr>
+<tr class="memitem:ae6f1c99a5afe2d7fabf47a8a3b96227b"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session_1_1SendIntermediate.html#ae6f1c99a5afe2d7fabf47a8a3b96227b">SendIntermediate</a> (<a class="el" href="classRoar_1_1Session.html">Session</a> &amp;session, <a class="el" href="classRoar_1_1Request.html">Request</a>&lt; OriginalBodyT &gt; const &amp;req, Forwards &amp;&amp;... forwards)</td></tr>
+<tr class="separator:ae6f1c99a5afe2d7fabf47a8a3b96227b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f331a17c0525be9d2696a81d608420a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session_1_1SendIntermediate.html#a7f331a17c0525be9d2696a81d608420a">SendIntermediate</a> (<a class="el" href="classRoar_1_1Session_1_1SendIntermediate.html">SendIntermediate</a> &amp;&amp;)=default</td></tr>
 <tr class="separator:a7f331a17c0525be9d2696a81d608420a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79190cd8f0e3288495c4ee95c36d2bec"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session_1_1SendIntermediate.html#a79190cd8f0e3288495c4ee95c36d2bec">SendIntermediate</a> (<a class="el" href="classRoar_1_1Session_1_1SendIntermediate.html">SendIntermediate</a> const &amp;)=delete</td></tr>
@@ -112,7 +112,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a7e7ad80d83bf4f5f39ab0278b66f0b27"><td class="mdescLeft">&#160;</td><td class="mdescRight">(De)Activate chunked encoding.  <a href="classRoar_1_1Session_1_1SendIntermediate.html#a7e7ad80d83bf4f5f39ab0278b66f0b27">More...</a><br /></td></tr>
 <tr class="separator:a7e7ad80d83bf4f5f39ab0278b66f0b27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afca87b1d2ee5670c826ce9a2b2193547"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:afca87b1d2ee5670c826ce9a2b2193547"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Session_1_1SendIntermediate.html">SendIntermediate</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session_1_1SendIntermediate.html#afca87b1d2ee5670c826ce9a2b2193547">contentType</a> (T &amp;&amp;type)</td></tr>
+<tr class="memitem:afca87b1d2ee5670c826ce9a2b2193547"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Session_1_1SendIntermediate.html">SendIntermediate</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session_1_1SendIntermediate.html#afca87b1d2ee5670c826ce9a2b2193547">contentType</a> (T &amp;&amp;<a class="el" href="namespaceRoar.html#a7a331395c296b4077a311da601d1f4f7">type</a>)</td></tr>
 <tr class="memdesc:afca87b1d2ee5670c826ce9a2b2193547"><td class="mdescLeft">&#160;</td><td class="mdescRight">For setting of the content type.  <a href="classRoar_1_1Session_1_1SendIntermediate.html#afca87b1d2ee5670c826ce9a2b2193547">More...</a><br /></td></tr>
 <tr class="separator:afca87b1d2ee5670c826ce9a2b2193547"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a627d5e7fb196eb0f81ba668e6685ef42"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
@@ -123,11 +123,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a60306beb1fef1bc5c01b76705c4db819"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Session_1_1SendIntermediate.html">SendIntermediate</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session_1_1SendIntermediate.html#a60306beb1fef1bc5c01b76705c4db819">enableCors</a> (<a class="el" href="classRoar_1_1Request.html">Request</a>&lt; RequestBodyT &gt; const &amp;req, std::optional&lt; <a class="el" href="structRoar_1_1CorsSettings.html">CorsSettings</a> &gt; cors=std::nullopt)</td></tr>
 <tr class="memdesc:a60306beb1fef1bc5c01b76705c4db819"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets cors headers.  <a href="classRoar_1_1Session_1_1SendIntermediate.html#a60306beb1fef1bc5c01b76705c4db819">More...</a><br /></td></tr>
 <tr class="separator:a60306beb1fef1bc5c01b76705c4db819"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6eda3d77e2b91cb8649b4afac6132ed1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session_1_1SendIntermediate.html#a6eda3d77e2b91cb8649b4afac6132ed1">preparePayload</a> ()</td></tr>
-<tr class="separator:a6eda3d77e2b91cb8649b4afac6132ed1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba42ff70d249ac50a014268890febf47"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Detail_1_1PromiseTypeBind.html">Detail::PromiseTypeBind</a>&lt; <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindThen.html">Detail::PromiseTypeBindThen</a>&lt; bool &gt;, <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindFail.html">Detail::PromiseTypeBindFail</a>&lt; <a class="el" href="structRoar_1_1Error.html">Error</a> const &amp; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session_1_1SendIntermediate.html#aba42ff70d249ac50a014268890febf47">commit</a> ()</td></tr>
-<tr class="memdesc:aba42ff70d249ac50a014268890febf47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends the response and invalidates this object.  <a href="classRoar_1_1Session_1_1SendIntermediate.html#aba42ff70d249ac50a014268890febf47">More...</a><br /></td></tr>
-<tr class="separator:aba42ff70d249ac50a014268890febf47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa21449a45b234342309f058af7d921df"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Session_1_1SendIntermediate.html">SendIntermediate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session_1_1SendIntermediate.html#aa21449a45b234342309f058af7d921df">preparePayload</a> ()</td></tr>
+<tr class="separator:aa21449a45b234342309f058af7d921df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8d7fb8eb399784f2652f6e6447e509c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Detail_1_1PromiseTypeBind.html">Detail::PromiseTypeBind</a>&lt; <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindThen.html">Detail::PromiseTypeBindThen</a>&lt; bool &gt;, <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindFail.html">Detail::PromiseTypeBindFail</a>&lt; <a class="el" href="structRoar_1_1Error.html">Error</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session_1_1SendIntermediate.html#af8d7fb8eb399784f2652f6e6447e509c">commit</a> ()</td></tr>
+<tr class="memdesc:af8d7fb8eb399784f2652f6e6447e509c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends the response and invalidates this object.  <a href="classRoar_1_1Session_1_1SendIntermediate.html#af8d7fb8eb399784f2652f6e6447e509c">More...</a><br /></td></tr>
+<tr class="separator:af8d7fb8eb399784f2652f6e6447e509c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -140,15 +140,15 @@ Private Attributes</h2></td></tr>
 <div class="textblock"><div class="compoundTemplParams">template&lt;typename BodyT&gt;<br />
 class Roar::Session::SendIntermediate&lt; BodyT &gt;</div><p >Helper class to prepare and send a response. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="af7fd4fec5a0aeee040bc61554030b1ea" name="af7fd4fec5a0aeee040bc61554030b1ea"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af7fd4fec5a0aeee040bc61554030b1ea">&#9670;&nbsp;</a></span>SendIntermediate() <span class="overload">[1/3]</span></h2>
+<a id="ae6f1c99a5afe2d7fabf47a8a3b96227b" name="ae6f1c99a5afe2d7fabf47a8a3b96227b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6f1c99a5afe2d7fabf47a8a3b96227b">&#9670;&nbsp;</a></span>SendIntermediate() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename BodyT &gt; </div>
 <div class="memtemplate">
-template&lt;typename OriginalBodyT &gt; </div>
+template&lt;typename OriginalBodyT , typename... Forwards&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -163,7 +163,13 @@ template&lt;typename OriginalBodyT &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classRoar_1_1Request.html">Request</a>&lt; OriginalBodyT &gt; const &amp;&#160;</td>
-          <td class="paramname"><em>req</em>&#160;</td>
+          <td class="paramname"><em>req</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Forwards &amp;&amp;...&#160;</td>
+          <td class="paramname"><em>forwards</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -349,8 +355,8 @@ template&lt;typename BodyT &gt; </div>
 
 </div>
 </div>
-<a id="aba42ff70d249ac50a014268890febf47" name="aba42ff70d249ac50a014268890febf47"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aba42ff70d249ac50a014268890febf47">&#9670;&nbsp;</a></span>commit()</h2>
+<a id="af8d7fb8eb399784f2652f6e6447e509c" name="af8d7fb8eb399784f2652f6e6447e509c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8d7fb8eb399784f2652f6e6447e509c">&#9670;&nbsp;</a></span>commit()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -361,7 +367,7 @@ template&lt;typename BodyT &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classRoar_1_1Detail_1_1PromiseTypeBind.html">Detail::PromiseTypeBind</a>&lt; <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindThen.html">Detail::PromiseTypeBindThen</a>&lt; bool &gt;, <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindFail.html">Detail::PromiseTypeBindFail</a>&lt; <a class="el" href="structRoar_1_1Error.html">Error</a> const  &amp; &gt; &gt; <a class="el" href="classRoar_1_1Session_1_1SendIntermediate.html">Roar::Session::SendIntermediate</a>&lt; BodyT &gt;::commit </td>
+          <td class="memname"><a class="el" href="classRoar_1_1Detail_1_1PromiseTypeBind.html">Detail::PromiseTypeBind</a>&lt; <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindThen.html">Detail::PromiseTypeBindThen</a>&lt; bool &gt;, <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindFail.html">Detail::PromiseTypeBindFail</a>&lt; <a class="el" href="structRoar_1_1Error.html">Error</a> &gt; &gt; <a class="el" href="classRoar_1_1Session_1_1SendIntermediate.html">Roar::Session::SendIntermediate</a>&lt; BodyT &gt;::commit </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -523,8 +529,8 @@ template&lt;typename BodyT &gt; </div>
 
 </div>
 </div>
-<a id="a6eda3d77e2b91cb8649b4afac6132ed1" name="a6eda3d77e2b91cb8649b4afac6132ed1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6eda3d77e2b91cb8649b4afac6132ed1">&#9670;&nbsp;</a></span>preparePayload()</h2>
+<a id="aa21449a45b234342309f058af7d921df" name="aa21449a45b234342309f058af7d921df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa21449a45b234342309f058af7d921df">&#9670;&nbsp;</a></span>preparePayload()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -535,7 +541,7 @@ template&lt;typename BodyT &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classRoar_1_1Session_1_1SendIntermediate.html">Roar::Session::SendIntermediate</a>&lt; BodyT &gt;::preparePayload </td>
+          <td class="memname"><a class="el" href="classRoar_1_1Session_1_1SendIntermediate.html">SendIntermediate</a> &amp; <a class="el" href="classRoar_1_1Session_1_1SendIntermediate.html">Roar::Session::SendIntermediate</a>&lt; BodyT &gt;::preparePayload </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>

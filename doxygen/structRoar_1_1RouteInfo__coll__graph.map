@@ -1,10 +1,11 @@
 <map id="Roar::RouteInfo&lt; RequestListenerT &gt;" name="Roar::RouteInfo&lt; RequestListenerT &gt;">
-<area shape="rect" id="node1" title="This class is what is used in ROAR_GET, ROAR_PUT, ... requests All options you can set for routes beh..." alt="" coords="263,300,505,377"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,160,232,237"/>
-<area shape="rect" id="node3" title=" " alt="" coords="257,160,303,237"/>
-<area shape="rect" id="node4" title=" " alt="" coords="328,160,440,237"/>
-<area shape="rect" id="node5" href="$structRoar_1_1RouteOptions.html" title="Options that modify the server behavior for a given route." alt="" coords="464,160,603,237"/>
-<area shape="rect" id="node6" title=" " alt="" coords="435,5,482,83"/>
-<area shape="rect" id="node7" title=" " alt="" coords="507,5,709,83"/>
-<area shape="rect" id="node8" title=" " alt="" coords="627,160,850,237"/>
+<area shape="rect" id="node1" title=" " alt="" coords="389,440,632,517"/>
+<area shape="rect" id="node2" href="$structRoar_1_1RouteInfoBase.html" title="This class is what is used in ROAR_GET, ROAR_PUT, ... requests All options you can set for routes beh..." alt="" coords="5,300,277,377"/>
+<area shape="rect" id="node3" title=" " alt="" coords="85,160,131,237"/>
+<area shape="rect" id="node4" href="$structRoar_1_1RouteOptions.html" title="Options that modify the server behavior for a given route." alt="" coords="156,160,295,237"/>
+<area shape="rect" id="node5" title=" " alt="" coords="127,5,174,83"/>
+<area shape="rect" id="node6" title=" " alt="" coords="199,5,401,83"/>
+<area shape="rect" id="node7" title=" " alt="" coords="301,300,528,377"/>
+<area shape="rect" id="node8" title=" " alt="" coords="552,300,664,377"/>
+<area shape="rect" id="node9" title=" " alt="" coords="687,300,910,377"/>
 </map>

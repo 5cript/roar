@@ -7,5 +7,6 @@ var searchData=
   ['instance_4',['Instance',['../classRoar_1_1Curl_1_1Instance.html#aecfcc307ba71d7d415ee06d99cbbd145',1,'Roar::Curl::Instance']]],
   ['ischunked_5',['isChunked',['../classRoar_1_1Curl_1_1Source.html#a711ea1bfb5d97362a85db71648e59499',1,'Roar::Curl::Source']]],
   ['issecure_6',['isSecure',['../classRoar_1_1Server.html#afb16a97d0d39b31b111650e1c83fa552',1,'Roar::Server::isSecure()'],['../classRoar_1_1Session.html#acf92635d21b0672d3d340dc42092b060',1,'Roar::Session::isSecure()']]],
-  ['iswebsocketupgrade_7',['isWebsocketUpgrade',['../classRoar_1_1Request.html#a02d70ade85255c42879a7398931a0f05',1,'Roar::Request']]]
+  ['iswebsocketupgrade_7',['isWebsocketUpgrade',['../classRoar_1_1Request.html#a02d70ade85255c42879a7398931a0f05',1,'Roar::Request']]],
+  ['iswithinjail_8',['isWithinJail',['../classRoar_1_1Jail.html#af97622143f4088171b2001505f624a5d',1,'Roar::Jail']]]
 ];

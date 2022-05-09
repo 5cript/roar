@@ -1,12 +1,8 @@
 var searchData=
 [
-  ['m_5fbuffer_0',['m_buffer',['../classRoar_1_1Detail_1_1FixedString.html#ac91a660a59980cddcaa6a59593fe782d',1,'Roar::Detail::FixedString']]],
-  ['m_5fcode_1',['m_code',['../classRoar_1_1Curl_1_1CurlError.html#a59399db400598b85cacade8b974039e6',1,'Roar::Curl::CurlError']]],
-  ['m_5fmessage_2',['m_message',['../classRoar_1_1Curl_1_1CurlError.html#a1e2cc920164a97d8818eb79640446e83',1,'Roar::Curl::CurlError']]],
-  ['m_5fsize_3',['m_size',['../classRoar_1_1Detail_1_1FixedString.html#a756da94e5546a4ebfdc40d06c0652eff',1,'Roar::Detail::FixedString']]],
-  ['matches_4',['matches',['../structRoar_1_1ProtoRoute.html#a08dda83e83821e4fa543f109c874ef20',1,'Roar::ProtoRoute']]],
-  ['memoizedfilesize_5f_5',['memoizedFileSize_',['../classRoar_1_1Curl_1_1FileSource.html#ab23509d1a2d021e6d286a22e3c566c10',1,'Roar::Curl::FileSource']]],
-  ['message_6',['message',['../structRoar_1_1WebsocketReadResult.html#a33055da3c64e7f27cb86af8e9f9a09d4',1,'Roar::WebsocketReadResult']]],
-  ['method_7',['method',['../structRoar_1_1SslContextCreationParameters.html#ae48664e0c97866ab6de0f245183f3b72',1,'Roar::SslContextCreationParameters']]],
-  ['methodallowselection_8',['methodAllowSelection',['../structRoar_1_1CorsSettings.html#a0efd8e6ea86cdb0857370abebff0325d',1,'Roar::CorsSettings']]]
+  ['impl_5f_0',['impl_',['../classRoar_1_1Route.html#a78525e5f4909cf830eee594d8b0e43ca',1,'Roar::Route::impl_()'],['../classRoar_1_1Router.html#ae617b67a52b7d207b127a2009575f0eb',1,'Roar::Router::impl_()'],['../classRoar_1_1Server.html#aba835d0092d29e17a3491cc51435c90b',1,'Roar::Server::impl_()'],['../classRoar_1_1Factory.html#a5dfe0b4f2b7ec09e2efd014e3b448bf1',1,'Roar::Factory::impl_()'],['../classRoar_1_1Session.html#a36182f7af3fc0b15328788a48ef91c78',1,'Roar::Session::impl_()'],['../classRoar_1_1WebsocketClient.html#a32cc142feb3d90a06be23bd4cc4edd40',1,'Roar::WebsocketClient::impl_()'],['../classRoar_1_1WebsocketSession.html#a34c6e34b09e16addf0151f93b61004ab',1,'Roar::WebsocketSession::impl_()']]],
+  ['instance_5f_1',['instance_',['../classRoar_1_1Curl_1_1Instance.html#a76aaf70c11a73a93d018e986a090932e',1,'Roar::Curl::Instance::instance_()'],['../classRoar_1_1Curl_1_1Request.html#a97103b546f3c8af50ac04889d2624c40',1,'Roar::Curl::Request::instance_()'],['../classRoar_1_1Curl_1_1Response.html#a8554b954ee192cf7a95c6710c3824cc6',1,'Roar::Curl::Response::instance_()']]],
+  ['isbinary_2',['isBinary',['../structRoar_1_1WebsocketReadResult.html#ab6c2655ec63f372b30d60ed974992424',1,'Roar::WebsocketReadResult']]],
+  ['ismessagedone_3',['isMessageDone',['../structRoar_1_1WebsocketReadResult.html#a6c5a0d800e4ebd2138f70a063a61c457',1,'Roar::WebsocketReadResult']]],
+  ['issecure_4',['isSecure',['../structRoar_1_1Session_1_1Implementation.html#ad36a3a85af969e4c5180bcc33c6d99af',1,'Roar::Session::Implementation']]]
 ];

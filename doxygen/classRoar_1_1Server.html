@@ -80,7 +80,7 @@ $(function() {
 <div class="dynheader">
 Collaboration diagram for Roar::Server:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classRoar_1_1Server__coll__graph.svg" width="290" height="419"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classRoar_1_1Server__coll__graph.svg" width="290" height="448"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 <table class="memberdecls">
@@ -131,6 +131,12 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:a355ad98a9c8bf59ce24ec5d5dfc79754"><td class="memTemplParams" colspan="2">template&lt;typename RequestListenerT &gt; </td></tr>
+<tr class="memitem:a355ad98a9c8bf59ce24ec5d5dfc79754"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classRoar_1_1Server.html#a355ad98a9c8bf59ce24ec5d5dfc79754">addRoute</a> (std::shared_ptr&lt; RequestListenerT &gt; listener, std::unordered_multimap&lt; boost::beast::http::verb, <a class="el" href="structRoar_1_1ProtoRoute.html">ProtoRoute</a> &gt; &amp;extractedRoutes, <a class="el" href="structRoar_1_1RouteInfo.html">RouteInfo</a>&lt; RequestListenerT &gt; const &amp;info)</td></tr>
+<tr class="separator:a355ad98a9c8bf59ce24ec5d5dfc79754"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae177fde363aa6c591aa9dd9fdd821ccb"><td class="memTemplParams" colspan="2">template&lt;typename RequestListenerT &gt; </td></tr>
+<tr class="memitem:ae177fde363aa6c591aa9dd9fdd821ccb"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classRoar_1_1Server.html#ae177fde363aa6c591aa9dd9fdd821ccb">addRoute</a> (std::shared_ptr&lt; RequestListenerT &gt; listener, std::unordered_multimap&lt; boost::beast::http::verb, <a class="el" href="structRoar_1_1ProtoRoute.html">ProtoRoute</a> &gt; &amp;extractedRoutes, <a class="el" href="structRoar_1_1ServeInfo.html">ServeInfo</a>&lt; RequestListenerT &gt; const &amp;info)</td></tr>
+<tr class="separator:ae177fde363aa6c591aa9dd9fdd821ccb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af475a98daf66ebb98ef379003cba0b5f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Server.html#af475a98daf66ebb98ef379003cba0b5f">addRequestListenerToRouter</a> (std::unordered_multimap&lt; boost::beast::http::verb, <a class="el" href="structRoar_1_1ProtoRoute.html">ProtoRoute</a> &gt; &amp;&amp;routes)</td></tr>
 <tr class="separator:af475a98daf66ebb98ef379003cba0b5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -256,6 +262,94 @@ Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a355ad98a9c8bf59ce24ec5d5dfc79754" name="a355ad98a9c8bf59ce24ec5d5dfc79754"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a355ad98a9c8bf59ce24ec5d5dfc79754">&#9670;&nbsp;</a></span>addRoute() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename RequestListenerT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Roar::Server::addRoute </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; RequestListenerT &gt;&#160;</td>
+          <td class="paramname"><em>listener</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::unordered_multimap&lt; boost::beast::http::verb, <a class="el" href="structRoar_1_1ProtoRoute.html">ProtoRoute</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>extractedRoutes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structRoar_1_1RouteInfo.html">RouteInfo</a>&lt; RequestListenerT &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>info</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae177fde363aa6c591aa9dd9fdd821ccb" name="ae177fde363aa6c591aa9dd9fdd821ccb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae177fde363aa6c591aa9dd9fdd821ccb">&#9670;&nbsp;</a></span>addRoute() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename RequestListenerT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Roar::Server::addRoute </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; RequestListenerT &gt;&#160;</td>
+          <td class="paramname"><em>listener</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::unordered_multimap&lt; boost::beast::http::verb, <a class="el" href="structRoar_1_1ProtoRoute.html">ProtoRoute</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>extractedRoutes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structRoar_1_1ServeInfo.html">ServeInfo</a>&lt; RequestListenerT &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>info</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
