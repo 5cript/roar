@@ -11,6 +11,8 @@
 #include <algorithm>
 #include <iostream>
 
+using namespace Roar::Literals;
+
 class FileServer
 {
   public:
@@ -30,9 +32,9 @@ class FileServer
   private:
     ROAR_MAKE_LISTENER(FileServer);
 
-    // Use the ROAR_GET, ... macro to define a route. Routes are basically mappings of paths to handlers.
-    // If you lead with a tilde, this tilde will be replaced with the user home on linux and with the user directory on
-    // windows.
+    // Use the ROAR_SERVE macro to define a route that gives access to the filesystem. The given paths that point to the
+    // filesystem may be prefixed with some magic values. ~  and %appdata% are some of them. To see what they resolve
+    // to, see Roar::resolvePath in doxygen.
     ROAR_SERVE(serve)("/bla", "~/roar");
 
     // This will resolve to home on linux and to the appdata/Roaming on windows.
@@ -59,11 +61,7 @@ class FileServer
     }
     void createDummyFile(std::filesystem::path const& where)
     {
-        using namespace Roar::Literals;
-
         std::ofstream writer{where, std::ios_base::binary};
-        std::mt19937 gen(0);
-        std::uniform_int_distribution<int> letters(1, 2_MiB);
         std::string str(letters(gen), 'a');
         writer << str;
     }
@@ -84,6 +82,10 @@ class FileServer
             .pathProvider = &FileServer::getServePath,
         },
     });
+
+  private:
+    std::mt19937 gen{0};
+    std::uniform_int_distribution<int> letters{1, 2_MiB};
 
   private:
     // This makes routes visible to the library. For as long as we have to wait for native reflection...

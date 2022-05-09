@@ -1,5 +1,6 @@
 #pragma once
 
+#include <roar/directory_server/default_listing_style.hpp>
 #include <roar/detail/bytes_to_human_readable.hpp>
 #include <roar/filesystem/special_paths.hpp>
 #include <roar/mime_type.hpp>
@@ -64,12 +65,25 @@ namespace Roar::Detail
 
             const auto fileAndStatus = getFileAndStatus(req.target());
 
+            // File is found, now ask the library user for permissions:
+            switch (std::invoke(
+                this->serveInfo_.handler, *this->listener_, session, req, fileAndStatus, this->serveInfo_.serveOptions))
+            {
+                case (ServeDecision::Continue):
+                    break;
+                case (ServeDecision::Deny):
+                    return session.sendStandardResponse(boost::beast::http::status::forbidden);
+                case (ServeDecision::Handled):
+                    return;
+            };
+
             // Filter allowed methods
             switch (req.method())
             {
                 case (http::verb::head):
                 {
-                    if (!this->serveInfo_.serveOptions.allowDownload)
+                    if (!unwrapFlexibleProvider<RequestListenerT, bool>(
+                            *this->listener_, this->serveInfo_.serveOptions.allowDownload))
                         return session.sendStandardResponse(http::status::method_not_allowed);
                     return sendHeadResponse(session, req, fileAndStatus);
                 }
@@ -79,19 +93,22 @@ namespace Roar::Detail
                 }
                 case (http::verb::get):
                 {
-                    if (!this->serveInfo_.serveOptions.allowDownload)
+                    if (!unwrapFlexibleProvider<RequestListenerT, bool>(
+                            *this->listener_, this->serveInfo_.serveOptions.allowDownload))
                         return session.sendStandardResponse(http::status::method_not_allowed);
                     break;
                 }
                 case (http::verb::delete_):
                 {
-                    if (!this->serveInfo_.serveOptions.allowDelete)
+                    if (!unwrapFlexibleProvider<RequestListenerT, bool>(
+                            *this->listener_, this->serveInfo_.serveOptions.allowDelete))
                         return session.sendStandardResponse(http::status::method_not_allowed);
                     break;
                 }
                 case (http::verb::put):
                 {
-                    if (!this->serveInfo_.serveOptions.allowUpload)
+                    if (!unwrapFlexibleProvider<RequestListenerT, bool>(
+                            *this->listener_, this->serveInfo_.serveOptions.allowUpload))
                         return session.sendStandardResponse(http::status::method_not_allowed);
                     break;
                 }
@@ -105,117 +122,27 @@ namespace Roar::Detail
             if (fileAndStatus.status.type() == std::filesystem::file_type::none && req.method() != http::verb::put)
                 return session.sendStandardResponse(http::status::not_found);
 
-            // File is found, method is allowed, now ask the library user for final permissions:
-            switch (std::invoke(this->serveInfo_.handler, *this->listener_, session, req, fileAndStatus))
-            {
-                case (ServeDecision::Continue):
-                    return handleFileServe(session, req, fileAndStatus);
-                case (ServeDecision::Deny):
-                    return session.sendStandardResponse(boost::beast::http::status::forbidden);
-                case (ServeDecision::JustClose):
-                    return;
-            };
+            handleFileServe(session, req, fileAndStatus);
         }
 
       private:
         std::filesystem::path resolvePath() const
         {
-            const auto rawPath = std::visit(
-                Detail::overloaded{
-                    [this](std::function<std::filesystem::path(RequestListenerT & requestListener)> const& fn) {
-                        return fn(*this->listener_);
-                    },
-                    [this](std::filesystem::path (RequestListenerT::*fn)()) {
-                        return (this->listener_.get()->*fn)();
-                    },
-                    [this](std::filesystem::path (RequestListenerT::*fn)() const) {
-                        return (this->listener_.get()->*fn)();
-                    },
-                    [this](std::filesystem::path RequestListenerT::*mem) {
-                        return this->listener_.get()->*mem;
-                    },
-                },
-                this->serveInfo_.serveOptions.pathProvider);
-
+            const auto rawPath = unwrapFlexibleProvider<RequestListenerT, std::filesystem::path>(
+                *this->listener_, this->serveInfo_.serveOptions.pathProvider);
             return Roar::resolvePath(rawPath);
         }
 
         std::string listingStyle() const
         {
-            return std::visit(
-                Detail::overloaded{
-                    [this](std::monostate) -> std::string {
-                        return
-                            R"css(
-    a { text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    a:visited { color: #23f5fc; }
-    a:active { color: #23fc7e; }
-    a:link { color: #83a8f2; }
-
-    body { 
-        font-family: sans-serif; 
-        font-size: 0.8em;
-        width: 100%;
-        margin: 0;
-        padding: 8px;
-        background-color: #303030;
-        color: #eee;
-    }
-
-    .styled-table {
-        border-collapse: collapse;
-        margin: 25px 0;
-        min-width: 400px;
-        width: calc(100% - 16px);
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-    }
-
-    .styled-table thead tr {
-        background-color: #0a5778;
-        color: #ffffff;
-        text-align: left;
-    }
-
-    .styled-table th,
-    .styled-table td {
-        padding: 12px 15px;
-    }
-
-    .styled-table tbody tr {
-        border-bottom: 1px solid #dddddd;
-    }
-
-    .styled-table tbody tr:nth-of-type(even) {
-        background-color: #505050;
-    }
-
-    .styled-table tbody tr:last-of-type {
-        border-bottom: 2px solid #0a5778;
-    }
-
-    .styled-table tbody tr.active-row {
-        font-weight: bold;
-        color: #009879;
-    })css";
-                    },
-                    [this](std::function<std::string(RequestListenerT & requestListener)> const& fn) {
-                        return fn(*this->listener_);
-                    },
-                    [this](std::string (RequestListenerT::*fn)()) {
-                        return (this->listener_.get()->*fn)();
-                    },
-                    [this](std::string (RequestListenerT::*fn)() const) {
-                        return (this->listener_.get()->*fn)();
-                    },
-                    [this](std::string RequestListenerT::*mem) {
-                        return this->listener_.get()->*mem;
-                    },
-                },
-                this->serveInfo_.serveOptions.customListingStyle);
+            auto style = unwrapFlexibleProvider<RequestListenerT, std::string>(
+                *this->listener_, this->serveInfo_.serveOptions.customListingStyle);
+            if (!style)
+                style = Detail::defaultListingStyle;
+            return *style;
         }
 
-        FileAndStatus getFileAndStatus(boost::beast::string_view target)
+        FileAndStatus getFileAndStatus(boost::beast::string_view target) const
         {
             auto analyzeFile = [this](boost::beast::string_view target) -> FileAndStatus {
                 const auto absolute = jail_.pathAsIsInJail(std::filesystem::path{std::string{target}});
@@ -235,7 +162,7 @@ namespace Roar::Detail
             return analyzeFile(target);
         }
 
-        void handleFileServe(Session& session, EmptyBodyRequest const& req, FileAndStatus const& fileAndStatus)
+        void handleFileServe(Session& session, EmptyBodyRequest const& req, FileAndStatus const& fileAndStatus) const
         {
             namespace http = boost::beast::http;
             switch (req.method())
@@ -244,7 +171,8 @@ namespace Roar::Detail
                 {
                     if (fileAndStatus.status.type() == std::filesystem::file_type::directory)
                     {
-                        if (this->serveInfo_.serveOptions.allowListing)
+                        if (unwrapFlexibleProvider<RequestListenerT, bool>(
+                                *this->listener_, this->serveInfo_.serveOptions.allowListing))
                             return makeListing(session, req, fileAndStatus);
                         else
                         {
@@ -267,7 +195,8 @@ namespace Roar::Detail
                     }
                     else if (fileAndStatus.status.type() == std::filesystem::file_type::directory)
                     {
-                        if (this->serveInfo_.serveOptions.allowDeleteOfNonEmptyDirectories)
+                        if (unwrapFlexibleProvider<RequestListenerT, bool>(
+                                *this->listener_, this->serveInfo_.serveOptions.allowDeleteOfNonEmptyDirectories))
                             std::filesystem::remove_all(fileAndStatus.file, ec);
                         else
                         {
@@ -297,7 +226,7 @@ namespace Roar::Detail
             }
         }
 
-        void sendHeadResponse(Session& session, EmptyBodyRequest const& req, FileAndStatus const&)
+        void sendHeadResponse(Session& session, EmptyBodyRequest const& req, FileAndStatus const&) const
         {
             namespace http = boost::beast::http;
             session.send<http::empty_body>(req)
@@ -307,17 +236,20 @@ namespace Roar::Detail
                 .commit();
         }
 
-        void sendOptionsResponse(Session& session, EmptyBodyRequest const& req, FileAndStatus const&)
+        void sendOptionsResponse(Session& session, EmptyBodyRequest const& req, FileAndStatus const&) const
         {
             // TODO: cors
 
             namespace http = boost::beast::http;
             std::string allow = "OPTIONS";
-            if (this->serveInfo_.serveOptions.allowDownload)
+            if (unwrapFlexibleProvider<RequestListenerT, bool>(
+                    *this->listener_, this->serveInfo_.serveOptions.allowDownload))
                 allow += ", GET, HEAD";
-            if (this->serveInfo_.serveOptions.allowUpload)
+            if (unwrapFlexibleProvider<RequestListenerT, bool>(
+                    *this->listener_, this->serveInfo_.serveOptions.allowUpload))
                 allow += ", PUT";
-            if (this->serveInfo_.serveOptions.allowDelete)
+            if (unwrapFlexibleProvider<RequestListenerT, bool>(
+                    *this->listener_, this->serveInfo_.serveOptions.allowDelete))
                 allow += ", DELETE";
 
             session.send<http::empty_body>(req)
@@ -326,7 +258,7 @@ namespace Roar::Detail
                 .commit();
         }
 
-        void makeListing(Session& session, EmptyBodyRequest const& req, FileAndStatus const& fileAndStatus)
+        void makeListing(Session& session, EmptyBodyRequest const& req, FileAndStatus const& fileAndStatus) const
         {
             namespace http = boost::beast::http;
             std::stringstream document;
@@ -415,7 +347,7 @@ namespace Roar::Detail
                 .commit();
         }
 
-        void upload(Session& session, EmptyBodyRequest const& req, FileAndStatus const& fileAndStatus)
+        void upload(Session& session, EmptyBodyRequest const& req, FileAndStatus const& fileAndStatus) const
         {
             namespace http = boost::beast::http;
             if (!req.expectsContinue())
@@ -435,7 +367,8 @@ namespace Roar::Detail
                     break;
                 case (std::filesystem::file_type::regular):
                 {
-                    if (this->serveInfo_.serveOptions.allowOverwrite)
+                    if (unwrapFlexibleProvider<RequestListenerT, bool>(
+                            *this->listener_, this->serveInfo_.serveOptions.allowOverwrite))
                         break;
                 }
                 default:
@@ -475,7 +408,7 @@ namespace Roar::Detail
                 });
         }
 
-        void download(Session& session, EmptyBodyRequest const& req, FileAndStatus const& fileAndStatus)
+        void download(Session& session, EmptyBodyRequest const& req, FileAndStatus const& fileAndStatus) const
         {
             namespace http = boost::beast::http;
             if (fileAndStatus.status.type() != std::filesystem::file_type::regular &&

@@ -6,6 +6,7 @@
 #include <roar/detail/overloaded.hpp>
 #include <roar/literals/regex.hpp>
 #include <roar/session/session.hpp>
+#include <roar/routing/flexible_provider.hpp>
 #include <roar/request.hpp>
 
 #include <boost/beast/http/verb.hpp>
@@ -32,21 +33,11 @@ namespace Roar
         Deny,
 
         /// You handled the response, so just end the connection if necessary.
-        JustClose
+        Handled
     };
 
     template <typename RequestListenerT>
     using HandlerType = void (RequestListenerT::*)(Session&, Request<boost::beast::http::empty_body>&&);
-
-    struct FileAndStatus
-    {
-        std::filesystem::path file;
-        std::filesystem::path relative;
-        std::filesystem::file_status status;
-    };
-    template <typename RequestListenerT>
-    using ServeHandlerType = ServeDecision (
-        RequestListenerT::*)(Session&, Request<boost::beast::http::empty_body> const&, FileAndStatus const&);
 
     enum class RoutePathType
     {
@@ -66,40 +57,42 @@ namespace Roar
     struct ServeOptions
     {
         /// Allow GET requests to download files.
-        bool allowDownload = true;
+        FlexibleProvider<RequestListenerT, bool> allowDownload = true;
 
         /// Allow PUT requests to upload files.
-        bool allowUpload = false;
+        FlexibleProvider<RequestListenerT, bool> allowUpload = false;
 
         /// Allow PUT requests to overwrite existing files.
-        bool allowOverwrite = false;
+        FlexibleProvider<RequestListenerT, bool> allowOverwrite = false;
 
         /// Allow DELETE requests to delete files.
-        bool allowDelete = false;
+        FlexibleProvider<RequestListenerT, bool> allowDelete = false;
 
         /// Allow DELETE for directories that are non empty?
-        bool allowDeleteOfNonEmptyDirectories = false;
+        FlexibleProvider<RequestListenerT, bool> allowDeleteOfNonEmptyDirectories = false;
 
         /// Requests on directories become listings.
-        bool allowListing = false;
+        FlexibleProvider<RequestListenerT, bool> allowListing = true;
 
         /// Serve files from the directory given by this function.
-        std::variant<
-            std::function<std::filesystem::path(RequestListenerT& requestListener)>,
-            std::filesystem::path (RequestListenerT::*)(),
-            std::filesystem::path (RequestListenerT::*)() const,
-            std::filesystem::path RequestListenerT::*>
-            pathProvider = {};
+        FlexibleProvider<RequestListenerT, std::filesystem::path> pathProvider = std::filesystem::path{};
 
         /// Serve files from the directory given by this function.
-        std::variant<
-            std::monostate,
-            std::function<std::string(RequestListenerT& requestListener)>,
-            std::string (RequestListenerT::*)(),
-            std::string (RequestListenerT::*)() const,
-            std::string RequestListenerT::*>
-            customListingStyle = std::monostate{};
+        FlexibleProvider<RequestListenerT, std::string, true> customListingStyle = std::monostate{};
     };
+
+    struct FileAndStatus
+    {
+        std::filesystem::path file;
+        std::filesystem::path relative;
+        std::filesystem::file_status status;
+    };
+    template <typename RequestListenerT>
+    using ServeHandlerType = ServeDecision (RequestListenerT::*)(
+        Session&,
+        Request<boost::beast::http::empty_body> const&,
+        FileAndStatus const&,
+        ServeOptions<RequestListenerT>& options);
 
     /**
      * @brief This class is what is used in ROAR_GET, ROAR_PUT, ... requests
@@ -205,10 +198,8 @@ namespace Roar
                         .routeOptions = info.routeOptions,
                     },
                     ServeOptions<RequestListenerT>{
-                        .pathProvider =
-                            [root](RequestListenerT&) {
-                                return root;
-                            }},
+                        .pathProvider = root,
+                    },
                     handler,
                 };
             },
@@ -259,7 +250,8 @@ namespace Roar
     Roar::ServeDecision HandlerName( \
         Roar::Session& session, \
         Roar::Request<boost::beast::http::empty_body> const& request, \
-        Roar::FileAndStatus const& fileAndStatus); \
+        Roar::FileAndStatus const& fileAndStatus, \
+        Roar::ServeOptions<this_type>& options); \
     inline static const auto roar_##HandlerName = \
         Roar::extendRouteInfoForServe(Roar::ServeInfo<this_type>{}, &this_type::HandlerName)
 
