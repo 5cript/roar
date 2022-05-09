@@ -1,5 +1,6 @@
 #pragma once
 
+#include <roar/detail/bytes_to_human_readable.hpp>
 #include <roar/filesystem/special_paths.hpp>
 #include <roar/mime_type.hpp>
 #include <roar/filesystem/jail.hpp>
@@ -117,7 +118,7 @@ namespace Roar::Detail
         }
 
       private:
-        std::filesystem::path resolvePath()
+        std::filesystem::path resolvePath() const
         {
             const auto rawPath = std::visit(
                 Detail::overloaded{
@@ -139,6 +140,81 @@ namespace Roar::Detail
             return Roar::resolvePath(rawPath);
         }
 
+        std::string listingStyle() const
+        {
+            return std::visit(
+                Detail::overloaded{
+                    [this](std::monostate) -> std::string {
+                        return
+                            R"css(
+    a { text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    a:visited { color: #23f5fc; }
+    a:active { color: #23fc7e; }
+    a:link { color: #83a8f2; }
+
+    body { 
+        font-family: sans-serif; 
+        font-size: 0.8em;
+        width: 100%;
+        margin: 0;
+        padding: 8px;
+        background-color: #303030;
+        color: #eee;
+    }
+
+    .styled-table {
+        border-collapse: collapse;
+        margin: 25px 0;
+        min-width: 400px;
+        width: calc(100% - 16px);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .styled-table thead tr {
+        background-color: #0a5778;
+        color: #ffffff;
+        text-align: left;
+    }
+
+    .styled-table th,
+    .styled-table td {
+        padding: 12px 15px;
+    }
+
+    .styled-table tbody tr {
+        border-bottom: 1px solid #dddddd;
+    }
+
+    .styled-table tbody tr:nth-of-type(even) {
+        background-color: #505050;
+    }
+
+    .styled-table tbody tr:last-of-type {
+        border-bottom: 2px solid #0a5778;
+    }
+
+    .styled-table tbody tr.active-row {
+        font-weight: bold;
+        color: #009879;
+    })css";
+                    },
+                    [this](std::function<std::string(RequestListenerT & requestListener)> const& fn) {
+                        return fn(*this->listener_);
+                    },
+                    [this](std::string (RequestListenerT::*fn)()) {
+                        return (this->listener_.get()->*fn)();
+                    },
+                    [this](std::string (RequestListenerT::*fn)() const) {
+                        return (this->listener_.get()->*fn)();
+                    },
+                    [this](std::string RequestListenerT::*mem) {
+                        return this->listener_.get()->*mem;
+                    },
+                },
+                this->serveInfo_.serveOptions.customListingStyle);
+        }
+
         FileAndStatus getFileAndStatus(boost::beast::string_view target)
         {
             auto analyzeFile = [this](boost::beast::string_view target) -> FileAndStatus {
@@ -155,14 +231,7 @@ namespace Roar::Detail
             };
 
             std::pair<std::filesystem::file_type, std::filesystem::path> fileAndStatus;
-            if (target.size() <= basePath_.size() + 1)
-            {
-                if (this->serveInfo_.serveOptions.allowListing)
-                    return analyzeFile("");
-                else
-                    return analyzeFile("index.html");
-            }
-            target.remove_prefix(basePath_.size() + 1);
+            target.remove_prefix(basePath_.size() + (basePath_.size() == 1 ? 0 : 1));
             return analyzeFile(target);
         }
 
@@ -178,7 +247,12 @@ namespace Roar::Detail
                         if (this->serveInfo_.serveOptions.allowListing)
                             return makeListing(session, req, fileAndStatus);
                         else
-                            return session.sendStandardResponse(http::status::forbidden);
+                        {
+                            return download(
+                                session,
+                                req,
+                                getFileAndStatus((basePath_ / fileAndStatus.relative / "index.html").string()));
+                        }
                     }
                     else
                         return download(session, req, fileAndStatus);
@@ -262,59 +336,7 @@ namespace Roar::Detail
             document << "<meta charset='utf-8'>\n";
             document << "<meta http-equiv='X-UA-Compatible' content='IE=edge'>\n";
             document << "<style>\n";
-            document << "a { text-decoration: none; }\n";
-            document << "a:hover { text-decoration: underline; }\n";
-            document << "a:visited { color: #23f5fc; }\n";
-            document << "a:active { color: #23fc7e; }\n";
-            document << "a:link { color: #83a8f2; }\n";
-            document << R"css(
-body { 
-    font-family: sans-serif; 
-    font-size: 0.8em;
-    width: 100%;
-    margin: 0;
-    padding: 8px;
-    background-color: #303030;
-    color: #eee;
-}
-
-.styled-table {
-    border-collapse: collapse;
-    margin: 25px 0;
-    min-width: 400px;
-    width: calc(100% - 16px);
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-}
-
-.styled-table thead tr {
-    background-color: #0a5778;
-    color: #ffffff;
-    text-align: left;
-}
-
-.styled-table th,
-.styled-table td {
-    padding: 12px 15px;
-}
-
-.styled-table tbody tr {
-    border-bottom: 1px solid #dddddd;
-}
-
-.styled-table tbody tr:nth-of-type(even) {
-    background-color: #505050;
-}
-
-.styled-table tbody tr:last-of-type {
-    border-bottom: 2px solid #0a5778;
-}
-
-.styled-table tbody tr.active-row {
-    font-weight: bold;
-    color: #009879;
-}
-            )css";
-            document << "</style>\n";
+            document << listingStyle() << "</style>\n";
             document << "<title>Roar Listing of " << fileAndStatus.relative.string() << "</title>\n";
             document << "<meta name='viewport' content='width=device-width, initial-scale=1'>\n";
             document << "</head>\n";
@@ -336,30 +358,34 @@ body {
             document << "</thead>\n";
             document << "<tbody>\n";
 
-            auto toHumanReadableSize = [](auto size) {
-                if (size < 1024)
-                    return std::to_string(size) + " bytes";
-                else if (size < 1024 * 1024)
-                    return std::to_string(size / 1024) + " KB";
-                else if (size < 1024 * 1024 * 1024)
-                    return std::to_string(size / 1024 / 1024) + " MB";
-                else
-                    return std::to_string(size / 1024 / 1024 / 1024) + " GB";
-            };
-
             try
             {
                 for (auto const& entry : std::filesystem::directory_iterator{fileAndStatus.file})
                 {
+                    std::string link;
+                    std::string fn = entry.path().filename().string();
+                    auto relative = fileAndStatus.relative.string();
+                    link.reserve(relative.size() + basePath_.size() + fn.size() + 10);
+                    if (basePath_.empty() || basePath_.front() != '/')
+                        link.push_back('/');
+                    link += basePath_;
+                    if (!basePath_.empty() && basePath_.back() != '/')
+                        link.push_back('/');
+
+                    if (!relative.empty() && relative != ".")
+                    {
+                        link += relative;
+                        link.push_back('/');
+                    }
+                    link += fn;
+
                     document << "<tr>\n";
                     document << "<td>\n";
-                    document << "<a href='" << basePath_ << "/" << fileAndStatus.relative.string() << "/"
-                             << entry.path().filename().string() << "'>" << entry.path().filename().string()
-                             << "</a>\n";
+                    document << "<a href='" << link << "'>" << fn << "</a>\n";
                     if (entry.is_regular_file())
                     {
                         document << "<td>" << to_string(entry.last_write_time()) << "</td>\n";
-                        document << "<td>" << toHumanReadableSize(entry.file_size()) << "</td>\n";
+                        document << "<td>" << bytesToHumanReadable<1024>(entry.file_size()) << "</td>\n";
                     }
                     else
                     {
@@ -452,6 +478,10 @@ body {
         void download(Session& session, EmptyBodyRequest const& req, FileAndStatus const& fileAndStatus)
         {
             namespace http = boost::beast::http;
+            if (fileAndStatus.status.type() != std::filesystem::file_type::regular &&
+                fileAndStatus.status.type() != std::filesystem::file_type::symlink)
+                return session.sendStandardResponse(http::status::not_found);
+
             // TODO: Range Requests
             http::file_body::value_type body;
             boost::beast::error_code ec;

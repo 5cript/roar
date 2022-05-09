@@ -38,7 +38,7 @@ namespace Roar
         if (fakeJailAsRoot)
             return this->fakeJailAsRoot(proxi);
         else
-            return proxi;
+            return proxi.generic_string();
     }
     //---------------------------------------------------------------------------------------------------------------------
     std::optional<std::filesystem::path> Jail::pathAsIsInJail(std::filesystem::path const& other) const

@@ -225,7 +225,7 @@ namespace Roar
          * @param session The session to send this on.
          */
         template <typename SessionT>
-        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error const&>>
+        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error>>
         send(SessionT& session)
         {
             return session.send(std::move(response_));
@@ -238,7 +238,7 @@ namespace Roar
          * @param session The session to send this on.
          */
         template <typename SessionT>
-        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error const&>>
+        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error>>
         send(std::shared_ptr<SessionT>& session)
         {
             return session->send(std::move(response_));

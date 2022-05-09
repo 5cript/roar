@@ -5,7 +5,7 @@
 
 #include <roar/routing/request_listener.hpp>
 #include <roar/curl/request.hpp>
-#include <roar/detail/literals/memory.hpp>
+#include <roar/literals/memory.hpp>
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>

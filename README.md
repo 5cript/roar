@@ -15,13 +15,12 @@ This is a network library that has:
   - [x] Routing (verb+path => handler)
   - [x] Custom Error Pages (404, ...)
   - [x] Regex paths
-  - [ ] Serving files (easier than using regex paths)
-    - [ ] Download
-    - [ ] Upload
-    - [ ] Deletion
-    - [ ] Directory Listing
-    - [ ] Range Requests
-  - [ ] Resumeable requests (upload/download).
+  - [x] Serving files (easier than using regex paths)
+    - [x] Download
+    - [x] Upload
+    - [x] Deletion
+    - [x] Directory Listing
+    - [ ] Resumeable requests (Range Requests).
 - [x] Websocket
   - [x] Websocket Server Support (SSL and Plain)
   - [x] Websocket Client (SSL and Plain)

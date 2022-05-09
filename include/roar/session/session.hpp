@@ -172,8 +172,7 @@ namespace Roar
             /**
              * @brief Sends the response and invalidates this object
              */
-            Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error const&>>
-            commit()
+            Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error>> commit()
             {
                 return session_->send(std::move(response_));
             }
@@ -199,7 +198,7 @@ namespace Roar
          * @return Returns a promise that resolves with whether or not the connection was auto-closed.
          */
         template <typename BodyT>
-        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error const&>>
+        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error>>
         send(boost::beast::http::response<BodyT>&& response)
         {
             return promise::newPromise([&, this](promise::Defer d) {
@@ -226,7 +225,7 @@ namespace Roar
          * @param response A response object.
          */
         template <typename BodyT>
-        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error const&>>
+        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error>>
         send(Response<BodyT>&& response)
         {
             return std::move(response).send(*this);

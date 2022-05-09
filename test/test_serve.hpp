@@ -30,6 +30,7 @@ namespace Roar::Tests
             std::filesystem::create_directory(pathSupplier() / "emptyDir");
             createDummyFile(pathSupplier() / "nonEmptyDir" / "file.txt");
             createDummyFile(pathSupplier() / "file.txt");
+            createDummyFile(pathSupplier() / "index.html");
             std::filesystem::create_directory(pathSupplier() / "a");
             std::filesystem::create_directory(pathSupplier() / "a" / "b");
             std::filesystem::create_directory(pathSupplier() / "a" / "b" / "c");
@@ -368,11 +369,6 @@ namespace Roar::Tests
         EXPECT_EQ(res.code(), boost::beast::http::status::not_found);
     }
 
-    TEST_F(ServeTests, CanDownloadFileRange)
-    {
-        // TODO:
-    }
-
     TEST_F(ServeTests, CanDeleteFile)
     {
         EXPECT_TRUE(std::filesystem::exists(listener_->pathSupplier() / "file.txt"));
@@ -382,7 +378,18 @@ namespace Roar::Tests
 
     TEST_F(ServeTests, CanGetDirectoryListingIfAllowed)
     {
-        // TODO:
+        std::string body;
+        const auto res = Curl::Request{}.sink(body).get(url("/allAllowed"));
+        EXPECT_EQ(res.code(), boost::beast::http::status::ok);
+        EXPECT_TRUE(body.starts_with("<!DOCTYPE"));
+    }
+
+    TEST_F(ServeTests, WillGetIndexIfDirectoryListingIsNotAllowed)
+    {
+        std::string body;
+        const auto res = Curl::Request{}.sink(body).get(url("/1"));
+        EXPECT_EQ(res.code(), boost::beast::http::status::ok);
+        EXPECT_TRUE(body.starts_with(ServingListener::DummyFileContent));
     }
 
     TEST_F(ServeTests, DirectoryListingReturnsErrorIfNotAllowed)

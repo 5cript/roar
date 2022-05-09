@@ -71,7 +71,7 @@ class FileServer
     ROAR_SERVE(customServeOptions)
     ({
         {
-            .path = "/customServeOptions",
+            .path = "/",
             .routeOptions = {.allowUnsecure = false},
         },
         {

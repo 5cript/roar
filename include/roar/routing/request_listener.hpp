@@ -90,6 +90,15 @@ namespace Roar
             std::filesystem::path (RequestListenerT::*)() const,
             std::filesystem::path RequestListenerT::*>
             pathProvider = {};
+
+        /// Serve files from the directory given by this function.
+        std::variant<
+            std::monostate,
+            std::function<std::string(RequestListenerT& requestListener)>,
+            std::string (RequestListenerT::*)(),
+            std::string (RequestListenerT::*)() const,
+            std::string RequestListenerT::*>
+            customListingStyle = std::monostate{};
     };
 
     /**

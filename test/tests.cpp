@@ -1,8 +1,8 @@
-// #include "curl/test_request.hpp"
-// #include "test_cors.hpp"
-// #include "test_reading.hpp"
-// #include "test_http_server.hpp"
-// #include "test_web_socket.hpp"
+#include "curl/test_request.hpp"
+#include "test_cors.hpp"
+#include "test_reading.hpp"
+#include "test_http_server.hpp"
+#include "test_web_socket.hpp"
 #include "test_serve.hpp"
 
 #include <gtest/gtest.h>
