@@ -233,7 +233,7 @@ namespace Roar::Tests
         Roar::ServeOptions<ServingListener>& options)
     {
         session.send<http::empty_body>(request)->status(http::status::bad_request).commit();
-        return Roar::ServeDecision::JustClose;
+        return Roar::ServeDecision::Handled;
     }
 
     inline Roar::ServeDecision ServingListener::deep(
@@ -364,7 +364,7 @@ namespace Roar::Tests
         EXPECT_EQ(res.code(), boost::beast::http::status::forbidden);
     }
 
-    TEST_F(ServeTests, UserDeniedRequestWithJustCloseDoesWhatUserDoes)
+    TEST_F(ServeTests, UserDeniedRequestWithHandledDoesWhatUserDoes)
     {
         const auto res = Curl::Request{}.get(url("/customDeny/file.txt"));
         EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);

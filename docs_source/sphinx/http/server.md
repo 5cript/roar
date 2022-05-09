@@ -147,7 +147,6 @@ After this, making requests to the server on "/" will yield a response:
 ---
 lineno-start: 1
 caption: Curl
-emphasize-lines: 17
 ---
 $ curl -v localhost:8081/
 *   Trying 127.0.0.1:8081...
@@ -323,3 +322,110 @@ Download/Upload speeds can be set on a session using "readLimit" and "writeLimit
 ## Serving Directories
 
 Serving directories for file download, upload and deletion can be done in the following way:
+(Also see the serve_directory example for a more).
+```{code-block} c++
+---
+lineno-start: 1
+caption: A class that gives access to the filesystem
+---
+class FileServer
+{
+  private:
+    ROAR_MAKE_LISTENER(FileServer);
+
+    ROAR_SERVE(serveMyDirectory)
+    ({
+        // RouteOptions, that are also present in normal routes.
+        {
+            .path = "/",
+            .routeOptions = {.allowUnsecure = false},
+        },
+        // ServeOptions, these can also be set on a per session basis. Provide defaults here:
+        {
+            // Allow GET requests for file downloads?
+            .allowDownload = true,
+
+            // Allow PUT requests for file uploads? Defaults to false.
+            .allowUpload = false,
+
+            // Allow PUT requests to overwrite existing files? Defaults to false.
+            .allowOverwrite = false,
+
+            // Allow DELETE requests to delete existing files (and empty directories)? Defaults to false.
+            .allowDelete = false,
+
+            // Allow DELETE requests to recursively delete directories? Defaults to false.
+            .allowDeleteOfNonEmptyDirectories = false,
+
+            // If this option is set, requests to directories do not try to serve an index.html, 
+            // but give a table with all existing files instead. Defaults to true.
+            .allowListing = true,
+
+            // A path to the filesystem. Special magic prefix values are replaced.
+            .pathProvider = "~/roar",
+            // Alternatives:
+            // .pathProvider = &FileServer::servePath_
+            // .pathProvider = &FileServer::servePath
+            // .pathProvider = &FileServer::servePath2
+
+            // Optional! CSS Style to style the directory listing. I recommend using the default, its pretty ;)
+            .customListingStyle = "",
+        },
+    });
+
+  private:
+    std::filesystem::path servePath_;
+    std::filesystem::path servePath() const {
+        return servePath_;
+    }
+    std::filesystem::path servePath2() {
+        return servePath_;
+    }
+
+    BOOST_DESCRIBE_CLASS(FileServer, (), (), (), (roar_serveMyDirectory))
+};
+```
+This class defines a route that gives access to the filesystem using ROAR_SERVE.
+Filesystem paths can be prefixed by one of the following values:
+- ~ Linux: home. Windows: home
+- \%userprofile\% Linux: home. Windows: home
+- \%appdata\% Linux: home. Windows: CSIDL_APPDATA
+- \%localappdata\% Linux: home. Windows: CSIDL_APPDATA_LOCAL
+- \%temp\% Linux: /tmp. Windows: \%userprofile\%\AppData\Local\Temp
+
+A ROAR_SERVE macro also generates a function that you need to define.
+This function can be used to fine-control permissions.
+```{code-block} c++
+---
+lineno-start: 1
+caption: Control permissions.
+---
+Roar::ServeDecision FileServer::serveMyDirectory(
+    Roar::Session& session,
+    Roar::EmptyBodyRequest const& request,
+    Roar::FileAndStatus const& fileAndStatus,
+    Roar::ServeOptions<FileServer>& options)
+{
+    session.readLimit(100'000); // 100kb/s
+    session.writeLimit(100'000); // 100kb/s
+
+    std::cout << fileAndStatus.file << "\n";
+    std::cout << static_cast<int>(fileAndStatus.status.type()) << "\n";
+
+    // You can do something like:
+    /**
+     * if (user has permissions)
+     *   options.allowUpload = true;
+     */
+    options.allowListing = true;
+    return Roar::ServeDecision::Continue;
+    // return Roar::ServeDecision::Deny;
+    // return Roar::ServeDecision::Handled;
+}
+```
+The altered options in the above example are only set for the individual session and do not carry over to other sessions.
+The Return values have the following meaning:
+- Continue: continue and handle the request based on the given permissions.
+- Deny: Do not continue and return a forbidden response.
+- Handled: You have handled the request here, the server will only let the session run out of scope (close by reset, if not kept alive by you).
+

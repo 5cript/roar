@@ -73,7 +73,7 @@ namespace Roar::Detail
                     break;
                 case (ServeDecision::Deny):
                     return session.sendStandardResponse(boost::beast::http::status::forbidden);
-                case (ServeDecision::JustClose):
+                case (ServeDecision::Handled):
                     return;
             };
 

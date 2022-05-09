@@ -33,7 +33,7 @@ namespace Roar
         Deny,
 
         /// You handled the response, so just end the connection if necessary.
-        JustClose
+        Handled
     };
 
     template <typename RequestListenerT>
@@ -72,7 +72,7 @@ namespace Roar
         FlexibleProvider<RequestListenerT, bool> allowDeleteOfNonEmptyDirectories = false;
 
         /// Requests on directories become listings.
-        FlexibleProvider<RequestListenerT, bool> allowListing = false;
+        FlexibleProvider<RequestListenerT, bool> allowListing = true;
 
         /// Serve files from the directory given by this function.
         FlexibleProvider<RequestListenerT, std::filesystem::path> pathProvider = std::filesystem::path{};
