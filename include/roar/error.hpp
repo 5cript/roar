@@ -9,6 +9,7 @@
 #include <optional>
 #include <functional>
 #include <string_view>
+#include <sstream>
 
 namespace Roar
 {
@@ -19,6 +20,8 @@ namespace Roar
     {
         std::variant<boost::system::error_code, std::string> error;
         std::string_view additionalInfo = {};
+
+        std::string toString() const;
     };
 
     template <typename StreamT>
@@ -32,5 +35,12 @@ namespace Roar
         if (!error.additionalInfo.empty())
             stream << ": " << error.additionalInfo;
         return stream;
+    }
+
+    inline std::string Error::toString() const
+    {
+        std::stringstream sstr;
+        sstr << *this;
+        return sstr.str();
     }
 }

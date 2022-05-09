@@ -32,6 +32,13 @@ namespace Roar
             response_.version(11);
         }
 
+        template <typename... Forwards>
+        Response(Forwards... forwards)
+            : response_{std::piecewise_construct, std::forward_as_tuple(std::forward<Forwards>(forwards)...)}
+        {
+            response_.version(11);
+        }
+
         /**
          * @brief Sets the response status code.
          *
@@ -69,6 +76,7 @@ namespace Roar
             else
 #endif
                 response_.body() = std::forward<T>(toAssign);
+            preparePayload();
             return *this;
         }
 
@@ -217,7 +225,7 @@ namespace Roar
          * @param session The session to send this on.
          */
         template <typename SessionT>
-        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error const&>>
+        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error>>
         send(SessionT& session)
         {
             return session.send(std::move(response_));
@@ -230,7 +238,7 @@ namespace Roar
          * @param session The session to send this on.
          */
         template <typename SessionT>
-        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error const&>>
+        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error>>
         send(std::shared_ptr<SessionT>& session)
         {
             return session->send(std::move(response_));

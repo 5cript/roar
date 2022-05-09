@@ -6,7 +6,7 @@
 #include <roar/response.hpp>
 #include <roar/beast/forward.hpp>
 #include <roar/detail/pimpl_special_functions.hpp>
-#include <roar/detail/literals/memory.hpp>
+#include <roar/literals/memory.hpp>
 #include <roar/routing/proto_route.hpp>
 #include <roar/standard_response_provider.hpp>
 #include <roar/detail/promise_compat.hpp>
@@ -65,10 +65,10 @@ namespace Roar
         class SendIntermediate : public std::enable_shared_from_this<SendIntermediate<BodyT>>
         {
           public:
-            template <typename OriginalBodyT>
-            SendIntermediate(Session& session, Request<OriginalBodyT> const& req)
+            template <typename OriginalBodyT, typename... Forwards>
+            SendIntermediate(Session& session, Request<OriginalBodyT> const& req, Forwards&&... forwards)
                 : session_(session.shared_from_this())
-                , response_{session_->prepareResponse<BodyT>(req)}
+                , response_{session_->prepareResponse<BodyT>(req, std::forward<Forwards>(forwards)...)}
             {}
             SendIntermediate(SendIntermediate&&) = default;
             SendIntermediate(SendIntermediate const&) = delete;
@@ -163,16 +163,16 @@ namespace Roar
                 return *this;
             }
 
-            void preparePayload()
+            SendIntermediate& preparePayload()
             {
                 response_.preparePayload();
+                return *this;
             }
 
             /**
              * @brief Sends the response and invalidates this object
              */
-            Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error const&>>
-            commit()
+            Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error>> commit()
             {
                 return session_->send(std::move(response_));
             }
@@ -182,10 +182,12 @@ namespace Roar
             Response<BodyT> response_;
         };
 
-        template <typename BodyT, typename OriginalBodyT>
-        [[nodiscard]] std::shared_ptr<SendIntermediate<BodyT>> send(Request<OriginalBodyT> const& req)
+        template <typename BodyT, typename OriginalBodyT, typename... Forwards>
+        [[nodiscard]] std::shared_ptr<SendIntermediate<BodyT>>
+        send(Request<OriginalBodyT> const& req, Forwards&&... forwards)
         {
-            return std::shared_ptr<SendIntermediate<BodyT>>(new SendIntermediate<BodyT>{*this, req});
+            return std::shared_ptr<SendIntermediate<BodyT>>(
+                new SendIntermediate<BodyT>{*this, req, std::forward<Forwards>(forwards)...});
         }
 
         /**
@@ -196,7 +198,7 @@ namespace Roar
          * @return Returns a promise that resolves with whether or not the connection was auto-closed.
          */
         template <typename BodyT>
-        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error const&>>
+        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error>>
         send(boost::beast::http::response<BodyT>&& response)
         {
             return promise::newPromise([&, this](promise::Defer d) {
@@ -223,7 +225,7 @@ namespace Roar
          * @param response A response object.
          */
         template <typename BodyT>
-        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error const&>>
+        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error>>
         send(Response<BodyT>&& response)
         {
             return std::move(response).send(*this);
@@ -243,7 +245,7 @@ namespace Roar
             template <typename OriginalBodyT, typename... Forwards>
             ReadIntermediate(Session& session, Request<OriginalBodyT> req, Forwards&&... forwardArgs)
                 : session_{session.shared_from_this()}
-                , req_{[&]() -> decltype(req_) {
+                , req_{[&session, &forwardArgs...]() -> decltype(req_) {
                     if constexpr (std::is_same_v<BodyT, boost::beast::http::empty_body>)
                         throw std::runtime_error("Attempting to read with empty_body type.");
                     else
@@ -438,10 +440,10 @@ namespace Roar
          * @tparam BodyT
          * @return Response<BodyT>
          */
-        template <typename BodyT = boost::beast::http::empty_body, typename RequestBodyT>
-        [[nodiscard]] Response<BodyT> prepareResponse(Request<RequestBodyT> const& req)
+        template <typename BodyT = boost::beast::http::empty_body, typename RequestBodyT, typename... Forwards>
+        [[nodiscard]] Response<BodyT> prepareResponse(Request<RequestBodyT> const& req, Forwards&&... forwardArgs)
         {
-            auto res = Response<BodyT>{};
+            auto res = Response<BodyT>{std::forward<Forwards>(forwardArgs)...};
             res.setHeader(boost::beast::http::field::server, "Roar+" BOOST_BEAST_VERSION_STRING);
             if (routeOptions().cors)
                 res.enableCors(req, routeOptions().cors);

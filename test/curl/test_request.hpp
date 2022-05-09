@@ -175,7 +175,7 @@ namespace Roar::Tests
 
     TEST_F(CurlRequestTests, CanMakeDeleteRequest)
     {
-        const auto result = Request{}.del(url("/deleteHere"));
+        const auto result = Request{}.delete_(url("/deleteHere"));
         EXPECT_EQ(result.code(), boost::beast::http::status::ok);
     }
 

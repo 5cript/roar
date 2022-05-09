@@ -11,13 +11,13 @@ class RequestListener : public std::enable_shared_from_this<RequestListener>
     ROAR_MAKE_LISTENER(RequestListener);
 
     ROAR_GET(ws)
-    ({
+    ({{
         .path = "/api/ws",
         .routeOptions =
             {
                 .expectUpgrade = true,
             },
-    });
+    }});
 
   private:
     std::shared_ptr<Roar::WebsocketSession> ws_;

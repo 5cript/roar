@@ -62,6 +62,11 @@ namespace Roar::Tests
             return path_;
         }
 
+        operator std::filesystem::path() const noexcept
+        {
+            return path_;
+        }
+
       private:
         std::filesystem::path path_;
         boost::uuids::random_generator gen_;

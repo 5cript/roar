@@ -48,10 +48,13 @@ namespace Roar::Tests
         ROAR_OPTIONS(optionsHere)("/optionsHere");
         ROAR_HEAD(headHere)("/headHere");
         ROAR_GET(unsecure)
-        ({.path = "/unsecure",
-          .routeOptions = {
-              .allowUnsecure = true,
-          }});
+        ({{
+            .path = "/unsecure",
+            .routeOptions =
+                {
+                    .allowUnsecure = true,
+                },
+        }});
         ROAR_GET(sendIntermediate)("/sendIntermediate");
 
       private:
@@ -84,6 +87,7 @@ namespace Roar::Tests
         session.prepareResponse<string_body>(req)
             .body("Hello")
             .contentType("text/plain")
+            .preparePayload()
             .status(status::ok)
             .send(session);
     }
@@ -132,6 +136,7 @@ namespace Roar::Tests
                 {"matches", *req.pathMatches()},
             })
             .contentType("text/plain")
+            .preparePayload()
             .status(status::ok)
             .send(session);
     }
@@ -143,6 +148,6 @@ namespace Roar::Tests
     inline void SimpleRoutes::sendIntermediate(Session& session, EmptyBodyRequest&& req)
     {
         using namespace boost::beast::http;
-        session.send<string_body>(req)->status(status::ok).body("Hi").commit();
+        session.send<string_body>(req)->status(status::ok).body("Hi").preparePayload().commit();
     }
 }
