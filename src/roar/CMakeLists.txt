@@ -1,6 +1,7 @@
 add_library(roar STATIC
   server.cpp
   mime_type.cpp
+  request.cpp
   filesystem/jail.cpp
   filesystem/special_paths.cpp
   routing/route.cpp

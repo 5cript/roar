@@ -69,7 +69,7 @@ namespace Roar
     template <bool isRequest, class Fields>
     inline VoidBody::writer::writer(boost::beast::http::header<isRequest, Fields>&, value_type&)
     {}
-    inline void init(boost::beast::error_code& ec)
+    inline void VoidBody::writer::init(boost::beast::error_code& ec)
     {
         ec = {};
     }

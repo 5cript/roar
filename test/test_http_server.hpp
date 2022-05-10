@@ -2,7 +2,10 @@
 
 #include "util/common_server_setup.hpp"
 #include "util/common_listeners.hpp"
+#include "util/test_sources.hpp"
+#include "util/temporary_directory.hpp"
 
+#include <roar/body/range_file_body.hpp>
 #include <roar/routing/request_listener.hpp>
 #include <roar/curl/request.hpp>
 #include <roar/literals/memory.hpp>
@@ -12,6 +15,17 @@
 
 namespace Roar::Tests
 {
+    class RangeRoutes
+    {
+      private:
+        ROAR_MAKE_LISTENER(RangeRoutes);
+        ROAR_GET(slice)("/slice");
+
+      private:
+        BOOST_DESCRIBE_CLASS(RangeRoutes, (), (), (), (roar_slice))
+        TemporaryDirectory tempDir_{TEST_TEMPORARY_DIRECTORY};
+    };
+
     class HttpServerTests
         : public CommonServerSetup
         , public ::testing::Test
@@ -23,11 +37,48 @@ namespace Roar::Tests
             makeSecureServer();
             listener_ = server_->installRequestListener<SimpleRoutes>();
             secureServer_->installRequestListener<SimpleRoutes>();
+            server_->installRequestListener<RangeRoutes>();
         }
 
       protected:
         std::shared_ptr<SimpleRoutes> listener_;
     };
+
+    void RangeRoutes::slice(Session& session, EmptyBodyRequest&& req)
+    {
+        using namespace Roar::Literals;
+        using namespace boost::beast::http;
+
+        {
+            std::ofstream writer{tempDir_.path() / "index.txt", std::ios::binary};
+            LetterGenerator gen;
+            for (int i = 0; i != 1_KiB; ++i)
+                writer.put(gen());
+        }
+        const auto ranges = req.ranges();
+        if (!ranges)
+            return session.sendStandardResponse(status::bad_request, "Cannot parse ranges.");
+
+        if (ranges->ranges.size() != 1)
+            return session.sendStandardResponse(status::bad_request, "Only supporting one range");
+
+        const auto& range = ranges->ranges[0];
+
+        RangeFileBody::value_type body;
+        boost::beast::error_code ec;
+        body.open(tempDir_.path() / "index.txt", std::ios_base::in, ec);
+        if (ec)
+            return session.sendStandardResponse(status::internal_server_error, "Cannot open file for reading.");
+        body.setReadRange(range.start, range.end);
+
+        session.send<RangeFileBody>(req, std::move(body))
+            ->status(status::ok)
+            .preparePayload()
+            .commit()
+            .fail([](auto e) {
+                std::cerr << e << std::endl;
+            });
+    }
 
     TEST_F(HttpServerTests, StringPathIsCorrectlyRouted)
     {
@@ -91,5 +142,49 @@ namespace Roar::Tests
         auto res = Curl::Request{}.sink(body).get(url("/sendIntermediate", {.secure = false}));
         EXPECT_EQ(res.code(), boost::beast::http::status::ok);
         EXPECT_EQ(body, "Hi");
+    }
+
+    TEST_F(HttpServerTests, CanSendFilePartially)
+    {
+        std::string body;
+        auto res = Curl::Request{}.sink(body).setHeaderField("Range", "bytes=0-100").get(url("/slice"));
+        EXPECT_EQ(res.code(), boost::beast::http::status::ok);
+        ASSERT_EQ(body.size(), 100);
+        LetterGenerator gen;
+        bool allEqual = true;
+        for (int i = 0; i != 100; ++i)
+        {
+            allEqual &= body[i] == gen();
+            if (!allEqual)
+                break;
+        }
+        EXPECT_TRUE(allEqual);
+    }
+
+    TEST_F(HttpServerTests, InvalidRangeRequestIsRejected)
+    {
+        auto res = Curl::Request{}.setHeaderField("Range", "bytes?0-100").get(url("/slice"));
+        EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
+
+        res = Curl::Request{}.setHeaderField("Range", "=0-100").get(url("/slice"));
+        EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
+
+        res = Curl::Request{}.setHeaderField("Range", "asdf").get(url("/slice"));
+        EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
+
+        res = Curl::Request{}.setHeaderField("Range", "bytes=0").get(url("/slice"));
+        EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
+
+        res = Curl::Request{}.setHeaderField("Range", "bytes=x").get(url("/slice"));
+        EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
+
+        res = Curl::Request{}.setHeaderField("Range", "bytes=0-").get(url("/slice"));
+        EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
+
+        res = Curl::Request{}.setHeaderField("Range", "bytes=0-x").get(url("/slice"));
+        EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
+
+        res = Curl::Request{}.setHeaderField("Range", "bytes=100-0").get(url("/slice"));
+        EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
     }
 }

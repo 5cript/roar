@@ -31,7 +31,7 @@ namespace Roar::Tests
             else
                 j[std::string{to_string(field.name())}] = field.value();
         }
-        session.send<string_body>(req)->body(j).status(status::ok).commit();
+        session.send<string_body>(req)->body(j.dump()).preparePayload().status(status::ok).commit();
     }
 
     class SimpleRoutes

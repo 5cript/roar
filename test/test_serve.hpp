@@ -64,7 +64,19 @@ namespace Roar::Tests
         ROAR_GET(precendenceCheck)("/1/bla");
         ROAR_GET(precendenceCheckRegex)("/1/(.+)"_rgx);
 
-        ROAR_SERVE(serve1)("/1", &ServingListener::alternativeSupplier_);
+        ROAR_SERVE(serve1)
+        ({
+            {.path = "/1", .routeOptions = {.allowUnsecure = false}},
+            {
+                .allowDownload = true,
+                .allowUpload = false,
+                .allowOverwrite = false,
+                .allowDelete = false,
+                .allowDeleteOfNonEmptyDirectories = false,
+                .allowListing = false,
+                .pathProvider = &ServingListener::alternativeSupplier_,
+            },
+        });
         ROAR_SERVE(serve2)("/2", &ServingListener::pathSupplier);
         ROAR_SERVE(serveDeny)("/deny", &ServingListener::pathSupplier2);
         ROAR_SERVE(serveCustomDeny)("/customDeny", &ServingListener::pathSupplier);

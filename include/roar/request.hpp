@@ -30,6 +30,19 @@ namespace Roar
         };
     }
 
+    struct Ranges
+    {
+        struct Range
+        {
+            std::uint64_t start;
+            std::uint64_t end;
+        };
+        std::string unit;
+        std::vector<Range> ranges;
+
+        static std::optional<Ranges> fromString(std::string const& str);
+    };
+
     /**
      * @brief This class extends the boost::beast::http::request<BodyT> with additional convenience.
      *
@@ -180,6 +193,19 @@ namespace Roar
                 return std::nullopt;
             else
                 return boost::lexical_cast<std::size_t>(contentLength->value());
+        }
+
+        /**
+         * @brief Extracts the Range header.
+         *
+         * @return Ranges a parsed format of the range header.
+         */
+        std::optional<Ranges> ranges() const
+        {
+            auto iter = this->find(boost::beast::http::field::range);
+            if (iter == std::end(*this))
+                return std::nullopt;
+            return Ranges::fromString(std::string{iter->value()});
         }
 
       private:

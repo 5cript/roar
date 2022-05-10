@@ -114,7 +114,7 @@ namespace Roar
             template <typename T>
             SendIntermediate& body(T&& toAssign)
             {
-                response_.body() = std::forward<T>(toAssign);
+                response_.body(std::forward<T>(toAssign));
                 preparePayload();
                 return *this;
             }
@@ -182,6 +182,7 @@ namespace Roar
              */
             Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error>> commit()
             {
+                // FIXME: could timeout just like read. do in chunks.
                 return promise::newPromise([&, this](promise::Defer d) {
                     session_->withStreamDo([this, &d](auto& stream) {
                         auto res =
@@ -199,8 +200,6 @@ namespace Roar
                     });
                 });
             }
-
-            // void enableRanges()
 
           private:
             std::shared_ptr<Session> session_;
