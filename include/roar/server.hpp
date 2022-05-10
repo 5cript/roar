@@ -183,7 +183,7 @@ namespace Roar
                                            Session& session, Request<boost::beast::http::empty_body> const& req) {
                     if (serverIsSecure && !session.isSecure() && !allowUnsecure)
                         return session.sendStrictTransportSecurityResponse();
-                    session.send(session.prepareResponse(req));
+                    session.send<boost::beast::http::empty_body>(session.prepareResponse(req))->commit();
                 };
                 extractedRoutes.emplace(boost::beast::http::verb::options, preflightRoute);
             }

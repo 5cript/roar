@@ -63,7 +63,7 @@ namespace Roar::Detail
             if (this->serverIsSecure_ && !session.isSecure() && !this->serveInfo_.routeOptions.allowUnsecure)
                 return session.sendStrictTransportSecurityResponse();
 
-            const auto fileAndStatus = getFileAndStatus(req.target());
+            const auto fileAndStatus = getFileAndStatus(req.path());
 
             // File is found, now ask the library user for permissions:
             switch (std::invoke(
@@ -231,8 +231,7 @@ namespace Roar::Detail
             namespace http = boost::beast::http;
             session.send<http::empty_body>(req)
                 ->status(http::status::ok)
-                // TODO:
-                //.setHeader(http::field::accept_ranges, "bytes")
+                .setHeader(http::field::accept_ranges, "bytes")
                 .commit();
         }
 
@@ -255,6 +254,7 @@ namespace Roar::Detail
             session.send<http::empty_body>(req)
                 ->status(http::status::no_content)
                 .setHeader(http::field::allow, allow)
+                .setHeader(http::field::accept_ranges, "bytes")
                 .commit();
         }
 

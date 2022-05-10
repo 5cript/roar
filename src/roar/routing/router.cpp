@@ -78,14 +78,17 @@ namespace Roar
     //------------------------------------------------------------------------------------------------------------------
     void Router::followRoute(Session& session, Request<boost::beast::http::empty_body> request)
     {
+        using namespace boost::beast::http;
         using namespace std::string_literals;
         try
         {
             auto result = impl_->findRoute(request.method(), request.path());
             if (!result)
             {
-                session.send(impl_->standardResponseProvider->makeStandardResponse(
-                    session, boost::beast::http::status::not_found, "No route for path: "s + request.path()));
+                session
+                    .send<string_body>(impl_->standardResponseProvider->makeStandardResponse(
+                        session, status::not_found, "No route for path: "s + request.path()))
+                    ->commit();
                 return;
             }
             request.pathMatches(std::move(result->second));
@@ -95,16 +98,20 @@ namespace Roar
             }
             catch (std::exception const& exc)
             {
-                impl_->standardResponseProvider->makeStandardResponse(
-                    session,
-                    boost::beast::http::status::internal_server_error,
-                    "An exception was thrown in the request handler: "s + exc.what());
+                session
+                    .send<string_body>(impl_->standardResponseProvider->makeStandardResponse(
+                        session,
+                        status::internal_server_error,
+                        "An exception was thrown in the request handler: "s + exc.what()))
+                    ->commit();
             }
         }
         catch (std::exception const& exc)
         {
-            impl_->standardResponseProvider->makeStandardResponse(
-                session, boost::beast::http::status::internal_server_error, "Error during routing: "s + exc.what());
+            session
+                .send<string_body>(impl_->standardResponseProvider->makeStandardResponse(
+                    session, status::internal_server_error, "Error during routing: "s + exc.what()))
+                ->commit();
             return;
         }
     }

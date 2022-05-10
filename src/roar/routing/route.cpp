@@ -23,13 +23,16 @@ namespace Roar
         Request<boost::beast::http::empty_body> req,
         StandardResponseProvider const& standardResponseProvider) const
     {
+        using namespace boost::beast::http;
         session.setupRouteOptions(impl_->routeOptions);
         if (impl_->routeOptions.expectUpgrade && !req.isWebsocketUpgrade())
         {
-            session.send(standardResponseProvider.makeStandardResponse(
-                session,
-                boost::beast::http::status::upgrade_required,
-                "A regular request was received for a route that wants to upgrade to a websocket."));
+            session
+                .send<string_body>(standardResponseProvider.makeStandardResponse(
+                    session,
+                    status::upgrade_required,
+                    "A regular request was received for a route that wants to upgrade to a websocket."))
+                ->commit();
             return;
         }
         impl_->callRoute(session, std::move(req));

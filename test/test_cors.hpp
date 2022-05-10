@@ -74,7 +74,7 @@ namespace Roar::Tests
 
         void respondDefault(Session& session, EmptyBodyRequest&& req)
         {
-            session.send(session.prepareResponse(req));
+            session.send(session.prepareResponse(req))->commit();
         }
 
       private:

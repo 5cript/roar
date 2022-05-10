@@ -70,6 +70,14 @@ namespace Roar
                 : session_(session.shared_from_this())
                 , response_{session_->prepareResponse<BodyT>(req, std::forward<Forwards>(forwards)...)}
             {}
+            SendIntermediate(Session& session, boost::beast::http::response<BodyT> res)
+                : session_(session.shared_from_this())
+                , response_{std::move(res)}
+            {}
+            SendIntermediate(Session& session, Response<BodyT>&& res)
+                : session_(session.shared_from_this())
+                , response_{std::move(res)}
+            {}
             SendIntermediate(SendIntermediate&&) = default;
             SendIntermediate(SendIntermediate const&) = delete;
             SendIntermediate& operator=(SendIntermediate&&) = default;
@@ -174,8 +182,25 @@ namespace Roar
              */
             Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error>> commit()
             {
-                return session_->send(std::move(response_));
+                return promise::newPromise([&, this](promise::Defer d) {
+                    session_->withStreamDo([this, &d](auto& stream) {
+                        auto res =
+                            std::make_shared<boost::beast::http::response<BodyT>>(std::move(response_).response());
+                        boost::beast::http::async_write(
+                            stream,
+                            *res,
+                            [session = session_, res = std::move(res), d](
+                                boost::beast::error_code ec, std::size_t bytesTransferred) {
+                                if (!ec)
+                                    d.resolve(session->onWriteComplete(res->need_eof(), ec, bytesTransferred));
+                                else
+                                    d.reject(Error{.error = ec, .additionalInfo = "Failed to send response"});
+                            });
+                    });
+                });
             }
+
+            // void enableRanges()
 
           private:
             std::shared_ptr<Session> session_;
@@ -190,45 +215,16 @@ namespace Roar
                 new SendIntermediate<BodyT>{*this, req, std::forward<Forwards>(forwards)...});
         }
 
-        /**
-         * @brief Send a boost::beast::http response to the client.
-         *
-         * @tparam BodyT Body type of the response.
-         * @param response A response object.
-         * @return Returns a promise that resolves with whether or not the connection was auto-closed.
-         */
         template <typename BodyT>
-        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error>>
-        send(boost::beast::http::response<BodyT>&& response)
+        [[nodiscard]] std::shared_ptr<SendIntermediate<BodyT>> send(boost::beast::http::response<BodyT>&& res)
         {
-            return promise::newPromise([&, this](promise::Defer d) {
-                withStreamDo([this, &response, &d](auto& stream) {
-                    auto res = std::make_shared<boost::beast::http::response<BodyT>>(std::move(response));
-                    boost::beast::http::async_write(
-                        stream,
-                        *res,
-                        [self = shared_from_this(), res = std::move(res), d](
-                            boost::beast::error_code ec, std::size_t bytesTransferred) {
-                            if (!ec)
-                                d.resolve(self->onWriteComplete(res->need_eof(), ec, bytesTransferred));
-                            else
-                                d.reject(Error{.error = ec, .additionalInfo = "Failed to send response"});
-                        });
-                });
-            });
+            return std::shared_ptr<SendIntermediate<BodyT>>(new SendIntermediate<BodyT>{*this, std::move(res)});
         }
 
-        /**
-         * @brief Send a response to the client.
-         *
-         * @tparam BodyT Body type of the response.
-         * @param response A response object.
-         */
         template <typename BodyT>
-        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error>>
-        send(Response<BodyT>&& response)
+        [[nodiscard]] std::shared_ptr<SendIntermediate<BodyT>> send(Response<BodyT>&& res)
         {
-            return std::move(response).send(*this);
+            return std::shared_ptr<SendIntermediate<BodyT>>(new SendIntermediate<BodyT>{*this, std::move(res)});
         }
 
         /**
@@ -303,8 +299,8 @@ namespace Roar
             /**
              * @brief Set a callback function that is called whenever some data was read.
              *
-             * @param onChunkFunc The function to be called. Is called with the buffer and amount of bytes transferred.
-             * Return false in this function to stop reading.
+             * @param onChunkFunc The function to be called. Is called with the buffer and amount of bytes
+             * transferred. Return false in this function to stop reading.
              * @return ReadIntermediate& Returns itself for chaining.
              */
             ReadIntermediate& onReadSome(std::function<bool(boost::beast::flat_buffer&, std::size_t)> onChunkFunc)
@@ -383,10 +379,12 @@ namespace Roar
                             catch (std::exception const& exc)
                             {
                                 using namespace std::string_literals;
-                                self->session_->send(self->session_->standardResponseProvider().makeStandardResponse(
-                                    *self->session_,
-                                    boost::beast::http::status::internal_server_error,
-                                    "An exception was thrown in the body read completion handler: "s + exc.what()));
+                                self->session_
+                                    ->send(self->session_->standardResponseProvider().makeStandardResponse(
+                                        *self->session_,
+                                        boost::beast::http::status::internal_server_error,
+                                        "An exception was thrown in the body read completion handler: "s + exc.what()))
+                                    ->commit();
                             }
                         });
                 });
