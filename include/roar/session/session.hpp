@@ -157,6 +157,19 @@ namespace Roar
             }
 
             /**
+             * @brief Set a callback function that is called whenever some data was written.
+             *
+             * @param onChunkFunc The function to be called. Is called with the buffer and amount of bytes
+             * transferred. Return false in this function to stop writing.
+             * @return ReadIntermediate& Returns itself for chaining.
+             */
+            SendIntermediate& onWriteSome(std::function<bool(std::size_t)> onChunkFunc)
+            {
+                onChunk_ = onChunkFunc;
+                return *this;
+            }
+
+            /**
              * @brief Sets cors headers.
              * @param req A request to base the cors headers off of.
              * @param cors A cors settings object. If not supplied, a very permissive setting is used.
@@ -182,28 +195,75 @@ namespace Roar
              */
             Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error>> commit()
             {
-                // FIXME: could timeout just like read. do in chunks.
-                return promise::newPromise([&, this](promise::Defer d) {
-                    session_->withStreamDo([this, &d](auto& stream) {
-                        auto res =
-                            std::make_shared<boost::beast::http::response<BodyT>>(std::move(response_).response());
-                        boost::beast::http::async_write(
-                            stream,
-                            *res,
-                            [session = session_, res = std::move(res), d](
-                                boost::beast::error_code ec, std::size_t bytesTransferred) {
-                                if (!ec)
-                                    d.resolve(session->onWriteComplete(res->need_eof(), ec, bytesTransferred));
-                                else
-                                    d.reject(Error{.error = ec, .additionalInfo = "Failed to send response"});
-                            });
+                if (overallTimeout_)
+                {
+                    session_->withStreamDo([this](auto& stream) {
+                        boost::beast::get_lowest_layer(stream).expires_after(*overallTimeout_);
                     });
+                }
+                promise_ = std::make_unique<promise::Promise>(promise::newPromise());
+                writeChunk();
+                return {*promise_};
+            }
+
+            /**
+             * @brief Set a timeout for the whole write operation.
+             *
+             * @param timeout The timeout as a std::chrono::duration.
+             * @return ReadIntermediate& Returns itself for chaining.
+             */
+            SendIntermediate& useFixedTimeout(std::chrono::milliseconds timeout)
+            {
+                overallTimeout_ = timeout;
+                return *this;
+            }
+
+          private:
+            void writeChunk()
+            {
+                session_->withStreamDo([this](auto& stream) {
+                    if (!overallTimeout_)
+                        boost::beast::get_lowest_layer(stream).expires_after(std::chrono::seconds(sessionTimeout));
+
+                    auto ser = std::make_shared<boost::beast::http::serializer<false, BodyT>>(response_.response());
+
+                    boost::beast::http::async_write_some(
+                        stream,
+                        *ser,
+                        [self = this->shared_from_this(),
+                         ser = std::move(ser)](boost::beast::error_code ec, std::size_t bytesTransferred) {
+                            if (!ec && !ser->is_done())
+                                return self->writeChunk();
+
+                            if (ec)
+                            {
+                                self->session_->close();
+                                self->promise_->reject(Error{.error = ec, .additionalInfo = "Failed to send response"});
+                            }
+
+                            if (self->onChunk_ && !self->onChunk_(bytesTransferred))
+                                return;
+
+                            try
+                            {
+                                self->promise_->resolve(
+                                    self->session_->onWriteComplete(ser->get().need_eof(), ec, bytesTransferred));
+                            }
+                            catch (std::exception const& exc)
+                            {
+                                self->promise_->fail(
+                                    Error{.error = exc.what(), .additionalInfo = "Failed to send response"});
+                            }
+                        });
                 });
             }
 
           private:
             std::shared_ptr<Session> session_;
             Response<BodyT> response_;
+            std::function<bool(std::size_t)> onChunk_;
+            std::unique_ptr<promise::Promise> promise_;
+            std::optional<std::chrono::milliseconds> overallTimeout_;
         };
 
         template <typename BodyT, typename OriginalBodyT, typename... Forwards>
@@ -420,8 +480,8 @@ namespace Roar
          * @tparam Forwards
          * @param req A request that was received
          * @param forwardArgs
-         * @return std::shared_ptr<ReadIntermediate<BodyT>> A class that can be used to start the reading process and
-         * set options.
+         * @return std::shared_ptr<ReadIntermediate<BodyT>> A class that can be used to start the reading process
+         * and set options.
          */
         template <typename BodyT, typename OriginalBodyT, typename... Forwards>
         [[nodiscard]] std::shared_ptr<ReadIntermediate<BodyT>>
@@ -501,8 +561,8 @@ namespace Roar
 
         /**
          * @brief Some clients insist on closing the connection on their own even if they received a response.
-         * To avoid this, this function can be called and the connection will be kept alive until the client closes it
-         * or a timeout is reached.
+         * To avoid this, this function can be called and the connection will be kept alive until the client closes
+         * it or a timeout is reached.
          *
          * @return A promise that resolves to true when the connection was closed by the client.
          */
