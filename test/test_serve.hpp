@@ -290,8 +290,15 @@ namespace Roar::Tests
     TEST_F(ServeTests, CanMakeHeadRequest)
     {
         std::unordered_map<std::string, std::string> headers;
-        const auto res = Curl::Request{}.headerSink(headers).head(url("/1"));
+        const auto res = Curl::Request{}.headerSink(headers).head(url("/1/file.txt"));
         EXPECT_EQ(res.code(), boost::beast::http::status::ok);
+    }
+
+    TEST_F(ServeTests, HeadRequestToNonExistingFileReturns404)
+    {
+        std::unordered_map<std::string, std::string> headers;
+        const auto res = Curl::Request{}.headerSink(headers).head(url("/1/you_dont_exist.txt"));
+        EXPECT_EQ(res.code(), boost::beast::http::status::not_found);
     }
 
     TEST_F(ServeTests, CanotMakeHeadRequestWhenDownloadIsNotAllowed)
@@ -477,10 +484,8 @@ namespace Roar::Tests
 
     TEST_F(ServeTests, CannotUploadFileWithout100ContinueHandling)
     {
-        const auto res = Curl::Request{}
-                             .source("Yes I am there.")
-                             .setHeaderField("Expect", "")
-                             .put(url("/allAllowed/emptyDir/file.txt"));
+        const auto res =
+            Curl::Request{}.source("Yes I am there.").setHeader("Expect", "").put(url("/allAllowed/emptyDir/file.txt"));
         EXPECT_EQ(res.code(), boost::beast::http::status::expectation_failed);
     }
 
@@ -488,7 +493,7 @@ namespace Roar::Tests
     TEST_F(ServeTests, CannotAccessFileOutsideOfJail)
     {
         const auto res =
-            Curl::Request{}.source("Yes I am there.").setHeaderField("Expect", "").put(url("/deep/../../../file.txt"));
+            Curl::Request{}.source("Yes I am there.").setHeader("Expect", "").put(url("/deep/../../../file.txt"));
         // There is a file there, but should report as not_found.
         EXPECT_EQ(res.code(), boost::beast::http::status::not_found);
     }
@@ -505,5 +510,16 @@ namespace Roar::Tests
     {
         const auto res = Curl::Request{}.source("test").put(url("/nothingIsAllowedButIsOverruled/file.txt"));
         EXPECT_EQ(res.code(), boost::beast::http::status::method_not_allowed);
+    }
+
+    TEST_F(ServeTests, CanMakeRangeRequest)
+    {
+        std::string body;
+        const auto res = Curl::Request{}
+                             .setHeader(boost::beast::http::field::range, "bytes=1-3")
+                             .sink(body)
+                             .get(url("/allAllowed/file.txt"));
+        EXPECT_EQ(res.code(), boost::beast::http::status::partial_content);
+        EXPECT_EQ(body, std::string{ServingListener::DummyFileContent}.substr(1, 2));
     }
 }

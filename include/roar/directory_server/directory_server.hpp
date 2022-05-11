@@ -231,12 +231,17 @@ namespace Roar::Detail
             namespace http = boost::beast::http;
             const auto contentType = extensionToMime(fileAndStatus.file.extension().string());
 
+            if (fileAndStatus.status.type() != std::filesystem::file_type::regular &&
+                fileAndStatus.status.type() != std::filesystem::file_type::symlink)
+                return session.sendStandardResponse(http::status::not_found);
+
             session.send<http::empty_body>(req)
                 ->status(http::status::ok)
                 .setHeader(http::field::accept_ranges, "bytes")
                 .setHeader(http::field::content_length, std::to_string(std::filesystem::file_size(fileAndStatus.file)))
                 .contentType(contentType ? *contentType : "application/octet-stream")
-                .commit();
+                .commit()
+                .fail([](auto) {});
         }
 
         void sendOptionsResponse(Session& session, EmptyBodyRequest const& req, FileAndStatus const&) const

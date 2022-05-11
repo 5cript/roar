@@ -19,7 +19,7 @@ int main()
     const auto response = Roar::Curl::Request{}
         .sink(responseBody)
         .verbose()
-        .setHeaderField("Content-Type", "text/plain")
+        .setHeader("Content-Type", "text/plain")
         .source("Hi")
         .post("https://localhost:8080")
     ;

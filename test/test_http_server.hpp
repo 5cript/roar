@@ -148,7 +148,7 @@ namespace Roar::Tests
     TEST_F(HttpServerTests, CanSendFilePartially)
     {
         std::string body;
-        auto res = Curl::Request{}.sink(body).setHeaderField("Range", "bytes=0-100").get(url("/slice"));
+        auto res = Curl::Request{}.sink(body).setHeader("Range", "bytes=0-100").get(url("/slice"));
         EXPECT_EQ(res.code(), boost::beast::http::status::partial_content);
         ASSERT_EQ(body.size(), 100);
         LetterGenerator gen;
@@ -167,7 +167,7 @@ namespace Roar::Tests
         std::string body;
         std::unordered_map<std::string, std::string> headers;
         auto res =
-            Curl::Request{}.sink(body).headerSink(headers).setHeaderField("Range", "bytes=200-350").get(url("/slice"));
+            Curl::Request{}.sink(body).headerSink(headers).setHeader("Range", "bytes=200-350").get(url("/slice"));
         std::string base;
         LetterGenerator gen;
         for (int i = 0; i != 1024; ++i)
@@ -185,7 +185,7 @@ namespace Roar::Tests
         auto res = Curl::Request{}
                        .sink(body)
                        .headerSink(headers)
-                       .setHeaderField("Range", "bytes=0-100, 200-350, 400-465")
+                       .setHeader("Range", "bytes=0-100, 200-350, 400-465")
                        .get(url("/slice"));
         std::string base;
         LetterGenerator gen;
@@ -218,7 +218,7 @@ namespace Roar::Tests
         auto res = Curl::Request{}
                        .sink(body)
                        .headerSink(headers)
-                       .setHeaderField("Range", "bytes=200-6800, 0-10, 137-10521")
+                       .setHeader("Range", "bytes=200-6800, 0-10, 137-10521")
                        .get(url("/slice"));
         std::string base;
         LetterGenerator gen;
@@ -246,28 +246,28 @@ namespace Roar::Tests
 
     TEST_F(HttpServerTests, InvalidRangeRequestIsRejected)
     {
-        auto res = Curl::Request{}.setHeaderField("Range", "bytes?0-100").get(url("/slice"));
+        auto res = Curl::Request{}.setHeader("Range", "bytes?0-100").get(url("/slice"));
         EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
 
-        res = Curl::Request{}.setHeaderField("Range", "=0-100").get(url("/slice"));
+        res = Curl::Request{}.setHeader("Range", "=0-100").get(url("/slice"));
         EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
 
-        res = Curl::Request{}.setHeaderField("Range", "asdf").get(url("/slice"));
+        res = Curl::Request{}.setHeader("Range", "asdf").get(url("/slice"));
         EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
 
-        res = Curl::Request{}.setHeaderField("Range", "bytes=0").get(url("/slice"));
+        res = Curl::Request{}.setHeader("Range", "bytes=0").get(url("/slice"));
         EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
 
-        res = Curl::Request{}.setHeaderField("Range", "bytes=x").get(url("/slice"));
+        res = Curl::Request{}.setHeader("Range", "bytes=x").get(url("/slice"));
         EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
 
-        res = Curl::Request{}.setHeaderField("Range", "bytes=0-").get(url("/slice"));
+        res = Curl::Request{}.setHeader("Range", "bytes=0-").get(url("/slice"));
         EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
 
-        res = Curl::Request{}.setHeaderField("Range", "bytes=0-x").get(url("/slice"));
+        res = Curl::Request{}.setHeader("Range", "bytes=0-x").get(url("/slice"));
         EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
 
-        res = Curl::Request{}.setHeaderField("Range", "bytes=100-0").get(url("/slice"));
+        res = Curl::Request{}.setHeader("Range", "bytes=100-0").get(url("/slice"));
         EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
     }
 }
