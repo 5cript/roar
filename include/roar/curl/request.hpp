@@ -4,6 +4,7 @@
 #include "response.hpp"
 #include "source.hpp"
 
+#include <boost/beast/http/field.hpp>
 #include <curl/curl.h>
 #ifdef ROAR_ENABLE_NLOHMANN_JSON
 #    include <nlohmann/json.hpp>
@@ -77,7 +78,16 @@ namespace Roar::Curl
          * @param value The value.
          * @return Request& Returned for chaining.
          */
-        Request& setHeaderField(std::string const& key, std::string const& value);
+        Request& setHeader(std::string const& key, std::string const& value);
+
+        /**
+         * @brief Set the speficied header field with value
+         *
+         * @param key The field.
+         * @param value The value.
+         * @return Request& Returned for chaining.
+         */
+        Request& setHeader(boost::beast::http::field key, std::string const& value);
 
         /**
          * @brief Verify the peer in secure requests?

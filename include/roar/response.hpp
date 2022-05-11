@@ -32,8 +32,14 @@ namespace Roar
             response_.version(11);
         }
 
+        explicit Response(boost::beast::http::response<BodyT>&& res)
+            : response_{std::move(res)}
+        {
+            response_.version(11);
+        }
+
         template <typename... Forwards>
-        Response(Forwards... forwards)
+        explicit Response(Forwards... forwards)
             : response_{std::piecewise_construct, std::forward_as_tuple(std::forward<Forwards>(forwards)...)}
         {
             response_.version(11);
@@ -58,6 +64,18 @@ namespace Roar
         auto& body()
         {
             return response_.body();
+        }
+
+        /**
+         * @brief Set keep alive.
+         *
+         * @param keepAlive
+         * @return Response&
+         */
+        Response& keepAlive(bool keepAlive = true)
+        {
+            response_.keep_alive(keepAlive);
+            return *this;
         }
 
         /**
@@ -216,32 +234,6 @@ namespace Roar
             }
 
             return *this;
-        }
-
-        /**
-         * @brief Sends this response on a given session. This invalides this response object.
-         *
-         * @tparam SessionT
-         * @param session The session to send this on.
-         */
-        template <typename SessionT>
-        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error>>
-        send(SessionT& session)
-        {
-            return session.send(std::move(response_));
-        }
-
-        /**
-         * @brief Send overload for shared_ptr. This invalides this response object.
-         *
-         * @tparam SessionT
-         * @param session The session to send this on.
-         */
-        template <typename SessionT>
-        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error>>
-        send(std::shared_ptr<SessionT>& session)
-        {
-            return session->send(std::move(response_));
         }
 
         /**

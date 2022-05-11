@@ -31,7 +31,7 @@ namespace Roar::Tests
             else
                 j[std::string{to_string(field.name())}] = field.value();
         }
-        res.body(j).status(status::ok).send(session);
+        session.send<string_body>(req)->body(j.dump()).preparePayload().status(status::ok).commit();
     }
 
     class SimpleRoutes
@@ -61,7 +61,7 @@ namespace Roar::Tests
         void justOk(Session& session, EmptyBodyRequest&& req)
         {
             using namespace boost::beast::http;
-            session.prepareResponse<empty_body>(req).status(status::ok).send(session);
+            session.send<string_body>(req)->status(status::ok).commit();
         }
 
       private:
@@ -84,12 +84,12 @@ namespace Roar::Tests
     inline void SimpleRoutes::index(Session& session, EmptyBodyRequest&& req)
     {
         using namespace boost::beast::http;
-        session.prepareResponse<string_body>(req)
-            .body("Hello")
+        session.send<string_body>(req)
+            ->status(status::ok)
             .contentType("text/plain")
+            .body("Hello")
             .preparePayload()
-            .status(status::ok)
-            .send(session);
+            .commit();
     }
     inline void SimpleRoutes::putHere(Session& session, EmptyBodyRequest&& req)
     {
@@ -98,12 +98,12 @@ namespace Roar::Tests
             ->noBodyLimit()
             .commit()
             .then([](Session& session, Request<string_body> const& req) {
-                session.template prepareResponse<string_body>(req)
-                    .contentType("text/plain")
+                session.send<string_body>(req)
+                    ->contentType("text/plain")
                     .status(status::ok)
                     .body(req.body())
                     .preparePayload()
-                    .send(session);
+                    .commit();
             });
     }
     inline void SimpleRoutes::postHere(Session& session, EmptyBodyRequest&& req)
@@ -125,25 +125,30 @@ namespace Roar::Tests
     inline void SimpleRoutes::ab(Session& session, EmptyBodyRequest&& req)
     {
         using namespace boost::beast::http;
-        session.prepareResponse<string_body>(req).body("AB").contentType("text/plain").status(status::ok).send(session);
+        session.send<string_body>(req)
+            ->body("AB")
+            .contentType("text/plain")
+            .preparePayload()
+            .status(status::ok)
+            .commit();
     }
     inline void SimpleRoutes::anything(Session& session, EmptyBodyRequest&& req)
     {
         using namespace boost::beast::http;
-        session.prepareResponse<string_body>(req)
-            .body(nlohmann::json{
+        session.send<string_body>(req)
+            ->body(nlohmann::json{
                 {"path", req.path()},
                 {"matches", *req.pathMatches()},
             })
             .contentType("text/plain")
             .preparePayload()
             .status(status::ok)
-            .send(session);
+            .commit();
     }
     inline void SimpleRoutes::unsecure(Session& session, EmptyBodyRequest&& req)
     {
         using namespace boost::beast::http;
-        session.prepareResponse<string_body>(req).status(status::no_content).send(session);
+        session.send<string_body>(req)->status(status::no_content).commit();
     }
     inline void SimpleRoutes::sendIntermediate(Session& session, EmptyBodyRequest&& req)
     {

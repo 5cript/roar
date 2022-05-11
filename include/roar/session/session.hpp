@@ -2,6 +2,7 @@
 
 #include <functional>
 #include <roar/error.hpp>
+#include <roar/detail/type_equal_compare.hpp>
 #include <roar/websocket/websocket_session.hpp>
 #include <roar/response.hpp>
 #include <roar/beast/forward.hpp>
@@ -12,6 +13,7 @@
 #include <roar/detail/promise_compat.hpp>
 #include <roar/body/void_body.hpp>
 #include <roar/detail/stream_type.hpp>
+#include <roar/body/range_file_body.hpp>
 
 #include <boost/beast/http/message.hpp>
 #include <boost/beast/http/empty_body.hpp>
@@ -27,6 +29,7 @@
 #include <chrono>
 #include <variant>
 #include <stdexcept>
+#include <sstream>
 
 namespace Roar
 {
@@ -70,6 +73,14 @@ namespace Roar
                 : session_(session.shared_from_this())
                 , response_{session_->prepareResponse<BodyT>(req, std::forward<Forwards>(forwards)...)}
             {}
+            SendIntermediate(Session& session, boost::beast::http::response<BodyT> res)
+                : session_(session.shared_from_this())
+                , response_{std::move(res)}
+            {}
+            SendIntermediate(Session& session, Response<BodyT>&& res)
+                : session_(session.shared_from_this())
+                , response_{std::move(res)}
+            {}
             SendIntermediate(SendIntermediate&&) = default;
             SendIntermediate(SendIntermediate const&) = delete;
             SendIntermediate& operator=(SendIntermediate&&) = default;
@@ -106,7 +117,7 @@ namespace Roar
             template <typename T>
             SendIntermediate& body(T&& toAssign)
             {
-                response_.body() = std::forward<T>(toAssign);
+                response_.body(std::forward<T>(toAssign));
                 preparePayload();
                 return *this;
             }
@@ -149,6 +160,19 @@ namespace Roar
             }
 
             /**
+             * @brief Set a callback function that is called whenever some data was written.
+             *
+             * @param onChunkFunc The function to be called. Is called with the buffer and amount of bytes
+             * transferred. Return false in this function to stop writing.
+             * @return ReadIntermediate& Returns itself for chaining.
+             */
+            SendIntermediate& onWriteSome(std::function<bool(std::size_t)> onChunkFunc)
+            {
+                onChunk_ = onChunkFunc;
+                return *this;
+            }
+
+            /**
              * @brief Sets cors headers.
              * @param req A request to base the cors headers off of.
              * @param cors A cors settings object. If not supplied, a very permissive setting is used.
@@ -169,17 +193,141 @@ namespace Roar
                 return *this;
             }
 
+          private:
+            using CommitReturnType =
+                Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error>>;
+
+          public:
             /**
              * @brief Sends the response and invalidates this object
              */
-            Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error>> commit()
+            template <typename T = BodyT, bool OverrideSfinae = false>
+            std::enable_if_t<typeof(T{}) != typeof(RangeFileBody{}) || OverrideSfinae, CommitReturnType> commit()
             {
-                return session_->send(std::move(response_));
+                if (overallTimeout_)
+                {
+                    session_->withStreamDo([this](auto& stream) {
+                        boost::beast::get_lowest_layer(stream).expires_after(*overallTimeout_);
+                    });
+                }
+                promise_ = std::make_unique<promise::Promise>(promise::newPromise());
+                serializer_ = std::make_unique<boost::beast::http::serializer<false, BodyT>>(response_.response());
+                writeChunk();
+                return {*promise_};
+            }
+
+            /**
+             * @brief Sends the response for range request file bodies. Sets appropriate headers.
+             */
+            template <typename T = BodyT>
+            std::enable_if_t<typeof(T{}) == typeof(RangeFileBody{}), CommitReturnType> commit()
+            {
+                using namespace boost::beast::http;
+                preparePayload();
+                if (response_.body().isMultipart())
+                    setHeader(field::content_type, "multipart/byteranges; boundary=" + response_.body().boundary());
+                else
+                {
+                    setHeader(
+                        field::content_range,
+                        fmt::format(
+                            "bytes {}-{}/{}",
+                            response_.body().firstRange().first,
+                            response_.body().firstRange().second,
+                            response_.body().fileSize()));
+                }
+                status(status::partial_content);
+                return commit<BodyT, true>();
+            }
+
+            /**
+             * @brief Set keep alive.
+             *
+             * @param keepAlive
+             * @return SendIntermediate&
+             */
+            SendIntermediate& keepAlive(bool keepAlive = true)
+            {
+                response_.keepAlive(keepAlive);
+                return *this;
+            }
+
+            /**
+             * @brief Set a timeout for the whole write operation.
+             *
+             * @param timeout The timeout as a std::chrono::duration.
+             * @return ReadIntermediate& Returns itself for chaining.
+             */
+            SendIntermediate& useFixedTimeout(std::chrono::milliseconds timeout)
+            {
+                overallTimeout_ = timeout;
+                return *this;
+            }
+
+          private:
+            void writeHeader()
+            {
+                session_->withStreamDo([this](auto& stream) {
+                    if (!overallTimeout_)
+                        boost::beast::get_lowest_layer(stream).expires_after(std::chrono::seconds(sessionTimeout));
+
+                    serializer_ = std::make_unique<boost::beast::http::serializer<false, BodyT>>(response_.response());
+
+                    boost::beast::http::async_write_header(
+                        stream,
+                        *serializer_,
+                        [self = this->shared_from_this()](boost::beast::error_code ec, std::size_t) {
+                            if (ec)
+                                self->promise_->fail(ec);
+                            else
+                                self->promise_->resolve();
+                        });
+                });
+            }
+
+            void writeChunk()
+            {
+                session_->withStreamDo([this](auto& stream) {
+                    if (!overallTimeout_)
+                        boost::beast::get_lowest_layer(stream).expires_after(std::chrono::seconds(sessionTimeout));
+
+                    boost::beast::http::async_write_some(
+                        stream,
+                        *serializer_,
+                        [self = this->shared_from_this()](boost::beast::error_code ec, std::size_t bytesTransferred) {
+                            if (!ec && !self->serializer_->is_done())
+                                return self->writeChunk();
+
+                            if (ec)
+                            {
+                                self->session_->close();
+                                self->promise_->reject(Error{.error = ec, .additionalInfo = "Failed to send response"});
+                            }
+
+                            if (self->onChunk_ && !self->onChunk_(bytesTransferred))
+                                return;
+
+                            try
+                            {
+                                self->promise_->resolve(self->session_->onWriteComplete(
+                                    self->serializer_->get().need_eof(), ec, bytesTransferred));
+                            }
+                            catch (std::exception const& exc)
+                            {
+                                self->promise_->fail(
+                                    Error{.error = exc.what(), .additionalInfo = "Failed to send response"});
+                            }
+                        });
+                });
             }
 
           private:
             std::shared_ptr<Session> session_;
             Response<BodyT> response_;
+            std::function<bool(std::size_t)> onChunk_;
+            std::unique_ptr<promise::Promise> promise_;
+            std::optional<std::chrono::milliseconds> overallTimeout_;
+            std::unique_ptr<boost::beast::http::serializer<false, BodyT>> serializer_;
         };
 
         template <typename BodyT, typename OriginalBodyT, typename... Forwards>
@@ -190,45 +338,16 @@ namespace Roar
                 new SendIntermediate<BodyT>{*this, req, std::forward<Forwards>(forwards)...});
         }
 
-        /**
-         * @brief Send a boost::beast::http response to the client.
-         *
-         * @tparam BodyT Body type of the response.
-         * @param response A response object.
-         * @return Returns a promise that resolves with whether or not the connection was auto-closed.
-         */
         template <typename BodyT>
-        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error>>
-        send(boost::beast::http::response<BodyT>&& response)
+        [[nodiscard]] std::shared_ptr<SendIntermediate<BodyT>> send(boost::beast::http::response<BodyT>&& res)
         {
-            return promise::newPromise([&, this](promise::Defer d) {
-                withStreamDo([this, &response, &d](auto& stream) {
-                    auto res = std::make_shared<boost::beast::http::response<BodyT>>(std::move(response));
-                    boost::beast::http::async_write(
-                        stream,
-                        *res,
-                        [self = shared_from_this(), res = std::move(res), d](
-                            boost::beast::error_code ec, std::size_t bytesTransferred) {
-                            if (!ec)
-                                d.resolve(self->onWriteComplete(res->need_eof(), ec, bytesTransferred));
-                            else
-                                d.reject(Error{.error = ec, .additionalInfo = "Failed to send response"});
-                        });
-                });
-            });
+            return std::shared_ptr<SendIntermediate<BodyT>>(new SendIntermediate<BodyT>{*this, std::move(res)});
         }
 
-        /**
-         * @brief Send a response to the client.
-         *
-         * @tparam BodyT Body type of the response.
-         * @param response A response object.
-         */
         template <typename BodyT>
-        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error>>
-        send(Response<BodyT>&& response)
+        [[nodiscard]] std::shared_ptr<SendIntermediate<BodyT>> send(Response<BodyT>&& res)
         {
-            return std::move(response).send(*this);
+            return std::shared_ptr<SendIntermediate<BodyT>>(new SendIntermediate<BodyT>{*this, std::move(res)});
         }
 
         /**
@@ -303,8 +422,8 @@ namespace Roar
             /**
              * @brief Set a callback function that is called whenever some data was read.
              *
-             * @param onChunkFunc The function to be called. Is called with the buffer and amount of bytes transferred.
-             * Return false in this function to stop reading.
+             * @param onChunkFunc The function to be called. Is called with the buffer and amount of bytes
+             * transferred. Return false in this function to stop reading.
              * @return ReadIntermediate& Returns itself for chaining.
              */
             ReadIntermediate& onReadSome(std::function<bool(boost::beast::flat_buffer&, std::size_t)> onChunkFunc)
@@ -383,10 +502,12 @@ namespace Roar
                             catch (std::exception const& exc)
                             {
                                 using namespace std::string_literals;
-                                self->session_->send(self->session_->standardResponseProvider().makeStandardResponse(
-                                    *self->session_,
-                                    boost::beast::http::status::internal_server_error,
-                                    "An exception was thrown in the body read completion handler: "s + exc.what()));
+                                self->session_
+                                    ->send(self->session_->standardResponseProvider().makeStandardResponse(
+                                        *self->session_,
+                                        boost::beast::http::status::internal_server_error,
+                                        "An exception was thrown in the body read completion handler: "s + exc.what()))
+                                    ->commit();
                             }
                         });
                 });
@@ -423,8 +544,8 @@ namespace Roar
          * @tparam Forwards
          * @param req A request that was received
          * @param forwardArgs
-         * @return std::shared_ptr<ReadIntermediate<BodyT>> A class that can be used to start the reading process and
-         * set options.
+         * @return std::shared_ptr<ReadIntermediate<BodyT>> A class that can be used to start the reading process
+         * and set options.
          */
         template <typename BodyT, typename OriginalBodyT, typename... Forwards>
         [[nodiscard]] std::shared_ptr<ReadIntermediate<BodyT>>
@@ -504,8 +625,8 @@ namespace Roar
 
         /**
          * @brief Some clients insist on closing the connection on their own even if they received a response.
-         * To avoid this, this function can be called and the connection will be kept alive until the client closes it
-         * or a timeout is reached.
+         * To avoid this, this function can be called and the connection will be kept alive until the client closes
+         * it or a timeout is reached.
          *
          * @return A promise that resolves to true when the connection was closed by the client.
          */

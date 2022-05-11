@@ -1,5 +1,7 @@
 #pragma once
 
+#include <roar/mechanics/ranges.hpp>
+
 #include <boost/beast/http/message.hpp>
 #include <boost/beast/http/empty_body.hpp>
 #include <boost/algorithm/string/classification.hpp>
@@ -17,6 +19,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <deque>
 
 namespace Roar
 {
@@ -180,6 +183,19 @@ namespace Roar
                 return std::nullopt;
             else
                 return boost::lexical_cast<std::size_t>(contentLength->value());
+        }
+
+        /**
+         * @brief Extracts the Range header.
+         *
+         * @return Ranges a parsed format of the range header.
+         */
+        std::optional<Ranges> ranges() const
+        {
+            auto iter = this->find(boost::beast::http::field::range);
+            if (iter == std::end(*this))
+                return std::nullopt;
+            return Ranges::fromString(std::string{iter->value()});
         }
 
       private:

@@ -270,17 +270,18 @@ namespace Roar
     //------------------------------------------------------------------------------------------------------------------
     void Session::sendStandardResponse(boost::beast::http::status status, std::string_view additionalInfo)
     {
+        using namespace boost::beast::http;
         auto res = impl_->standardResponseProvider->makeStandardResponse(*this, status, additionalInfo);
-        res.set(boost::beast::http::field::connection, "close");
-        send(std::move(res));
+        res.set(field::connection, "close");
+        send<string_body>(std::move(res))->commit();
     }
     //------------------------------------------------------------------------------------------------------------------
     void Session::sendStrictTransportSecurityResponse()
     {
-        auto res =
-            impl_->standardResponseProvider->makeStandardResponse(*this, boost::beast::http::status::forbidden, "");
-        res.set(boost::beast::http::field::strict_transport_security, "max-age=3600");
-        send(std::move(res));
+        using namespace boost::beast::http;
+        auto res = impl_->standardResponseProvider->makeStandardResponse(*this, status::forbidden, "");
+        res.set(field::strict_transport_security, "max-age=3600");
+        send<string_body>(std::move(res))->commit();
     }
     //##################################################################################################################
 }

@@ -74,7 +74,7 @@ namespace Roar::Tests
 
         void respondDefault(Session& session, EmptyBodyRequest&& req)
         {
-            session.send(session.prepareResponse(req));
+            session.send(session.prepareResponse(req))->commit();
         }
 
       private:
@@ -153,7 +153,7 @@ namespace Roar::Tests
     TEST_F(CorsTests, CorsAllowOriginIsOriginOfRequest)
     {
         std::unordered_map<std::string, std::string> headers;
-        auto res = Curl::Request{}.setHeaderField("Origin", "bla.com").headerSink(headers).get(url("/permissiveCors"));
+        auto res = Curl::Request{}.setHeader("Origin", "bla.com").headerSink(headers).get(url("/permissiveCors"));
         ASSERT_NE(std::end(headers), headers.find("Access-Control-Allow-Origin"));
         EXPECT_EQ(headers["Access-Control-Allow-Origin"], "bla.com");
     }
@@ -172,7 +172,7 @@ namespace Roar::Tests
         std::unordered_map<std::string, std::string> headers;
         auto res = Curl::Request{}
                        .headerSink(headers)
-                       .setHeaderField("Access-Control-Request-Headers", allowedHeaders)
+                       .setHeader("Access-Control-Request-Headers", allowedHeaders)
                        .get(url("/permissiveCors"));
         ASSERT_NE(std::end(headers), headers.find("Access-Control-Allow-Headers"));
         EXPECT_EQ(headers["Access-Control-Allow-Headers"], allowedHeaders);
@@ -223,7 +223,7 @@ namespace Roar::Tests
         std::unordered_map<std::string, std::string> headers;
         auto res = Curl::Request{}
                        .headerSink(headers)
-                       .setHeaderField("Access-Control-Request-Method", "PUT")
+                       .setHeader("Access-Control-Request-Method", "PUT")
                        .options(url("/permissiveCors"));
         ASSERT_NE(std::end(headers), headers.find("Access-Control-Allow-Methods"));
         EXPECT_EQ(headers["Access-Control-Allow-Methods"], "GET");

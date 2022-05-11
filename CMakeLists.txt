@@ -17,6 +17,8 @@ endif()
 
 include (./cmake/example_target.cmake)
 include (./cmake/options.cmake)
+
+include (./cmake/fmt.cmake)
 include (./cmake/xhawk18_promise.cmake)
 
 if (${ROAR_ENABLE_NLOHMANN_JSON})
