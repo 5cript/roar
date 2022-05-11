@@ -20,7 +20,13 @@ This is a network library that has:
     - [x] Upload
     - [x] Deletion
     - [x] Directory Listing
-    - [ ] Resumeable requests (Range Requests).
+      - [x] List of files
+      - [x] Styleable, pretty by default
+      - [x] Last modified date
+      - [x] File size
+    - [x] Range Requests for GET.
+    - [ ] Resumeable Uploads?
+  - [ ] Provided pretty standard replies / error pages
 - [x] Websocket
   - [x] Websocket Server Support (SSL and Plain)
   - [x] Websocket Client (SSL and Plain)
