@@ -193,10 +193,16 @@ namespace Roar
                 return *this;
             }
 
+          private:
+            using CommitReturnType =
+                Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error>>;
+
+          public:
             /**
              * @brief Sends the response and invalidates this object
              */
-            Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error>> commit()
+            template <typename T = BodyT, bool OverrideSfinae = false>
+            std::enable_if_t<typeof(T{}) != typeof(RangeFileBody{}) || OverrideSfinae, CommitReturnType> commit()
             {
                 if (overallTimeout_)
                 {
@@ -210,121 +216,28 @@ namespace Roar
                 return {*promise_};
             }
 
+            /**
+             * @brief Sends the response for range request file bodies. Sets appropriate headers.
+             */
             template <typename T = BodyT>
-            std::enable_if_t<typeof(T{}) == typeof(RangeFileBody{}), SendIntermediate&> suffix(std::string const& str)
+            std::enable_if_t<typeof(T{}) == typeof(RangeFileBody{}), CommitReturnType> commit()
             {
-                response_.body().suffix(str);
-                return *this;
-            }
-
-            template <typename OriginalBodyT, typename T = BodyT>
-            std::enable_if_t<
-                typeof(T{}) == typeof(RangeFileBody{}),
-                Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error>>>
-            commitRanges(Request<OriginalBodyT> const& req, std::string partBodyType = "text/plain")
-            {
-                const auto maybeRanges = req.ranges();
-                if (!maybeRanges)
-                    throw std::invalid_argument("No ranges supplied");
-
-                auto ranges = *maybeRanges;
-
-                if (ranges.ranges.size() == 0)
-                    throw std::invalid_argument("No ranges supplied");
-
-                if (ranges.ranges.size() == 1)
-                {
-                    setHeader(
-                        boost::beast::http::field::content_range,
-                        std::string{"bytes "} + ranges.ranges[0].toString() + "/" +
-                            std::to_string(response_.body().realSize()));
-                    setHeader(boost::beast::http::field::content_length, std::to_string(ranges.ranges[0].size()));
-                    status(boost::beast::http::status::partial_content);
-                    response_.body().setReadRange(ranges.ranges[0].start, ranges.ranges[0].end);
-                    return commit();
-                }
+                using namespace boost::beast::http;
+                preparePayload();
+                if (response_.body().isMultipart())
+                    setHeader(field::content_type, "multipart/byteranges; boundary=" + response_.body().boundary());
                 else
                 {
-                    return promise::newPromise([&, this](promise::Defer d) {
-                        const auto totalSize = std::accumulate(
-                            std::begin(ranges.ranges),
-                            std::end(ranges.ranges),
-                            std::uint64_t{0},
-                            [](std::uint64_t acc, Ranges::Range const& range) {
-                                return acc + range.size();
-                            });
-
-                        auto sendSingleRange = std::make_shared<std::function<void(Ranges ranges)>>();
-                        *sendSingleRange = [self = this->shared_from_this(),
-                                            req,
-                                            sendSingleRange,
-                                            d,
-                                            partBodyType = std::move(partBodyType),
-                                            realSizeSuffix = std::string{"/"} +
-                                                std::to_string(response_.body().realSize())](Ranges ranges) {
-                            const auto path = self->response_.body().originalPath();
-                            self->response_.body().close();
-                            RangeFileBody::value_type file;
-                            std::error_code ec;
-                            file.open(path, std::ios_base::in, ec);
-                            if (ec)
-                            {
-                                d.reject(Error{.error = ec.message()});
-                                return;
-                            }
-                            file.setReadRange(ranges.ranges[0].start, ranges.ranges[0].end);
-                            ranges.ranges.pop_front();
-                            self->session_->template send<RangeFileBody>(req, std::move(file))
-                                ->setHeader(
-                                    boost::beast::http::field::content_range,
-                                    std::string{"bytes "} + ranges.ranges[0].toString() + realSizeSuffix)
-                                .setHeader(boost::beast::http::field::content_type, partBodyType)
-                                .keepAlive()
-                                .suffix("--ROAR_MULTIPART_BOUNDARY")
-                                .commit()
-                                .fail([d](Error e) {
-                                    d.reject(e);
-                                })
-                                .then(
-                                    [self, d, ranges = std::move(ranges), sendSingleRange = std::move(sendSingleRange)](
-                                        bool wasClosed) {
-                                        if (wasClosed)
-                                        {
-                                            d.reject(Error{.additionalInfo = "Connection was closed"});
-                                            return;
-                                        }
-                                        if (ranges.ranges.size() > 0)
-                                            (*sendSingleRange)(std::move(ranges));
-                                        else
-                                            d.resolve(true);
-                                    });
-                        };
-
-                        session_->send<boost::beast::http::string_body>(req)
-                            ->status(boost::beast::http::status::partial_content)
-                            .setHeader(
-                                boost::beast::http::field::content_type,
-                                "multipart/byteranges; boundary=ROAR_MULTIPART_BOUNDARY")
-                            .setHeader(boost::beast::http::field::content_length, std::to_string(totalSize))
-                            .keepAlive()
-                            .body("--ROAR_MULTIPART_BOUNDARY")
-                            .commit()
-                            .fail([d](Error e) {
-                                d.reject(e);
-                            })
-                            .then([d,
-                                   self = this->shared_from_this(),
-                                   ranges = std::move(ranges),
-                                   sendSingleRange = std::move(sendSingleRange)](bool wasClosed) {
-                                if (wasClosed)
-                                {
-                                    d.reject(Error{.additionalInfo = "Connection was closed"});
-                                    return;
-                                }
-                                (*sendSingleRange)(std::move(ranges));
-                            });
-                    });
+                    setHeader(
+                        field::content_range,
+                        fmt::format(
+                            "bytes {}-{}/{}",
+                            response_.body().firstRange().first,
+                            response_.body().firstRange().second,
+                            response_.body().fileSize()));
                 }
+                status(status::partial_content);
+                return commit<BodyT, true>();
             }
 
             /**

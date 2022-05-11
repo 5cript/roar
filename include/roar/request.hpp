@@ -1,5 +1,7 @@
 #pragma once
 
+#include <roar/mechanics/ranges.hpp>
+
 #include <boost/beast/http/message.hpp>
 #include <boost/beast/http/empty_body.hpp>
 #include <boost/algorithm/string/classification.hpp>
@@ -30,22 +32,6 @@ namespace Roar
             std::unordered_map<std::string, std::string> query_;
         };
     }
-
-    struct Ranges
-    {
-        struct Range
-        {
-            std::uint64_t start;
-            std::uint64_t end;
-
-            std::uint64_t size() const;
-            std::string toString() const;
-        };
-        std::string unit;
-        std::deque<Range> ranges;
-
-        static std::optional<Ranges> fromString(std::string const& str);
-    };
 
     /**
      * @brief This class extends the boost::beast::http::request<BodyT> with additional convenience.

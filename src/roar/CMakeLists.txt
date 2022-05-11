@@ -1,7 +1,7 @@
 add_library(roar STATIC
   server.cpp
   mime_type.cpp
-  request.cpp
+  mechanics/ranges.cpp
   filesystem/jail.cpp
   filesystem/special_paths.cpp
   routing/route.cpp
@@ -29,7 +29,7 @@ find_library(LCRYPTO crypto)
 find_library(LCRYPTOPP cryptopp)
 
 target_include_directories(roar PUBLIC ${CMAKE_SOURCE_DIR}/include ${CURL_INCLUDE_DIR})
-target_link_libraries(roar PUBLIC Boost::system promise ${CURL_LIBRARIES} ${LSSL} ${LCRYPTOPP} ${LCRYPTO})
+target_link_libraries(roar PUBLIC Boost::system promise fmt::fmt ${CURL_LIBRARIES} ${LSSL} ${LCRYPTOPP} ${LCRYPTO})
 
 if (${ROAR_ENABLE_NLOHMANN_JSON})
     target_link_libraries(roar PUBLIC nlohmann_json::nlohmann_json)

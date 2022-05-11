@@ -1,5 +1,6 @@
 #pragma once
 
+#include <roar/mechanics/ranges.hpp>
 #include <boost/beast/http/message.hpp>
 #include <roar/literals/memory.hpp>
 
@@ -7,15 +8,81 @@
 #include <filesystem>
 #include <fstream>
 #include <stdexcept>
+#include <random>
+#include <string_view>
+#include <algorithm>
+#include <fmt/format.h>
 
 namespace Roar
 {
     namespace Detail
     {
+        /**
+         * @brief Support range requests for get requests including multipart/byterange.
+         */
         class RangeFileBodyImpl
         {
+            constexpr static unsigned SplitterLength = 16;
+
+          private:
+            struct Sequence
+            {
+
+                Sequence() = default;
+                Sequence(
+                    std::uint64_t start,
+                    std::uint64_t end,
+                    std::uint64_t totalFile,
+                    std::string_view contentType,
+                    std::string const& splitter)
+                    : start{start}
+                    , end{end}
+                    , headConsumed{0}
+                    , headSection{fmt::format(
+                          "\r\n{}\r\n"
+                          "Content-Type: {}\r\n"
+                          "Content-Range: bytes {}-{}/{}\r\n\r\n",
+                          splitter,
+                          contentType,
+                          start,
+                          end,
+                          totalFile)}
+                {}
+                Sequence(std::string const& splitter)
+                    : start{0}
+                    , end{0}
+                    , headConsumed{0}
+                    , headSection{std::string{"\r\n"} + splitter}
+                {}
+                Sequence(std::size_t start, std::size_t end)
+                    : start{start}
+                    , end{end}
+                    , headConsumed{0}
+                    , headSection{}
+                {}
+                std::uint64_t start;
+                std::uint64_t end;
+                std::uint64_t headConsumed;
+                std::string headSection;
+            };
+
           public:
-            RangeFileBodyImpl() = default;
+            RangeFileBodyImpl()
+                : file_{}
+                , sequences_{}
+                , splitter_(SplitterLength + 2, '-')
+                , totalSize_{0}
+                , consumed_{0}
+            {
+                constexpr const char* hexCharacters = "0123456789ABCDEF";
+
+                std::random_device rd;
+                std::mt19937 gen(rd());
+                std::uniform_int_distribution<> distrib(0, 15);
+                std::generate_n(std::next(std::next(std::begin(splitter_))), SplitterLength, [&]() {
+                    return static_cast<char>(hexCharacters[distrib(gen)]);
+                });
+            }
             ~RangeFileBodyImpl() = default;
             RangeFileBodyImpl(RangeFileBodyImpl const&) = delete;
             RangeFileBodyImpl(RangeFileBodyImpl&&) = default;
@@ -29,10 +96,25 @@ namespace Roar
 
             std::uint64_t size() const
             {
-                return size_ + suffix_.size();
+                return totalSize_;
             }
 
-            std::uint64_t realSize()
+            std::uint64_t remaining() const
+            {
+                return totalSize_ - consumed_;
+            }
+
+            bool isMultipart() const
+            {
+                return sequences_.size() > 1;
+            }
+
+            std::pair<std::uint64_t, std::uint64_t> firstRange()
+            {
+                return {sequences_.rbegin()->start, sequences_.rbegin()->end};
+            }
+
+            std::uint64_t fileSize()
             {
                 auto pos = file_.tellg();
                 file_.seekg(0, std::ios::end);
@@ -66,7 +148,6 @@ namespace Roar
                 try
                 {
                     file_.open(filename, std::ios::binary | mode);
-                    originalPath_ = filename;
                 }
                 catch (std::system_error& e)
                 {
@@ -75,37 +156,55 @@ namespace Roar
                 file_.exceptions(excMask);
             }
 
-            std::filesystem::path const& originalPath() const
-            {
-                return originalPath_;
-            }
-
             /**
              * @brief Set the Read Range.
              *
              * @param start
              * @param end
              */
-            void setReadRange(std::uint64_t start, std::uint64_t end)
+            void setReadRanges(Ranges const& ranges, std::string_view contentType)
             {
-                file_.seekg(start);
-                size_ = end - start;
+                if (ranges.ranges.empty())
+                    throw std::invalid_argument("Ranges must not be empty");
+
+                if (ranges.ranges.size() > 1)
+                {
+                    std::size_t totalFile = fileSize();
+                    sequences_.resize(ranges.ranges.size() + 1);
+
+                    if (ranges.ranges.empty())
+                        throw std::runtime_error("No ranges specified");
+
+                    for (auto const& range : ranges.ranges)
+                    {
+                        if (range.end < range.start)
+                            throw std::invalid_argument("end < start");
+                        if (range.end > fileSize())
+                            throw std::invalid_argument("range.end > file size");
+                    }
+
+                    std::transform(
+                        ranges.ranges.begin(), ranges.ranges.end(), sequences_.rbegin(), [&, this](auto const& range) {
+                            auto seq = Sequence{range.start, range.end, totalFile, contentType, splitter_};
+                            totalSize_ += seq.headSection.size() + (range.end - range.start);
+                            return seq;
+                        });
+                    sequences_.rbegin()->headSection =
+                        sequences_.rbegin()->headSection.substr(2, sequences_.rbegin()->headSection.size() - 2);
+                    *sequences_.begin() = Sequence{splitter_};
+                    totalSize_ += splitter_.size();
+                }
+                else
+                {
+                    sequences_.resize(1);
+                    sequences_.front() = Sequence{ranges.ranges.front().start, ranges.ranges.front().end};
+                    totalSize_ = ranges.ranges.front().end - ranges.ranges.front().start;
+                    file_.seekg(ranges.ranges.front().start);
+                }
             }
 
             /**
-             * @brief Set the Write Range.
-             *
-             * @param start
-             * @param end
-             */
-            void setWriteRange(std::uint64_t start, std::uint64_t end)
-            {
-                file_.seekp(start);
-                size_ = end - start;
-            }
-
-            /**
-             * @brief Reads some of the file into the buffer.
+             * @brief Reads some of the multipart data into the buffer.
              *
              * @param buf
              * @param amount
@@ -113,27 +212,33 @@ namespace Roar
              */
             std::size_t read(char* buf, std::size_t amount)
             {
-                if (amount + totalBytesProcessed_ <= size_)
+                std::size_t origAmount = amount;
+                auto& current = sequences_.back();
+
+                if (current.headConsumed != current.headSection.size())
                 {
-                    file_.read(buf, amount);
-                    totalBytesProcessed_ += file_.gcount();
-                    return file_.gcount();
+                    auto copied = current.headSection.copy(
+                        buf, std::min(amount, current.headSection.size() - current.headConsumed), current.headConsumed);
+                    buf += copied;
+                    current.headConsumed += copied;
+                    consumed_ += copied;
+                    amount -= copied;
+                    if (amount > 0)
+                        file_.seekg(current.start);
                 }
-                else
-                {
-                    auto amountToReadFromFile = 0;
-                    auto amountToReadFromSuffix = amount;
-                    if (size_ > totalBytesProcessed_)
-                    {
-                        amountToReadFromFile = size_ - totalBytesProcessed_;
-                        file_.read(buf, amountToReadFromFile);
-                        totalBytesProcessed_ += amountToReadFromFile;
-                        amountToReadFromSuffix = amount - amountToReadFromFile;
-                    }
-                    std::memcpy(buf + amountToReadFromFile, suffix_.data(), amountToReadFromSuffix);
-                    totalBytesProcessed_ += amountToReadFromSuffix;
-                    return amountToReadFromFile + amountToReadFromSuffix;
-                }
+                file_.read(buf, std::min(amount, current.end - current.start));
+                std::size_t gcount = file_.gcount();
+                consumed_ += gcount;
+                current.start += gcount;
+                amount -= gcount;
+                if (current.start == current.end)
+                    sequences_.pop_back();
+
+                if (sequences_.empty())
+                    return (origAmount - amount); // amount should be 0 at this point.
+                if (amount > 0)
+                    return (origAmount - amount) + read(buf + gcount, amount);
+                return origAmount;
             }
 
             /**
@@ -147,7 +252,7 @@ namespace Roar
             std::size_t write(char const* buf, std::size_t amount, bool& error)
             {
                 file_.write(buf, amount);
-                totalBytesProcessed_ += amount;
+                // totalBytesProcessed_ += amount;
                 if (file_.fail())
                     error = true;
                 return amount;
@@ -174,22 +279,18 @@ namespace Roar
                 file_.seekg(0, std::ios::beg);
             }
 
-            std::size_t totalBytesProcessed() const
+            std::string boundary() const
             {
-                return totalBytesProcessed_;
-            }
-
-            void suffix(std::string suffix)
-            {
-                suffix_ = std::move(suffix);
+                return splitter_;
             }
 
           private:
             std::fstream file_{};
-            std::filesystem::path originalPath_{};
-            std::uint64_t size_{0};
-            std::uint64_t totalBytesProcessed_{0};
-            std::string suffix_{};
+            // are inserted in reverse order, so we can pop_back.
+            std::vector<Sequence> sequences_;
+            std::string splitter_;
+            std::size_t totalSize_;
+            std::size_t consumed_;
         };
 
         constexpr static std::size_t bufferSize()
@@ -296,7 +397,7 @@ namespace Roar
     inline boost::optional<std::pair<RangeFileBody::const_buffers_type, bool>>
     RangeFileBody::writer::get(boost::beast::error_code& ec)
     {
-        const auto remain = body_.size() - body_.totalBytesProcessed();
+        const auto remain = body_.remaining();
         const auto amount = remain > sizeof(buf_) ? sizeof(buf_) : static_cast<std::size_t>(remain);
 
         if (amount == 0)
