@@ -20,7 +20,7 @@ namespace Roar::Detail
 {
     namespace
     {
-        static std::string to_string(std::filesystem::file_time_type const& ftime)
+        inline static std::string to_string(std::filesystem::file_time_type const& ftime)
         {
             auto tp = std::chrono::file_clock::to_sys(ftime);
             auto cftime =
@@ -226,19 +226,21 @@ namespace Roar::Detail
             }
         }
 
-        void sendHeadResponse(Session& session, EmptyBodyRequest const& req, FileAndStatus const&) const
+        void sendHeadResponse(Session& session, EmptyBodyRequest const& req, FileAndStatus const& fileAndStatus) const
         {
             namespace http = boost::beast::http;
+            const auto contentType = extensionToMime(fileAndStatus.file.extension().string());
+
             session.send<http::empty_body>(req)
                 ->status(http::status::ok)
                 .setHeader(http::field::accept_ranges, "bytes")
+                .setHeader(http::field::content_length, std::to_string(std::filesystem::file_size(fileAndStatus.file)))
+                .contentType(contentType ? *contentType : "application/octet-stream")
                 .commit();
         }
 
         void sendOptionsResponse(Session& session, EmptyBodyRequest const& req, FileAndStatus const&) const
         {
-            // TODO: cors
-
             namespace http = boost::beast::http;
             std::string allow = "OPTIONS";
             if (unwrapFlexibleProvider<RequestListenerT, bool>(
@@ -381,7 +383,6 @@ namespace Roar::Detail
             if (!contentLength)
                 return session.sendStandardResponse(http::status::bad_request, "Require Content-Length.");
 
-            // TODO: Range Requests
             auto body = std::make_shared<http::file_body::value_type>();
             boost::beast::error_code ec;
             body->open(fileAndStatus.file.string().c_str(), boost::beast::file_mode::write, ec);
@@ -415,21 +416,45 @@ namespace Roar::Detail
                 fileAndStatus.status.type() != std::filesystem::file_type::symlink)
                 return session.sendStandardResponse(http::status::not_found);
 
-            // TODO: Range Requests
-            http::file_body::value_type body;
-            boost::beast::error_code ec;
-            body.open(fileAndStatus.file.string().c_str(), boost::beast::file_mode::read, ec);
-            if (ec)
-                return session.sendStandardResponse(
-                    http::status::internal_server_error, "Cannot open file for reading.");
+            const auto ranges = req.ranges();
+            if (!ranges)
+            {
+                http::file_body::value_type body;
+                boost::beast::error_code ec;
+                body.open(fileAndStatus.file.string().c_str(), boost::beast::file_mode::read, ec);
+                if (ec)
+                    return session.sendStandardResponse(
+                        http::status::internal_server_error, "Cannot open file for reading.");
 
-            auto intermediate = session.send<http::file_body>(req, std::move(body));
-            intermediate->preparePayload();
-            intermediate->enableCors(req, this->serveInfo_.routeOptions.cors);
-            auto contentType = extensionToMime(fileAndStatus.file.extension().string());
-            if (contentType)
-                intermediate->contentType(*contentType);
-            intermediate->commit();
+                auto contentType = extensionToMime(fileAndStatus.file.extension().string());
+                auto intermediate = session.send<http::file_body>(req, std::move(body));
+                intermediate->preparePayload();
+                intermediate->enableCors(req, this->serveInfo_.routeOptions.cors);
+                intermediate->contentType(contentType ? contentType.value() : "application/octet-stream");
+                intermediate->commit().fail([](auto) {});
+            }
+            else
+            {
+                RangeFileBody::value_type body;
+                boost::beast::error_code ec;
+                body.open(fileAndStatus.file.string().c_str(), std::ios_base::in, ec);
+                if (ec)
+                    return session.sendStandardResponse(
+                        http::status::internal_server_error, "Cannot open file for reading.");
+                try
+                {
+                    body.setReadRanges(*ranges, "plain/text");
+
+                    session.send<RangeFileBody>(req, std::move(body))
+                        ->useFixedTimeout(std::chrono::seconds{10})
+                        .commit()
+                        .fail([](auto) {});
+                }
+                catch (...)
+                {
+                    return session.sendStandardResponse(http::status::bad_request, "Invalid ranges.");
+                }
+            }
         }
 
       private:

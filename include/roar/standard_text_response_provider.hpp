@@ -13,7 +13,6 @@ namespace Roar
         boost::beast::http::response<boost::beast::http::string_body>
         makeStandardResponse(Session& session, boost::beast::http::status status, std::string_view additionalInfo) const
         {
-            // TODO: this once used prepareReply, can do better.
             auto res = boost::beast::http::response<boost::beast::http::string_body>(status, 11);
             res.set(boost::beast::http::field::content_type, "text/html");
             res.set(boost::beast::http::field::connection, "close");

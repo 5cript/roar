@@ -72,8 +72,6 @@ namespace Roar::Tests
         TemporaryDirectory m_tempDir{TEST_TEMPORARY_DIRECTORY, true};
     };
 
-    // TODO: test proxy, tunnel
-
     TEST_F(CurlRequestTests, CanMakeSimpleGetRequest)
     {
         auto response = Request{}.get(url("/index.txt"));
