@@ -17,6 +17,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <deque>
 
 namespace Roar
 {
@@ -36,9 +37,12 @@ namespace Roar
         {
             std::uint64_t start;
             std::uint64_t end;
+
+            std::uint64_t size() const;
+            std::string toString() const;
         };
         std::string unit;
-        std::vector<Range> ranges;
+        std::deque<Range> ranges;
 
         static std::optional<Ranges> fromString(std::string const& str);
     };

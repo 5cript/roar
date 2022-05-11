@@ -59,132 +59,141 @@ namespace Roar::Tests
         if (!ranges)
             return session.sendStandardResponse(status::bad_request, "Cannot parse ranges.");
 
-        if (ranges->ranges.size() != 1)
-            return session.sendStandardResponse(status::bad_request, "Only supporting one range");
-
-        const auto& range = ranges->ranges[0];
-
         RangeFileBody::value_type body;
         boost::beast::error_code ec;
         body.open(tempDir_.path() / "index.txt", std::ios_base::in, ec);
         if (ec)
             return session.sendStandardResponse(status::internal_server_error, "Cannot open file for reading.");
-        body.setReadRange(range.start, range.end);
 
         session.send<RangeFileBody>(req, std::move(body))
-            ->status(status::ok)
+            ->status(status::partial_content)
             .preparePayload()
-            .commit()
+            .useFixedTimeout(std::chrono::minutes(5))
+            .commitRanges(req)
             .fail([](auto e) {
                 std::cerr << e << std::endl;
             });
     }
 
-    TEST_F(HttpServerTests, StringPathIsCorrectlyRouted)
+    // TEST_F(HttpServerTests, StringPathIsCorrectlyRouted)
+    // {
+    //     auto res = Curl::Request{}.get(url("/index.txt"));
+    //     EXPECT_EQ(res.code(), boost::beast::http::status::ok);
+    // }
+
+    // TEST_F(HttpServerTests, RegexPathIsCorrectlyRouted)
+    // {
+    //     using namespace ::testing;
+
+    //     nlohmann::json body;
+    //     auto res = Curl::Request{}.sink(body).get(url("/something/here"));
+    //     EXPECT_EQ(res.code(), boost::beast::http::status::ok);
+    //     EXPECT_EQ(body["path"], "/something/here");
+    //     ASSERT_THAT(body["matches"], ElementsAre("something", "here"));
+    // }
+
+    // TEST_F(HttpServerTests, StringPathsTakePrecedenceOverRegexPaths)
+    // {
+    //     using namespace ::testing;
+
+    //     std::string body;
+    //     auto res = Curl::Request{}.sink(body).get(url("/a/b"));
+    //     EXPECT_EQ(res.code(), boost::beast::http::status::ok);
+    //     EXPECT_EQ(body, "AB");
+    // }
+
+    // TEST_F(HttpServerTests, EncryptedServerAcceptsEncryptedConnection)
+    // {
+    //     auto res =
+    //         Curl::Request{}.verifyPeer(false).verifyHost(false).get(urlEncryptedServer("/index.txt", {.secure =
+    //         true}));
+    //     EXPECT_EQ(res.code(), boost::beast::http::status::ok);
+    // }
+
+    // TEST_F(HttpServerTests, EncryptedServerDoesNotAcceptUnencryptedConnection)
+    // {
+    //     std::unordered_map<std::string, std::string> headers;
+    //     auto res = Curl::Request{}.headerSink(headers).verifyPeer(false).verifyHost(false).get(
+    //         urlEncryptedServer("/index.txt", {.secure = false}));
+    //     EXPECT_NE(headers.find("Strict-Transport-Security"), std::end(headers));
+    //     EXPECT_EQ(res.code(), boost::beast::http::status::forbidden);
+    // }
+
+    // TEST_F(HttpServerTests, UnencryptedServerDoesNotAcceptEncryptedConnection)
+    // {
+    //     auto res = Curl::Request{}.get(url("/a/b", {.secure = true}));
+    //     EXPECT_NE(res.result(), CURLE_OK);
+    //     EXPECT_NE(res.code(), boost::beast::http::status::ok);
+    // }
+
+    // TEST_F(HttpServerTests, EncryptedServerDoesAcceptUnencryptedConnectionWhenExplicitlyAllowed)
+    // {
+    //     auto res = Curl::Request{}.get(urlEncryptedServer("/unsecure", {.secure = false}));
+    //     EXPECT_EQ(res.code(), boost::beast::http::status::no_content);
+    // }
+
+    // TEST_F(HttpServerTests, CanSendUsingSendIntermediate)
+    // {
+    //     std::string body;
+    //     auto res = Curl::Request{}.sink(body).get(url("/sendIntermediate", {.secure = false}));
+    //     EXPECT_EQ(res.code(), boost::beast::http::status::ok);
+    //     EXPECT_EQ(body, "Hi");
+    // }
+
+    // TEST_F(HttpServerTests, CanSendFilePartially)
+    // {
+    //     std::string body;
+    //     auto res = Curl::Request{}.sink(body).setHeaderField("Range", "bytes=0-100").get(url("/slice"));
+    //     EXPECT_EQ(res.code(), boost::beast::http::status::partial_content);
+    //     ASSERT_EQ(body.size(), 100);
+    //     LetterGenerator gen;
+    //     bool allEqual = true;
+    //     for (int i = 0; i != 100; ++i)
+    //     {
+    //         allEqual &= body[i] == gen();
+    //         if (!allEqual)
+    //             break;
+    //     }
+    //     EXPECT_TRUE(allEqual);
+    // }
+
+    TEST_F(HttpServerTests, CanMakeMultipartRequest)
     {
-        auto res = Curl::Request{}.get(url("/index.txt"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::ok);
-    }
-
-    TEST_F(HttpServerTests, RegexPathIsCorrectlyRouted)
-    {
-        using namespace ::testing;
-
-        nlohmann::json body;
-        auto res = Curl::Request{}.sink(body).get(url("/something/here"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::ok);
-        EXPECT_EQ(body["path"], "/something/here");
-        ASSERT_THAT(body["matches"], ElementsAre("something", "here"));
-    }
-
-    TEST_F(HttpServerTests, StringPathsTakePrecedenceOverRegexPaths)
-    {
-        using namespace ::testing;
-
+        std::cout << url("/slice") << "\n";
         std::string body;
-        auto res = Curl::Request{}.sink(body).get(url("/a/b"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::ok);
-        EXPECT_EQ(body, "AB");
+        auto res = Curl::Request{}
+                       .verbose()
+                       .sink(body)
+                       .setHeaderField("Range", "bytes=0-100, 200-350, 400-465")
+                       .get(url("/slice"));
+
+        EXPECT_EQ(res.code(), boost::beast::http::status::partial_content);
     }
 
-    TEST_F(HttpServerTests, EncryptedServerAcceptsEncryptedConnection)
-    {
-        auto res =
-            Curl::Request{}.verifyPeer(false).verifyHost(false).get(urlEncryptedServer("/index.txt", {.secure = true}));
-        EXPECT_EQ(res.code(), boost::beast::http::status::ok);
-    }
+    // TEST_F(HttpServerTests, InvalidRangeRequestIsRejected)
+    // {
+    //     auto res = Curl::Request{}.setHeaderField("Range", "bytes?0-100").get(url("/slice"));
+    //     EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
 
-    TEST_F(HttpServerTests, EncryptedServerDoesNotAcceptUnencryptedConnection)
-    {
-        std::unordered_map<std::string, std::string> headers;
-        auto res = Curl::Request{}.headerSink(headers).verifyPeer(false).verifyHost(false).get(
-            urlEncryptedServer("/index.txt", {.secure = false}));
-        EXPECT_NE(headers.find("Strict-Transport-Security"), std::end(headers));
-        EXPECT_EQ(res.code(), boost::beast::http::status::forbidden);
-    }
+    //     res = Curl::Request{}.setHeaderField("Range", "=0-100").get(url("/slice"));
+    //     EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
 
-    TEST_F(HttpServerTests, UnencryptedServerDoesNotAcceptEncryptedConnection)
-    {
-        auto res = Curl::Request{}.get(url("/a/b", {.secure = true}));
-        EXPECT_NE(res.result(), CURLE_OK);
-        EXPECT_NE(res.code(), boost::beast::http::status::ok);
-    }
+    //     res = Curl::Request{}.setHeaderField("Range", "asdf").get(url("/slice"));
+    //     EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
 
-    TEST_F(HttpServerTests, EncryptedServerDoesAcceptUnencryptedConnectionWhenExplicitlyAllowed)
-    {
-        auto res = Curl::Request{}.get(urlEncryptedServer("/unsecure", {.secure = false}));
-        EXPECT_EQ(res.code(), boost::beast::http::status::no_content);
-    }
+    //     res = Curl::Request{}.setHeaderField("Range", "bytes=0").get(url("/slice"));
+    //     EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
 
-    TEST_F(HttpServerTests, CanSendUsingSendIntermediate)
-    {
-        std::string body;
-        auto res = Curl::Request{}.sink(body).get(url("/sendIntermediate", {.secure = false}));
-        EXPECT_EQ(res.code(), boost::beast::http::status::ok);
-        EXPECT_EQ(body, "Hi");
-    }
+    //     res = Curl::Request{}.setHeaderField("Range", "bytes=x").get(url("/slice"));
+    //     EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
 
-    TEST_F(HttpServerTests, CanSendFilePartially)
-    {
-        std::string body;
-        auto res = Curl::Request{}.sink(body).setHeaderField("Range", "bytes=0-100").get(url("/slice"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::ok);
-        ASSERT_EQ(body.size(), 100);
-        LetterGenerator gen;
-        bool allEqual = true;
-        for (int i = 0; i != 100; ++i)
-        {
-            allEqual &= body[i] == gen();
-            if (!allEqual)
-                break;
-        }
-        EXPECT_TRUE(allEqual);
-    }
+    //     res = Curl::Request{}.setHeaderField("Range", "bytes=0-").get(url("/slice"));
+    //     EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
 
-    TEST_F(HttpServerTests, InvalidRangeRequestIsRejected)
-    {
-        auto res = Curl::Request{}.setHeaderField("Range", "bytes?0-100").get(url("/slice"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
+    //     res = Curl::Request{}.setHeaderField("Range", "bytes=0-x").get(url("/slice"));
+    //     EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
 
-        res = Curl::Request{}.setHeaderField("Range", "=0-100").get(url("/slice"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
-
-        res = Curl::Request{}.setHeaderField("Range", "asdf").get(url("/slice"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
-
-        res = Curl::Request{}.setHeaderField("Range", "bytes=0").get(url("/slice"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
-
-        res = Curl::Request{}.setHeaderField("Range", "bytes=x").get(url("/slice"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
-
-        res = Curl::Request{}.setHeaderField("Range", "bytes=0-").get(url("/slice"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
-
-        res = Curl::Request{}.setHeaderField("Range", "bytes=0-x").get(url("/slice"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
-
-        res = Curl::Request{}.setHeaderField("Range", "bytes=100-0").get(url("/slice"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
-    }
+    //     res = Curl::Request{}.setHeaderField("Range", "bytes=100-0").get(url("/slice"));
+    //     EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
+    // }
 }

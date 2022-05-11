@@ -2,6 +2,7 @@
 
 #include <functional>
 #include <roar/error.hpp>
+#include <roar/detail/type_equal_compare.hpp>
 #include <roar/websocket/websocket_session.hpp>
 #include <roar/response.hpp>
 #include <roar/beast/forward.hpp>
@@ -12,6 +13,7 @@
 #include <roar/detail/promise_compat.hpp>
 #include <roar/body/void_body.hpp>
 #include <roar/detail/stream_type.hpp>
+#include <roar/body/range_file_body.hpp>
 
 #include <boost/beast/http/message.hpp>
 #include <boost/beast/http/empty_body.hpp>
@@ -27,6 +29,7 @@
 #include <chrono>
 #include <variant>
 #include <stdexcept>
+#include <sstream>
 
 namespace Roar
 {
@@ -202,8 +205,138 @@ namespace Roar
                     });
                 }
                 promise_ = std::make_unique<promise::Promise>(promise::newPromise());
+                serializer_ = std::make_unique<boost::beast::http::serializer<false, BodyT>>(response_.response());
                 writeChunk();
                 return {*promise_};
+            }
+
+            template <typename T = BodyT>
+            std::enable_if_t<typeof(T{}) == typeof(RangeFileBody{}), SendIntermediate&> suffix(std::string const& str)
+            {
+                response_.body().suffix(str);
+                return *this;
+            }
+
+            template <typename OriginalBodyT, typename T = BodyT>
+            std::enable_if_t<
+                typeof(T{}) == typeof(RangeFileBody{}),
+                Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error>>>
+            commitRanges(Request<OriginalBodyT> const& req, std::string partBodyType = "text/plain")
+            {
+                const auto maybeRanges = req.ranges();
+                if (!maybeRanges)
+                    throw std::invalid_argument("No ranges supplied");
+
+                auto ranges = *maybeRanges;
+
+                if (ranges.ranges.size() == 0)
+                    throw std::invalid_argument("No ranges supplied");
+
+                if (ranges.ranges.size() == 1)
+                {
+                    setHeader(
+                        boost::beast::http::field::content_range,
+                        std::string{"bytes "} + ranges.ranges[0].toString() + "/" +
+                            std::to_string(response_.body().realSize()));
+                    setHeader(boost::beast::http::field::content_length, std::to_string(ranges.ranges[0].size()));
+                    status(boost::beast::http::status::partial_content);
+                    response_.body().setReadRange(ranges.ranges[0].start, ranges.ranges[0].end);
+                    return commit();
+                }
+                else
+                {
+                    return promise::newPromise([&, this](promise::Defer d) {
+                        const auto totalSize = std::accumulate(
+                            std::begin(ranges.ranges),
+                            std::end(ranges.ranges),
+                            std::uint64_t{0},
+                            [](std::uint64_t acc, Ranges::Range const& range) {
+                                return acc + range.size();
+                            });
+
+                        auto sendSingleRange = std::make_shared<std::function<void(Ranges ranges)>>();
+                        *sendSingleRange = [self = this->shared_from_this(),
+                                            req,
+                                            sendSingleRange,
+                                            d,
+                                            partBodyType = std::move(partBodyType),
+                                            realSizeSuffix = std::string{"/"} +
+                                                std::to_string(response_.body().realSize())](Ranges ranges) {
+                            const auto path = self->response_.body().originalPath();
+                            self->response_.body().close();
+                            RangeFileBody::value_type file;
+                            std::error_code ec;
+                            file.open(path, std::ios_base::in, ec);
+                            if (ec)
+                            {
+                                d.reject(Error{.error = ec.message()});
+                                return;
+                            }
+                            file.setReadRange(ranges.ranges[0].start, ranges.ranges[0].end);
+                            ranges.ranges.pop_front();
+                            self->session_->template send<RangeFileBody>(req, std::move(file))
+                                ->setHeader(
+                                    boost::beast::http::field::content_range,
+                                    std::string{"bytes "} + ranges.ranges[0].toString() + realSizeSuffix)
+                                .setHeader(boost::beast::http::field::content_type, partBodyType)
+                                .keepAlive()
+                                .suffix("--ROAR_MULTIPART_BOUNDARY")
+                                .commit()
+                                .fail([d](Error e) {
+                                    d.reject(e);
+                                })
+                                .then(
+                                    [self, d, ranges = std::move(ranges), sendSingleRange = std::move(sendSingleRange)](
+                                        bool wasClosed) {
+                                        if (wasClosed)
+                                        {
+                                            d.reject(Error{.additionalInfo = "Connection was closed"});
+                                            return;
+                                        }
+                                        if (ranges.ranges.size() > 0)
+                                            (*sendSingleRange)(std::move(ranges));
+                                        else
+                                            d.resolve(true);
+                                    });
+                        };
+
+                        session_->send<boost::beast::http::string_body>(req)
+                            ->status(boost::beast::http::status::partial_content)
+                            .setHeader(
+                                boost::beast::http::field::content_type,
+                                "multipart/byteranges; boundary=ROAR_MULTIPART_BOUNDARY")
+                            .setHeader(boost::beast::http::field::content_length, std::to_string(totalSize))
+                            .keepAlive()
+                            .body("--ROAR_MULTIPART_BOUNDARY")
+                            .commit()
+                            .fail([d](Error e) {
+                                d.reject(e);
+                            })
+                            .then([d,
+                                   self = this->shared_from_this(),
+                                   ranges = std::move(ranges),
+                                   sendSingleRange = std::move(sendSingleRange)](bool wasClosed) {
+                                if (wasClosed)
+                                {
+                                    d.reject(Error{.additionalInfo = "Connection was closed"});
+                                    return;
+                                }
+                                (*sendSingleRange)(std::move(ranges));
+                            });
+                    });
+                }
+            }
+
+            /**
+             * @brief Set keep alive.
+             *
+             * @param keepAlive
+             * @return SendIntermediate&
+             */
+            SendIntermediate& keepAlive(bool keepAlive = true)
+            {
+                response_.keepAlive(keepAlive);
+                return *this;
             }
 
             /**
@@ -219,20 +352,37 @@ namespace Roar
             }
 
           private:
+            void writeHeader()
+            {
+                session_->withStreamDo([this](auto& stream) {
+                    if (!overallTimeout_)
+                        boost::beast::get_lowest_layer(stream).expires_after(std::chrono::seconds(sessionTimeout));
+
+                    serializer_ = std::make_unique<boost::beast::http::serializer<false, BodyT>>(response_.response());
+
+                    boost::beast::http::async_write_header(
+                        stream,
+                        *serializer_,
+                        [self = this->shared_from_this()](boost::beast::error_code ec, std::size_t) {
+                            if (ec)
+                                self->promise_->fail(ec);
+                            else
+                                self->promise_->resolve();
+                        });
+                });
+            }
+
             void writeChunk()
             {
                 session_->withStreamDo([this](auto& stream) {
                     if (!overallTimeout_)
                         boost::beast::get_lowest_layer(stream).expires_after(std::chrono::seconds(sessionTimeout));
 
-                    auto ser = std::make_shared<boost::beast::http::serializer<false, BodyT>>(response_.response());
-
                     boost::beast::http::async_write_some(
                         stream,
-                        *ser,
-                        [self = this->shared_from_this(),
-                         ser = std::move(ser)](boost::beast::error_code ec, std::size_t bytesTransferred) {
-                            if (!ec && !ser->is_done())
+                        *serializer_,
+                        [self = this->shared_from_this()](boost::beast::error_code ec, std::size_t bytesTransferred) {
+                            if (!ec && !self->serializer_->is_done())
                                 return self->writeChunk();
 
                             if (ec)
@@ -246,8 +396,8 @@ namespace Roar
 
                             try
                             {
-                                self->promise_->resolve(
-                                    self->session_->onWriteComplete(ser->get().need_eof(), ec, bytesTransferred));
+                                self->promise_->resolve(self->session_->onWriteComplete(
+                                    self->serializer_->get().need_eof(), ec, bytesTransferred));
                             }
                             catch (std::exception const& exc)
                             {
@@ -264,6 +414,7 @@ namespace Roar
             std::function<bool(std::size_t)> onChunk_;
             std::unique_ptr<promise::Promise> promise_;
             std::optional<std::chrono::milliseconds> overallTimeout_;
+            std::unique_ptr<boost::beast::http::serializer<false, BodyT>> serializer_;
         };
 
         template <typename BodyT, typename OriginalBodyT, typename... Forwards>

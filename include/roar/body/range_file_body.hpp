@@ -29,7 +29,16 @@ namespace Roar
 
             std::uint64_t size() const
             {
-                return size_;
+                return size_ + suffix_.size();
+            }
+
+            std::uint64_t realSize()
+            {
+                auto pos = file_.tellg();
+                file_.seekg(0, std::ios::end);
+                auto size = file_.tellg();
+                file_.seekg(pos);
+                return size;
             }
 
             bool isOpen() const
@@ -42,6 +51,13 @@ namespace Roar
                 file_.close();
             }
 
+            /**
+             * @brief Opens the file.
+             *
+             * @param filename
+             * @param mode
+             * @param ec
+             */
             void open(std::filesystem::path const& filename, std::ios_base::openmode mode, std::error_code& ec)
             {
                 ec = {};
@@ -50,6 +66,7 @@ namespace Roar
                 try
                 {
                     file_.open(filename, std::ios::binary | mode);
+                    originalPath_ = filename;
                 }
                 catch (std::system_error& e)
                 {
@@ -58,32 +75,89 @@ namespace Roar
                 file_.exceptions(excMask);
             }
 
+            std::filesystem::path const& originalPath() const
+            {
+                return originalPath_;
+            }
+
+            /**
+             * @brief Set the Read Range.
+             *
+             * @param start
+             * @param end
+             */
             void setReadRange(std::uint64_t start, std::uint64_t end)
             {
                 file_.seekg(start);
                 size_ = end - start;
             }
 
+            /**
+             * @brief Set the Write Range.
+             *
+             * @param start
+             * @param end
+             */
             void setWriteRange(std::uint64_t start, std::uint64_t end)
             {
                 file_.seekp(start);
                 size_ = end - start;
             }
 
+            /**
+             * @brief Reads some of the file into the buffer.
+             *
+             * @param buf
+             * @param amount
+             * @return std::size_t
+             */
             std::size_t read(char* buf, std::size_t amount)
             {
-                file_.read(buf, amount);
-                return file_.gcount();
+                if (amount + totalBytesProcessed_ <= size_)
+                {
+                    file_.read(buf, amount);
+                    totalBytesProcessed_ += file_.gcount();
+                    return file_.gcount();
+                }
+                else
+                {
+                    auto amountToReadFromFile = 0;
+                    auto amountToReadFromSuffix = amount;
+                    if (size_ > totalBytesProcessed_)
+                    {
+                        amountToReadFromFile = size_ - totalBytesProcessed_;
+                        file_.read(buf, amountToReadFromFile);
+                        totalBytesProcessed_ += amountToReadFromFile;
+                        amountToReadFromSuffix = amount - amountToReadFromFile;
+                    }
+                    std::memcpy(buf + amountToReadFromFile, suffix_.data(), amountToReadFromSuffix);
+                    totalBytesProcessed_ += amountToReadFromSuffix;
+                    return amountToReadFromFile + amountToReadFromSuffix;
+                }
             }
 
+            /**
+             * @brief Writes the given buffer to the file.
+             *
+             * @param buf
+             * @param amount
+             * @param error
+             * @return std::size_t
+             */
             std::size_t write(char const* buf, std::size_t amount, bool& error)
             {
                 file_.write(buf, amount);
+                totalBytesProcessed_ += amount;
                 if (file_.fail())
                     error = true;
                 return amount;
             }
 
+            /**
+             * @brief Resets the file stream with a new stream.
+             *
+             * @param file A fresh fstream.
+             */
             void reset(std::fstream&& file)
             {
                 if (isOpen())
@@ -91,9 +165,31 @@ namespace Roar
                 file_ = std::move(file);
             }
 
+            /**
+             * @brief Resets the fstream state and goes back to the start.
+             */
+            void reset()
+            {
+                file_.clear();
+                file_.seekg(0, std::ios::beg);
+            }
+
+            std::size_t totalBytesProcessed() const
+            {
+                return totalBytesProcessed_;
+            }
+
+            void suffix(std::string suffix)
+            {
+                suffix_ = std::move(suffix);
+            }
+
           private:
-            std::fstream file_;
-            std::uint64_t size_;
+            std::fstream file_{};
+            std::filesystem::path originalPath_{};
+            std::uint64_t size_{0};
+            std::uint64_t totalBytesProcessed_{0};
+            std::string suffix_{};
         };
 
         constexpr static std::size_t bufferSize()
@@ -143,7 +239,6 @@ namespace Roar
 
           private:
             value_type& body_;
-            std::uint64_t remain_;
         };
 
         static std::uint64_t size(value_type const& vt)
@@ -193,8 +288,6 @@ namespace Roar
     {
         if (!body_.isOpen())
             throw std::invalid_argument{"File must be open"};
-
-        remain_ = body_.size();
     }
     inline void RangeFileBody::writer::init(boost::beast::error_code& ec)
     {
@@ -203,7 +296,8 @@ namespace Roar
     inline boost::optional<std::pair<RangeFileBody::const_buffers_type, bool>>
     RangeFileBody::writer::get(boost::beast::error_code& ec)
     {
-        const auto amount = remain_ > sizeof(buf_) ? sizeof(buf_) : static_cast<std::size_t>(remain_);
+        const auto remain = body_.size() - body_.totalBytesProcessed();
+        const auto amount = remain > sizeof(buf_) ? sizeof(buf_) : static_cast<std::size_t>(remain);
 
         if (amount == 0)
         {
@@ -219,14 +313,12 @@ namespace Roar
         }
 
         BOOST_ASSERT(readCount != 0);
-        BOOST_ASSERT(readCount <= remain_);
-
-        remain_ -= readCount;
+        BOOST_ASSERT(readCount <= remain);
 
         ec = {};
         return {{
             const_buffers_type{buf_, readCount},
-            remain_ > 0,
+            remain > 0,
         }};
     }
 }

@@ -3,6 +3,8 @@
 #include <boost/spirit/home/x3.hpp>
 #include <boost/fusion/adapted/struct.hpp>
 
+#include <sstream>
+
 BOOST_FUSION_ADAPT_STRUCT(Roar::Ranges, unit, ranges)
 BOOST_FUSION_ADAPT_STRUCT(Roar::Ranges::Range, start, end)
 
@@ -20,6 +22,18 @@ namespace Roar
         const auto ranges_def = (+(x3::char_ - '=') >> '=' >> (rangeRule % ',')) > x3::eoi;
 
         BOOST_SPIRIT_DEFINE(ranges);
+    }
+    //##################################################################################################################
+    std::uint64_t Ranges::Range::size() const
+    {
+        return end - start;
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    std::string Ranges::Range::toString() const
+    {
+        std::stringstream sstr;
+        sstr << start << '-' << end;
+        return sstr.str();
     }
     //##################################################################################################################
     std::optional<Ranges> Ranges::fromString(std::string const& str)
@@ -40,6 +54,5 @@ namespace Roar
 
         return ranges;
     }
-    //------------------------------------------------------------------------------------------------------------------
     //##################################################################################################################
 }

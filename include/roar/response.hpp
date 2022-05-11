@@ -67,6 +67,18 @@ namespace Roar
         }
 
         /**
+         * @brief Set keep alive.
+         *
+         * @param keepAlive
+         * @return Response&
+         */
+        Response& keepAlive(bool keepAlive = true)
+        {
+            response_.keep_alive(keepAlive);
+            return *this;
+        }
+
+        /**
          * @brief This function can be used to assign something to the body.
          *
          * @tparam T
