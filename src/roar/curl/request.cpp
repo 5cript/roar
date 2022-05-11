@@ -83,17 +83,22 @@ namespace Roar::Curl
     Request& Request::setHeaderFields(std::unordered_map<std::string, std::string> const& fields)
     {
         for (auto const& [key, value] : fields)
-            setHeaderField(key, value);
+            setHeader(key, value);
         return *this;
     }
-    Request& Request::setHeaderField(std::string const& key, std::string const& value)
+    Request& Request::setHeader(std::string const& key, std::string const& value)
     {
         headerFields_[key] = value;
         return *this;
     }
+    Request& Request::setHeader(boost::beast::http::field key, std::string const& value)
+    {
+        headerFields_[std::string{to_string(key)}] = value;
+        return *this;
+    }
     Request& Request::contentType(std::string const& type)
     {
-        return setHeaderField("Content-Type", type);
+        return setHeader("Content-Type", type);
     }
     Request& Request::verifyPeer(bool verify)
     {
