@@ -13,7 +13,8 @@ This is a network library that has:
   - [x] HTTPS Support (facillitated using boost::asio::ssl_context)
     - [x] Hybrid support, allow marked requests as unsecure.
   - [x] Routing (verb+path => handler)
-  - [x] Custom Error Pages (404, ...)
+  - [x] Custom error pages (404, ...)
+  - [ ] Provided pretty standard replies / error pages.
   - [x] Regex paths
   - [x] Serving files (easier than using regex paths)
     - [x] Download
@@ -26,7 +27,6 @@ This is a network library that has:
       - [x] File size
     - [x] Range Requests for GET.
     - [ ] Resumeable Uploads?
-  - [ ] Provided pretty standard replies / error pages
 - [x] Websocket
   - [x] Websocket Server Support (SSL and Plain)
   - [x] Websocket Client (SSL and Plain)
