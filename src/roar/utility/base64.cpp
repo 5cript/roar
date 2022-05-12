@@ -19,4 +19,10 @@ namespace Roar
         base64::decode(result.data(), base64String.c_str(), base64String.size());
         return result;
     }
+    std::string base64Decode(std::string_view base64String)
+    {
+        std::string result(base64::decoded_size(base64String.size()), '\0');
+        base64::decode(result.data(), base64String.data(), base64String.size());
+        return result;
+    }
 }

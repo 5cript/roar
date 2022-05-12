@@ -13,6 +13,8 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
+#include <future>
+
 namespace Roar::Tests
 {
     class RangeRoutes
@@ -269,5 +271,115 @@ namespace Roar::Tests
 
         res = Curl::Request{}.setHeader("Range", "bytes=100-0").get(url("/slice"));
         EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
+    }
+
+    TEST_F(HttpServerTests, CanExtractAuthorizationScheme)
+    {
+        using namespace boost::beast::http;
+
+        std::promise<std::optional<AuthorizationScheme>> promise;
+        listener_->dynamicGetFunc = [&promise](Session& session, EmptyBodyRequest&& req) {
+            promise.set_value(req.authorizationScheme());
+        };
+        auto future = promise.get_future();
+        auto res = Curl::Request{}.setHeader(field::authorization, "Basic dXNlcjpwYXNz").get(url("/dynamicGet"));
+        ASSERT_EQ(future.wait_for(std::chrono::seconds(5)), std::future_status::ready);
+        auto value = future.get();
+        ASSERT_TRUE(value);
+        EXPECT_EQ(*value, AuthorizationScheme::Basic);
+    }
+
+    TEST_F(HttpServerTests, CanExtractBasicAuthorization)
+    {
+        using namespace boost::beast::http;
+
+        std::promise<std::optional<BasicAuth>> promise;
+        listener_->dynamicGetFunc = [&promise](Session& session, EmptyBodyRequest&& req) {
+            promise.set_value(req.basicAuth());
+        };
+        auto future = promise.get_future();
+        auto res = Curl::Request{}.setHeader(field::authorization, "Basic dXNlcjpwYXNz").get(url("/dynamicGet"));
+        ASSERT_EQ(future.wait_for(std::chrono::seconds(5)), std::future_status::ready);
+        auto value = future.get();
+        ASSERT_TRUE(value);
+        EXPECT_EQ(value->user, "user");
+        EXPECT_EQ(value->password, "pass");
+    }
+
+    TEST_F(HttpServerTests, CanExtractDigestAuthorization)
+    {
+        using namespace boost::beast::http;
+
+        std::promise<std::optional<DigestAuth>> promise;
+        listener_->dynamicGetFunc = [&promise](Session& session, EmptyBodyRequest&& req) {
+            promise.set_value(req.digestAuth());
+        };
+        auto future = promise.get_future();
+        auto res = Curl::Request{}
+                       .setHeader(
+                           field::authorization,
+                           "Digest username=user, realm=\"wonderland\", uri=\"asdf.com\", response=\"bla\", "
+                           "algorithm=md5, nonce=asdf, qop=\"auth\", opaque=xef, cnonce=50, nc=50")
+                       .get(url("/dynamicGet"));
+        ASSERT_EQ(future.wait_for(std::chrono::seconds(5)), std::future_status::ready);
+        auto value = future.get();
+        ASSERT_TRUE(value);
+        EXPECT_EQ(value->username, "user");
+        EXPECT_EQ(value->realm, "wonderland");
+        EXPECT_EQ(value->uri, "asdf.com");
+        EXPECT_EQ(value->response, "bla");
+        EXPECT_EQ(value->algorithm, "md5");
+        EXPECT_EQ(value->nonce, "asdf");
+        EXPECT_EQ(value->qop, "auth");
+        EXPECT_EQ(value->opaque, "xef");
+        EXPECT_EQ(value->cnonce, "50");
+        EXPECT_EQ(value->nc, "50");
+    }
+
+    // This does not mean that the digest is correct then.
+    TEST_F(HttpServerTests, DigestParametersMayBeMissing)
+    {
+        using namespace boost::beast::http;
+
+        std::promise<std::optional<DigestAuth>> promise;
+        listener_->dynamicGetFunc = [&promise](Session& session, EmptyBodyRequest&& req) {
+            promise.set_value(req.digestAuth());
+        };
+        auto future = promise.get_future();
+        auto res = Curl::Request{}
+                       .setHeader(
+                           field::authorization,
+                           "Digest username=user, realm=\"wonderland\", uri=\"asdf.com\", response=\"bla\", "
+                           "algorithm=md5")
+                       .get(url("/dynamicGet"));
+        ASSERT_EQ(future.wait_for(std::chrono::seconds(5)), std::future_status::ready);
+        auto value = future.get();
+        ASSERT_TRUE(value);
+        EXPECT_EQ(value->username, "user");
+        EXPECT_EQ(value->realm, "wonderland");
+        EXPECT_EQ(value->uri, "asdf.com");
+        EXPECT_EQ(value->response, "bla");
+        EXPECT_EQ(value->algorithm, "md5");
+        EXPECT_EQ(value->nonce, "");
+        EXPECT_EQ(value->qop, "");
+        EXPECT_EQ(value->opaque, "");
+        EXPECT_EQ(value->cnonce, "");
+        EXPECT_EQ(value->nc, "");
+    }
+
+    TEST_F(HttpServerTests, CanExtractBearerAuthorization)
+    {
+        using namespace boost::beast::http;
+
+        std::promise<std::optional<std::string>> promise;
+        listener_->dynamicGetFunc = [&promise](Session& session, EmptyBodyRequest&& req) {
+            promise.set_value(req.bearerAuth());
+        };
+        auto future = promise.get_future();
+        auto res = Curl::Request{}.setHeader(field::authorization, "Bearer token").get(url("/dynamicGet"));
+        ASSERT_EQ(future.wait_for(std::chrono::seconds(5)), std::future_status::ready);
+        auto value = future.get();
+        ASSERT_TRUE(value);
+        EXPECT_EQ(*value, "token");
     }
 }

@@ -1,5 +1,8 @@
 #pragma once
 
+#include <roar/authorization/basic_auth.hpp>
+#include <roar/authorization/digest_auth.hpp>
+#include <roar/authorization/authorization.hpp>
 #include <roar/mechanics/ranges.hpp>
 
 #include <boost/beast/http/message.hpp>
@@ -196,6 +199,68 @@ namespace Roar
             if (iter == std::end(*this))
                 return std::nullopt;
             return Ranges::fromString(std::string{iter->value()});
+        }
+
+        /**
+         * @brief Returns the authorization scheme of the Authorization header if it exists.
+         */
+        std::optional<AuthorizationScheme> authorizationScheme() const
+        {
+            auto iter = this->find(boost::beast::http::field::authorization);
+            if (iter == std::end(*this))
+                return std::nullopt;
+            auto spacePos = iter->value().find(' ');
+            if (spacePos == std::string::npos)
+                return std::nullopt;
+            return authorizationSchemeFromString(iter->value().substr(0, spacePos));
+        }
+
+        /**
+         * @brief Returns a basic auth object if the authorization scheme is "Basic".
+         */
+        std::optional<BasicAuth> basicAuth() const
+        {
+            auto iter = this->find(boost::beast::http::field::authorization);
+            if (iter == std::end(*this))
+                return std::nullopt;
+            auto spacePos = iter->value().find(' ');
+            if (spacePos == std::string::npos)
+                return std::nullopt;
+            if (iter->value().substr(0, spacePos) != "Basic")
+                return std::nullopt;
+            return BasicAuth::fromBase64(iter->value().substr(spacePos + 1));
+        }
+
+        /**
+         * @brief Returns a digest auth object with all digest auth information.
+         */
+        std::optional<DigestAuth> digestAuth() const
+        {
+            auto iter = this->find(boost::beast::http::field::authorization);
+            if (iter == std::end(*this))
+                return std::nullopt;
+            auto spacePos = iter->value().find(' ');
+            if (spacePos == std::string::npos)
+                return std::nullopt;
+            if (iter->value().substr(0, spacePos) != "Digest")
+                return std::nullopt;
+            return DigestAuth::fromParameters(iter->value().substr(spacePos + 1));
+        }
+
+        /**
+         * @brief Returns token data of bearer authentication method.
+         */
+        std::optional<std::string> bearerAuth() const
+        {
+            auto iter = this->find(boost::beast::http::field::authorization);
+            if (iter == std::end(*this))
+                return std::nullopt;
+            auto spacePos = iter->value().find(' ');
+            if (spacePos == std::string::npos)
+                return std::nullopt;
+            if (iter->value().substr(0, spacePos) != "Bearer")
+                return std::nullopt;
+            return std::string{iter->value().substr(spacePos + 1)};
         }
 
       private:
