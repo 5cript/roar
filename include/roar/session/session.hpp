@@ -241,6 +241,19 @@ namespace Roar
             }
 
             /**
+             * @brief Sets WWW-Authenticate header and sets the status to unauthorized.
+             *
+             * @param wwwAuthenticate A string to be used as the value of the header. eg: "Basic realm=<realm>"
+             */
+            SendIntermediate& rejectAuthorization(std::string const& wwwAuthenticate)
+            {
+                if (!wwwAuthenticate.empty())
+                    response_.setHeader(boost::beast::http::field::www_authenticate, wwwAuthenticate);
+                response_.status(boost::beast::http::status::unauthorized);
+                return *this;
+            }
+
+            /**
              * @brief Set keep alive.
              *
              * @param keepAlive

@@ -301,10 +301,17 @@ namespace Roar::Tests
         EXPECT_EQ(res.code(), boost::beast::http::status::not_found);
     }
 
-    TEST_F(ServeTests, CanotMakeHeadRequestWhenDownloadIsNotAllowed)
+    TEST_F(ServeTests, CannotMakeHeadRequestWhenNoFileIsSpecified)
     {
         std::unordered_map<std::string, std::string> headers;
         const auto res = Curl::Request{}.headerSink(headers).head(url("/nothingAllowed"));
+        EXPECT_EQ(res.code(), boost::beast::http::status::method_not_allowed);
+    }
+
+    TEST_F(ServeTests, CannotMakeHeadRequestWhenDownloadIsNotAllowed)
+    {
+        std::unordered_map<std::string, std::string> headers;
+        const auto res = Curl::Request{}.headerSink(headers).head(url("/nothingAllowed/file.txt"));
         EXPECT_EQ(res.code(), boost::beast::http::status::method_not_allowed);
     }
 

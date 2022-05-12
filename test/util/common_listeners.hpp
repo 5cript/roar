@@ -36,6 +36,9 @@ namespace Roar::Tests
 
     class SimpleRoutes
     {
+      public:
+        std::function<void(Session& session, EmptyBodyRequest&& req)> dynamicGetFunc;
+
       private:
         ROAR_MAKE_LISTENER(SimpleRoutes);
 
@@ -56,6 +59,7 @@ namespace Roar::Tests
                 },
         }});
         ROAR_GET(sendIntermediate)("/sendIntermediate");
+        ROAR_GET(dynamicGet)("/dynamicGet");
 
       private:
         void justOk(Session& session, EmptyBodyRequest&& req)
@@ -79,7 +83,8 @@ namespace Roar::Tests
              roar_anything,
              roar_ab,
              roar_unsecure,
-             roar_sendIntermediate))
+             roar_sendIntermediate,
+             roar_dynamicGet))
     };
     inline void SimpleRoutes::index(Session& session, EmptyBodyRequest&& req)
     {
@@ -154,5 +159,13 @@ namespace Roar::Tests
     {
         using namespace boost::beast::http;
         session.send<string_body>(req)->status(status::ok).body("Hi").preparePayload().commit();
+    }
+    inline void SimpleRoutes::dynamicGet(Session& session, EmptyBodyRequest&& req)
+    {
+        using namespace boost::beast::http;
+        if (dynamicGetFunc)
+            dynamicGetFunc(session, std::move(req));
+        else
+            justOk(session, std::move(req));
     }
 }

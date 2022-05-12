@@ -1,24 +1,27 @@
 add_library(roar STATIC
-  server.cpp
-  mime_type.cpp
-  mechanics/ranges.cpp
-  filesystem/jail.cpp
-  filesystem/special_paths.cpp
-  routing/route.cpp
-  routing/router.cpp
-  session/factory.cpp
-  session/session.cpp
-  ssl/make_ssl_context.cpp
-  websocket/websocket_session.cpp
-  websocket/websocket_client.cpp
-  websocket/websocket_base.cpp
-  curl/sources/file_source.cpp
-  curl/sources/string_source.cpp
-  curl/global_curl_context.cpp
-  curl/request.cpp
-  curl/response.cpp
-  utility/url.cpp
-  utility/base64.cpp
+    server.cpp
+    mime_type.cpp
+    mechanics/ranges.cpp
+    authorization/authorization.cpp
+    authorization/basic_auth.cpp
+    authorization/digest_auth.cpp
+    filesystem/jail.cpp
+    filesystem/special_paths.cpp
+    routing/route.cpp
+    routing/router.cpp
+    session/factory.cpp
+    session/session.cpp
+    ssl/make_ssl_context.cpp
+    websocket/websocket_session.cpp
+    websocket/websocket_client.cpp
+    websocket/websocket_base.cpp
+    curl/sources/file_source.cpp
+    curl/sources/string_source.cpp
+    curl/global_curl_context.cpp
+    curl/request.cpp
+    curl/response.cpp
+    utility/url.cpp
+    utility/base64.cpp
 )
 
 include(../../cmake/curl.cmake)
@@ -30,6 +33,7 @@ find_library(LCRYPTOPP cryptopp)
 
 target_include_directories(roar PUBLIC ${CMAKE_SOURCE_DIR}/include ${CURL_INCLUDE_DIR})
 target_link_libraries(roar PUBLIC Boost::system promise fmt::fmt ${CURL_LIBRARIES} ${LSSL} ${LCRYPTOPP} ${LCRYPTO})
+target_compile_definitions(roar PUBLIC BOOST_BEAST_USE_STD_STRING_VIEW)
 
 if (${ROAR_ENABLE_NLOHMANN_JSON})
     target_link_libraries(roar PUBLIC nlohmann_json::nlohmann_json)

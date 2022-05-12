@@ -158,6 +158,8 @@ namespace Roar::Detail
             };
 
             std::pair<std::filesystem::file_type, std::filesystem::path> fileAndStatus;
+            if (target.size() == basePath_.size())
+                return analyzeFile("");
             target.remove_prefix(basePath_.size() + (basePath_.size() == 1 ? 0 : 1));
             return analyzeFile(target);
         }

@@ -19,4 +19,12 @@ namespace Roar
      * @return std::string
      */
     std::string base64Decode(std::string const& base64String);
+
+    /**
+     * @brief Decode base64 to string.
+     *
+     * @param base64String
+     * @return std::string
+     */
+    std::string base64Decode(std::string_view base64String);
 }
