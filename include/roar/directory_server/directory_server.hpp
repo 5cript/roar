@@ -22,7 +22,6 @@ namespace Roar::Detail
     {
         inline static std::string to_string(std::filesystem::file_time_type const& ftime)
         {
-            auto tp = std::chrono::file_clock::to_sys(ftime);
             auto cftime =
                 std::chrono::system_clock::to_time_t(std::chrono::time_point_cast<std::chrono::system_clock::duration>(
                     std::chrono::file_clock::to_sys(ftime)));
@@ -407,7 +406,7 @@ namespace Roar::Detail
                     session->read<http::file_body>(req, std::move(*body))
                         ->bodyLimit(*contentLength)
                         .commit()
-                        .then([](auto& session, auto const& req) {
+                        .then([](auto& session, auto const&) {
                             session.sendStandardResponse(http::status::ok);
                         })
                         .fail([session](Error const& e) {

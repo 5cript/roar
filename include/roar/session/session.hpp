@@ -2,7 +2,6 @@
 
 #include <functional>
 #include <roar/error.hpp>
-#include <roar/detail/type_equal_compare.hpp>
 #include <roar/websocket/websocket_session.hpp>
 #include <roar/response.hpp>
 #include <roar/beast/forward.hpp>
@@ -202,7 +201,7 @@ namespace Roar
              * @brief Sends the response and invalidates this object
              */
             template <typename T = BodyT, bool OverrideSfinae = false>
-            std::enable_if_t<typeof(T{}) != typeof(RangeFileBody{}) || OverrideSfinae, CommitReturnType> commit()
+            std::enable_if_t<!std::is_same_v<T, RangeFileBody> || OverrideSfinae, CommitReturnType> commit()
             {
                 if (overallTimeout_)
                 {
@@ -220,7 +219,7 @@ namespace Roar
              * @brief Sends the response for range request file bodies. Sets appropriate headers.
              */
             template <typename T = BodyT>
-            std::enable_if_t<typeof(T{}) == typeof(RangeFileBody{}), CommitReturnType> commit()
+            std::enable_if_t<std::is_same_v<T, RangeFileBody>, CommitReturnType> commit()
             {
                 using namespace boost::beast::http;
                 preparePayload();

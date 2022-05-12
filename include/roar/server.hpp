@@ -10,7 +10,6 @@
 #include <roar/standard_response_provider.hpp>
 #include <roar/standard_text_response_provider.hpp>
 #include <roar/filesystem/jail.hpp>
-#include <roar/detail/type_equal_compare.hpp>
 
 #include <boost/describe/modifiers.hpp>
 #include <boost/asio/ssl/context.hpp>
@@ -139,10 +138,9 @@ namespace Roar
                 case (RoutePathType::RegularString):
                 {
                     protoRoute.path = std::string{info.path};
-                    protoRoute.matches =
-                        [p = info.path](std::string const& path, std::vector<std::string>& regexMatches) {
-                            return path == p;
-                        };
+                    protoRoute.matches = [p = info.path](std::string const& path, std::vector<std::string>&) {
+                        return path == p;
+                    };
                     break;
                 }
                 case (RoutePathType::Regex):

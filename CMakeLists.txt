@@ -15,6 +15,7 @@ if(PROJECT_IS_TOP_LEVEL)
     endif()
 endif()
 
+include (./cmake/warnings.cmake)
 include (./cmake/example_target.cmake)
 include (./cmake/options.cmake)
 

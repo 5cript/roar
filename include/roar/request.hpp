@@ -180,7 +180,6 @@ namespace Roar
 
         std::optional<std::size_t> contentLength() const
         {
-            bool allow = false;
             auto contentLength = this->find("Content-Length");
             if (contentLength == std::end(*this))
                 return std::nullopt;

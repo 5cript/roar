@@ -1,4 +1,5 @@
 #include <roar/ssl/make_ssl_context.hpp>
+#include <roar/detail/overloaded.hpp>
 
 namespace Roar
 {
@@ -15,11 +16,27 @@ namespace Roar
             boost::asio::ssl::context::default_workarounds | boost::asio::ssl::context::no_sslv2 |
             boost::asio::ssl::context::single_dh_use);
 
-        sslContext.use_certificate_chain(boost::asio::buffer(settings.certificate.data(), settings.certificate.size()));
+        std::visit(
+            Detail::overloaded{
+                [&](std::string_view key) {
+                    sslContext.use_certificate_chain(boost::asio::buffer(key.data(), key.size()));
+                },
+                [&](std::filesystem::path const& path) {
+                    sslContext.use_certificate_chain_file(path.string());
+                },
+            },
+            settings.certificate);
 
-        sslContext.use_private_key(
-            boost::asio::buffer(settings.privateKey.data(), settings.privateKey.size()),
-            boost::asio::ssl::context::file_format::pem);
+        std::visit(
+            Detail::overloaded{
+                [&](std::string_view key) {
+                    sslContext.use_private_key(
+                        boost::asio::buffer(key.data(), key.size()), boost::asio::ssl::context::file_format::pem);
+                },
+                [&](std::filesystem::path const& path) {
+                    sslContext.use_private_key_file(path.string(), boost::asio::ssl::context::file_format::pem);
+                }},
+            settings.privateKey);
 
         if (!settings.diffieHellmanParameters.empty())
         {

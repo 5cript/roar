@@ -120,7 +120,7 @@ namespace Roar
                 file_.seekg(0, std::ios::end);
                 auto size = file_.tellg();
                 file_.seekg(pos);
-                return size;
+                return static_cast<std::uint64_t>(size);
             }
 
             bool isOpen() const
@@ -199,7 +199,7 @@ namespace Roar
                     sequences_.resize(1);
                     sequences_.front() = Sequence{ranges.ranges.front().start, ranges.ranges.front().end};
                     totalSize_ = ranges.ranges.front().end - ranges.ranges.front().start;
-                    file_.seekg(ranges.ranges.front().start);
+                    file_.seekg(static_cast<std::streamoff>(ranges.ranges.front().start));
                 }
             }
 
@@ -224,10 +224,10 @@ namespace Roar
                     consumed_ += copied;
                     amount -= copied;
                     if (amount > 0)
-                        file_.seekg(current.start);
+                        file_.seekg(static_cast<std::streamoff>(current.start));
                 }
-                file_.read(buf, std::min(amount, current.end - current.start));
-                std::size_t gcount = file_.gcount();
+                file_.read(buf, static_cast<std::streamoff>(std::min(amount, current.end - current.start)));
+                auto gcount = static_cast<std::uint64_t>(file_.gcount());
                 consumed_ += gcount;
                 current.start += gcount;
                 amount -= gcount;
@@ -249,7 +249,7 @@ namespace Roar
              * @param error
              * @return std::size_t
              */
-            std::size_t write(char const* buf, std::size_t amount, bool& error)
+            std::streamsize write(char const* buf, std::streamsize amount, bool& error)
             {
                 file_.write(buf, amount);
                 // totalBytesProcessed_ += amount;
@@ -367,7 +367,8 @@ namespace Roar
             // Write this buffer to the file
             boost::asio::const_buffer buffer = *it;
             bool fail{false};
-            writtenBytes += body_.write(reinterpret_cast<char const*>(buffer.data()), buffer.size(), fail);
+            writtenBytes += static_cast<std::size_t>(body_.write(
+                reinterpret_cast<char const*>(buffer.data()), static_cast<std::streamsize>(buffer.size()), fail));
             if (fail)
             {
                 ec = boost::beast::http::error::body_limit;

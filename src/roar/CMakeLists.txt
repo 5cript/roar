@@ -31,9 +31,11 @@ find_library(LSSL ssl)
 find_library(LCRYPTO crypto)
 find_library(LCRYPTOPP cryptopp)
 
-target_include_directories(roar PUBLIC ${CMAKE_SOURCE_DIR}/include ${CURL_INCLUDE_DIR})
+target_include_directories(roar PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../include ${CURL_INCLUDE_DIR})
 target_link_libraries(roar PUBLIC Boost::system promise fmt::fmt ${CURL_LIBRARIES} ${LSSL} ${LCRYPTOPP} ${LCRYPTO})
 target_compile_definitions(roar PUBLIC BOOST_BEAST_USE_STD_STRING_VIEW)
+
+set_target_warnings(roar)
 
 if (${ROAR_ENABLE_NLOHMANN_JSON})
     target_link_libraries(roar PUBLIC nlohmann_json::nlohmann_json)

@@ -57,7 +57,7 @@ namespace Roar
             return std::toupper(character);
         });
         cors.methodAllowSelection =
-            [method = std::move(method)](std::vector<std::string> const& requestedMethods) -> std::vector<std::string> {
+            [method = std::move(method)](std::vector<std::string> const&) -> std::vector<std::string> {
             return std::vector<std::string>{method};
         };
         cors.allowCredentials = true;

@@ -67,7 +67,7 @@ namespace Roar::Detail
     {};
 
     template <typename...>
-    class PromiseTypeBind;
+    struct PromiseTypeBind;
 
     class PromiseTypeBindBase
     {
