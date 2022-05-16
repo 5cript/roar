@@ -108,7 +108,8 @@ namespace Roar
     //------------------------------------------------------------------------------------------------------------------
     boost::leaf::result<void> Server::start(unsigned short port, std::string const& host)
     {
-        return start(Dns::resolveSingle(impl_->acceptor.get_executor(), host, port));
+        return start(Dns::resolveSingle(
+            impl_->acceptor.get_executor(), host, port, false, boost::asio::ip::resolver_base::flags::passive));
     }
     //------------------------------------------------------------------------------------------------------------------
     boost::asio::ip::basic_endpoint<boost::asio::ip::tcp> const& Server::getLocalEndpoint() const

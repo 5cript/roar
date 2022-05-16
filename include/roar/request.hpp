@@ -4,6 +4,7 @@
 #include <roar/authorization/digest_auth.hpp>
 #include <roar/authorization/authorization.hpp>
 #include <roar/mechanics/ranges.hpp>
+#include <roar/utility/base64.hpp>
 
 #include <boost/beast/http/message.hpp>
 #include <boost/beast/http/empty_body.hpp>
@@ -259,7 +260,7 @@ namespace Roar
                 return std::nullopt;
             if (iter->value().substr(0, spacePos) != "Bearer")
                 return std::nullopt;
-            return std::string{iter->value().substr(spacePos + 1)};
+            return std::string{base64Decode(iter->value().substr(spacePos + 1))};
         }
 
       private:

@@ -86,7 +86,7 @@ namespace Roar
                         boost::asio::dynamic_buffer(data);
                 };
                 auto buf = std::make_shared<Buf>();
-                ws.async_read(buf->buf, [d, self = shared_from_this(), buf](auto ec, std::size_t bytesTransferred) {
+                ws.async_read(buf->buf, [d, self = shared_from_this(), buf](auto ec, std::size_t) {
                     if (ec)
                         return d.reject(Error{.error = ec, .additionalInfo = "Websocket read failed."});
                     self->withStreamDo([&](auto& ws) {
@@ -102,14 +102,14 @@ namespace Roar
     //------------------------------------------------------------------------------------------------------------------
     void WebsocketBase::autoFragment(bool enable)
     {
-        withStreamDo([this, enable](auto& ws) {
+        withStreamDo([enable](auto& ws) {
             ws.auto_fragment(enable);
         });
     }
     //------------------------------------------------------------------------------------------------------------------
     bool WebsocketBase::autoFragment() const
     {
-        return withStreamDo([this](auto& ws) {
+        return withStreamDo([](auto& ws) {
             return ws.auto_fragment();
         });
     }
@@ -119,7 +119,7 @@ namespace Roar
         auto waitForClose = std::make_shared<std::promise<void>>();
         withStreamDo([&, this](auto& ws) {
             ws.async_close(
-                boost::beast::websocket::close_code::normal, [waitForClose, self = shared_from_this()](auto ec) {
+                boost::beast::websocket::close_code::normal, [waitForClose, self = shared_from_this()](auto) {
                     waitForClose->set_value();
                 });
         });

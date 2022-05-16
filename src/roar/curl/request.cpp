@@ -217,7 +217,7 @@ namespace Roar::Curl
     {
         auto str = std::make_shared<std::string>();
         return sink(
-            [str, &json](char const* data, std::size_t count) {
+            [str](char const* data, std::size_t count) {
                 str->append(data, count);
             },
             [str, &json]() {

@@ -94,6 +94,14 @@ namespace Roar
         FileAndStatus const&,
         ServeOptions<RequestListenerT>& options);
 
+#define ROUTE_INFO_COMMON() \
+    char const* path = nullptr; \
+    RouteOptions routeOptions = { \
+        .allowUnsecure = false, \
+        .expectUpgrade = false, \
+        .cors = std::nullopt, \
+    };
+
     /**
      * @brief This class is what is used in ROAR_GET, ROAR_PUT, ... requests
      * All options you can set for routes behind these macros are part of this object.
@@ -101,22 +109,10 @@ namespace Roar
      * @tparam RequestListenerT The request listener class that the route belongs to.
      */
     template <typename RequestListenerT>
-    struct RouteInfoBase
+    struct RouteInfo
     {
-        /// A path to route to.
-        char const* path = nullptr;
+        ROUTE_INFO_COMMON()
 
-        /// Some options of this route. See documentation for RouteOptions.
-        RouteOptions routeOptions = {
-            .allowUnsecure = false,
-            .expectUpgrade = false,
-            .cors = std::nullopt,
-        };
-    };
-
-    template <typename RequestListenerT>
-    struct RouteInfo : RouteInfoBase<RequestListenerT>
-    {
         /// What verb for this route?
         std::optional<boost::beast::http::verb> verb = std::nullopt;
 
@@ -128,8 +124,10 @@ namespace Roar
     };
 
     template <typename RequestListenerT>
-    struct ServeInfo : RouteInfoBase<RequestListenerT>
+    struct ServeInfo
     {
+        ROUTE_INFO_COMMON()
+
         /// Options needed for serving files.
         ServeOptions<RequestListenerT> serveOptions = {};
 
@@ -143,35 +141,29 @@ namespace Roar
         return Detail::overloaded{
             [info, handler](RouteInfo<RequestListenerT> userInfo) -> RouteInfo<RequestListenerT> {
                 return {
-                    {
-                        .path = userInfo.path,
-                        .routeOptions = userInfo.routeOptions,
-                    },
-                    userInfo.verb ? userInfo.verb : info.verb,
-                    userInfo.pathType,
-                    handler,
+                    .path = userInfo.path,
+                    .routeOptions = userInfo.routeOptions,
+                    .verb = userInfo.verb ? userInfo.verb : info.verb,
+                    .pathType = userInfo.pathType,
+                    .handler = handler,
                 };
             },
             [info, handler](char const* path) -> RouteInfo<RequestListenerT> {
                 return {
-                    {
-                        .path = path,
-                        .routeOptions = info.routeOptions,
-                    },
-                    info.verb,
-                    info.pathType,
-                    handler,
+                    .path = path,
+                    .routeOptions = info.routeOptions,
+                    .verb = info.verb,
+                    .pathType = info.pathType,
+                    .handler = handler,
                 };
             },
             [info, handler](PseudoRegex path) -> RouteInfo<RequestListenerT> {
                 return {
-                    {
-                        .path = path.pattern,
-                        .routeOptions = info.routeOptions,
-                    },
-                    info.verb,
-                    RoutePathType::Regex,
-                    handler,
+                    .path = path.pattern,
+                    .routeOptions = info.routeOptions,
+                    .verb = info.verb,
+                    .pathType = RoutePathType::Regex,
+                    .handler = handler,
                 };
             },
         };
@@ -183,57 +175,45 @@ namespace Roar
         return Detail::overloaded{
             [info, handler](ServeInfo<RequestListenerT> userInfo) -> ServeInfo<RequestListenerT> {
                 return {
-                    {
-                        .path = userInfo.path,
-                        .routeOptions = userInfo.routeOptions,
-                    },
-                    userInfo.serveOptions,
-                    handler,
+                    .path = userInfo.path,
+                    .routeOptions = userInfo.routeOptions,
+                    .serveOptions = userInfo.serveOptions,
+                    .handler = handler,
                 };
             },
             [info, handler](char const* path, std::filesystem::path const& root) -> ServeInfo<RequestListenerT> {
                 return {
-                    {
-                        .path = path,
-                        .routeOptions = info.routeOptions,
-                    },
-                    ServeOptions<RequestListenerT>{
-                        .pathProvider = root,
-                    },
-                    handler,
+                    .path = path,
+                    .routeOptions = info.routeOptions,
+                    .pathProvider = root,
+                    .handler = handler,
                 };
             },
             [info, handler](char const* path, std::filesystem::path (RequestListenerT::*rootProvider)())
                 -> ServeInfo<RequestListenerT> {
                 return {
-                    {
-                        .path = path,
-                        .routeOptions = info.routeOptions,
-                    },
-                    ServeOptions<RequestListenerT>{.pathProvider = rootProvider},
-                    handler,
+                    .path = path,
+                    .routeOptions = info.routeOptions,
+                    .pathProvider = rootProvider,
+                    .handler = handler,
                 };
             },
             [info, handler](char const* path, std::filesystem::path (RequestListenerT::*rootProvider)() const)
                 -> ServeInfo<RequestListenerT> {
                 return {
-                    {
-                        .path = path,
-                        .routeOptions = info.routeOptions,
-                    },
-                    ServeOptions<RequestListenerT>{.pathProvider = rootProvider},
-                    handler,
+                    .path = path,
+                    .routeOptions = info.routeOptions,
+                    .pathProvider = rootProvider,
+                    .handler = handler,
                 };
             },
             [info, handler](char const* path, std::filesystem::path RequestListenerT::*rootProvider)
                 -> ServeInfo<RequestListenerT> {
                 return {
-                    {
-                        .path = path,
-                        .routeOptions = info.routeOptions,
-                    },
-                    ServeOptions<RequestListenerT>{.pathProvider = rootProvider},
-                    handler,
+                    .path = path,
+                    .routeOptions = info.routeOptions,
+                    .pathProvider = rootProvider,
+                    .handler = handler,
                 };
             }};
     }
@@ -244,7 +224,7 @@ namespace Roar
 #define ROAR_ROUTE_I(HandlerName, DefaultVerb) \
     void HandlerName(Roar::Session& session, Roar::Request<boost::beast::http::empty_body>&& request); \
     inline static const auto roar_##HandlerName = Roar::extendRouteInfo( \
-        Roar::RouteInfo<this_type>{{}, boost::beast::http::verb::DefaultVerb}, &this_type::HandlerName)
+        Roar::RouteInfo<this_type>{.verb = boost::beast::http::verb::DefaultVerb}, &this_type::HandlerName)
 
 #define ROAR_SERVE(HandlerName) \
     Roar::ServeDecision HandlerName( \

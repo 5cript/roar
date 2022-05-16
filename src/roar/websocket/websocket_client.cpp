@@ -47,7 +47,7 @@ namespace Roar
             if (ec)
                 return onError({.error = ec, .additionalInfo = "Could not connect."});
 
-            client->withStreamDo([&, this](auto& ws) {
+            client->withStreamDo([&timeout](auto& ws) {
                 boost::beast::get_lowest_layer(ws).expires_after(timeout);
             });
 
@@ -58,22 +58,20 @@ namespace Roar
                 performWebsocketHandshake(std::move(client));
         }
 
-        void performSslHandshake(std::string const& host, std::shared_ptr<WebsocketClient> client)
+        void performSslHandshake(std::string const& origHost, std::shared_ptr<WebsocketClient> client)
         {
             auto& wss =
                 std::get<boost::beast::websocket::stream<boost::beast::ssl_stream<Detail::StreamType>>>(client->ws_);
-            if (!SSL_set_tlsext_host_name(wss.next_layer().native_handle(), host.c_str()))
+            if (!SSL_set_tlsext_host_name(wss.next_layer().native_handle(), origHost.c_str()))
             {
                 auto ec = boost::beast::error_code(
                     static_cast<int>(::ERR_get_error()), boost::asio::error::get_ssl_category());
                 return onError({.error = ec, .additionalInfo = "SSL_set_tlsext_host_name failed."});
             }
-            client->withStreamDo([&, this](auto& ws) {
-                wss.next_layer().async_handshake(
-                    boost::asio::ssl::stream_base::client, [client](boost::beast::error_code ec) {
-                        client->impl_->onSslHandshake(std::move(ec), client);
-                    });
-            });
+            wss.next_layer().async_handshake(
+                boost::asio::ssl::stream_base::client, [client](boost::beast::error_code ec) {
+                    client->impl_->onSslHandshake(std::move(ec), client);
+                });
         }
 
         void onSslHandshake(boost::beast::error_code ec, std::shared_ptr<WebsocketClient> client)
