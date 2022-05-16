@@ -221,14 +221,15 @@ namespace Roar
         std::optional<BasicAuth> basicAuth() const
         {
             auto iter = this->find(boost::beast::http::field::authorization);
+            auto value = iter->value();
             if (iter == std::end(*this))
                 return std::nullopt;
-            auto spacePos = iter->value().find(' ');
+            auto spacePos = value.find(' ');
             if (spacePos == std::string::npos)
                 return std::nullopt;
-            if (iter->value().substr(0, spacePos) != "Basic")
+            if (value.substr(0, spacePos) != "Basic")
                 return std::nullopt;
-            return BasicAuth::fromBase64(iter->value().substr(spacePos + 1));
+            return BasicAuth::fromBase64(value.substr(spacePos + 1, value.size() - spacePos - 1));
         }
 
         /**
@@ -237,14 +238,15 @@ namespace Roar
         std::optional<DigestAuth> digestAuth() const
         {
             auto iter = this->find(boost::beast::http::field::authorization);
+            auto value = iter->value();
             if (iter == std::end(*this))
                 return std::nullopt;
-            auto spacePos = iter->value().find(' ');
+            auto spacePos = value.find(' ');
             if (spacePos == std::string::npos)
                 return std::nullopt;
-            if (iter->value().substr(0, spacePos) != "Digest")
+            if (value.substr(0, spacePos) != "Digest")
                 return std::nullopt;
-            return DigestAuth::fromParameters(iter->value().substr(spacePos + 1));
+            return DigestAuth::fromParameters(value.substr(spacePos + 1));
         }
 
         /**
