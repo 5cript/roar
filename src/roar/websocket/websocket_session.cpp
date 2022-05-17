@@ -32,6 +32,10 @@ namespace Roar
     {
         return newPromise([this, &req](Defer d) {
             withStreamDo([this, request = req, &d](auto& ws) {
+                boost::beast::get_lowest_layer(ws).expires_never();
+                ws.set_option(
+                    boost::beast::websocket::stream_base::timeout::suggested(boost::beast::role_type::server));
+
                 auto req = std::make_shared<Request<boost::beast::http::empty_body>>(std::move(request));
                 ws.async_accept(*req, [req, self = shared_from_this(), d = std::move(d)](auto&& ec) {
                     if (ec)

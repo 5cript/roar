@@ -89,6 +89,16 @@ namespace Roar
             read();
 
         /**
+         * @brief Reads something from the server.
+         *
+         * @param limit A limit on how much to read.
+         * @return A promise to continue after reading
+         */
+        Detail::
+            PromiseTypeBind<Detail::PromiseTypeBindThen<WebsocketReadResult>, Detail::PromiseTypeBindFail<Error const&>>
+            read_some(std::size_t limit = 4096);
+
+        /**
          * @brief Set the automatic fragmentation option.
          *
          * @param enable true = automatic fragmentation, false = no automatic fragmentation.
