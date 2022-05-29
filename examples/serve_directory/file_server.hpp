@@ -68,19 +68,18 @@ class FileServer
 
     ROAR_SERVE(customServeOptions)
     ({
-        {
-            .path = "/",
-            .routeOptions = {.allowUnsecure = false},
-        },
-        {
-            .allowDownload = true,
-            .allowUpload = false,
-            .allowOverwrite = false,
-            .allowDelete = false,
-            .allowDeleteOfNonEmptyDirectories = false,
-            .allowListing = true,
-            .pathProvider = &FileServer::getServePath,
-        },
+        .path = "/",
+        .routeOptions = {.allowUnsecure = false},
+        .serveOptions =
+            {
+                .allowDownload = true,
+                .allowUpload = false,
+                .allowOverwrite = false,
+                .allowDelete = false,
+                .allowDeleteOfNonEmptyDirectories = false,
+                .allowListing = true,
+                .pathProvider = &FileServer::getServePath,
+            },
     });
 
   private:

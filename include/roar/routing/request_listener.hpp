@@ -185,7 +185,10 @@ namespace Roar
                 return {
                     .path = path,
                     .routeOptions = info.routeOptions,
-                    .pathProvider = root,
+                    .serveOptions =
+                        {
+                            .pathProvider = root,
+                        },
                     .handler = handler,
                 };
             },
@@ -194,7 +197,10 @@ namespace Roar
                 return {
                     .path = path,
                     .routeOptions = info.routeOptions,
-                    .pathProvider = rootProvider,
+                    .serveOptions =
+                        {
+                            .pathProvider = rootProvider,
+                        },
                     .handler = handler,
                 };
             },
@@ -203,7 +209,10 @@ namespace Roar
                 return {
                     .path = path,
                     .routeOptions = info.routeOptions,
-                    .pathProvider = rootProvider,
+                    .serveOptions =
+                        {
+                            .pathProvider = rootProvider,
+                        },
                     .handler = handler,
                 };
             },
@@ -212,7 +221,10 @@ namespace Roar
                 return {
                     .path = path,
                     .routeOptions = info.routeOptions,
-                    .pathProvider = rootProvider,
+                    .serveOptions =
+                        {
+                            .pathProvider = rootProvider,
+                        },
                     .handler = handler,
                 };
             }};

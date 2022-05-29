@@ -262,7 +262,7 @@ namespace Roar
                 return std::nullopt;
             if (iter->value().substr(0, spacePos) != "Bearer")
                 return std::nullopt;
-            return std::string{base64Decode(iter->value().substr(spacePos + 1))};
+            return std::string{iter->value().substr(spacePos + 1)};
         }
 
       private:
