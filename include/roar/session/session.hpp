@@ -1,5 +1,6 @@
 #pragma once
 
+#include <roar/mechanics/cookie.hpp>
 #include <functional>
 #include <roar/error.hpp>
 #include <roar/websocket/websocket_session.hpp>
@@ -261,6 +262,18 @@ namespace Roar
             SendIntermediate& keepAlive(bool keepAlive = true)
             {
                 response_.keepAlive(keepAlive);
+                return *this;
+            }
+
+            /**
+             * @brief Sets a cookie.
+             *
+             * @param cookie A cookie object
+             * @return SendIntermediate& Returns itself for chaining.
+             */
+            SendIntermediate& setCookie(Cookie const& cookie)
+            {
+                response_.setCookie(cookie);
                 return *this;
             }
 
