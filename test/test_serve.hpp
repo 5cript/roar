@@ -275,6 +275,62 @@ namespace Roar::Tests
         return Roar::ServeDecision::Continue;
     }
 
+    class SlashServer
+    {
+      public:
+        constexpr static char const* DummyFileContent = "File Contents";
+
+      public:
+        ROAR_MAKE_LISTENER(SlashServer);
+        SlashServer()
+            : tempDir_{TEST_TEMPORARY_DIRECTORY}
+        {
+            createDummyFile(pathSupplier() / "index.html");
+        }
+        std::filesystem::path pathSupplier() const
+        {
+            return tempDir_;
+        }
+
+      private:
+        TemporaryDirectory tempDir_;
+
+      private:
+        void createDummyFile(std::filesystem::path const& where)
+        {
+            std::ofstream writer{where, std::ios_base::binary};
+            writer << DummyFileContent;
+        }
+
+      private: // routes
+        ROAR_SERVE(slash)
+        ({
+            .path = "/",
+            .routeOptions = {.allowUnsecure = false},
+            .serveOptions =
+                {
+                    .allowDownload = true,
+                    .allowUpload = false,
+                    .allowOverwrite = false,
+                    .allowDelete = false,
+                    .allowDeleteOfNonEmptyDirectories = false,
+                    .allowListing = false,
+                    .pathProvider = &SlashServer::pathSupplier,
+                },
+        });
+
+      private: // reflection.
+        BOOST_DESCRIBE_CLASS(SlashServer, (), (), (), (roar_slash))
+    };
+    inline Roar::ServeDecision SlashServer::slash(
+        Roar::Session& session,
+        Roar::EmptyBodyRequest const& request,
+        Roar::FileAndStatus const& fileAndStatus,
+        Roar::ServeOptions<SlashServer>& options)
+    {
+        return Roar::ServeDecision::Continue;
+    }
+
     class ServeTests
         : public CommonServerSetup
         , public ::testing::Test
@@ -293,6 +349,24 @@ namespace Roar::Tests
       protected:
         std::shared_ptr<ServingListener> listener_;
         std::shared_ptr<ServingListener> listenerSecure_;
+    };
+
+    class SlashServeTests
+        : public CommonServerSetup
+        , public ::testing::Test
+    {
+      protected:
+        using CommonServerSetup::url;
+
+        void SetUp() override
+        {
+            makeDefaultServer();
+            makeSecureServer();
+            listener_ = server_->installRequestListener<SlashServer>();
+        }
+
+      protected:
+        std::shared_ptr<SlashServer> listener_;
     };
 
     TEST_F(ServeTests, CanMakeHeadRequest)
@@ -536,5 +610,14 @@ namespace Roar::Tests
                              .get(url("/allAllowed/file.txt"));
         EXPECT_EQ(res.code(), boost::beast::http::status::partial_content);
         EXPECT_EQ(body, std::string{ServingListener::DummyFileContent}.substr(1, 2));
+    }
+
+    TEST_F(SlashServeTests, CanServeSlash)
+    {
+        std::string body;
+        const auto res = Curl::Request{}.sink(body).get(url("/index.html"));
+        EXPECT_EQ(res.code(), boost::beast::http::status::ok);
+        const auto res2 = Curl::Request{}.sink(body).get(url("/"));
+        EXPECT_EQ(res2.code(), boost::beast::http::status::ok);
     }
 }

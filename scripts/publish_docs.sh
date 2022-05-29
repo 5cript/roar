@@ -17,4 +17,5 @@ rsync -rts ./build/clang_debug/docs/ gh-pages
 # Do manually:
 # cd gh-pages
 # git add .
+# git commit -m "Update documentation."
 # pit push
