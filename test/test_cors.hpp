@@ -17,32 +17,32 @@ namespace Roar::Tests
         ROAR_MAKE_LISTENER(CorsListener);
 
         ROAR_GET(withCors)
-        ({{
+        ({
             .path = "/permissiveCors",
             .routeOptions =
                 {
                     .cors = makePermissiveCorsSettings("get"),
                 },
-        }});
+        });
         ROAR_GET(withUnsecureCors)
-        ({{
+        ({
             .path = "/unsecurePermissiveCors",
             .routeOptions =
                 {
                     .allowUnsecure = true,
                     .cors = makePermissiveCorsSettings("get"),
                 },
-        }});
+        });
         ROAR_GET(noCors)
-        ({{
+        ({
             .path = "/noCors",
             .routeOptions =
                 {
                     .cors = std::nullopt,
                 },
-        }});
+        });
         ROAR_GET(withCustomCors)
-        ({{
+        ({
             .path = "/customCors",
             .routeOptions =
                 {
@@ -66,11 +66,11 @@ namespace Roar::Tests
                         .allowCredentials = false,
                     },
                 },
-        }});
+        });
         ROAR_GET(noCorsByDefault)
-        ({{
+        ({
             .path = "/noCorsByDefault",
-        }});
+        });
 
         void respondDefault(Session& session, EmptyBodyRequest&& req)
         {

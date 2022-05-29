@@ -21,8 +21,8 @@ namespace Roar::Tests
       private:
         ROAR_MAKE_LISTENER(ReadingTestListener);
 
-        ROAR_POST(staticString)({{.path = "/staticString"}});
-        ROAR_PUT(failPut)({{.path = "/failPut"}});
+        ROAR_POST(staticString)({.path = "/staticString"});
+        ROAR_PUT(failPut)({.path = "/failPut"});
 
       private:
         BOOST_DESCRIBE_CLASS(ReadingTestListener, (), (), (), (roar_staticString, roar_failPut))

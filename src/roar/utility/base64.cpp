@@ -23,6 +23,13 @@ namespace Roar
     {
         std::string result(base64::decoded_size(base64String.size()), '\0');
         base64::decode(result.data(), base64String.data(), base64String.size());
+        auto i = std::rbegin(result);
+        for (; i != std::rend(result); ++i)
+        {
+            if (*i != '\0')
+                break;
+        }
+        result.erase(i.base(), result.end());
         return result;
     }
 }

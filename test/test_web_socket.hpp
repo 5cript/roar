@@ -22,15 +22,15 @@ namespace Roar::Tests
         ROAR_MAKE_LISTENER(WebsocketListener);
 
         ROAR_GET(wsRoute)
-        ({{.path = "/ws",
-           .routeOptions = {
-               .expectUpgrade = true,
-           }}});
+        ({.path = "/ws",
+          .routeOptions = {
+              .expectUpgrade = true,
+          }});
 
         ROAR_GET(notWsRoute)
-        ({{
+        ({
             .path = "/notWs",
-        }});
+        });
 
       public:
         std::shared_ptr<WebsocketSession> ws;

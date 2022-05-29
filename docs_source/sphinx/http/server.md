@@ -27,6 +27,16 @@ int main()
     // Create server.
     Roar::Server server{{.executor = pool.executor()}};
 
+    // SSL Server (you can provide your own SSL Context for more options.)
+    // Roar::Server server{{
+    //     .executor = pool.executor()
+    //     .sslContext = makeSslContext(SslContextCreationParameters{
+    //         .certificate = std::string_view{"certificate string here"},
+    //         .privateKey = std::string_view{"private key here"},
+    //         .password = keyPassphrase,
+    //     })
+    // }};
+
     // stop the thread_pool on scope exit to guarantee that all asynchronous tasks are finished before the server is
     // destroyed.
     const auto shutdownPool = Roar::ScopeExit{[&pool]() {
@@ -336,12 +346,11 @@ class FileServer
     ROAR_SERVE(serveMyDirectory)
     ({
         // RouteOptions, that are also present in normal routes.
-        {
-            .path = "/",
-            .routeOptions = {.allowUnsecure = false},
-        },
+        .path = "/",
+        .routeOptions = {.allowUnsecure = false},
+
         // ServeOptions, these can also be set on a per session basis. Provide defaults here:
-        {
+        .serveOptions = {
             // Allow GET requests for file downloads?
             .allowDownload = true,
 

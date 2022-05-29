@@ -104,7 +104,7 @@ namespace Roar
                 describe_members<RequestListenerT, boost::describe::mod_any_access | boost::describe::mod_static>;
             std::unordered_multimap<boost::beast::http::verb, ProtoRoute> extractedRoutes;
             boost::mp11::mp_for_each<routes>([&extractedRoutes, &listener, this]<typename T>(T route) {
-                addRoute(listener, extractedRoutes, *route.pointer);
+                this->addRoute(listener, extractedRoutes, *route.pointer);
             });
             addRequestListenerToRouter(std::move(extractedRoutes));
             return listener;

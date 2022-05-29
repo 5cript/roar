@@ -66,16 +66,18 @@ namespace Roar::Tests
 
         ROAR_SERVE(serve1)
         ({
-            {.path = "/1", .routeOptions = {.allowUnsecure = false}},
-            {
-                .allowDownload = true,
-                .allowUpload = false,
-                .allowOverwrite = false,
-                .allowDelete = false,
-                .allowDeleteOfNonEmptyDirectories = false,
-                .allowListing = false,
-                .pathProvider = &ServingListener::alternativeSupplier_,
-            },
+            .path = "/1",
+            .routeOptions = {.allowUnsecure = false},
+            .serveOptions =
+                {
+                    .allowDownload = true,
+                    .allowUpload = false,
+                    .allowOverwrite = false,
+                    .allowDelete = false,
+                    .allowDeleteOfNonEmptyDirectories = false,
+                    .allowListing = false,
+                    .pathProvider = &ServingListener::alternativeSupplier_,
+                },
         });
         ROAR_SERVE(serve2)("/2", &ServingListener::pathSupplier);
         ROAR_SERVE(serveDeny)("/deny", &ServingListener::pathSupplier2);
@@ -83,67 +85,73 @@ namespace Roar::Tests
         ROAR_SERVE(deep)("/deep", &ServingListener::pathDeep);
         ROAR_SERVE(allAllowed)
         ({
-            {.path = "/allAllowed", .routeOptions = {.allowUnsecure = true}},
-            {
-                .allowDownload = true,
-                .allowUpload = true,
-                .allowOverwrite = true,
-                .allowDelete = true,
-                .allowDeleteOfNonEmptyDirectories = true,
-                .allowListing = true,
-                .pathProvider = &ServingListener::pathSupplier,
-            },
+            .path = "/allAllowed",
+            .routeOptions = {.allowUnsecure = true},
+            .serveOptions =
+                {
+                    .allowDownload = true,
+                    .allowUpload = true,
+                    .allowOverwrite = true,
+                    .allowDelete = true,
+                    .allowDeleteOfNonEmptyDirectories = true,
+                    .allowListing = true,
+                    .pathProvider = &ServingListener::pathSupplier,
+                },
         });
         ROAR_SERVE(nothingAllowed)
         ({
-            {.path = "/nothingAllowed"},
-            {
-                .allowDownload = false,
-                .allowUpload = false,
-                .allowOverwrite = false,
-                .allowDelete = false,
-                .allowDeleteOfNonEmptyDirectories = false,
-                .allowListing = false,
-                .pathProvider = &ServingListener::pathSupplier,
-            },
+            .path = "/nothingAllowed",
+            .serveOptions =
+                {
+                    .allowDownload = false,
+                    .allowUpload = false,
+                    .allowOverwrite = false,
+                    .allowDelete = false,
+                    .allowDeleteOfNonEmptyDirectories = false,
+                    .allowListing = false,
+                    .pathProvider = &ServingListener::pathSupplier,
+                },
         });
         ROAR_SERVE(deleteAllowedButNotDirectories)
         ({
-            {.path = "/deleteAllowedButNotDirectories"},
-            {
-                .allowDownload = false,
-                .allowUpload = false,
-                .allowDelete = true,
-                .allowDeleteOfNonEmptyDirectories = false,
-                .allowListing = false,
-                .pathProvider = &ServingListener::pathSupplier,
-            },
+            .path = "/deleteAllowedButNotDirectories",
+            .serveOptions =
+                {
+                    .allowDownload = false,
+                    .allowUpload = false,
+                    .allowDelete = true,
+                    .allowDeleteOfNonEmptyDirectories = false,
+                    .allowListing = false,
+                    .pathProvider = &ServingListener::pathSupplier,
+                },
         });
         ROAR_SERVE(overwriteNotAllowed)
         ({
-            {.path = "/overwriteNotAllowed"},
-            {
-                .allowDownload = false,
-                .allowUpload = true,
-                .allowOverwrite = false,
-                .allowDelete = false,
-                .allowDeleteOfNonEmptyDirectories = false,
-                .allowListing = false,
-                .pathProvider = &ServingListener::pathSupplier,
-            },
+            .path = "/overwriteNotAllowed",
+            .serveOptions =
+                {
+                    .allowDownload = false,
+                    .allowUpload = true,
+                    .allowOverwrite = false,
+                    .allowDelete = false,
+                    .allowDeleteOfNonEmptyDirectories = false,
+                    .allowListing = false,
+                    .pathProvider = &ServingListener::pathSupplier,
+                },
         });
         ROAR_SERVE(nothingIsAllowedButIsOverruled)
         ({
-            {.path = "/nothingIsAllowedButIsOverruled"},
-            {
-                .allowDownload = false,
-                .allowUpload = false,
-                .allowOverwrite = false,
-                .allowDelete = false,
-                .allowDeleteOfNonEmptyDirectories = false,
-                .allowListing = false,
-                .pathProvider = &ServingListener::pathSupplier,
-            },
+            .path = "/nothingIsAllowedButIsOverruled",
+            .serveOptions =
+                {
+                    .allowDownload = false,
+                    .allowUpload = false,
+                    .allowOverwrite = false,
+                    .allowDelete = false,
+                    .allowDeleteOfNonEmptyDirectories = false,
+                    .allowListing = false,
+                    .pathProvider = &ServingListener::pathSupplier,
+                },
         });
 
       private: // reflection.
