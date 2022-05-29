@@ -77,9 +77,10 @@ namespace Roar
             return unresolvedPath;
 
         auto path = unresolvedPath;
+        auto lowerPath = to_lower_copy(path.string());
 
-        auto tryAndMap = [&path, &unresolvedPath](auto needle, std::filesystem::path (*func)()) {
-            if (to_lower_copy(path.string()).starts_with(needle))
+        auto tryAndMap = [&lowerPath, &path, &unresolvedPath](auto needle, std::filesystem::path (*func)()) {
+            if (lowerPath.starts_with(needle))
             {
                 path = std::accumulate(
                     std::next(std::begin(unresolvedPath)),
