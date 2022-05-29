@@ -22,6 +22,8 @@ add_library(roar STATIC
     curl/response.cpp
     utility/url.cpp
     utility/base64.cpp
+    utility/shutdown_barrier.cpp
+    utility/sha.cpp
 )
 
 include(../../cmake/curl.cmake)
