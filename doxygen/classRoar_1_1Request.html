@@ -123,6 +123,21 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1bf698f2a8d9f785360069c876a8ce61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f607e494617fdd7b82f419441558642"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Request.html#a3f607e494617fdd7b82f419441558642">contentLength</a> () const</td></tr>
 <tr class="separator:a3f607e494617fdd7b82f419441558642"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a387075f9b16f0e35ce6267b418a08909"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structRoar_1_1Ranges.html">Ranges</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Request.html#a387075f9b16f0e35ce6267b418a08909">ranges</a> () const</td></tr>
+<tr class="memdesc:a387075f9b16f0e35ce6267b418a08909"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extracts the Range header.  <a href="classRoar_1_1Request.html#a387075f9b16f0e35ce6267b418a08909">More...</a><br /></td></tr>
+<tr class="separator:a387075f9b16f0e35ce6267b418a08909"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a958f56d6ed5e314c4c402ad252027f66"><td class="memItemLeft" align="right" valign="top">std::optional&lt; AuthorizationScheme &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Request.html#a958f56d6ed5e314c4c402ad252027f66">authorizationScheme</a> () const</td></tr>
+<tr class="memdesc:a958f56d6ed5e314c4c402ad252027f66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the authorization scheme of the <a class="el" href="classRoar_1_1Authorization.html">Authorization</a> header if it exists.  <a href="classRoar_1_1Request.html#a958f56d6ed5e314c4c402ad252027f66">More...</a><br /></td></tr>
+<tr class="separator:a958f56d6ed5e314c4c402ad252027f66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d6d0bb6239435fdeb792f839330c7c0"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structRoar_1_1BasicAuth.html">BasicAuth</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Request.html#a7d6d0bb6239435fdeb792f839330c7c0">basicAuth</a> () const</td></tr>
+<tr class="memdesc:a7d6d0bb6239435fdeb792f839330c7c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a basic auth object if the authorization scheme is "Basic".  <a href="classRoar_1_1Request.html#a7d6d0bb6239435fdeb792f839330c7c0">More...</a><br /></td></tr>
+<tr class="separator:a7d6d0bb6239435fdeb792f839330c7c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3e59589fbae716b2a61da024a777711"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structRoar_1_1DigestAuth.html">DigestAuth</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Request.html#ad3e59589fbae716b2a61da024a777711">digestAuth</a> () const</td></tr>
+<tr class="memdesc:ad3e59589fbae716b2a61da024a777711"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a digest auth object with all digest auth information.  <a href="classRoar_1_1Request.html#ad3e59589fbae716b2a61da024a777711">More...</a><br /></td></tr>
+<tr class="separator:ad3e59589fbae716b2a61da024a777711"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef3992c68f6e2422106b83f434a8e67b"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Request.html#aef3992c68f6e2422106b83f434a8e67b">bearerAuth</a> () const</td></tr>
+<tr class="memdesc:aef3992c68f6e2422106b83f434a8e67b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns token data of bearer authentication method.  <a href="classRoar_1_1Request.html#aef3992c68f6e2422106b83f434a8e67b">More...</a><br /></td></tr>
+<tr class="separator:aef3992c68f6e2422106b83f434a8e67b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -259,6 +274,93 @@ template&lt;typename BodyT &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a958f56d6ed5e314c4c402ad252027f66" name="a958f56d6ed5e314c4c402ad252027f66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a958f56d6ed5e314c4c402ad252027f66">&#9670;&nbsp;</a></span>authorizationScheme()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename BodyT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; AuthorizationScheme &gt; <a class="el" href="classRoar_1_1Request.html">Roar::Request</a>&lt; BodyT &gt;::authorizationScheme </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the authorization scheme of the <a class="el" href="classRoar_1_1Authorization.html">Authorization</a> header if it exists. </p>
+
+</div>
+</div>
+<a id="a7d6d0bb6239435fdeb792f839330c7c0" name="a7d6d0bb6239435fdeb792f839330c7c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d6d0bb6239435fdeb792f839330c7c0">&#9670;&nbsp;</a></span>basicAuth()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename BodyT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; <a class="el" href="structRoar_1_1BasicAuth.html">BasicAuth</a> &gt; <a class="el" href="classRoar_1_1Request.html">Roar::Request</a>&lt; BodyT &gt;::basicAuth </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns a basic auth object if the authorization scheme is "Basic". </p>
+
+</div>
+</div>
+<a id="aef3992c68f6e2422106b83f434a8e67b" name="aef3992c68f6e2422106b83f434a8e67b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef3992c68f6e2422106b83f434a8e67b">&#9670;&nbsp;</a></span>bearerAuth()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename BodyT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; std::string &gt; <a class="el" href="classRoar_1_1Request.html">Roar::Request</a>&lt; BodyT &gt;::bearerAuth </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns token data of bearer authentication method. </p>
+
+</div>
+</div>
 <a id="a3f607e494617fdd7b82f419441558642" name="a3f607e494617fdd7b82f419441558642"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3f607e494617fdd7b82f419441558642">&#9670;&nbsp;</a></span>contentLength()</h2>
 
@@ -283,6 +385,35 @@ template&lt;typename BodyT &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad3e59589fbae716b2a61da024a777711" name="ad3e59589fbae716b2a61da024a777711"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3e59589fbae716b2a61da024a777711">&#9670;&nbsp;</a></span>digestAuth()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename BodyT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; <a class="el" href="structRoar_1_1DigestAuth.html">DigestAuth</a> &gt; <a class="el" href="classRoar_1_1Request.html">Roar::Request</a>&lt; BodyT &gt;::digestAuth </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns a digest auth object with all digest auth information. </p>
 
 </div>
 </div>
@@ -534,6 +665,36 @@ template&lt;typename BodyT &gt; </div>
 
 <p>Returns the query part of the url as an unordered_map&lt;string, string&gt;. </p>
 <dl class="section return"><dt>Returns</dt><dd>auto const&amp; The query part. </dd></dl>
+
+</div>
+</div>
+<a id="a387075f9b16f0e35ce6267b418a08909" name="a387075f9b16f0e35ce6267b418a08909"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a387075f9b16f0e35ce6267b418a08909">&#9670;&nbsp;</a></span>ranges()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename BodyT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; <a class="el" href="structRoar_1_1Ranges.html">Ranges</a> &gt; <a class="el" href="classRoar_1_1Request.html">Roar::Request</a>&lt; BodyT &gt;::ranges </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Extracts the Range header. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structRoar_1_1Ranges.html">Ranges</a> a parsed format of the range header. </dd></dl>
 
 </div>
 </div>

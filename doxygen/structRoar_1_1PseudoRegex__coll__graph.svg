@@ -24,7 +24,7 @@
 <!-- Node2 -->
 <g id="node2" class="node">
 <title>Node2</title>
-<g id="a_node2"><a xlink:title=" ">
+<g id="a_node2"><a xlink:href="classchar.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="8,-105.5 8,-162.5 43,-162.5 43,-105.5 8,-105.5"/>
 <text text-anchor="middle" x="25.5" y="-150.5" font-family="Helvetica,sans-Serif" font-size="10.00">char</text>
 <polyline fill="none" stroke="black" points="8,-143.5 43,-143.5 "/>

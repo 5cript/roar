@@ -79,7 +79,7 @@ $(function() {
 <div class="line">    const auto response = Roar::Curl::Request{}</div>
 <div class="line">        .sink(responseBody)</div>
 <div class="line">        .verbose()</div>
-<div class="line">        .setHeaderField(&quot;Content-Type&quot;, &quot;text/plain&quot;)</div>
+<div class="line">        .setHeader(&quot;Content-Type&quot;, &quot;text/plain&quot;)</div>
 <div class="line">        .source(&quot;Hi&quot;)</div>
 <div class="line">        .post(&quot;https://localhost:8080&quot;)</div>
 <div class="line">    ;</div>

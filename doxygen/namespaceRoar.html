@@ -67,8 +67,7 @@ $(function() {
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
-<a href="#func-members">Functions</a> &#124;
-<a href="#var-members">Variables</a>  </div>
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">Roar Namespace Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -85,13 +84,21 @@ Namespaces</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespaceRoar_1_1Literals_1_1MemoryLiterals"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRoar_1_1Literals_1_1MemoryLiterals.html">MemoryLiterals</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespaceRoar_1_1Parser"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRoar_1_1Parser.html">Parser</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespaceRoar_1_1Literals_1_1RegexLiterals"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRoar_1_1Literals_1_1RegexLiterals.html">RegexLiterals</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Authorization.html">Authorization</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1BasicAuth.html">BasicAuth</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1CorsSettings.html">CorsSettings</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Settings object to control CORS requests.  <a href="structRoar_1_1CorsSettings.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1DigestAuth.html">DigestAuth</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1Error.html">Error</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Holds errors that are produced asynchronously anywhere.  <a href="structRoar_1_1Error.html#details">More...</a><br /></td></tr>
@@ -112,6 +119,11 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1PseudoRegex.html">PseudoRegex</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1RangeFileBody.html">RangeFileBody</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This body is a file body, but with range request support.  <a href="classRoar_1_1RangeFileBody.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1Ranges.html">Ranges</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Request.html">Request</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class extends the boost::beast::http::request&lt;BodyT&gt; with additional convenience.  <a href="classRoar_1_1Request.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -121,9 +133,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A route represents the mapping of a verb+path to a user provided function.  <a href="classRoar_1_1Route.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1RouteInfo.html">RouteInfo</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1RouteInfoBase.html">RouteInfoBase</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class is what is used in ROAR_GET, ROAR_PUT, ... requests All options you can set for routes behind these macros are part of this object.  <a href="structRoar_1_1RouteInfoBase.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class is what is used in ROAR_GET, ROAR_PUT, ... requests All options you can set for routes behind these macros are part of this object.  <a href="structRoar_1_1RouteInfo.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1RouteOptions.html">RouteOptions</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Options that modify the server behavior for a given route.  <a href="structRoar_1_1RouteOptions.html#details">More...</a><br /></td></tr>
@@ -148,8 +158,6 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1StandardTextResponseProvider.html">StandardTextResponseProvider</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This standard response provider implementation produces very simple text responses.  <a href="classRoar_1_1StandardTextResponseProvider.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1TypeWrapper.html">TypeWrapper</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1Url.html">Url</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -196,17 +204,20 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a833c45b27b0d05057aecc2037005d027"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRoar.html#a833c45b27b0d05057aecc2037005d027">init</a> (boost::beast::error_code &amp;ec)</td></tr>
-<tr class="separator:a833c45b27b0d05057aecc2037005d027"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d92576ac07f47a876a677e458ad541b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRoar.html#a1d92576ac07f47a876a677e458ad541b">BOOST_DEFINE_ENUM</a> (AuthorizationScheme, Basic, Bearer, Digest, Hoba, Mutual, Ntlm, Vapid, Scram, Aws4_Hmac_Sha256, Other)</td></tr>
+<tr class="separator:a1d92576ac07f47a876a677e458ad541b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa133fe06512a1feb78afbc2ce4635916"><td class="memItemLeft" align="right" valign="top">AuthorizationScheme&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRoar.html#aa133fe06512a1feb78afbc2ce4635916">authorizationSchemeFromString</a> (std::string const &amp;)</td></tr>
+<tr class="separator:aa133fe06512a1feb78afbc2ce4635916"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f116a872d79ac61a3777ba39094f3a4"><td class="memItemLeft" align="right" valign="top">AuthorizationScheme&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRoar.html#a9f116a872d79ac61a3777ba39094f3a4">authorizationSchemeFromString</a> (std::string_view)</td></tr>
+<tr class="separator:a9f116a872d79ac61a3777ba39094f3a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39712214928efdc7711a386cd731fb98"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRoar.html#a39712214928efdc7711a386cd731fb98">to_string</a> (AuthorizationScheme scheme)</td></tr>
+<tr class="separator:a39712214928efdc7711a386cd731fb98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31a9e9bd9037bffdb8de38c4433f21a1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structRoar_1_1CorsSettings.html">CorsSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRoar.html#a31a9e9bd9037bffdb8de38c4433f21a1">makePermissiveCorsSettings</a> (std::string method)</td></tr>
 <tr class="memdesc:a31a9e9bd9037bffdb8de38c4433f21a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reflects all requested headers and origin or sets the Kleene star. Is as permissive as possible. Least secure option.  <a href="namespaceRoar.html#a31a9e9bd9037bffdb8de38c4433f21a1">More...</a><br /></td></tr>
 <tr class="separator:a31a9e9bd9037bffdb8de38c4433f21a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e0c155969f8936327a7a8cd81ff36fb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structRoar_1_1CorsSettings.html">CorsSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRoar.html#a8e0c155969f8936327a7a8cd81ff36fb">makePermissiveCorsSettings</a> (boost::beast::http::verb method)</td></tr>
 <tr class="memdesc:a8e0c155969f8936327a7a8cd81ff36fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as the <a class="el" href="namespaceRoar.html#a31a9e9bd9037bffdb8de38c4433f21a1" title="Reflects all requested headers and origin or sets the Kleene star. Is as permissive as possible....">makePermissiveCorsSettings(std::string method)</a> overload.  <a href="namespaceRoar.html#a8e0c155969f8936327a7a8cd81ff36fb">More...</a><br /></td></tr>
 <tr class="separator:a8e0c155969f8936327a7a8cd81ff36fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0150333aab61dd97b588478a2057730a"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:a0150333aab61dd97b588478a2057730a"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceRoar.html#a0150333aab61dd97b588478a2057730a">typeof</a> (T &amp;&amp;)</td></tr>
-<tr class="separator:a0150333aab61dd97b588478a2057730a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad547ce2c66e76f5a1f67ddedb1c25513"><td class="memTemplParams" colspan="2">template&lt;typename StreamT &gt; </td></tr>
 <tr class="memitem:ad547ce2c66e76f5a1f67ddedb1c25513"><td class="memTemplItemLeft" align="right" valign="top">StreamT &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceRoar.html#ad547ce2c66e76f5a1f67ddedb1c25513">operator&lt;&lt;</a> (StreamT &amp;stream, <a class="el" href="structRoar_1_1Error.html">Error</a> error)</td></tr>
 <tr class="separator:ad547ce2c66e76f5a1f67ddedb1c25513"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -223,7 +234,7 @@ Functions</h2></td></tr>
 <tr class="separator:ac8bbcf97905d25baac1de036534dcceb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab1e442c03460383ef1520b789e4146ff"><td class="memItemLeft" align="right" valign="top">constexpr unsigned long long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRoar_1_1Literals_1_1MemoryLiterals.html#ab1e442c03460383ef1520b789e4146ff">operator&quot;&quot;_MemoryPage</a> (unsigned long long n)</td></tr>
 <tr class="separator:ab1e442c03460383ef1520b789e4146ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b39b241e2a3252fcac223d0c9dee04d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structRoar_1_1PseudoRegex.html">PseudoRegex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRoar_1_1Literals_1_1RegexLiterals.html#a6b39b241e2a3252fcac223d0c9dee04d">operator&quot;&quot;_rgx</a> (char const *regexString, std::size_t length)</td></tr>
+<tr class="memitem:a6b39b241e2a3252fcac223d0c9dee04d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structRoar_1_1PseudoRegex.html">PseudoRegex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRoar_1_1Literals_1_1RegexLiterals.html#a6b39b241e2a3252fcac223d0c9dee04d">operator&quot;&quot;_rgx</a> (<a class="el" href="classchar.html">char</a> const *regexString, std::size_t length)</td></tr>
 <tr class="separator:a6b39b241e2a3252fcac223d0c9dee04d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af6ab509a41deb674b0859a6a3590c55c"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRoar.html#af6ab509a41deb674b0859a6a3590c55c">extensionToMime</a> (std::string const &amp;extension)</td></tr>
 <tr class="separator:af6ab509a41deb674b0859a6a3590c55c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -248,9 +259,16 @@ Functions</h2></td></tr>
 <tr class="memitem:afe3436898844987b847b5261afb12f9c"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRoar.html#afe3436898844987b847b5261afb12f9c">base64Decode</a> (std::string const &amp;base64String)</td></tr>
 <tr class="memdesc:afe3436898844987b847b5261afb12f9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode base64 to string.  <a href="namespaceRoar.html#afe3436898844987b847b5261afb12f9c">More...</a><br /></td></tr>
 <tr class="separator:afe3436898844987b847b5261afb12f9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07add533e3274e5d46ae0003b9d7b79d"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRoar.html#a07add533e3274e5d46ae0003b9d7b79d">base64Decode</a> (std::string_view base64String)</td></tr>
+<tr class="memdesc:a07add533e3274e5d46ae0003b9d7b79d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode base64 to string.  <a href="namespaceRoar.html#a07add533e3274e5d46ae0003b9d7b79d">More...</a><br /></td></tr>
+<tr class="separator:a07add533e3274e5d46ae0003b9d7b79d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af53ebb4f8223bb0cfa52428dfa57bad8"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:af53ebb4f8223bb0cfa52428dfa57bad8"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceRoar.html#af53ebb4f8223bb0cfa52428dfa57bad8">ScopeExit</a> (T) -&gt; <a class="el" href="classRoar_1_1ScopeExit.html">ScopeExit</a>&lt; T &gt;</td></tr>
 <tr class="separator:af53ebb4f8223bb0cfa52428dfa57bad8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25170bdbceb8aad7fd40d6f4e04bf375"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRoar.html#a25170bdbceb8aad7fd40d6f4e04bf375">sha256</a> (std::string_view data)</td></tr>
+<tr class="separator:a25170bdbceb8aad7fd40d6f4e04bf375"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acfd4db4817ff407d96ccf212e17b0a81"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRoar.html#acfd4db4817ff407d96ccf212e17b0a81">sha512</a> (std::string_view data)</td></tr>
+<tr class="separator:acfd4db4817ff407d96ccf212e17b0a81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80978fb0aa5968e0d5f9e0682bd287eb"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, std::string &gt; const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRoar.html#a80978fb0aa5968e0d5f9e0682bd287eb">getMimeMapping</a> ()</td></tr>
 <tr class="separator:a80978fb0aa5968e0d5f9e0682bd287eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac116bc925fe050e82b6e1f13194be163"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRoar.html#ac116bc925fe050e82b6e1f13194be163">ROAR_PIMPL_SPECIAL_FUNCTIONS_IMPL</a> (<a class="el" href="classRoar_1_1Route.html">Route</a>)</td></tr>
@@ -261,12 +279,6 @@ Functions</h2></td></tr>
 <tr class="separator:a6221462b495c1cbb72298b2d0e8fe05d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4cd571f406510f57ab97b5016a3f4797"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceRoar.html#a4cd571f406510f57ab97b5016a3f4797">ROAR_PIMPL_SPECIAL_FUNCTIONS_IMPL</a> (<a class="el" href="classRoar_1_1Session.html">Session</a>)</td></tr>
 <tr class="separator:a4cd571f406510f57ab97b5016a3f4797"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
-Variables</h2></td></tr>
-<tr class="memitem:a7a331395c296b4077a311da601d1f4f7"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:a7a331395c296b4077a311da601d1f4f7"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceRoar.html#a7a331395c296b4077a311da601d1f4f7">type</a> = <a class="el" href="structRoar_1_1TypeWrapper.html">TypeWrapper</a>&lt;T&gt;{}</td></tr>
-<tr class="separator:a7a331395c296b4077a311da601d1f4f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
 <a id="ab598fb110e75803c00fb724ff377c7d7" name="ab598fb110e75803c00fb724ff377c7d7"></a>
@@ -394,8 +406,44 @@ template&lt;typename RequestListenerT &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="aa133fe06512a1feb78afbc2ce4635916" name="aa133fe06512a1feb78afbc2ce4635916"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa133fe06512a1feb78afbc2ce4635916">&#9670;&nbsp;</a></span>authorizationSchemeFromString() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">AuthorizationScheme Roar::authorizationSchemeFromString </td>
+          <td>(</td>
+          <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9f116a872d79ac61a3777ba39094f3a4" name="a9f116a872d79ac61a3777ba39094f3a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f116a872d79ac61a3777ba39094f3a4">&#9670;&nbsp;</a></span>authorizationSchemeFromString() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">AuthorizationScheme Roar::authorizationSchemeFromString </td>
+          <td>(</td>
+          <td class="paramtype">std::string_view&#160;</td>
+          <td class="paramname"><em>view</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="afe3436898844987b847b5261afb12f9c" name="afe3436898844987b847b5261afb12f9c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afe3436898844987b847b5261afb12f9c">&#9670;&nbsp;</a></span>base64Decode()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#afe3436898844987b847b5261afb12f9c">&#9670;&nbsp;</a></span>base64Decode() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -404,6 +452,33 @@ template&lt;typename RequestListenerT &gt; </div>
           <td class="memname">std::string Roar::base64Decode </td>
           <td>(</td>
           <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramname"><em>base64String</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Decode base64 to string. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">base64String</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::string </dd></dl>
+
+</div>
+</div>
+<a id="a07add533e3274e5d46ae0003b9d7b79d" name="a07add533e3274e5d46ae0003b9d7b79d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07add533e3274e5d46ae0003b9d7b79d">&#9670;&nbsp;</a></span>base64Decode() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Roar::base64Decode </td>
+          <td>(</td>
+          <td class="paramtype">std::string_view&#160;</td>
           <td class="paramname"><em>base64String</em></td><td>)</td>
           <td></td>
         </tr>
@@ -445,6 +520,88 @@ template&lt;typename RequestListenerT &gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>std::string </dd></dl>
+
+</div>
+</div>
+<a id="a1d92576ac07f47a876a677e458ad541b" name="a1d92576ac07f47a876a677e458ad541b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d92576ac07f47a876a677e458ad541b">&#9670;&nbsp;</a></span>BOOST_DEFINE_ENUM()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Roar::BOOST_DEFINE_ENUM </td>
+          <td>(</td>
+          <td class="paramtype">AuthorizationScheme&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Basic&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Bearer&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Digest&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Hoba&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Mutual&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ntlm&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vapid&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Scram&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Aws4_Hmac_Sha256&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Other&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -539,32 +696,6 @@ template&lt;typename RequestListenerT &gt; </div>
           <td></td>
         </tr>
       </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a833c45b27b0d05057aecc2037005d027" name="a833c45b27b0d05057aecc2037005d027"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a833c45b27b0d05057aecc2037005d027">&#9670;&nbsp;</a></span>init()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Roar::init </td>
-          <td>(</td>
-          <td class="paramtype">boost::beast::error_code &amp;&#160;</td>
-          <td class="paramname"><em>ec</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
@@ -816,30 +947,56 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a0150333aab61dd97b588478a2057730a" name="a0150333aab61dd97b588478a2057730a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0150333aab61dd97b588478a2057730a">&#9670;&nbsp;</a></span>typeof()</h2>
+<a id="a25170bdbceb8aad7fd40d6f4e04bf375" name="a25170bdbceb8aad7fd40d6f4e04bf375"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25170bdbceb8aad7fd40d6f4e04bf375">&#9670;&nbsp;</a></span>sha256()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<div class="memtemplate">
-template&lt;class T &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr auto Roar::typeof </td>
+          <td class="memname">std::optional&lt; std::string &gt; Roar::sha256 </td>
           <td>(</td>
-          <td class="paramtype">T &amp;&amp;&#160;</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">std::string_view&#160;</td>
+          <td class="paramname"><em>data</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acfd4db4817ff407d96ccf212e17b0a81" name="acfd4db4817ff407d96ccf212e17b0a81"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acfd4db4817ff407d96ccf212e17b0a81">&#9670;&nbsp;</a></span>sha512()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; std::string &gt; Roar::sha512 </td>
+          <td>(</td>
+          <td class="paramtype">std::string_view&#160;</td>
+          <td class="paramname"><em>data</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a39712214928efdc7711a386cd731fb98" name="a39712214928efdc7711a386cd731fb98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39712214928efdc7711a386cd731fb98">&#9670;&nbsp;</a></span>to_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Roar::to_string </td>
+          <td>(</td>
+          <td class="paramtype">AuthorizationScheme&#160;</td>
+          <td class="paramname"><em>scheme</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
 </div><div class="memdoc">
 
 </div>
@@ -900,31 +1057,6 @@ template&lt;typename HolderClassT , typename T &gt; </div>
           <td></td><td></td>
         </tr>
       </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Variable Documentation</h2>
-<a id="a7a331395c296b4077a311da601d1f4f7" name="a7a331395c296b4077a311da601d1f4f7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7a331395c296b4077a311da601d1f4f7">&#9670;&nbsp;</a></span>type</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class T &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr auto Roar::type = <a class="el" href="structRoar_1_1TypeWrapper.html">TypeWrapper</a>&lt;T&gt;{}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>

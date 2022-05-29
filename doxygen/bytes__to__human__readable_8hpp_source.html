@@ -76,31 +76,32 @@ $(function() {
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;cstddef&gt;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;cmath&gt;</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno"><a class="line" href="namespaceRoar_1_1Detail.html">    8</a></span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceRoar_1_1Detail.html">Roar::Detail</a></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceRoar_1_1Detail.html">Roar::Detail</a></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span>{</div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>    <span class="keyword">template</span> &lt;<span class="keywordtype">unsigned</span> Base&gt;</div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno"><a class="line" href="namespaceRoar_1_1Detail.html#afd6e6695ba556fa426ed3e8347937083">   11</a></span>    std::string <a class="code hl_function" href="namespaceRoar_1_1Detail.html#afd6e6695ba556fa426ed3e8347937083">bytesToHumanReadable</a>(std::uint64_t bytes)</div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    {</div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>        <span class="keyword">const</span> <span class="keyword">auto</span> log = std::logl(bytes) / std::logl(<a class="code hl_class" href="classBase.html">Base</a>);</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>        <span class="keywordtype">unsigned</span> floored = log;</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>        <span class="keywordtype">unsigned</span> floored = <span class="keyword">static_cast&lt;</span><span class="keywordtype">unsigned</span><span class="keyword">&gt;</span>(log);</div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>        <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i = 0; i &lt; floored; ++i)</div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>            bytes /= <a class="code hl_class" href="classBase.html">Base</a>;</div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>        <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (<a class="code hl_class" href="classBase.html">Base</a> == 1024)</div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        {</div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>            <span class="keyword">constexpr</span> <span class="keyword">const</span> <span class="keywordtype">char</span> units[8][4]{<span class="stringliteral">&quot;B&quot;</span>, <span class="stringliteral">&quot;KiB&quot;</span>, <span class="stringliteral">&quot;MiB&quot;</span>, <span class="stringliteral">&quot;GiB&quot;</span>, <span class="stringliteral">&quot;TiB&quot;</span>, <span class="stringliteral">&quot;PiB&quot;</span>, <span class="stringliteral">&quot;EiB&quot;</span>, <span class="stringliteral">&quot;ZiB&quot;</span>};</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>            <span class="keywordflow">return</span> std::to_string(bytes) + <span class="stringliteral">&quot; &quot;</span> + units[floored];</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>            <span class="keywordflow">return</span> <a class="code hl_function" href="namespaceRoar.html#a39712214928efdc7711a386cd731fb98">std::to_string</a>(bytes) + <span class="stringliteral">&quot; &quot;</span> + units[floored];</div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        }</div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        <span class="keywordflow">else</span></div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        {</div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>            <span class="keyword">constexpr</span> <span class="keyword">const</span> <span class="keywordtype">char</span> units[8][3]{<span class="stringliteral">&quot;b&quot;</span>, <span class="stringliteral">&quot;kb&quot;</span>, <span class="stringliteral">&quot;mb&quot;</span>, <span class="stringliteral">&quot;gb&quot;</span>, <span class="stringliteral">&quot;tb&quot;</span>, <span class="stringliteral">&quot;pb&quot;</span>, <span class="stringliteral">&quot;eb&quot;</span>, <span class="stringliteral">&quot;zb&quot;</span>};</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>            <span class="keywordflow">return</span> std::to_string(bytes) + <span class="stringliteral">&quot; &quot;</span> + units[floored];</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>            <span class="keywordflow">return</span> <a class="code hl_function" href="namespaceRoar.html#a39712214928efdc7711a386cd731fb98">std::to_string</a>(bytes) + <span class="stringliteral">&quot; &quot;</span> + units[floored];</div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        }</div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    }</div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>}</div>
 <div class="ttc" id="aclassBase_html"><div class="ttname"><a href="classBase.html">Base</a></div></div>
-<div class="ttc" id="anamespaceRoar_1_1Detail_html"><div class="ttname"><a href="namespaceRoar_1_1Detail.html">Roar::Detail</a></div><div class="ttdef"><b>Definition:</b> bytes_to_human_readable.hpp:9</div></div>
+<div class="ttc" id="anamespaceRoar_1_1Detail_html"><div class="ttname"><a href="namespaceRoar_1_1Detail.html">Roar::Detail</a></div><div class="ttdef"><b>Definition:</b> range_file_body.hpp:19</div></div>
 <div class="ttc" id="anamespaceRoar_1_1Detail_html_afd6e6695ba556fa426ed3e8347937083"><div class="ttname"><a href="namespaceRoar_1_1Detail.html#afd6e6695ba556fa426ed3e8347937083">Roar::Detail::bytesToHumanReadable</a></div><div class="ttdeci">std::string bytesToHumanReadable(std::uint64_t bytes)</div><div class="ttdef"><b>Definition:</b> bytes_to_human_readable.hpp:11</div></div>
+<div class="ttc" id="anamespaceRoar_html_a39712214928efdc7711a386cd731fb98"><div class="ttname"><a href="namespaceRoar.html#a39712214928efdc7711a386cd731fb98">Roar::to_string</a></div><div class="ttdeci">std::string to_string(AuthorizationScheme scheme)</div><div class="ttdef"><b>Definition:</b> authorization.cpp:33</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['operator_3d_3d_0',['operator==',['../structRoar_1_1TypeWrapper.html#ac4f8412aad8422e42c49f7623dfa5165',1,'Roar::TypeWrapper']]]
+  ['request_0',['Request',['../classRoar_1_1Curl_1_1Response.html#a5719d6ff12298e668b17796c87450d5b',1,'Roar::Curl::Response']]],
+  ['route_1',['Route',['../classRoar_1_1Session.html#a82eb8d8152124f42f8bad8770270f4fc',1,'Roar::Session']]]
 ];

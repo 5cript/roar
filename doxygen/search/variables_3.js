@@ -6,5 +6,6 @@ var searchData=
   ['defaultheaderlimit_3',['defaultHeaderLimit',['../classRoar_1_1Session.html#ad98bef3f572044a21aa7e101ddbf67f2',1,'Roar::Session']]],
   ['defaultlistingstyle_4',['defaultListingStyle',['../namespaceRoar_1_1Detail.html#ac282adf6b3e74593238687fc762eec83',1,'Roar::Detail']]],
   ['defaulttimeout_5',['defaultTimeout',['../classRoar_1_1WebsocketClient.html#a7551ccaf8b7375e64a67eda2d9950ae8',1,'Roar::WebsocketClient']]],
-  ['diffiehellmanparameters_6',['diffieHellmanParameters',['../structRoar_1_1SslContextCreationParameters.html#a628da0f738788548cbdc71778954cc69',1,'Roar::SslContextCreationParameters']]]
+  ['diffiehellmanparameters_6',['diffieHellmanParameters',['../structRoar_1_1SslContextCreationParameters.html#a628da0f738788548cbdc71778954cc69',1,'Roar::SslContextCreationParameters']]],
+  ['digestrule_7',['digestRule',['../namespaceRoar_1_1Parser.html#a881713cc361910977f9e023d80582841',1,'Roar::Parser']]]
 ];

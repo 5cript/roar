@@ -91,6 +91,16 @@ Minimal Setup Example</h2>
 <div class="line">    // Create server.</div>
 <div class="line">    Roar::Server server{{.executor = pool.executor()}};</div>
 <div class="line"> </div>
+<div class="line">    // SSL Server (you can provide your own SSL Context for more options.)</div>
+<div class="line">    // Roar::Server server{{</div>
+<div class="line">    //     .executor = pool.executor()</div>
+<div class="line">    //     .sslContext = makeSslContext(SslContextCreationParameters{</div>
+<div class="line">    //         .certificate = std::string_view{&quot;certificate string here&quot;},</div>
+<div class="line">    //         .privateKey = std::string_view{&quot;private key here&quot;},</div>
+<div class="line">    //         .password = keyPassphrase,</div>
+<div class="line">    //     })</div>
+<div class="line">    // }};</div>
+<div class="line"> </div>
 <div class="line">    // stop the thread_pool on scope exit to guarantee that all asynchronous tasks are finished before the server is</div>
 <div class="line">    // destroyed.</div>
 <div class="line">    const auto shutdownPool = Roar::ScopeExit{[&amp;pool]() {</div>
@@ -336,12 +346,11 @@ Serving Directories</h1>
 <div class="line">    ROAR_SERVE(serveMyDirectory)</div>
 <div class="line">    ({</div>
 <div class="line">        // RouteOptions, that are also present in normal routes.</div>
-<div class="line">        {</div>
-<div class="line">            .path = &quot;/&quot;,</div>
-<div class="line">            .routeOptions = {.allowUnsecure = false},</div>
-<div class="line">        },</div>
+<div class="line">        .path = &quot;/&quot;,</div>
+<div class="line">        .routeOptions = {.allowUnsecure = false},</div>
+<div class="line"> </div>
 <div class="line">        // ServeOptions, these can also be set on a per session basis. Provide defaults here:</div>
-<div class="line">        {</div>
+<div class="line">        .serveOptions = {</div>
 <div class="line">            // Allow GET requests for file downloads?</div>
 <div class="line">            .allowDownload = true,</div>
 <div class="line"> </div>

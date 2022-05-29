@@ -2,9 +2,9 @@ var searchData=
 [
   ['check_0',['check',['../classRoar_1_1Curl_1_1Request.html#a0c6cacef061ad4b660eed3321852177e',1,'Roar::Curl::Request']]],
   ['chunked_1',['chunked',['../classRoar_1_1Response.html#a9bb57cf0f088de7126096fec749aaf03',1,'Roar::Response::chunked()'],['../classRoar_1_1Session_1_1SendIntermediate.html#a7e7ad80d83bf4f5f39ab0278b66f0b27',1,'Roar::Session::SendIntermediate::chunked()']]],
-  ['close_2',['close',['../classRoar_1_1Session.html#ae0433c5b46b48f4dff9d5c3e5cf38512',1,'Roar::Session::close()'],['../classRoar_1_1WebsocketBase.html#a381774715bc84135a37e3a537d78e3ab',1,'Roar::WebsocketBase::close()']]],
+  ['close_2',['close',['../classRoar_1_1Detail_1_1RangeFileBodyImpl.html#a87104b860453e46f9d850c4375471a0c',1,'Roar::Detail::RangeFileBodyImpl::close()'],['../classRoar_1_1Session.html#ae0433c5b46b48f4dff9d5c3e5cf38512',1,'Roar::Session::close()'],['../classRoar_1_1WebsocketBase.html#a381774715bc84135a37e3a537d78e3ab',1,'Roar::WebsocketBase::close()']]],
   ['code_3',['code',['../classRoar_1_1Curl_1_1CurlError.html#a90b3fe5db64036f3b84cead4b9b771bc',1,'Roar::Curl::CurlError::code()'],['../classRoar_1_1Curl_1_1Response.html#a7e1b453dead4a22306075df9a25ee42e',1,'Roar::Curl::Response::code()']]],
-  ['commit_4',['commit',['../classRoar_1_1Session_1_1SendIntermediate.html#af8d7fb8eb399784f2652f6e6447e509c',1,'Roar::Session::SendIntermediate::commit()'],['../classRoar_1_1Session_1_1ReadIntermediate.html#ae2cf0e8f4e6b1a1852877ca806fafff7',1,'Roar::Session::ReadIntermediate::commit()']]],
+  ['commit_4',['commit',['../classRoar_1_1Session_1_1SendIntermediate.html#a1661b722f2a25309dfdccd92cee46850',1,'Roar::Session::SendIntermediate::commit()'],['../classRoar_1_1Session_1_1SendIntermediate.html#a5ce97e785b122feda6d2114a884d468b',1,'Roar::Session::SendIntermediate::commit()'],['../classRoar_1_1Session_1_1ReadIntermediate.html#ae2cf0e8f4e6b1a1852877ca806fafff7',1,'Roar::Session::ReadIntermediate::commit()']]],
   ['compare_5',['compare',['../classRoar_1_1Detail_1_1FixedString.html#a4a21309b19bcd431f2d2538a4afecdc5',1,'Roar::Detail::FixedString']]],
   ['connect_6',['connect',['../classRoar_1_1WebsocketClient.html#a887681acb1f156ce319f3c9d5e117ded',1,'Roar::WebsocketClient']]],
   ['connecttimeout_7',['connectTimeout',['../classRoar_1_1Curl_1_1Request.html#a5c4f204ef84320b127e48ff9a0457f4b',1,'Roar::Curl::Request']]],

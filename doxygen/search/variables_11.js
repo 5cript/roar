@@ -1,6 +1,28 @@
 var searchData=
 [
-  ['templates_5fpath_0',['templates_path',['../namespaceconf.html#ae850ae634911b713e036b43894fdd525',1,'conf']]],
-  ['timeout_1',['timeout',['../structRoar_1_1WebsocketClient_1_1ConnectParameters.html#aee7e2ec53607ee692a2a6fbf197e0474',1,'Roar::WebsocketClient::ConnectParameters']]],
-  ['type_2',['type',['../structRoar_1_1Curl_1_1VerboseLogEntry.html#a11f140918eee881cfab8195bd12aaf73',1,'Roar::Curl::VerboseLogEntry::type()'],['../namespaceRoar.html#a7a331395c296b4077a311da601d1f4f7',1,'Roar::type()']]]
+  ['scheme_0',['scheme',['../structRoar_1_1Url.html#a0d08719aa1d0e3bdcf9cdc4356473e0a',1,'Roar::Url']]],
+  ['scheme_5f_1',['scheme_',['../classRoar_1_1Authorization.html#a27258de99391c05c6413f1ee7a6527cf',1,'Roar::Authorization']]],
+  ['sequences_5f_2',['sequences_',['../classRoar_1_1Detail_1_1RangeFileBodyImpl.html#abbc916afea7cb8008480b9d281d0bf88',1,'Roar::Detail::RangeFileBodyImpl']]],
+  ['serializer_5f_3',['serializer_',['../classRoar_1_1Session_1_1SendIntermediate.html#a3d93da4499c0b1b370b3d8b91b5cd497',1,'Roar::Session::SendIntermediate']]],
+  ['serveinfo_5f_4',['serveInfo_',['../structRoar_1_1Detail_1_1DirectoryServerConstructionArgs.html#ab2010746fcf9e981ad4a2c802c4c74e4',1,'Roar::Detail::DirectoryServerConstructionArgs']]],
+  ['serveoptions_5',['serveOptions',['../structRoar_1_1ServeInfo.html#ad92d2ff8cbdbdcdda28452bbe74df031',1,'Roar::ServeInfo']]],
+  ['serverissecure_5f_6',['serverIsSecure_',['../structRoar_1_1Detail_1_1DirectoryServerConstructionArgs.html#a549563a63693cf8573d996cba53a4669',1,'Roar::Detail::DirectoryServerConstructionArgs']]],
+  ['serveroutes_7',['serveRoutes',['../structRoar_1_1Router_1_1Implementation.html#a88b80a5a201805c9238f727ac6cbe6b9',1,'Roar::Router::Implementation']]],
+  ['session_8',['Session',['../classRoar_1_1Session_1_1ReadIntermediate.html#a345b1cbfae807841e312b09bf1e6b080',1,'Roar::Session::ReadIntermediate']]],
+  ['session_5f_9',['session_',['../classRoar_1_1Session_1_1SendIntermediate.html#a75b7e77628c7a19103eb2430cb66c2e8',1,'Roar::Session::SendIntermediate::session_()'],['../classRoar_1_1Session_1_1ReadIntermediate.html#afe4ee00428c46cd458ca846de250f0f4',1,'Roar::Session::ReadIntermediate::session_()']]],
+  ['sessionfactory_10',['sessionFactory',['../structRoar_1_1Server_1_1Implementation.html#a1ba4837c48cd28cf83d9d5ce56bdac6f',1,'Roar::Server::Implementation']]],
+  ['sessiontimeout_11',['sessionTimeout',['../classRoar_1_1Session.html#af3909a76923bc3385e188a5b1b553da3',1,'Roar::Session']]],
+  ['sink_5f_12',['sink_',['../classRoar_1_1Curl_1_1Request.html#ae877f7217e42191318e333cfc8f21c92',1,'Roar::Curl::Request']]],
+  ['sinks_5f_13',['sinks_',['../classRoar_1_1Curl_1_1Request.html#a7c94a04fa5925a5820b924b2e74c8218',1,'Roar::Curl::Request']]],
+  ['size_14',['size',['../structRoar_1_1PseudoRegex.html#a5ebf4adf329845cf7222cb3c4e4b4bb3',1,'Roar::PseudoRegex']]],
+  ['source_5f_15',['source_',['../classRoar_1_1Curl_1_1Request.html#ac86b9bdbad19e84c22f876fb22ebbe94',1,'Roar::Curl::Request']]],
+  ['splitter_5f_16',['splitter_',['../classRoar_1_1Detail_1_1RangeFileBodyImpl.html#ad023e2a24ed9bee20d728ff22aeada6e',1,'Roar::Detail::RangeFileBodyImpl']]],
+  ['splitterlength_17',['SplitterLength',['../classRoar_1_1Detail_1_1RangeFileBodyImpl.html#a7c6bc8d5dec02b8f8f6df263d4ba7016',1,'Roar::Detail::RangeFileBodyImpl']]],
+  ['sslcontext_18',['sslContext',['../structRoar_1_1Server_1_1ConstructionArguments.html#ab1d2d3fc719a9ca01d4929b4490909c5',1,'Roar::Server::ConstructionArguments::sslContext()'],['../structRoar_1_1WebsocketClient_1_1ConstructionArguments.html#af5954533872e9acabb128c94a96e2e14',1,'Roar::WebsocketClient::ConstructionArguments::sslContext()'],['../structRoar_1_1Server_1_1Implementation.html#a615155ff83fb64c158a4ac62e4b43dd6',1,'Roar::Server::Implementation::sslContext()'],['../structRoar_1_1Factory_1_1Implementation.html#a87e6871edb52bb69816938a8330c8b73',1,'Roar::Factory::Implementation::sslContext()']]],
+  ['ssldetectiontimeout_19',['sslDetectionTimeout',['../classRoar_1_1Factory.html#a416e879cf9c028250e962d2571892553',1,'Roar::Factory']]],
+  ['standardresponseprovider_20',['standardResponseProvider',['../structRoar_1_1Server_1_1ConstructionArguments.html#a1d5e77668c672ccc3e1ebd1a7fe49bba',1,'Roar::Server::ConstructionArguments::standardResponseProvider()'],['../structRoar_1_1Router_1_1Implementation.html#adce95f6598ccb01e3a0c628accf1feff',1,'Roar::Router::Implementation::standardResponseProvider()'],['../structRoar_1_1Server_1_1Implementation.html#ad2c0b7d3a884b2a65dfc50c6a86cc12b',1,'Roar::Server::Implementation::standardResponseProvider()'],['../structRoar_1_1Session_1_1Implementation.html#a279b955f80bc791a86c47ab0192b5c74',1,'Roar::Session::Implementation::standardResponseProvider()']]],
+  ['start_21',['start',['../structRoar_1_1Detail_1_1RangeFileBodyImpl_1_1Sequence.html#ae07556c3df7ac2eaf8e6024da820d359',1,'Roar::Detail::RangeFileBodyImpl::Sequence::start()'],['../structRoar_1_1Ranges_1_1Range.html#a9eccc84c8d9f9a477c0a3c0f74d09d8d',1,'Roar::Ranges::Range::start()']]],
+  ['status_22',['status',['../structRoar_1_1FileAndStatus.html#af04467fe54bb32276ad1dc8ffeb36331',1,'Roar::FileAndStatus']]],
+  ['stream_23',['stream',['../structRoar_1_1Factory_1_1ProtoSession.html#a5144350630b5f39fe87805d3656bcf3a',1,'Roar::Factory::ProtoSession::stream()'],['../structRoar_1_1Session_1_1Implementation.html#a82ca9b349d788f0fa6ff84a9d46afe6e',1,'Roar::Session::Implementation::stream()']]],
+  ['stringroutes_24',['stringRoutes',['../structRoar_1_1Router_1_1Implementation.html#a6ddd2a2a458587b54bd34754499c8eb3',1,'Roar::Router::Implementation']]]
 ];

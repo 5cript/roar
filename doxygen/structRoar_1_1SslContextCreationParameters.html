@@ -77,7 +77,7 @@ $(function() {
 <div class="dynheader">
 Collaboration diagram for Roar::SslContextCreationParameters:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="structRoar_1_1SslContextCreationParameters__coll__graph.svg" width="316" height="272"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="structRoar_1_1SslContextCreationParameters__coll__graph.svg" width="535" height="243"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 <table class="memberdecls">
@@ -85,24 +85,24 @@ Collaboration diagram for Roar::SslContextCreationParameters:</div>
 Public Attributes</h2></td></tr>
 <tr class="memitem:ae48664e0c97866ab6de0f245183f3b72"><td class="memItemLeft" align="right" valign="top">boost::asio::ssl::context::method&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1SslContextCreationParameters.html#ae48664e0c97866ab6de0f245183f3b72">method</a> = boost::asio::ssl::context::tlsv13</td></tr>
 <tr class="separator:ae48664e0c97866ab6de0f245183f3b72"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b8c4ab722da72871d6053319fe03890"><td class="memItemLeft" align="right" valign="top">std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1SslContextCreationParameters.html#a8b8c4ab722da72871d6053319fe03890">certificate</a></td></tr>
-<tr class="separator:a8b8c4ab722da72871d6053319fe03890"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aabcf6ea01c7946e1e3e30ee92c7f7db4"><td class="memItemLeft" align="right" valign="top">std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1SslContextCreationParameters.html#aabcf6ea01c7946e1e3e30ee92c7f7db4">privateKey</a></td></tr>
-<tr class="separator:aabcf6ea01c7946e1e3e30ee92c7f7db4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2bd86224201ca80f0da9eac4bdfbe8f2"><td class="memItemLeft" align="right" valign="top">std::variant&lt; std::string_view, std::filesystem::path &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1SslContextCreationParameters.html#a2bd86224201ca80f0da9eac4bdfbe8f2">certificate</a></td></tr>
+<tr class="separator:a2bd86224201ca80f0da9eac4bdfbe8f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefeea4dc9c2c995b9c7195a1043b2b66"><td class="memItemLeft" align="right" valign="top">std::variant&lt; std::string_view, std::filesystem::path &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1SslContextCreationParameters.html#aefeea4dc9c2c995b9c7195a1043b2b66">privateKey</a></td></tr>
+<tr class="separator:aefeea4dc9c2c995b9c7195a1043b2b66"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a628da0f738788548cbdc71778954cc69"><td class="memItemLeft" align="right" valign="top">std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1SslContextCreationParameters.html#a628da0f738788548cbdc71778954cc69">diffieHellmanParameters</a> = &quot;&quot;</td></tr>
 <tr class="separator:a628da0f738788548cbdc71778954cc69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b1dd6e07acc341f68958a48603d78f2"><td class="memItemLeft" align="right" valign="top">std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRoar_1_1SslContextCreationParameters.html#a6b1dd6e07acc341f68958a48603d78f2">password</a> = &quot;&quot;</td></tr>
 <tr class="separator:a6b1dd6e07acc341f68958a48603d78f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a8b8c4ab722da72871d6053319fe03890" name="a8b8c4ab722da72871d6053319fe03890"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8b8c4ab722da72871d6053319fe03890">&#9670;&nbsp;</a></span>certificate</h2>
+<a id="a2bd86224201ca80f0da9eac4bdfbe8f2" name="a2bd86224201ca80f0da9eac4bdfbe8f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2bd86224201ca80f0da9eac4bdfbe8f2">&#9670;&nbsp;</a></span>certificate</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::string_view Roar::SslContextCreationParameters::certificate</td>
+          <td class="memname">std::variant&lt;std::string_view, std::filesystem::path&gt; Roar::SslContextCreationParameters::certificate</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -151,14 +151,14 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aabcf6ea01c7946e1e3e30ee92c7f7db4" name="aabcf6ea01c7946e1e3e30ee92c7f7db4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aabcf6ea01c7946e1e3e30ee92c7f7db4">&#9670;&nbsp;</a></span>privateKey</h2>
+<a id="aefeea4dc9c2c995b9c7195a1043b2b66" name="aefeea4dc9c2c995b9c7195a1043b2b66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aefeea4dc9c2c995b9c7195a1043b2b66">&#9670;&nbsp;</a></span>privateKey</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::string_view Roar::SslContextCreationParameters::privateKey</td>
+          <td class="memname">std::variant&lt;std::string_view, std::filesystem::path&gt; Roar::SslContextCreationParameters::privateKey</td>
         </tr>
       </table>
 </div><div class="memdoc">

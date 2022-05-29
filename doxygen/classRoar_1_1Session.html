@@ -99,7 +99,7 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a664bb6b438fb3c38191bdebe0a9492a9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session.html#a664bb6b438fb3c38191bdebe0a9492a9">Session</a> (<a class="el" href="classboost_1_1asio_1_1basic__stream__socket.html">boost::asio::basic_stream_socket</a>&lt; boost::asio::ip::tcp &gt; &amp;&amp;socket, <a class="el" href="classboost_1_1beast_1_1basic__flat__buffer.html">boost::beast::basic_flat_buffer</a>&lt; std::allocator&lt; char &gt; &gt; &amp;&amp;<a class="el" href="classRoar_1_1Session.html#ab2647584ec81f1a45ca2720809280b64">buffer</a>, std::optional&lt; boost::asio::ssl::context &gt; &amp;sslContext, bool <a class="el" href="classRoar_1_1Session.html#acf92635d21b0672d3d340dc42092b060">isSecure</a>, std::function&lt; void(<a class="el" href="structRoar_1_1Error.html">Error</a> &amp;&amp;)&gt; onError, std::weak_ptr&lt; <a class="el" href="classRoar_1_1Router.html">Router</a> &gt; router, std::shared_ptr&lt; const <a class="el" href="classRoar_1_1StandardResponseProvider.html">StandardResponseProvider</a> &gt; <a class="el" href="classRoar_1_1Session.html#a6d32fbccfdef1acc3a1a5a90b0e19840">standardResponseProvider</a>)</td></tr>
+<tr class="memitem:a664bb6b438fb3c38191bdebe0a9492a9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session.html#a664bb6b438fb3c38191bdebe0a9492a9">Session</a> (<a class="el" href="classboost_1_1asio_1_1basic__stream__socket.html">boost::asio::basic_stream_socket</a>&lt; boost::asio::ip::tcp &gt; &amp;&amp;socket, <a class="el" href="classboost_1_1beast_1_1basic__flat__buffer.html">boost::beast::basic_flat_buffer</a>&lt; std::allocator&lt; <a class="el" href="classchar.html">char</a> &gt; &gt; &amp;&amp;<a class="el" href="classRoar_1_1Session.html#ab2647584ec81f1a45ca2720809280b64">buffer</a>, std::optional&lt; boost::asio::ssl::context &gt; &amp;sslContext, bool <a class="el" href="classRoar_1_1Session.html#acf92635d21b0672d3d340dc42092b060">isSecure</a>, std::function&lt; void(<a class="el" href="structRoar_1_1Error.html">Error</a> &amp;&amp;)&gt; onError, std::weak_ptr&lt; <a class="el" href="classRoar_1_1Router.html">Router</a> &gt; router, std::shared_ptr&lt; const <a class="el" href="classRoar_1_1StandardResponseProvider.html">StandardResponseProvider</a> &gt; <a class="el" href="classRoar_1_1Session.html#a6d32fbccfdef1acc3a1a5a90b0e19840">standardResponseProvider</a>)</td></tr>
 <tr class="separator:a664bb6b438fb3c38191bdebe0a9492a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b0e6bde66fd7596f84f70ed759b6bd0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session.html#a8b0e6bde66fd7596f84f70ed759b6bd0">ROAR_PIMPL_SPECIAL_FUNCTIONS</a> (<a class="el" href="classRoar_1_1Session.html">Session</a>)</td></tr>
 <tr class="separator:a8b0e6bde66fd7596f84f70ed759b6bd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -109,14 +109,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3f3f79f09175d3a56280dc3de784c271"><td class="memTemplParams" colspan="2">template&lt;typename BodyT , typename OriginalBodyT , typename... Forwards&gt; </td></tr>
 <tr class="memitem:a3f3f79f09175d3a56280dc3de784c271"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classRoar_1_1Session_1_1SendIntermediate.html">SendIntermediate</a>&lt; BodyT &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session.html#a3f3f79f09175d3a56280dc3de784c271">send</a> (<a class="el" href="classRoar_1_1Request.html">Request</a>&lt; OriginalBodyT &gt; const &amp;req, Forwards &amp;&amp;... forwards)</td></tr>
 <tr class="separator:a3f3f79f09175d3a56280dc3de784c271"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a59de19c691f0429b797c26eff4ba8d46"><td class="memTemplParams" colspan="2">template&lt;typename BodyT &gt; </td></tr>
-<tr class="memitem:a59de19c691f0429b797c26eff4ba8d46"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Detail_1_1PromiseTypeBind.html">Detail::PromiseTypeBind</a>&lt; <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindThen.html">Detail::PromiseTypeBindThen</a>&lt; bool &gt;, <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindFail.html">Detail::PromiseTypeBindFail</a>&lt; <a class="el" href="structRoar_1_1Error.html">Error</a> &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session.html#a59de19c691f0429b797c26eff4ba8d46">send</a> (boost::beast::http::response&lt; BodyT &gt; &amp;&amp;response)</td></tr>
-<tr class="memdesc:a59de19c691f0429b797c26eff4ba8d46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a boost::beast::http response to the client.  <a href="classRoar_1_1Session.html#a59de19c691f0429b797c26eff4ba8d46">More...</a><br /></td></tr>
-<tr class="separator:a59de19c691f0429b797c26eff4ba8d46"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf7ca29e8534ee0962679352b4e5e661"><td class="memTemplParams" colspan="2">template&lt;typename BodyT &gt; </td></tr>
-<tr class="memitem:acf7ca29e8534ee0962679352b4e5e661"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Detail_1_1PromiseTypeBind.html">Detail::PromiseTypeBind</a>&lt; <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindThen.html">Detail::PromiseTypeBindThen</a>&lt; bool &gt;, <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindFail.html">Detail::PromiseTypeBindFail</a>&lt; <a class="el" href="structRoar_1_1Error.html">Error</a> &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session.html#acf7ca29e8534ee0962679352b4e5e661">send</a> (<a class="el" href="classRoar_1_1Response.html">Response</a>&lt; BodyT &gt; &amp;&amp;response)</td></tr>
-<tr class="memdesc:acf7ca29e8534ee0962679352b4e5e661"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a response to the client.  <a href="classRoar_1_1Session.html#acf7ca29e8534ee0962679352b4e5e661">More...</a><br /></td></tr>
-<tr class="separator:acf7ca29e8534ee0962679352b4e5e661"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3559f4cd802768c4c412f47afef2e4c4"><td class="memTemplParams" colspan="2">template&lt;typename BodyT &gt; </td></tr>
+<tr class="memitem:a3559f4cd802768c4c412f47afef2e4c4"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classRoar_1_1Session_1_1SendIntermediate.html">SendIntermediate</a>&lt; BodyT &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session.html#a3559f4cd802768c4c412f47afef2e4c4">send</a> (boost::beast::http::response&lt; BodyT &gt; &amp;&amp;res)</td></tr>
+<tr class="separator:a3559f4cd802768c4c412f47afef2e4c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a351295c321096fe78afd2c2943bdf160"><td class="memTemplParams" colspan="2">template&lt;typename BodyT &gt; </td></tr>
+<tr class="memitem:a351295c321096fe78afd2c2943bdf160"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classRoar_1_1Session_1_1SendIntermediate.html">SendIntermediate</a>&lt; BodyT &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session.html#a351295c321096fe78afd2c2943bdf160">send</a> (<a class="el" href="classRoar_1_1Response.html">Response</a>&lt; BodyT &gt; &amp;&amp;res)</td></tr>
+<tr class="separator:a351295c321096fe78afd2c2943bdf160"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a05ffb07717551cd002e52ba6f571744e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session.html#a05ffb07717551cd002e52ba6f571744e">readLimit</a> (std::size_t bytesPerSecond)</td></tr>
 <tr class="memdesc:a05ffb07717551cd002e52ba6f571744e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a rate limit in bytes/second for this session for reading.  <a href="classRoar_1_1Session.html#a05ffb07717551cd002e52ba6f571744e">More...</a><br /></td></tr>
 <tr class="separator:a05ffb07717551cd002e52ba6f571744e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -135,7 +133,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab22963e5f9879a27c1f51c749e07a84a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session.html#ab22963e5f9879a27c1f51c749e07a84a">withStreamDo</a> (FunctionT &amp;&amp;func)</td></tr>
 <tr class="memdesc:ab22963e5f9879a27c1f51c749e07a84a"><td class="mdescLeft">&#160;</td><td class="mdescRight">std::visit for the underlying beast stream. Either ssl_stream or tcp_stream.  <a href="classRoar_1_1Session.html#ab22963e5f9879a27c1f51c749e07a84a">More...</a><br /></td></tr>
 <tr class="separator:ab22963e5f9879a27c1f51c749e07a84a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adcb1fc38269927b6d3fa5c024b365097"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Detail_1_1PromiseTypeBind.html">Detail::PromiseTypeBind</a>&lt; <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindThen.html">Detail::PromiseTypeBindThen</a>&lt; std::shared_ptr&lt; <a class="el" href="classRoar_1_1WebsocketSession.html">WebsocketSession</a> &gt; &gt;, <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindFail.html">Detail::PromiseTypeBindFail</a>&lt; <a class="el" href="structRoar_1_1Error.html">Error</a> const &amp; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session.html#adcb1fc38269927b6d3fa5c024b365097">upgrade</a> (<a class="el" href="classRoar_1_1Request.html">Request</a>&lt; boost::beast::http::empty_body &gt; const &amp;req)</td></tr>
+<tr class="memitem:adcb1fc38269927b6d3fa5c024b365097"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBind.html">Detail::PromiseTypeBind</a>&lt; <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindThen.html">Detail::PromiseTypeBindThen</a>&lt; std::shared_ptr&lt; <a class="el" href="classRoar_1_1WebsocketSession.html">WebsocketSession</a> &gt; &gt;, <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindFail.html">Detail::PromiseTypeBindFail</a>&lt; <a class="el" href="structRoar_1_1Error.html">Error</a> const &amp; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session.html#adcb1fc38269927b6d3fa5c024b365097">upgrade</a> (<a class="el" href="classRoar_1_1Request.html">Request</a>&lt; boost::beast::http::empty_body &gt; const &amp;req)</td></tr>
 <tr class="memdesc:adcb1fc38269927b6d3fa5c024b365097"><td class="mdescLeft">&#160;</td><td class="mdescRight">Turn this session into a websocket session. Will return an invalid shared_ptr if this is not an upgrade request.  <a href="classRoar_1_1Session.html#adcb1fc38269927b6d3fa5c024b365097">More...</a><br /></td></tr>
 <tr class="separator:adcb1fc38269927b6d3fa5c024b365097"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e74276c308174a3c676da0799c0d2db"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structRoar_1_1RouteOptions.html">RouteOptions</a> const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session.html#a8e74276c308174a3c676da0799c0d2db">routeOptions</a> ()</td></tr>
@@ -151,7 +149,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a580fcf37c72bfc025f7e3e499d5ab1dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends a 403 with Strict-Transport-Security. Used only for unencrypted request on enforced HTTPS.  <a href="classRoar_1_1Session.html#a580fcf37c72bfc025f7e3e499d5ab1dc">More...</a><br /></td></tr>
 <tr class="separator:a580fcf37c72bfc025f7e3e499d5ab1dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72a62c5c8d71a96b9ead989ae2c42f3f"><td class="memTemplParams" colspan="2">template&lt;typename OriginalBodyT &gt; </td></tr>
-<tr class="memitem:a72a62c5c8d71a96b9ead989ae2c42f3f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classRoar_1_1Detail_1_1PromiseTypeBind.html">Detail::PromiseTypeBind</a>&lt; <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindThen.html">Detail::PromiseTypeBindThen</a>&lt;&gt;, <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindFail.html">Detail::PromiseTypeBindFail</a>&lt; <a class="el" href="structRoar_1_1Error.html">Error</a> const &amp; &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session.html#a72a62c5c8d71a96b9ead989ae2c42f3f">awaitClientClose</a> (<a class="el" href="classRoar_1_1Request.html">Request</a>&lt; OriginalBodyT &gt; req, std::chrono::milliseconds timeout=std::chrono::seconds{3})</td></tr>
+<tr class="memitem:a72a62c5c8d71a96b9ead989ae2c42f3f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBind.html">Detail::PromiseTypeBind</a>&lt; <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindThen.html">Detail::PromiseTypeBindThen</a>&lt;&gt;, <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindFail.html">Detail::PromiseTypeBindFail</a>&lt; <a class="el" href="structRoar_1_1Error.html">Error</a> const &amp; &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classRoar_1_1Session.html#a72a62c5c8d71a96b9ead989ae2c42f3f">awaitClientClose</a> (<a class="el" href="classRoar_1_1Request.html">Request</a>&lt; OriginalBodyT &gt; req, std::chrono::milliseconds timeout=std::chrono::seconds{3})</td></tr>
 <tr class="memdesc:a72a62c5c8d71a96b9ead989ae2c42f3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Some clients insist on closing the connection on their own even if they received a response. To avoid this, this function can be called and the connection will be kept alive until the client closes it or a timeout is reached.  <a href="classRoar_1_1Session.html#a72a62c5c8d71a96b9ead989ae2c42f3f">More...</a><br /></td></tr>
 <tr class="separator:a72a62c5c8d71a96b9ead989ae2c42f3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -213,7 +211,7 @@ Friends</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classboost_1_1beast_1_1basic__flat__buffer.html">boost::beast::basic_flat_buffer</a>&lt; std::allocator&lt; char &gt; &gt; &amp;&amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classboost_1_1beast_1_1basic__flat__buffer.html">boost::beast::basic_flat_buffer</a>&lt; std::allocator&lt; <a class="el" href="classchar.html">char</a> &gt; &gt; &amp;&amp;&#160;</td>
           <td class="paramname"><em>buffer</em>, </td>
         </tr>
         <tr>
@@ -269,7 +267,7 @@ template&lt;typename OriginalBodyT &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classRoar_1_1Detail_1_1PromiseTypeBind.html">Detail::PromiseTypeBind</a>&lt; <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindThen.html">Detail::PromiseTypeBindThen</a>&lt;&gt;, <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindFail.html">Detail::PromiseTypeBindFail</a>&lt; <a class="el" href="structRoar_1_1Error.html">Error</a> const  &amp; &gt; &gt; Roar::Session::awaitClientClose </td>
+          <td class="memname"><a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBind.html">Detail::PromiseTypeBind</a>&lt; <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindThen.html">Detail::PromiseTypeBindThen</a>&lt;&gt;, <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindFail.html">Detail::PromiseTypeBindFail</a>&lt; <a class="el" href="structRoar_1_1Error.html">Error</a> const  &amp; &gt; &gt; Roar::Session::awaitClientClose </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classRoar_1_1Request.html">Request</a>&lt; OriginalBodyT &gt;&#160;</td>
           <td class="paramname"><em>req</em>, </td>
@@ -648,8 +646,8 @@ template&lt;typename BodyT , typename OriginalBodyT , typename... Forwards&gt; <
 
 </div>
 </div>
-<a id="a59de19c691f0429b797c26eff4ba8d46" name="a59de19c691f0429b797c26eff4ba8d46"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a59de19c691f0429b797c26eff4ba8d46">&#9670;&nbsp;</a></span>send() <span class="overload">[1/3]</span></h2>
+<a id="a3559f4cd802768c4c412f47afef2e4c4" name="a3559f4cd802768c4c412f47afef2e4c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3559f4cd802768c4c412f47afef2e4c4">&#9670;&nbsp;</a></span>send() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -660,10 +658,10 @@ template&lt;typename BodyT &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classRoar_1_1Detail_1_1PromiseTypeBind.html">Detail::PromiseTypeBind</a>&lt; <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindThen.html">Detail::PromiseTypeBindThen</a>&lt; bool &gt;, <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindFail.html">Detail::PromiseTypeBindFail</a>&lt; <a class="el" href="structRoar_1_1Error.html">Error</a> &gt; &gt; Roar::Session::send </td>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="classRoar_1_1Session_1_1SendIntermediate.html">SendIntermediate</a>&lt; BodyT &gt; &gt; Roar::Session::send </td>
           <td>(</td>
           <td class="paramtype">boost::beast::http::response&lt; BodyT &gt; &amp;&amp;&#160;</td>
-          <td class="paramname"><em>response</em></td><td>)</td>
+          <td class="paramname"><em>res</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -673,21 +671,6 @@ template&lt;typename BodyT &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>Send a boost::beast::http response to the client. </p>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">BodyT</td><td>Body type of the response. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">response</td><td>A response object. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Returns a promise that resolves with whether or not the connection was auto-closed. </dd></dl>
 
 </div>
 </div>
@@ -729,8 +712,8 @@ template&lt;typename BodyT , typename OriginalBodyT , typename... Forwards&gt; <
 
 </div>
 </div>
-<a id="acf7ca29e8534ee0962679352b4e5e661" name="acf7ca29e8534ee0962679352b4e5e661"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acf7ca29e8534ee0962679352b4e5e661">&#9670;&nbsp;</a></span>send() <span class="overload">[3/3]</span></h2>
+<a id="a351295c321096fe78afd2c2943bdf160" name="a351295c321096fe78afd2c2943bdf160"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a351295c321096fe78afd2c2943bdf160">&#9670;&nbsp;</a></span>send() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -741,10 +724,10 @@ template&lt;typename BodyT &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classRoar_1_1Detail_1_1PromiseTypeBind.html">Detail::PromiseTypeBind</a>&lt; <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindThen.html">Detail::PromiseTypeBindThen</a>&lt; bool &gt;, <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindFail.html">Detail::PromiseTypeBindFail</a>&lt; <a class="el" href="structRoar_1_1Error.html">Error</a> &gt; &gt; Roar::Session::send </td>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="classRoar_1_1Session_1_1SendIntermediate.html">SendIntermediate</a>&lt; BodyT &gt; &gt; Roar::Session::send </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classRoar_1_1Response.html">Response</a>&lt; BodyT &gt; &amp;&amp;&#160;</td>
-          <td class="paramname"><em>response</em></td><td>)</td>
+          <td class="paramname"><em>res</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -754,20 +737,6 @@ template&lt;typename BodyT &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>Send a response to the client. </p>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">BodyT</td><td>Body type of the response. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">response</td><td>A response object. </td></tr>
-  </table>
-  </dd>
-</dl>
 
 </div>
 </div>
@@ -935,7 +904,7 @@ template&lt;typename BodyT &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classRoar_1_1Detail_1_1PromiseTypeBind.html">Detail::PromiseTypeBind</a>&lt; <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindThen.html">Detail::PromiseTypeBindThen</a>&lt; std::shared_ptr&lt; <a class="el" href="classRoar_1_1WebsocketSession.html">WebsocketSession</a> &gt; &gt;, <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindFail.html">Detail::PromiseTypeBindFail</a>&lt; <a class="el" href="structRoar_1_1Error.html">Error</a> const &amp; &gt; &gt; Roar::Session::upgrade </td>
+          <td class="memname"><a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBind.html">Detail::PromiseTypeBind</a>&lt; <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindThen.html">Detail::PromiseTypeBindThen</a>&lt; std::shared_ptr&lt; <a class="el" href="classRoar_1_1WebsocketSession.html">WebsocketSession</a> &gt; &gt;, <a class="el" href="structRoar_1_1Detail_1_1PromiseTypeBindFail.html">Detail::PromiseTypeBindFail</a>&lt; <a class="el" href="structRoar_1_1Error.html">Error</a> const &amp; &gt; &gt; Roar::Session::upgrade </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classRoar_1_1Request.html">Request</a>&lt; boost::beast::http::empty_body &gt; const &amp;&#160;</td>
           <td class="paramname"><em>req</em></td><td>)</td>

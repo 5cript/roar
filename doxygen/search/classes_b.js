@@ -1,16 +1,14 @@
 var searchData=
 [
-  ['reader_0',['reader',['../classRoar_1_1VoidBody_1_1reader.html',1,'Roar::VoidBody']]],
-  ['readintermediate_1',['ReadIntermediate',['../classRoar_1_1Session_1_1ReadIntermediate.html',1,'Roar::Session']]],
-  ['remote_2',['Remote',['../structRoar_1_1Url_1_1Remote.html',1,'Roar::Url']]],
-  ['request_3',['request',['../classboost_1_1beast_1_1http_1_1request.html',1,'boost::beast::http']]],
-  ['request_4',['Request',['../classRoar_1_1Curl_1_1Request.html',1,'Roar::Curl::Request'],['../classRoar_1_1Request.html',1,'Roar::Request&lt; BodyT &gt;']]],
-  ['requestextensions_5',['RequestExtensions',['../structRoar_1_1Detail_1_1RequestExtensions.html',1,'Roar::Detail']]],
-  ['requestlistener_6',['RequestListener',['../classRequestListener.html',1,'']]],
-  ['response_7',['Response',['../classRoar_1_1Curl_1_1Response.html',1,'Roar::Curl::Response'],['../classRoar_1_1Response.html',1,'Roar::Response&lt; BodyT &gt;']]],
-  ['route_8',['Route',['../classRoar_1_1Route.html',1,'Roar']]],
-  ['routeinfo_9',['RouteInfo',['../structRoar_1_1RouteInfo.html',1,'Roar']]],
-  ['routeinfobase_10',['RouteInfoBase',['../structRoar_1_1RouteInfoBase.html',1,'Roar']]],
-  ['routeoptions_11',['RouteOptions',['../structRoar_1_1RouteOptions.html',1,'Roar']]],
-  ['router_12',['Router',['../classRoar_1_1Router.html',1,'Roar']]]
+  ['promisereferencewrap_0',['PromiseReferenceWrap',['../structRoar_1_1Detail_1_1PromiseReferenceWrap.html',1,'Roar::Detail']]],
+  ['promisetypebind_1',['PromiseTypeBind',['../structRoar_1_1Detail_1_1PromiseTypeBind.html',1,'Roar::Detail']]],
+  ['promisetypebind_3c_20promisetypebindfail_3c_20failargs_2e_2e_2e_20_3e_20_3e_2',['PromiseTypeBind&lt; PromiseTypeBindFail&lt; FailArgs... &gt; &gt;',['../structRoar_1_1Detail_1_1PromiseTypeBind_3_01PromiseTypeBindFail_3_01FailArgs_8_8_8_01_4_01_4.html',1,'Roar::Detail']]],
+  ['promisetypebind_3c_20promisetypebindthen_3c_20thenargs_2e_2e_2e_20_3e_20_3e_3',['PromiseTypeBind&lt; PromiseTypeBindThen&lt; ThenArgs... &gt; &gt;',['../structRoar_1_1Detail_1_1PromiseTypeBind_3_01PromiseTypeBindThen_3_01ThenArgs_8_8_8_01_4_01_4.html',1,'Roar::Detail']]],
+  ['promisetypebind_3c_20promisetypebindthen_3c_20thenargs_2e_2e_2e_20_3e_2c_20promisetypebindfail_3c_20failargs_2e_2e_2e_20_3e_20_3e_4',['PromiseTypeBind&lt; PromiseTypeBindThen&lt; ThenArgs... &gt;, PromiseTypeBindFail&lt; FailArgs... &gt; &gt;',['../structRoar_1_1Detail_1_1PromiseTypeBind_3_01PromiseTypeBindThen_3_01ThenArgs_8_8_8_01_4_00_01Proe66a91975eb0e399812181b678ea8521.html',1,'Roar::Detail']]],
+  ['promisetypebindbase_5',['PromiseTypeBindBase',['../classRoar_1_1Detail_1_1PromiseTypeBindBase.html',1,'Roar::Detail']]],
+  ['promisetypebindfail_6',['PromiseTypeBindFail',['../structRoar_1_1Detail_1_1PromiseTypeBindFail.html',1,'Roar::Detail']]],
+  ['promisetypebindthen_7',['PromiseTypeBindThen',['../structRoar_1_1Detail_1_1PromiseTypeBindThen.html',1,'Roar::Detail']]],
+  ['protoroute_8',['ProtoRoute',['../structRoar_1_1ProtoRoute.html',1,'Roar']]],
+  ['protosession_9',['ProtoSession',['../structRoar_1_1Factory_1_1ProtoSession.html',1,'Roar::Factory']]],
+  ['pseudoregex_10',['PseudoRegex',['../structRoar_1_1PseudoRegex.html',1,'Roar']]]
 ];

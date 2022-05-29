@@ -2,7 +2,7 @@ var searchData=
 [
   ['gen_0',['gen',['../classFileServer.html#ad391cad355b874c63f7c85879dc18cc9',1,'FileServer']]],
   ['generatepreflightoptionsroute_1',['generatePreflightOptionsRoute',['../structRoar_1_1CorsSettings.html#aa648e72b66e45a7ca9d47a6985c912e5',1,'Roar::CorsSettings']]],
-  ['get_2',['get',['../classRoar_1_1VoidBody_1_1writer.html#aff3707d9edc1fc07ba91301680b70c95',1,'Roar::VoidBody::writer::get()'],['../classRoar_1_1Curl_1_1Instance.html#a729f4846a49cbb6b0bf198c1e75d71a1',1,'Roar::Curl::Instance::get()'],['../classRoar_1_1Curl_1_1Request.html#ad63668b6d80aa13d6cc6c918d3f0c4d7',1,'Roar::Curl::Request::get()']]],
+  ['get_2',['get',['../classRoar_1_1RangeFileBody_1_1writer.html#a55298e24fa3f839efa58e6e80cea4492',1,'Roar::RangeFileBody::writer::get()'],['../classRoar_1_1VoidBody_1_1writer.html#aff3707d9edc1fc07ba91301680b70c95',1,'Roar::VoidBody::writer::get()'],['../classRoar_1_1Curl_1_1Instance.html#a729f4846a49cbb6b0bf198c1e75d71a1',1,'Roar::Curl::Instance::get()'],['../classRoar_1_1Curl_1_1Request.html#ad63668b6d80aa13d6cc6c918d3f0c4d7',1,'Roar::Curl::Request::get()']]],
   ['getexecutor_3',['getExecutor',['../classRoar_1_1Server.html#a3e791c3023228ed259e75a1f65420df9',1,'Roar::Server']]],
   ['getfileandstatus_4',['getFileAndStatus',['../classRoar_1_1Detail_1_1DirectoryServer.html#a6f494006898c71f09d3ce6ce951cda38',1,'Roar::Detail::DirectoryServer']]],
   ['getlocalendpoint_5',['getLocalEndpoint',['../classRoar_1_1Server.html#a7e39fb44b093c0a4e84728d167b50b71',1,'Roar::Server']]],
