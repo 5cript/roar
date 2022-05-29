@@ -2,6 +2,7 @@ add_library(roar STATIC
     server.cpp
     mime_type.cpp
     mechanics/ranges.cpp
+    mechanics/cookie.cpp
     authorization/authorization.cpp
     authorization/basic_auth.cpp
     authorization/digest_auth.cpp
@@ -22,7 +23,9 @@ add_library(roar STATIC
     curl/response.cpp
     utility/url.cpp
     utility/base64.cpp
+    utility/shutdown_barrier.cpp
     utility/sha.cpp
+    utility/date.cpp
 )
 
 include(../../cmake/curl.cmake)
