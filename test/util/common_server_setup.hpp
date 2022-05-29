@@ -44,9 +44,9 @@ namespace Roar::Tests
         {
             secureServer_ = std::make_unique<Roar::Server>(Roar::Server::ConstructionArguments{
                 .executor = executor_,
-                .sslContext = makeSslContext({
-                    .certificate = certificateForTests,
-                    .privateKey = keyForTests,
+                .sslContext = makeSslContext(SslContextCreationParameters{
+                    .certificate = std::string_view{certificateForTests},
+                    .privateKey = std::string_view{keyForTests},
                     .password = keyPassphrase,
                 }),
                 .onError =
