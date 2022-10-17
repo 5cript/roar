@@ -1,5 +1,6 @@
 #pragma once
 
+#include <roar/mechanics/cookie.hpp>
 #include <roar/detail/promise_compat.hpp>
 #include <roar/cors.hpp>
 #include <roar/request.hpp>
@@ -53,6 +54,17 @@ namespace Roar
         Response& status(boost::beast::http::status status)
         {
             response_.result(status);
+            return *this;
+        }
+
+        /**
+         * @brief Sets a set-cookie header entry.
+         *
+         * @param cookie A cookie.
+         */
+        Response& setCookie(Cookie const& cookie)
+        {
+            response_.set(boost::beast::http::field::set_cookie, cookie.toSetCookieString());
             return *this;
         }
 

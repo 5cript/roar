@@ -1,5 +1,6 @@
 #pragma once
 
+#include <roar/mechanics/cookie.hpp>
 #include <roar/authorization/basic_auth.hpp>
 #include <roar/authorization/digest_auth.hpp>
 #include <roar/authorization/authorization.hpp>
@@ -263,6 +264,20 @@ namespace Roar
             if (iter->value().substr(0, spacePos) != "Bearer")
                 return std::nullopt;
             return std::string{iter->value().substr(spacePos + 1)};
+        }
+
+        /**
+         * @brief Gets all cookies
+         *
+         * @return std::vector<Cookie> A list of cookies.
+         */
+        std::unordered_map<std::string, std::string> getCookies() const
+        {
+            auto [begin, end] = this->equal_range(boost::beast::http::field::cookie);
+            std::unordered_map<std::string, std::string> cookies;
+            for (; begin != end; ++begin)
+                cookies.merge(Cookie::parseCookies(begin->value()));
+            return cookies;
         }
 
       private:
