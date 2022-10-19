@@ -10,7 +10,7 @@ namespace Roar::Detail
     template <unsigned Base>
     std::string bytesToHumanReadable(std::uint64_t bytes)
     {
-        const auto log = std::logl(bytes) / std::logl(Base);
+        const auto log = std::log(bytes) / std::log(Base);
         unsigned floored = static_cast<unsigned>(log);
         for (unsigned i = 0; i < floored; ++i)
             bytes /= Base;
