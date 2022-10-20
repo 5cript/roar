@@ -278,8 +278,8 @@ namespace Roar::Curl
 
         /**
          * @brief Alias for method.
-         * 
-         * @param verb 
+         *
+         * @param verb
          */
         Request& verb(std::string const& verb);
 
@@ -359,27 +359,19 @@ namespace Roar::Curl
          * @brief Returns the underlying curl instance.
          */
         Instance& instance();
-        
+
         /**
          * @brief The the url of the request.
          *
-         * @param url 
+         * @param url
          */
         Request& url(std::string const& url);
-        
+
         /**
          * @brief Perform the request. Use this like verb("GET").url("bla.com").perform().
          * There are get,patch,put etc which combine these into one.
          */
         Response perform();
-
-        /**
-         * @brief Uses curl url encode.
-         * 
-         * @param url A raw url.
-         * @return std::string A url encoded string.
-         */
-        std::string urlEncode(std::string const& url);
 
       private:
         void check(CURLcode code);

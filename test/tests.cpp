@@ -4,6 +4,7 @@
 #include "test_http_server.hpp"
 #include "test_web_socket.hpp"
 #include "test_serve.hpp"
+#include "test_url.hpp"
 
 #include <gtest/gtest.h>
 

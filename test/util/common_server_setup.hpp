@@ -3,7 +3,7 @@
 #include "../resources/keys.hpp"
 
 #include <roar/server.hpp>
-#include <roar/utility/url.hpp>
+#include <roar/url/url.hpp>
 #include <roar/ssl/make_ssl_context.hpp>
 
 #include <boost/asio/ip/tcp.hpp>
@@ -62,8 +62,11 @@ namespace Roar::Tests
             const auto url =
                 Url{
                     .scheme = params.secure ? "https" : "http",
-                    .remote = {.host = "localhost", .port = server.getLocalEndpoint().port()},
-                    .path = path,
+                    .authority =
+                        {
+                            .remote = {.host = "localhost", .port = server.getLocalEndpoint().port()},
+                        },
+                    .path = Url::parsePath(path).value(),
                 }
                     .toString();
             return url;

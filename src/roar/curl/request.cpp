@@ -214,10 +214,6 @@ namespace Roar::Curl
         check(curl_easy_setopt(instance_, CURLOPT_URL, url.c_str()));
         return *this;
     }
-    std::string Request::urlEncode(std::string const& url)
-    {
-        return std::string{curl_easy_escape(instance_, url.c_str(), static_cast<int>(url.size()))};
-    }
 #ifdef ROAR_ENABLE_NLOHMANN_JSON
     Request& Request::sink(nlohmann::json& json)
     {

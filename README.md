@@ -32,7 +32,7 @@ This is a network library that has:
   - [x] Websocket Client (SSL and Plain)
   - [x] Websocket Upgrade from HTTP(S) Server
 - [x] Synchronous HTTP Client using libcurl.
-- [ ] URL Parser
+- [x] URL Parser
 - [ ] HTTP & HTTPS Tunnel Proxy
 
 # Developer Notes
