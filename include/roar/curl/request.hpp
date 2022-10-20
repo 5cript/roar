@@ -269,6 +269,21 @@ namespace Roar::Curl
         Request& source(char const* str);
 
         /**
+         * @brief Set the request method
+         *
+         * @param method The method to set.
+         * @return Request& Returned for chaining.
+         */
+        Request& method(std::string const& method);
+
+        /**
+         * @brief Alias for method.
+         * 
+         * @param verb 
+         */
+        Request& verb(std::string const& verb);
+
+        /**
          * @brief Set the source from a string.
          *
          * @param str A string source.
@@ -340,13 +355,36 @@ namespace Roar::Curl
          */
         Response patch(std::string const& url);
 
+        /**
+         * @brief Returns the underlying curl instance.
+         */
+        Instance& instance();
+        
+        /**
+         * @brief The the url of the request.
+         *
+         * @param url 
+         */
+        Request& url(std::string const& url);
+        
+        /**
+         * @brief Perform the request. Use this like verb("GET").url("bla.com").perform().
+         * There are get,patch,put etc which combine these into one.
+         */
+        Response perform();
+
+        /**
+         * @brief Uses curl url encode.
+         * 
+         * @param url A raw url.
+         * @return std::string A url encoded string.
+         */
+        std::string urlEncode(std::string const& url);
+
       private:
-        void verb(std::string const& verb);
-        void url(std::string const& url);
         void check(CURLcode code);
         void setupSource(bool chunked);
         void setupSinks();
-        Response perform();
 
       private:
         Instance instance_;

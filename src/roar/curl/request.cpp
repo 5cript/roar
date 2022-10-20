@@ -204,13 +204,19 @@ namespace Roar::Curl
         verb("PATCH");
         return perform();
     }
-    void Request::verb(std::string const& verb)
+    Request& Request::verb(std::string const& verb)
     {
         check(curl_easy_setopt(instance_, CURLOPT_CUSTOMREQUEST, verb.c_str()));
+        return *this;
     }
-    void Request::url(std::string const& url)
+    Request& Request::url(std::string const& url)
     {
         check(curl_easy_setopt(instance_, CURLOPT_URL, url.c_str()));
+        return *this;
+    }
+    std::string Request::urlEncode(std::string const& url)
+    {
+        return std::string{curl_easy_escape(instance_, url.c_str(), static_cast<int>(url.size()))};
     }
 #ifdef ROAR_ENABLE_NLOHMANN_JSON
     Request& Request::sink(nlohmann::json& json)
@@ -295,6 +301,15 @@ namespace Roar::Curl
     {
         check(curl_easy_setopt(instance_, CURLOPT_UNIX_SOCKET_PATH, path.c_str()));
         return *this;
+    }
+    Request& Request::method(std::string const& method)
+    {
+        verb(method);
+        return *this;
+    }
+    Instance& Request::instance()
+    {
+        return instance_;
     }
 
     void Request::check(CURLcode code)
