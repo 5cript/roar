@@ -44,7 +44,7 @@ namespace Roar
         const auto genDelims = x3::rule<GenDelimsTag, char>{"gen-delims"} = char_(":/?#[]@");
 
         struct SubDelimsTag;
-        const auto subDelims = x3::rule<SubDelimsTag, char>{"sub-delims"} = char_("!$&'()*+,;=");
+        const auto subDelims = x3::rule<SubDelimsTag, char>{"sub-delims"} = char_("!$&'\"<>()*+,;=");
 
         struct ReservedTag;
         const auto reserved = x3::rule<ReservedTag, char>{"reserved"} = genDelims | subDelims;
