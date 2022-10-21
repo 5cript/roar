@@ -64,6 +64,31 @@ namespace Roar::Curl
         Request& acceptEncoding(std::string const& encoding);
 
         /**
+         * @brief Automatically follow redirects?
+         *
+         * @param doFollow Will follow redirects if true.
+         * @return Request& Returned for chaining.
+         */
+        Request& followRedirects(bool doFollow);
+
+        /**
+         * @brief Sets the maximum number of redirects to follow.
+         *
+         * @param maxRedirects The maximum number of redirects to follow.
+         * @return Request& Returned for chaining.
+         */
+        Request& maxRedirects(std::size_t maxRedirects);
+
+        /**
+         * @brief When enabled libcurl will automatically set the Referer: header field in HTTP requests to the full URL
+         * where it follows a Location: redirect
+         *
+         * @param doAutoRefer
+         * @return Request& Returned for chaining.
+         */
+        Request& autoReferer(bool doAutoRefer);
+
+        /**
          * @brief Set the all header fields at one using the map.
          *
          * @param fields A key/value object for header fields

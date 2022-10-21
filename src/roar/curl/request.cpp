@@ -110,6 +110,21 @@ namespace Roar::Curl
         check(curl_easy_setopt(instance_, CURLOPT_SSL_VERIFYHOST, verify ? 1L : 0L));
         return *this;
     }
+    Request& Request::followRedirects(bool doFollow)
+    {
+        curl_easy_setopt(instance_, CURLOPT_FOLLOWLOCATION, doFollow ? 1L : 0L);
+        return *this;
+    }
+    Request& Request::maxRedirects(std::size_t maxRedirects)
+    {
+        curl_easy_setopt(instance_, CURLOPT_MAXREDIRS, static_cast<long>(maxRedirects));
+        return *this;
+    }
+    Request& Request::autoReferer(bool doAutoRefer)
+    {
+        curl_easy_setopt(instance_, CURLOPT_AUTOREFERER, doAutoRefer ? 1L : 0L);
+        return *this;
+    }
     Response Request::get(std::string const& url)
     {
         this->url(url);
