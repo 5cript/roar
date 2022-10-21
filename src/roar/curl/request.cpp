@@ -242,6 +242,16 @@ namespace Roar::Curl
             });
     }
 #endif
+    Request& Request::sink(std::ostream& stream)
+    {
+        return sink(
+            [&stream](char const* data, std::size_t count) {
+                stream.write(data, static_cast<std::streamsize>(count));
+            },
+            [&stream]() {
+                stream.flush();
+            });
+    }
     Request& Request::sink(std::string& str)
     {
         return sink([&str](char const* data, std::size_t count) {

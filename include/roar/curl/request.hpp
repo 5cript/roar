@@ -182,6 +182,14 @@ namespace Roar::Curl
         Request& sink(std::string& str);
 
         /**
+         * @brief Installs a sink to a stream.
+         *
+         * @param stream The stream.
+         * @return Request& Returned for chaining.
+         */
+        Request& sink(std::ostream& stream);
+
+        /**
          * @brief Installs a sink to a file.
          *
          * This function does not check whether the path is writeable to.
