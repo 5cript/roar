@@ -44,7 +44,10 @@ namespace Roar
         const auto genDelims = x3::rule<GenDelimsTag, char>{"gen-delims"} = char_(":/?#[]@");
 
         struct SubDelimsTag;
-        const auto subDelims = x3::rule<SubDelimsTag, char>{"sub-delims"} = char_("!$&'\"<>()*+,;=");
+        const auto subDelims = x3::rule<SubDelimsTag, char>{"sub-delims"} = char_("!$&'()*+,;=");
+
+        struct Leniency;
+        const auto leniency = x3::rule<Leniency, char>("leniency") = char_("\"<> ");
 
         struct ReservedTag;
         const auto reserved = x3::rule<ReservedTag, char>{"reserved"} = genDelims | subDelims;
@@ -57,7 +60,7 @@ namespace Roar
 
         struct PathCharacterTag;
         const auto pathCharacter = x3::rule<PathCharacterTag, char>{"pathCharacter"} =
-            (percentEncoded | unreserved | reserved | char_(":@")) - char_("#?/");
+            (percentEncoded | leniency | unreserved | reserved | char_(":@")) - char_("#?/");
 
         struct PathTag;
         const auto path = x3::rule<PathTag, std::vector<std::string>>{"path"} =
