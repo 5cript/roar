@@ -52,7 +52,18 @@ namespace Roar::Detail
             : DirectoryServerConstructionArgs<RequestListenerT>{std::move(args)}
             , jail_{resolvePath()}
             , basePath_{this->serveInfo_.path}
-        {}
+            , onError_{unwrapFlexibleProvider<RequestListenerT, std::function<void(std::string const&)>>(
+                *this->listener_, this->serveInfo_.serveOptions.onError
+            )}
+            , onFileServeComplete_{unwrapFlexibleProvider<RequestListenerT, std::function<void(bool)>>(
+                *this->listener_, this->serveInfo_.serveOptions.onFileServeComplete
+            )}
+        {
+            if (!onError_)
+                onError_ = [](std::string const&) {};
+            if (!onFileServeComplete_)
+                onFileServeComplete_ = [](bool) {};
+        }
 
         void operator()(Session& session, EmptyBodyRequest const& req)
         {
@@ -242,7 +253,9 @@ namespace Roar::Detail
                 .setHeader(http::field::content_length, std::to_string(std::filesystem::file_size(fileAndStatus.file)))
                 .contentType(contentType ? *contentType : "application/octet-stream")
                 .commit()
-                .fail([](auto) {});
+                .fail([onError = onError_](auto&& err) {
+                    onError(err.toString());
+                });
         }
 
         void sendOptionsResponse(Session& session, EmptyBodyRequest const& req, FileAndStatus const&) const
@@ -399,7 +412,7 @@ namespace Roar::Detail
             session.send<http::empty_body>(req)
                 ->status(http::status::continue_)
                 .commit()
-                .then([session = session.shared_from_this(), req, body = std::move(body), contentLength](bool closed) {
+                .then([session = session.shared_from_this(), req, body = std::move(body), contentLength, onError = onError_](bool closed) {
                     if (closed)
                         return;
 
@@ -409,7 +422,8 @@ namespace Roar::Detail
                         .then([](auto& session, auto const&) {
                             session.sendStandardResponse(http::status::ok);
                         })
-                        .fail([session](Error const& e) {
+                        .fail([session, onError](Error const& e) {
+                            onError(e.toString());
                             session->sendStandardResponse(http::status::internal_server_error, e.toString());
                         });
                 });
@@ -437,7 +451,11 @@ namespace Roar::Detail
                 intermediate->preparePayload();
                 intermediate->enableCors(req, this->serveInfo_.routeOptions.cors);
                 intermediate->contentType(contentType ? contentType.value() : "application/octet-stream");
-                intermediate->commit().fail([](auto) {});
+                intermediate->commit().then([session = session.shared_from_this(), req, onFileServeComplete = onFileServeComplete_](bool wasClosed){
+                    onFileServeComplete(wasClosed);
+                }).fail([onError = onError_](auto&& err) {
+                    onError(err.toString());
+                });
             }
             else
             {
@@ -453,8 +471,11 @@ namespace Roar::Detail
 
                     session.send<RangeFileBody>(req, std::move(body))
                         ->useFixedTimeout(std::chrono::seconds{10})
-                        .commit()
-                        .fail([](auto) {});
+                        .commit().then([session = session.shared_from_this(), req, onFileServeComplete = onFileServeComplete_](bool wasClosed){
+                            onFileServeComplete(wasClosed);
+                        }).fail([onError = onError_](auto&& err) {
+                            onError(err.toString());
+                        });
                 }
                 catch (...)
                 {
@@ -466,5 +487,7 @@ namespace Roar::Detail
       private:
         Jail jail_;
         std::string basePath_;
+        std::function<void(std::string const&)> onError_;
+        std::function<void(bool)> onFileServeComplete_;
     };
 }

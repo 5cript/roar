@@ -79,6 +79,12 @@ namespace Roar
 
         /// Serve files from the directory given by this function.
         FlexibleProvider<RequestListenerT, std::string, true> customListingStyle = std::monostate{};
+
+        /// Called when errors occur on serve.
+        FlexibleProvider<RequestListenerT, std::function<void(std::string const& err)>> onError = std::function<void(std::string const& err)>{};
+
+        /// Called when errors occur on serve file complete. bool parameter = was the connection closed?
+        FlexibleProvider<RequestListenerT, std::function<void(bool)>> onFileServeComplete = std::function<void(bool)>{};
     };
 
     struct FileAndStatus

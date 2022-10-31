@@ -89,6 +89,16 @@ namespace Roar
         });
     }
     //------------------------------------------------------------------------------------------------------------------
+    bool Session::onWriteComplete(bool expectsClose, boost::beast::error_code ec, std::size_t)
+    {
+        if (ec || expectsClose)
+        {
+            close();
+            return true;
+        }
+        return false;
+    }
+    //------------------------------------------------------------------------------------------------------------------
     void Session::writeLimit(std::size_t bytesPerSecond)
     {
         withStreamDo([bytesPerSecond]<typename StreamT>(StreamT& stream) {
@@ -234,16 +244,6 @@ namespace Roar
                     .additionalInfo = "Request is not a websocket upgrade."});
             }
         });
-    }
-    //------------------------------------------------------------------------------------------------------------------
-    bool Session::onWriteComplete(bool expectsClose, boost::beast::error_code ec, std::size_t)
-    {
-        if (ec || expectsClose)
-        {
-            close();
-            return true;
-        }
-        return false;
     }
     //------------------------------------------------------------------------------------------------------------------
     void Session::close()

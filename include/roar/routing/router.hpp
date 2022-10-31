@@ -4,7 +4,6 @@
 #include <roar/routing/proto_route.hpp>
 #include <roar/standard_response_provider.hpp>
 
-#include <iostream>
 #include <boost/beast/http/verb.hpp>
 #include <boost/beast/http/empty_body.hpp>
 

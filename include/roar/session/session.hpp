@@ -68,8 +68,8 @@ namespace Roar
         class SendIntermediate : public std::enable_shared_from_this<SendIntermediate<BodyT>>
         {
           public:
-            template <typename OriginalBodyT, typename... Forwards>
-            SendIntermediate(Session& session, Request<OriginalBodyT> const& req, Forwards&&... forwards)
+            template <typename... Forwards, typename RequestBodyT>
+            SendIntermediate(Session& session, Request<RequestBodyT> const& req, Forwards&&... forwards)
                 : session_(session.shared_from_this())
                 , response_{session_->prepareResponse<BodyT>(req, std::forward<Forwards>(forwards)...)}
             {}
@@ -179,9 +179,9 @@ namespace Roar
              *
              * @return Response& Returned for chaining.
              */
-            template <typename RequestBodyT>
+            template <typename RequestBodyT2>
             SendIntermediate&
-            enableCors(Request<RequestBodyT> const& req, std::optional<CorsSettings> cors = std::nullopt)
+            enableCors(Request<RequestBodyT2> const& req, std::optional<CorsSettings> cors = std::nullopt)
             {
                 response_.enableCors(req, std::move(cors));
                 return *this;
@@ -327,6 +327,7 @@ namespace Roar
                             {
                                 self->session_->close();
                                 self->promise_->reject(Error{.error = ec, .additionalInfo = "Failed to send response"});
+                                return;
                             }
 
                             if (self->onChunk_ && !self->onChunk_(bytesTransferred))
@@ -366,13 +367,15 @@ namespace Roar
         template <typename BodyT>
         [[nodiscard]] std::shared_ptr<SendIntermediate<BodyT>> send(boost::beast::http::response<BodyT>&& res)
         {
-            return std::shared_ptr<SendIntermediate<BodyT>>(new SendIntermediate<BodyT>{*this, std::move(res)});
+            return std::shared_ptr<SendIntermediate<BodyT>>(
+                new SendIntermediate<BodyT>{*this, std::move(res)});
         }
 
         template <typename BodyT>
         [[nodiscard]] std::shared_ptr<SendIntermediate<BodyT>> send(Response<BodyT>&& res)
         {
-            return std::shared_ptr<SendIntermediate<BodyT>>(new SendIntermediate<BodyT>{*this, std::move(res)});
+            return std::shared_ptr<SendIntermediate<BodyT>>(
+                new SendIntermediate<BodyT>{*this, std::move(res)});
         }
 
         /**
@@ -678,7 +681,7 @@ namespace Roar
       private:
         void readHeader();
         void performSslHandshake();
-        bool onWriteComplete(bool expectsClose, boost::beast::error_code ec, std::size_t bytesTransferred);
+        bool onWriteComplete(bool expectsClose, boost::beast::error_code ec, std::size_t);
         std::variant<Detail::StreamType, boost::beast::ssl_stream<Detail::StreamType>>& stream();
         std::shared_ptr<boost::beast::http::request_parser<boost::beast::http::empty_body>>& parser();
         boost::beast::flat_buffer& buffer();
