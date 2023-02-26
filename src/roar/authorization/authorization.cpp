@@ -5,7 +5,7 @@
 
 namespace Roar
 {
-    //##################################################################################################################
+    // ##################################################################################################################
     AuthorizationScheme authorizationSchemeFromString(std::string_view view)
     {
         bool found = false;
@@ -23,11 +23,6 @@ namespace Roar
             return scheme;
         else
             return AuthorizationScheme::Other;
-    }
-    //------------------------------------------------------------------------------------------------------------------
-    AuthorizationScheme authorizationSchemeFromString(std::string const& str)
-    {
-        return authorizationSchemeFromString(std::string_view{str});
     }
     //------------------------------------------------------------------------------------------------------------------
     std::string to_string(AuthorizationScheme scheme)
@@ -54,13 +49,13 @@ namespace Roar
         return "";
     }
     //------------------------------------------------------------------------------------------------------------------
-    Authorization::Authorization(std::string const& scheme)
+    Authorization::Authorization(std::string_view scheme)
         : scheme_{[&scheme]() -> decltype(scheme_) {
-            auto schemeEnum = authorizationSchemeFromString(scheme);
+            const auto schemeEnum = authorizationSchemeFromString(scheme);
             if (schemeEnum == AuthorizationScheme::Other)
-                return scheme;
+                return std::string{scheme};
             return schemeEnum;
         }()}
     {}
-    //##################################################################################################################
+    // ##################################################################################################################
 }

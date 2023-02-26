@@ -21,14 +21,13 @@ namespace Roar
         Aws4_Hmac_Sha256,
         Other);
 
-    AuthorizationScheme authorizationSchemeFromString(std::string const&);
     AuthorizationScheme authorizationSchemeFromString(std::string_view);
     std::string to_string(AuthorizationScheme scheme);
 
     class Authorization
     {
       public:
-        Authorization(std::string const& scheme);
+        Authorization(std::string_view scheme);
 
         /**
          * @brief Returns the authorization scheme. If the value is "Other", use unknownSchemeAsString instead.

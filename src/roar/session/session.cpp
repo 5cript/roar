@@ -18,7 +18,7 @@
 
 namespace Roar
 {
-    //##################################################################################################################
+    // ##################################################################################################################
     struct Session::Implementation
     {
         std::variant<Detail::StreamType, boost::beast::ssl_stream<Detail::StreamType>> stream;
@@ -58,7 +58,7 @@ namespace Roar
             std::visit(std::forward<FunctionT>(func), stream);
         }
     };
-    //##################################################################################################################
+    // ##################################################################################################################
     Session::Session(
         boost::asio::ip::tcp::socket&& socket,
         boost::beast::flat_buffer&& buffer,
@@ -180,12 +180,9 @@ namespace Roar
         std::get<boost::beast::ssl_stream<Detail::StreamType>>(impl_->stream)
             .async_handshake(
                 boost::asio::ssl::stream_base::server,
-                impl_->buffer.data(),
-                [self = this->shared_from_this()](boost::beast::error_code ec, std::size_t bytesUsed) {
+                [self = this->shared_from_this()](const boost::system::error_code& ec) {
                     if (ec)
                         return self->impl_->onError({.error = ec, .additionalInfo = "Error during SSL handshake."});
-
-                    self->impl_->buffer.consume(bytesUsed);
                     self->readHeader();
                 });
     }
@@ -283,5 +280,5 @@ namespace Roar
         res.set(field::strict_transport_security, "max-age=3600");
         send<string_body>(std::move(res))->commit();
     }
-    //##################################################################################################################
+    // ##################################################################################################################
 }
