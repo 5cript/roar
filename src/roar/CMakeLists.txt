@@ -33,7 +33,7 @@ add_library(
 
 include(../../cmake/curl.cmake)
 
-find_package(Boost 1.78.0 REQUIRED COMPONENTS system)
+find_package(Boost 1.81.0 REQUIRED COMPONENTS system)
 find_library(LSSL ssl)
 find_library(LCRYPTO crypto)
 find_library(LCRYPTOPP cryptopp)
@@ -50,6 +50,7 @@ target_link_libraries(
          ${LCRYPTOPP}
          ${LCRYPTO})
 target_compile_definitions(roar PUBLIC BOOST_BEAST_USE_STD_STRING_VIEW)
+target_compile_features(roar PUBLIC cxx_std_20)
 
 set_target_warnings(roar)
 
