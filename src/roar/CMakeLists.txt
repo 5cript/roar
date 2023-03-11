@@ -34,8 +34,7 @@ add_library(
 include(../../cmake/curl.cmake)
 
 find_package(Boost 1.81.0 REQUIRED COMPONENTS system)
-find_library(LSSL ssl)
-find_library(LCRYPTO crypto)
+find_package(OpenSSL COMPONENTS SSL Crypto)
 find_library(LCRYPTOPP cryptopp)
 
 target_include_directories(roar PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../include
@@ -43,6 +42,8 @@ target_include_directories(roar PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../include
 target_link_libraries(
   roar
   PUBLIC Boost::system
+         OpenSSL::SSL
+         OpenSSL::Crypto
          promise
          fmt::fmt
          ${CURL_LIBRARIES}
