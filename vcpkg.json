@@ -1,0 +1,9 @@
+{
+  "name": "roar",
+  "dependencies": [
+    "boost",
+    "openssl",
+    "cryptopp",
+    "curl"
+  ]
+}

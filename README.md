@@ -43,9 +43,28 @@ This is a network library that has:
     - cryptopp
 - libcurl
 
-Use vcpkg on windows to install these dependencies when building with Visual Studio & cmake.
-Dont forget to install the correct triplet "vcpkg install boost --triplet x64-windows", when building 64 bit.
+Use vcpkg on windows for these dependencies when building with Visual Studio & cmake.
 https://vcpkg.io/en/getting-started.html
+
+Example CMakeSettings.json
+```json
+{
+  "configurations": [
+    {
+      "name": "x64-Clang-Debug",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "buildRoot": "${projectDir}\\build\\${name}",
+      "installRoot": "${projectDir}\\build\\install\\${name}",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "inheritEnvironments": [ "clang_cl_x64" ],
+      "cmakeCommandArgs": "-DVCPKG_DEFAULT_TRIPLET=x64-windows",
+      "cmakeToolchain": "D:/vcpkg/scripts/buildsystems/vcpkg.cmake"
+    }
+  ]
+}
+```
 
 # Developer Notes
 On msys2 use python (3) and python-pip of your subsystem, otherwise packages are not found
