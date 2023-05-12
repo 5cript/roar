@@ -53,7 +53,6 @@ if (${MSVC})
 else()
     target_link_libraries(roar PUBLIC cryptopp-static)
 endif()
-target_compile_definitions(roar PUBLIC BOOST_BEAST_USE_STD_STRING_VIEW)
 target_compile_features(roar PUBLIC cxx_std_20)
 
 set_target_warnings(roar)
