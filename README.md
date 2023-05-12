@@ -35,5 +35,17 @@ This is a network library that has:
 - [x] URL Parser
 - [ ] HTTP & HTTPS Tunnel Proxy
 
+## Dependencies
+
+- boost 1.81.0 or higher
+    - openssl::ssl
+    - openssl::crypto
+    - cryptopp
+- libcurl
+
+Use vcpkg on windows to install these dependencies when building with Visual Studio & cmake.
+Dont forget to install the correct triplet "vcpkg install boost --triplet x64-windows", when building 64 bit.
+https://vcpkg.io/en/getting-started.html
+
 # Developer Notes
 On msys2 use python (3) and python-pip of your subsystem, otherwise packages are not found
