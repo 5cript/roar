@@ -32,10 +32,10 @@ add_library(
   utility/date.cpp)
 
 include(../../cmake/curl.cmake)
+include(../../cmake/cryptopp.cmake)
 
 find_package(Boost 1.81.0 REQUIRED COMPONENTS system)
 find_package(OpenSSL COMPONENTS SSL Crypto)
-find_package(CryptoPP REQUIRED)
 
 target_include_directories(roar PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../include
                                        ${CURL_INCLUDE_DIR})
@@ -44,10 +44,15 @@ target_link_libraries(
   PUBLIC Boost::system
          promise
          fmt::fmt
-         ${CURL_LIBRARIES}
+         CURL::libcurl
          OpenSSL::SSL
          OpenSSL::Crypto
-         cryptopp-static)
+)
+if (${MSVC})
+    target_link_libraries(roar PUBLIC cryptopp::cryptopp)
+else()
+    target_link_libraries(roar PUBLIC cryptopp-static)
+endif()
 target_compile_definitions(roar PUBLIC BOOST_BEAST_USE_STD_STRING_VIEW)
 target_compile_features(roar PUBLIC cxx_std_20)
 

@@ -1,6 +1,8 @@
 build
 .cache
 .vscode
+.vs
+CMakeSettings.json
 compile_commands.json
 gdbserver.exe.stackdump
 gh-pages
