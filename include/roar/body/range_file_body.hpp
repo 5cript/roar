@@ -54,7 +54,7 @@ namespace Roar
                     , headConsumed{0}
                     , headSection{std::string{"\r\n"} + splitter}
                 {}
-                Sequence(std::size_t start, std::size_t end)
+                Sequence(std::uint64_t start, std::uint64_t end)
                     : start{start}
                     , end{end}
                     , headConsumed{0}
@@ -212,13 +212,13 @@ namespace Roar
              */
             std::size_t read(char* buf, std::size_t amount)
             {
-                std::size_t origAmount = amount;
+                std::uint64_t origAmount = amount;
                 auto& current = sequences_.back();
 
                 if (current.headConsumed != current.headSection.size())
                 {
                     auto copied = current.headSection.copy(
-                        buf, std::min(amount, current.headSection.size() - current.headConsumed), current.headConsumed);
+                        buf, std::min(static_cast<std::uint64_t>(amount), static_cast<std::uint64_t>(current.headSection.size()) - current.headConsumed), current.headConsumed);
                     buf += copied;
                     current.headConsumed += copied;
                     consumed_ += copied;
@@ -226,7 +226,7 @@ namespace Roar
                     if (amount > 0)
                         file_.seekg(static_cast<std::streamoff>(current.start));
                 }
-                file_.read(buf, static_cast<std::streamoff>(std::min(amount, current.end - current.start)));
+                file_.read(buf, static_cast<std::streamoff>(std::min(static_cast<std::uint64_t>(amount), current.end - current.start)));
                 auto gcount = static_cast<std::uint64_t>(file_.gcount());
                 consumed_ += gcount;
                 current.start += gcount;
@@ -289,11 +289,11 @@ namespace Roar
             // are inserted in reverse order, so we can pop_back.
             std::vector<Sequence> sequences_;
             std::string splitter_;
-            std::size_t totalSize_;
-            std::size_t consumed_;
+            std::uint64_t totalSize_;
+            std::uint64_t consumed_;
         };
 
-        constexpr static std::size_t bufferSize()
+        constexpr static std::uint64_t bufferSize()
         {
             using namespace MemoryLiterals;
             return 1_MemoryPage;
