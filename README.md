@@ -59,7 +59,7 @@ Example CMakeSettings.json
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
       "inheritEnvironments": [ "clang_cl_x64" ],
-      "cmakeCommandArgs": "-DVCPKG_DEFAULT_TRIPLET=x64-windows",
+      "cmakeCommandArgs": "",
       "cmakeToolchain": "D:/vcpkg/scripts/buildsystems/vcpkg.cmake"
     }
   ]
