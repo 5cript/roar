@@ -22,9 +22,15 @@ namespace Roar::Detail
     {
         inline static std::string to_string(std::filesystem::file_time_type const& ftime)
         {
+#ifdef _MSC_VER
+            auto cftime =
+                std::chrono::system_clock::to_time_t(std::chrono::time_point_cast<std::chrono::system_clock::duration>(
+                    std::chrono::utc_clock::to_sys(std::chrono::file_clock::to_utc(ftime))));
+#else
             auto cftime =
                 std::chrono::system_clock::to_time_t(std::chrono::time_point_cast<std::chrono::system_clock::duration>(
                     std::chrono::file_clock::to_sys(ftime)));
+#endif
             std::string str = std::asctime(std::localtime(&cftime));
             str.pop_back(); // rm the trailing '\n' put by `asctime`
             return str;
