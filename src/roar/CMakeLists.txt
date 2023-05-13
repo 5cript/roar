@@ -33,6 +33,7 @@ add_library(
 
 include(../../cmake/curl.cmake)
 include(../../cmake/cryptopp.cmake)
+include(../../cmake/warnings.cmake)
 
 find_package(Boost 1.81.0 REQUIRED COMPONENTS system)
 find_package(OpenSSL COMPONENTS SSL Crypto)
