@@ -1,6 +1,6 @@
 #include <roar/utility/sha.hpp>
 
-#include <openssl/sha.h>
+#include <openssl/evp.h>
 
 #include <sstream>
 #include <memory>
@@ -21,40 +21,38 @@ namespace Roar
             }
             return ss.str();
         }
+
+        std::optional<std::string> digest(std::string_view data, auto digestAlgorithm)
+        {
+            std::unique_ptr <EVP_MD_CTX, void(*)(EVP_MD_CTX*)> digestContext{
+                EVP_MD_CTX_new(), [](EVP_MD_CTX* ctx) { EVP_MD_CTX_free(ctx); }
+            };
+
+            unsigned char digestBuffer[EVP_MAX_MD_SIZE];
+            unsigned char* digest;
+            unsigned int digestLength = EVP_MAX_MD_SIZE;
+
+            if (!EVP_DigestInit_ex(digestContext.get(), digestAlgorithm(), nullptr))
+                return std::nullopt;
+
+            if (!EVP_DigestUpdate(digestContext.get(), data.data(), data.size()))
+                return std::nullopt;
+
+            if (!EVP_DigestFinal_ex(digestContext.get(), digestBuffer, &digestLength))
+                return std::nullopt;
+
+            return bufToHex(digestBuffer, digestLength);
+        }
     }
     //#####################################################################################################################
     std::optional<std::string> sha256(std::string_view data)
     {
-        SHA256_CTX ctx;
-        unsigned char buffer[SHA256_DIGEST_LENGTH]{0};
-
-        if (!SHA256_Init(&ctx))
-            return std::nullopt;
-
-        if (!SHA256_Update(&ctx, data.data(), data.size()))
-            return std::nullopt;
-
-        if (!SHA256_Final(buffer, &ctx))
-            return std::nullopt;
-
-        return bufToHex(buffer, SHA256_DIGEST_LENGTH);
+        return digest(data, EVP_sha256);
     }
     //---------------------------------------------------------------------------------------------------------------------
     std::optional<std::string> sha512(std::string_view data)
     {
-        SHA512_CTX ctx;
-        unsigned char buffer[SHA512_DIGEST_LENGTH]{0};
-
-        if (!SHA512_Init(&ctx))
-            return std::nullopt;
-
-        if (!SHA512_Update(&ctx, data.data(), data.size()))
-            return std::nullopt;
-
-        if (!SHA512_Final(buffer, &ctx))
-            return std::nullopt;
-
-        return bufToHex(buffer, SHA512_DIGEST_LENGTH);
+        return digest(data, EVP_sha512);
     }
     //#####################################################################################################################
 }

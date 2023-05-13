@@ -11,6 +11,7 @@
 
 #include <boost/beast/http/file_body.hpp>
 
+#include <ctime>
 #include <utility>
 #include <filesystem>
 #include <sstream>
@@ -31,9 +32,17 @@ namespace Roar::Detail
                 std::chrono::system_clock::to_time_t(std::chrono::time_point_cast<std::chrono::system_clock::duration>(
                     std::chrono::file_clock::to_sys(ftime)));
 #endif
-            std::string str = std::asctime(std::localtime(&cftime));
-            str.pop_back(); // rm the trailing '\n' put by `asctime`
-            return str;
+            std::string result(1024, '\0');
+#ifdef _MSC_VER
+#    pragma clang diagnostic push
+#    pragma clang diagnostic ignored "-Wdeprecated-declarations"
+            auto size = std::strftime(result.data(), result.size(), "%a %b %e %H:%M:%S %Y", std::localtime(&cftime));
+#    pragma clang diagnostic pop
+#else
+            auto size = std::strftime(result.data(), result.size(), "%a %b %e %H:%M:%S %Y", std::localtime(&cftime));
+#endif
+            result.resize(size);
+            return result;
         }
     }
 

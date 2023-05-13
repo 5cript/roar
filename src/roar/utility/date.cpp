@@ -37,7 +37,13 @@ namespace Roar
     std::string date::toGmtString() const
     {
         auto time = std::chrono::system_clock::to_time_t(timePoint_);
+#ifdef _MSC_VER
+        tm tmTime{0};
+        gmtime_s(&tmTime, &time);
+        return tmFormatter(&tmTime, " GMT");
+#else
         return tmFormatter(gmtime(&time), " GMT");
+#endif
     }
     //#####################################################################################################################
 }
