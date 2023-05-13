@@ -3,7 +3,7 @@
 #include <boost/algorithm/string.hpp>
 
 #ifndef _MSC_VER
-#   include <cxxabi.h>
+#    include <cxxabi.h>
 #endif
 #include <string>
 
@@ -26,8 +26,8 @@ namespace Roar
         std::string demangled(bufferSize, '\0');
         std::size_t mutableLength = bufferSize;
 
-        int status = 0;
 #ifndef _MSC_VER
+        int status = 0;
         abi::__cxa_demangle(name.c_str(), demangled.data(), &mutableLength, &status);
 #else
         demangled = name;
