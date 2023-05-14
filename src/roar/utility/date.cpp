@@ -5,7 +5,7 @@
 
 namespace Roar
 {
-    //#####################################################################################################################
+    // #####################################################################################################################
     std::string tmFormatter(std::tm* tm, const char* suffix = nullptr)
     {
         static constexpr const char* weekdays[] = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
@@ -20,7 +20,7 @@ namespace Roar
             sstr << suffix;
         return sstr.str();
     }
-    //#####################################################################################################################
+    // #####################################################################################################################
     date::date(std::chrono::system_clock::time_point time_point)
         : timePoint_{std::move(time_point)}
     {}
@@ -38,12 +38,12 @@ namespace Roar
     {
         auto time = std::chrono::system_clock::to_time_t(timePoint_);
 #ifdef _MSC_VER
-        tm tmTime{0};
+        tm tmTime{};
         gmtime_s(&tmTime, &time);
         return tmFormatter(&tmTime, " GMT");
 #else
         return tmFormatter(gmtime(&time), " GMT");
 #endif
     }
-    //#####################################################################################################################
+    // #####################################################################################################################
 }
