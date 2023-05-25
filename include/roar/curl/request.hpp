@@ -4,6 +4,7 @@
 #include "response.hpp"
 #include "source.hpp"
 
+#include <cstdint>
 #include <boost/beast/http/field.hpp>
 #include <curl/curl.h>
 #ifdef ROAR_ENABLE_NLOHMANN_JSON
