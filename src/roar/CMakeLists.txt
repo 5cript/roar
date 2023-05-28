@@ -72,7 +72,7 @@ set_target_warnings(roar)
 
 if(${ROAR_ENABLE_NLOHMANN_JSON})
   target_link_libraries(roar PUBLIC nlohmann_json::nlohmann_json)
-  target_compile_definitions(roar PUBLIC ROAR_ENABLE_NLOHMANN_JSON=1)
+  target_compile_definitions(roar PUBLIC ROAR_ENABLE_NLOHMANN_JSON=1 BOOST_ASIO_DISABLE_CONCEPTS)
 endif()
 
 if(WIN32)
