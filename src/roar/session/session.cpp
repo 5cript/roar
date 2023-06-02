@@ -67,6 +67,7 @@ namespace Roar
         std::function<void(Error&&)> onError,
         std::weak_ptr<Router> router,
         std::shared_ptr<const StandardResponseProvider> standardResponseProvider)
+        // NOLINTNEXTLINE
         : impl_{std::make_unique<Implementation>(
               std::move(socket),
               std::move(buffer),

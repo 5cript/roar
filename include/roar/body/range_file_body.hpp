@@ -74,7 +74,7 @@ namespace Roar
                 , totalSize_{0}
                 , consumed_{0}
             {
-                constexpr const char* hexCharacters = "0123456789ABCDEF";
+                constexpr const char* hexCharacters = "0123456789ABCDEF"; // NOLINT
 
                 std::random_device rd;
                 std::mt19937 gen(rd());
@@ -218,7 +218,11 @@ namespace Roar
                 if (current.headConsumed != current.headSection.size())
                 {
                     auto copied = current.headSection.copy(
-                        buf, std::min(static_cast<std::uint64_t>(amount), static_cast<std::uint64_t>(current.headSection.size()) - current.headConsumed), current.headConsumed);
+                        buf,
+                        std::min(
+                            static_cast<std::uint64_t>(amount),
+                            static_cast<std::uint64_t>(current.headSection.size()) - current.headConsumed),
+                        current.headConsumed);
                     buf += copied;
                     current.headConsumed += copied;
                     consumed_ += copied;
@@ -226,7 +230,10 @@ namespace Roar
                     if (amount > 0)
                         file_.seekg(static_cast<std::streamoff>(current.start));
                 }
-                file_.read(buf, static_cast<std::streamoff>(std::min(static_cast<std::uint64_t>(amount), current.end - current.start)));
+                file_.read(
+                    buf,
+                    static_cast<std::streamoff>(
+                        std::min(static_cast<std::uint64_t>(amount), current.end - current.start)));
                 auto gcount = static_cast<std::uint64_t>(file_.gcount());
                 consumed_ += gcount;
                 current.start += gcount;

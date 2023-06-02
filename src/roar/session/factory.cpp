@@ -14,7 +14,7 @@
 
 namespace Roar
 {
-    //##################################################################################################################
+    // ##################################################################################################################
     struct Factory::ProtoSession
     {
         boost::beast::tcp_stream stream;
@@ -25,7 +25,7 @@ namespace Roar
             , buffer{}
         {}
     };
-    //##################################################################################################################
+    // ##################################################################################################################
     struct Factory::Implementation
     {
         std::optional<boost::asio::ssl::context>& sslContext;
@@ -36,7 +36,7 @@ namespace Roar
             , onError{std::move(onError)}
         {}
     };
-    //##################################################################################################################
+    // ##################################################################################################################
     Factory::Factory(std::optional<boost::asio::ssl::context>& sslContext, std::function<void(Error&&)> onError)
         : impl_{std::make_unique<Implementation>(sslContext, std::move(onError))}
     {}
@@ -48,6 +48,7 @@ namespace Roar
         std::weak_ptr<Router> router,
         std::shared_ptr<const StandardResponseProvider> standardResponseProvider)
     {
+        // NOLINTNEXTLINE
         auto protoSession = std::make_shared<ProtoSession>(std::move(socket));
         boost::beast::get_lowest_layer(protoSession->stream).expires_after(std::chrono::seconds(sslDetectionTimeout));
         boost::beast::async_detect_ssl(
@@ -88,5 +89,5 @@ namespace Roar
                 }
             });
     }
-    //##################################################################################################################
+    // ##################################################################################################################
 }

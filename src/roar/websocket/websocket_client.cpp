@@ -16,7 +16,7 @@ namespace Roar
 {
     using namespace promise;
 
-    //##################################################################################################################
+    // ##################################################################################################################
     struct WebsocketClient::Implementation
     {
         boost::beast::flat_buffer buffer;
@@ -114,6 +114,7 @@ namespace Roar
     };
     //------------------------------------------------------------------------------------------------------------------
     WebsocketClient::WebsocketClient(ConstructionArguments&& args)
+        // NOLINTNEXTLINE
         : SharedFromBase{[&args]() -> decltype(ws_) {
             if (args.sslContext)
                 return boost::beast::websocket::stream<boost::beast::ssl_stream<Detail::StreamType>>{
@@ -161,5 +162,5 @@ namespace Roar
             });
         });
     }
-    //##################################################################################################################
+    // ##################################################################################################################
 }
