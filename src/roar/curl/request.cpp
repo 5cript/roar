@@ -45,7 +45,7 @@ namespace Roar::Curl
             const auto position = line.find_first_of(':');
             if (position != std::string::npos)
             {
-                auto value = line.substr(position + 1, line.length() - position - 1);
+                auto value = line.substr(position + 1);
                 boost::algorithm::trim_if(value, [](char c) {
                     return std::isspace(c);
                 });
@@ -260,7 +260,7 @@ namespace Roar::Curl
     }
     Request& Request::sink(std::filesystem::path const& path)
     {
-        return sink([file = std::make_shared<std::ofstream>(path, std::ios_base::binary)](
+        return sink([file = std::make_shared<std::ofstream>(path, std::ios::binary)](
                         char const* data, std::size_t count) mutable {
             file->write(data, static_cast<std::streamsize>(count));
         });

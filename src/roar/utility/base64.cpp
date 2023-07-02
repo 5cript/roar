@@ -147,7 +147,10 @@ namespace Roar
     }
     std::string base64Decode(std::string_view base64View)
     {
-        std::string result(base64::decoded_size(base64View.size()), '\0');
+        auto decodedSize = base64::decoded_size(base64View.size());
+        if (decodedSize == 0)
+            return {};
+        std::string result(decodedSize, '\0');
         const auto [writtenOut, readIn] = base64::decode(result.data(), base64View.data(), base64View.size());
         result.resize(writtenOut);
         return result;
