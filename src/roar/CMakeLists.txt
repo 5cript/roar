@@ -46,7 +46,6 @@ target_link_libraries(
   roar
   PUBLIC Boost::system
          promise
-         fmt::fmt
          CURL::libcurl
          OpenSSL::SSL
          OpenSSL::Crypto
