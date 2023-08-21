@@ -11,7 +11,6 @@
 #include <random>
 #include <string_view>
 #include <algorithm>
-#include <fmt/format.h>
 
 namespace Roar
 {
@@ -38,15 +37,11 @@ namespace Roar
                     : start{start}
                     , end{end}
                     , headConsumed{0}
-                    , headSection{fmt::format(
-                          "\r\n{}\r\n"
-                          "Content-Type: {}\r\n"
-                          "Content-Range: bytes {}-{}/{}\r\n\r\n",
-                          splitter,
-                          contentType,
-                          start,
-                          end,
-                          totalFile)}
+                    , headSection{
+                          std::string{"\r\n"} + splitter + "\r\n" +
+                          "Content-Type: " + std::string{contentType} + "\r\n" +
+                          "Content-Range: bytes " + std::to_string(start) + "-" + 
+                          std::to_string(end) + "/" + std::to_string(totalFile) + "\r\n\r\n"}
                 {}
                 Sequence(std::string const& splitter)
                     : start{0}

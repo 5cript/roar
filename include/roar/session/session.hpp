@@ -228,13 +228,15 @@ namespace Roar
                     setHeader(field::content_type, "multipart/byteranges; boundary=" + response_.body().boundary());
                 else
                 {
+                    const auto first = response_.body().firstRange().first;
+                    const auto second = response_.body().firstRange().second;
+                    const auto fileSize = response_.body().fileSize();
+
                     setHeader(
                         field::content_range,
-                        fmt::format(
-                            "bytes {}-{}/{}",
-                            response_.body().firstRange().first,
-                            response_.body().firstRange().second,
-                            response_.body().fileSize()));
+                        std::string{"bytes "} + std::to_string(first) +
+                        "-" + std::to_string(second) + "/" + std::to_string(fileSize)
+                    );
                 }
                 status(status::partial_content);
                 return commit<BodyT, true>();

@@ -13,6 +13,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
+#include <format>
 #include <future>
 
 namespace Roar::Tests
@@ -197,7 +198,7 @@ namespace Roar::Tests
         auto pos = headers["Content-Type"].find("boundary=");
         ASSERT_NE(pos, std::string::npos);
         const auto boundary = headers["Content-Type"].substr(pos + 9);
-        const auto inplaceFormatted = fmt::format(
+        const auto inplaceFormatted = std::format(
             "{}\r\nContent-Type: plain/text\r\nContent-Range: bytes 0-100/25600\r\n\r\n{}\r\n"
             "{}\r\nContent-Type: plain/text\r\nContent-Range: bytes 200-350/25600\r\n\r\n{}\r\n"
             "{}\r\nContent-Type: plain/text\r\nContent-Range: bytes 400-465/25600\r\n\r\n{}\r\n"
@@ -230,7 +231,7 @@ namespace Roar::Tests
         auto pos = headers["Content-Type"].find("boundary=");
         ASSERT_NE(pos, std::string::npos);
         const auto boundary = headers["Content-Type"].substr(pos + 9);
-        const auto inplaceFormatted = fmt::format(
+        const auto inplaceFormatted = std::format(
             "{}\r\nContent-Type: plain/text\r\nContent-Range: bytes 200-6800/25600\r\n\r\n{}\r\n"
             "{}\r\nContent-Type: plain/text\r\nContent-Range: bytes 0-10/25600\r\n\r\n{}\r\n"
             "{}\r\nContent-Type: plain/text\r\nContent-Range: bytes 137-10521/25600\r\n\r\n{}\r\n"
