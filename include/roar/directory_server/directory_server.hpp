@@ -28,9 +28,15 @@ namespace Roar::Detail
                 std::chrono::system_clock::to_time_t(std::chrono::time_point_cast<std::chrono::system_clock::duration>(
                     std::chrono::utc_clock::to_sys(std::chrono::file_clock::to_utc(ftime))));
 #else
+#    ifdef _GLIBCXX_RELEASE&& _GLIBCXX_RELEASE >= 9
             auto cftime =
                 std::chrono::system_clock::to_time_t(std::chrono::time_point_cast<std::chrono::system_clock::duration>(
                     std::chrono::file_clock::to_sys(ftime)));
+#    else
+            auto cftime =
+                std::chrono::system_clock::to_time_t(std::chrono::time_point_cast<std::chrono::system_clock::duration>(
+                    std::chrono::__file_clock::to_sys(ftime)));
+#    endif
 #endif
             std::string result(1024, '\0');
 #ifdef _MSC_VER
@@ -68,11 +74,11 @@ namespace Roar::Detail
             , jail_{resolvePath()}
             , basePath_{this->serveInfo_.path}
             , onError_{unwrapFlexibleProvider<RequestListenerT, std::function<void(std::string const&)>>(
-                *this->listener_, this->serveInfo_.serveOptions.onError
-            )}
+                  *this->listener_,
+                  this->serveInfo_.serveOptions.onError)}
             , onFileServeComplete_{unwrapFlexibleProvider<RequestListenerT, std::function<void(bool)>>(
-                *this->listener_, this->serveInfo_.serveOptions.onFileServeComplete
-            )}
+                  *this->listener_,
+                  this->serveInfo_.serveOptions.onFileServeComplete)}
         {
             if (!onError_)
                 onError_ = [](std::string const&) {};
@@ -427,7 +433,11 @@ namespace Roar::Detail
             session.send<http::empty_body>(req)
                 ->status(http::status::continue_)
                 .commit()
-                .then([session = session.shared_from_this(), req, body = std::move(body), contentLength, onError = onError_](bool closed) {
+                .then([session = session.shared_from_this(),
+                       req,
+                       body = std::move(body),
+                       contentLength,
+                       onError = onError_](bool closed) {
                     if (closed)
                         return;
 
@@ -466,11 +476,14 @@ namespace Roar::Detail
                 intermediate->preparePayload();
                 intermediate->enableCors(req, this->serveInfo_.routeOptions.cors);
                 intermediate->contentType(contentType ? contentType.value() : "application/octet-stream");
-                intermediate->commit().then([session = session.shared_from_this(), req, onFileServeComplete = onFileServeComplete_](bool wasClosed){
-                    onFileServeComplete(wasClosed);
-                }).fail([onError = onError_](auto&& err) {
-                    onError(err.toString());
-                });
+                intermediate->commit()
+                    .then([session = session.shared_from_this(), req, onFileServeComplete = onFileServeComplete_](
+                              bool wasClosed) {
+                        onFileServeComplete(wasClosed);
+                    })
+                    .fail([onError = onError_](auto&& err) {
+                        onError(err.toString());
+                    });
             }
             else
             {
@@ -486,9 +499,12 @@ namespace Roar::Detail
 
                     session.send<RangeFileBody>(req, std::move(body))
                         ->useFixedTimeout(std::chrono::seconds{10})
-                        .commit().then([session = session.shared_from_this(), req, onFileServeComplete = onFileServeComplete_](bool wasClosed){
+                        .commit()
+                        .then([session = session.shared_from_this(), req, onFileServeComplete = onFileServeComplete_](
+                                  bool wasClosed) {
                             onFileServeComplete(wasClosed);
-                        }).fail([onError = onError_](auto&& err) {
+                        })
+                        .fail([onError = onError_](auto&& err) {
                             onError(err.toString());
                         });
                 }
