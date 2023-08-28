@@ -40,8 +40,9 @@ namespace Roar::Detail
 #        endif
 #    else
             // Assume compliance:
-            std::chrono::system_clock::to_time_t(std::chrono::time_point_cast<std::chrono::system_clock::duration>(
-                std::chrono::file_clock::to_sys(ftime)));
+            auto cftime =
+                std::chrono::system_clock::to_time_t(std::chrono::time_point_cast<std::chrono::system_clock::duration>(
+                    std::chrono::file_clock::to_sys(ftime)));
 #    endif
 #endif
             std::string result(1024, '\0');
