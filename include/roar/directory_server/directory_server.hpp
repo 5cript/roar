@@ -28,22 +28,9 @@ namespace Roar::Detail
                 std::chrono::system_clock::to_time_t(std::chrono::time_point_cast<std::chrono::system_clock::duration>(
                     std::chrono::utc_clock::to_sys(std::chrono::file_clock::to_utc(ftime))));
 #else
-#    ifdef _GLIBCXX_RELEASE
-#        if _GLIBCXX_RELEASE >= 9
             auto cftime =
                 std::chrono::system_clock::to_time_t(std::chrono::time_point_cast<std::chrono::system_clock::duration>(
                     std::chrono::file_clock::to_sys(ftime)));
-#        else
-            auto cftime =
-                std::chrono::system_clock::to_time_t(std::chrono::time_point_cast<std::chrono::system_clock::duration>(
-                    std::chrono::__file_clock::to_sys(ftime)));
-#        endif
-#    else
-            // Assume compliance:
-            auto cftime =
-                std::chrono::system_clock::to_time_t(std::chrono::time_point_cast<std::chrono::system_clock::duration>(
-                    std::chrono::file_clock::to_sys(ftime)));
-#    endif
 #endif
             std::string result(1024, '\0');
 #ifdef _MSC_VER
