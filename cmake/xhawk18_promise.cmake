@@ -6,7 +6,7 @@ include(FetchContent)
 FetchContent_Declare(
     promise
     GIT_REPOSITORY https://github.com/5cript/promise-cpp.git
-    GIT_TAG        ef0de9165ffb318955e249a5281b9cfc4632d9ce
+    GIT_TAG        affb386031896805c198485f10fd56215b1a4460
 )
 
 FetchContent_MakeAvailable(promise)
