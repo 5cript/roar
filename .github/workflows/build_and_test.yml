@@ -76,7 +76,6 @@ jobs:
       - name: Build
         run: cmake --build ${{github.workspace}}/build/clang_${{env.BUILD_TYPE}} --config ${{env.BUILD_TYPE}}
 
-
   windows-msys2:
     runs-on: windows-2022
     defaults:
@@ -99,3 +98,20 @@ jobs:
 
       - name: Build
         run: cmake --build ${{env.WSPACE}}/build/clang_${{env.BUILD_TYPE}} --config ${{env.BUILD_TYPE}}
+
+  macos:
+    runs-on: macos-13
+
+    steps:
+      - run: brew install ninja boost cryptopp curl llvm@16
+
+      - name: Set Env Vars
+        run: |
+          echo "export LDFLAGS=-L/opt/homebrew/lib" >> $GITHUB_ENV
+          echo "export CPPFLAGS=-I/opt/homebrew/include" >> $GITHUB_ENV
+
+      - name: Configure CMake
+        run: cmake -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm@16/bin/clang -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm@16/bin/clang++ -DCMAKE_LINKER=/opt/homebrew/opt/llvm@16/bin/lld -B ${{github.workspace}}/build/clang_${{env.BUILD_TYPE}} -G"Ninja" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DNUI_BUILD_EXAMPLES=off -DCMAKE_CXX_EXTENSIONS=on -DCMAKE_CXX_STANDARD=20
+
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build/clang_${{env.BUILD_TYPE}} --config ${{env.BUILD_TYPE}}
