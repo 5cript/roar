@@ -43,6 +43,15 @@ This is a network library that has:
     - cryptopp
 - libcurl
 
+### MacOS
+
+Dependencies are expected to be installed via brew.
+If this does not work for you, please open an issue.
+
+brew install ninja boost cryptopp curl llvm@16
+
+### Windows
+
 Use vcpkg on windows for these dependencies when building with Visual Studio & cmake.
 https://vcpkg.io/en/getting-started.html
 
