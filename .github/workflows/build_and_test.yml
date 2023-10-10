@@ -69,7 +69,7 @@ jobs:
           platform: x64
 
       - name: Configure CMake
-        run: cmake -B ${{github.workspace}}/build/clang_${{env.BUILD_TYPE}} -G"Ninja" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DNUI_BUILD_EXAMPLES=off -DCMAKE_CXX_EXTENSIONS=on -DCMAKE_CXX_COMPILER=c++ -DCMAKE_C_COMPILER=cc -DCMAKE_CXX_STANDARD=20
+        run: cmake -B ${{github.workspace}}/build/clang_${{env.BUILD_TYPE}} -G"Ninja" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_EXTENSIONS=on -DCMAKE_CXX_COMPILER=c++ -DCMAKE_C_COMPILER=cc -DCMAKE_CXX_STANDARD=20
         env:
           BOOST_ROOT: ${{ steps.install-boost.outputs.BOOST_ROOT }}
 
@@ -94,7 +94,7 @@ jobs:
         run: echo "WSPACE=$(cygpath '${{github.workspace}}')" >> $GITHUB_ENV
 
       - name: Configure CMake
-        run: cmake -B ${{env.WSPACE}}/build/clang_${{env.BUILD_TYPE}} -G"Ninja" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DNUI_BUILD_EXAMPLES=off -DCMAKE_CXX_EXTENSIONS=on -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang -DCMAKE_LINKER=lld -DCMAKE_CXX_STANDARD=20
+        run: cmake -B ${{env.WSPACE}}/build/clang_${{env.BUILD_TYPE}} -G"Ninja" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_EXTENSIONS=on -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang -DCMAKE_LINKER=lld -DCMAKE_CXX_STANDARD=20
 
       - name: Build
         run: cmake --build ${{env.WSPACE}}/build/clang_${{env.BUILD_TYPE}} --config ${{env.BUILD_TYPE}}
@@ -103,15 +103,32 @@ jobs:
     runs-on: macos-13
 
     steps:
+      - uses: actions/checkout@v3
+
       - run: brew install ninja boost cryptopp curl llvm@16
+
+      - name: Get Brew Prefix
+        run: |
+          echo "BREW_PREFIX=$(brew --prefix)" >> $GITHUB_ENV
 
       - name: Set Env Vars
         run: |
-          echo "export LDFLAGS=-L/opt/homebrew/lib" >> $GITHUB_ENV
-          echo "export CPPFLAGS=-I/opt/homebrew/include" >> $GITHUB_ENV
+          echo "export LDFLAGS=-L$BREW_PREFIX/lib" >> $GITHUB_ENV
+          echo "export CPPFLAGS=-I$BREW_PREFIX/include" >> $GITHUB_ENV
 
       - name: Configure CMake
-        run: cmake -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm@16/bin/clang -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm@16/bin/clang++ -DCMAKE_LINKER=/opt/homebrew/opt/llvm@16/bin/lld -B ${{github.workspace}}/build/clang_${{env.BUILD_TYPE}} -G"Ninja" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DNUI_BUILD_EXAMPLES=off -DCMAKE_CXX_EXTENSIONS=on -DCMAKE_CXX_STANDARD=20
+        run: >
+          cmake
+          -DCMAKE_C_COMPILER=$BREW_PREFIX/opt/llvm@16/bin/clang
+          -DCMAKE_CXX_COMPILER=$BREW_PREFIX/opt/llvm@16/bin/clang++
+          -DCMAKE_LINKER=$BREW_PREFIX/opt/llvm@16/bin/lld
+          -S ${{github.workspace}}
+          -B ${{github.workspace}}/build/clang_${{env.BUILD_TYPE}}
+          -G"Ninja"
+          -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+          -DBREW_PREFIX="$BREW_PREFIX"
+          -DCMAKE_CXX_EXTENSIONS=on
+          -DCMAKE_CXX_STANDARD=20
 
       - name: Build
         run: cmake --build ${{github.workspace}}/build/clang_${{env.BUILD_TYPE}} --config ${{env.BUILD_TYPE}}

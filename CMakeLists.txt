@@ -13,6 +13,7 @@ endif()
 include(./cmake/warnings.cmake)
 include(./cmake/example_target.cmake)
 include(./cmake/options.cmake)
+include(./cmake/brew.cmake)
 
 # Deps
 include(./cmake/dependencies/boost.cmake)
