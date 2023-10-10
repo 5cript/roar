@@ -1,5 +1,3 @@
-project(promise-git NONE)
-
 set(PROMISE_BUILD_EXAMPLES off CACHE BOOL "Promise build examples" FORCE)
 set(PROMISE_MULTITHREAD on CACHE BOOL "Promise multithreading on")
 
@@ -12,8 +10,8 @@ else()
     include(FetchContent)
     FetchContent_Declare(
         promise
-        GIT_REPOSITORY https://github.com/5cript/promise-cpp.git
-        GIT_TAG        affb386031896805c198485f10fd56215b1a4460
+        GIT_REPOSITORY ${ROAR_PROMISE_GIT_REPOSITORY}
+        GIT_TAG        ${ROAR_PROMISE_GIT_TAG}
     )
     FetchContent_MakeAvailable(promise)
 
