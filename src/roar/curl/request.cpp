@@ -75,6 +75,13 @@ namespace Roar::Curl
 
         return *this;
     }
+    Request& Request::bearerAuth(std::string const& bearerToken)
+    {
+        check(curl_easy_setopt(instance_, CURLOPT_HTTPAUTH, CURLAUTH_BEARER));
+        check(curl_easy_setopt(instance_, CURLOPT_XOAUTH2_BEARER, bearerToken.c_str()));
+
+        return *this;
+    }
     Request& Request::acceptEncoding(std::string const& encoding)
     {
         check(curl_easy_setopt(instance_, CURLOPT_ACCEPT_ENCODING, encoding.c_str()));
