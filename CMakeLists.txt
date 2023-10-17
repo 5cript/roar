@@ -10,14 +10,20 @@ if(PROJECT_IS_TOP_LEVEL)
     endif()
 endif()
 
-include (./cmake/warnings.cmake)
-include (./cmake/example_target.cmake)
-include (./cmake/options.cmake)
+include(./cmake/warnings.cmake)
+include(./cmake/example_target.cmake)
+include(./cmake/options.cmake)
+include(./cmake/brew.cmake)
 
-include (./cmake/xhawk18_promise.cmake)
+# Deps
+include(./cmake/dependencies/boost.cmake)
+include(./cmake/dependencies/ssl.cmake)
+include(./cmake/dependencies/curl.cmake)
+include(./cmake/dependencies/cryptopp.cmake)
+include(./cmake/dependencies/xhawk18_promise.cmake)
 
 if (${ROAR_ENABLE_NLOHMANN_JSON})
-    include(./cmake/nlohmann_json.cmake)
+    include(./cmake/dependencies/nlohmann_json.cmake)
 endif()
 
 add_subdirectory(src/roar)

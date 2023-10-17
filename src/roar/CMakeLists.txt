@@ -33,39 +33,18 @@ add_library(
 
 include(../../cmake/warnings.cmake)
 
-if (UNIX)
-    find_package(PkgConfig REQUIRED)
-endif()
-find_package(CURL REQUIRED)
-find_package(Boost 1.81.0 REQUIRED COMPONENTS system)
-find_package(OpenSSL COMPONENTS SSL Crypto)
-
+target_compile_features(roar PUBLIC cxx_std_20)
 target_include_directories(roar PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../include
                                        ${CURL_INCLUDE_DIR})
 target_link_libraries(
   roar
   PUBLIC Boost::system
          promise
+         roar-cryptopp
          CURL::libcurl
          OpenSSL::SSL
          OpenSSL::Crypto
 )
-if (WIN32)
-    find_package(CryptoPP REQUIRED)
-    if (${MSVC})
-        target_link_libraries(roar PUBLIC cryptopp::cryptopp)
-    else()
-        target_link_libraries(roar PUBLIC cryptopp-static)
-    endif()
-else()
-    pkg_check_modules(cryptopp IMPORTED_TARGET libcrypto++)
-    if ("${cryptopp_FOUND}" STREQUAL "1")
-    else()
-        pkg_check_modules(cryptopp IMPORTED_TARGET libcryptopp)
-    endif()
-    target_link_libraries(roar PUBLIC PkgConfig::cryptopp)
-endif()
-target_compile_features(roar PUBLIC cxx_std_20)
 
 set_target_warnings(roar)
 

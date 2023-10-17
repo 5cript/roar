@@ -1,0 +1,1 @@
+set(BREW_PREFIX "/opt/homebrew" CACHE STRING "Homebrew install prefix")
