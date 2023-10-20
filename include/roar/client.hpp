@@ -162,7 +162,7 @@ namespace Roar
                         context->buffer,
                         context->response.response(),
                         [weak = weak_from_this(), d = std::move(d), timeout, context](
-                            boost::beast::error_code ec, std::size_t bytesTransferred) mutable {
+                            boost::beast::error_code ec, std::size_t) mutable {
                             auto self = weak.lock();
                             if (!self)
                                 return d.reject(Error{.error = ec, .additionalInfo = "Client is no longer alive."});
@@ -208,7 +208,7 @@ namespace Roar
                         context->buffer,
                         parser,
                         [weak = weak_from_this(), d = std::move(d), timeout, context, &parser](
-                            boost::beast::error_code ec, std::size_t bytesTransferred) mutable {
+                            boost::beast::error_code ec, std::size_t) mutable {
                             auto self = weak.lock();
                             if (!self)
                                 return d.reject(Error{.error = ec, .additionalInfo = "Client is no longer alive."});
@@ -323,7 +323,7 @@ namespace Roar
                     socket,
                     request,
                     [weak = weak_from_this(), d = std::move(d), timeout](
-                        boost::beast::error_code ec, std::size_t bytesWritten) mutable {
+                        boost::beast::error_code ec, std::size_t) mutable {
                         auto self = weak.lock();
                         if (!self)
                             return d.reject(Error{.error = ec, .additionalInfo = "Client is no longer alive."});

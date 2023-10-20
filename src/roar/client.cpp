@@ -91,7 +91,7 @@ namespace Roar
             withLowerLayerDo([timeout](auto& socket) {
                 socket.expires_after(timeout);
             });
-            withStreamDo([this, timeout, d = std::move(d)](auto& socket) mutable {
+            withStreamDo([this, d = std::move(d)](auto& socket) mutable {
                 struct Buf
                 {
                     std::string data = std::string(4096, '\0');
@@ -142,8 +142,8 @@ namespace Roar
     namespace
     {
         class OnChunkHandler;
-        class OnChunkHeader;
-        class OnChunkBody;
+        struct OnChunkHeader;
+        struct OnChunkBody;
 
         class SseContext : public std::enable_shared_from_this<SseContext>
         {
@@ -265,10 +265,7 @@ namespace Roar
 
             client->withStreamDo([client, timeout, self = shared_from_this()](auto& socket) {
                 boost::beast::http::async_read_some(
-                    socket,
-                    self->headerBuffer,
-                    self->responseParser,
-                    [self, client, timeout](auto ec, auto bytesTransferred) {
+                    socket, self->headerBuffer, self->responseParser, [self, client, timeout](auto ec, auto) {
                         if (ec)
                             return self->onEndOfStream(Error{.error = ec, .additionalInfo = "Stream read failed."});
 
@@ -306,17 +303,17 @@ namespace Roar
                     }
 
                     std::string event;
-                    std::string data;
+                    std::string eventData;
 
                     for (auto const& [key, value] : keyValuePairs)
                     {
                         if (key == "event")
                             event = value;
                         else if (key == "data")
-                            data = value;
+                            eventData = value;
                     }
 
-                    if (!onEvent(event, data))
+                    if (!onEvent(event, eventData))
                         onEndOfStream(std::nullopt);
                 }
                 catch (expectation_failure<std::string_view::const_iterator> const& e)
