@@ -3,7 +3,7 @@
 /** @file */
 
 #include <roar/routing/proto_route.hpp>
-#include <roar/detail/overloaded.hpp>
+#include <roar/utility/overloaded.hpp>
 #include <roar/literals/regex.hpp>
 #include <roar/session/session.hpp>
 #include <roar/routing/flexible_provider.hpp>
@@ -81,7 +81,8 @@ namespace Roar
         FlexibleProvider<RequestListenerT, std::string, true> customListingStyle = std::monostate{};
 
         /// Called when errors occur on serve.
-        FlexibleProvider<RequestListenerT, std::function<void(std::string const& err)>> onError = std::function<void(std::string const& err)>{};
+        FlexibleProvider<RequestListenerT, std::function<void(std::string const& err)>> onError =
+            std::function<void(std::string const& err)>{};
 
         /// Called when errors occur on serve file complete. bool parameter = was the connection closed?
         FlexibleProvider<RequestListenerT, std::function<void(bool)>> onFileServeComplete = std::function<void(bool)>{};
@@ -144,7 +145,7 @@ namespace Roar
     template <typename RequestListenerT>
     auto extendRouteInfo(RouteInfo<RequestListenerT> info, HandlerType<RequestListenerT> handler)
     {
-        return Detail::overloaded{
+        return overloaded{
             [info, handler](RouteInfo<RequestListenerT> userInfo) -> RouteInfo<RequestListenerT> {
                 return {
                     .path = userInfo.path,
@@ -178,7 +179,7 @@ namespace Roar
     template <typename RequestListenerT>
     auto extendRouteInfoForServe(ServeInfo<RequestListenerT> info, ServeHandlerType<RequestListenerT> handler)
     {
-        return Detail::overloaded{
+        return overloaded{
             [info, handler](ServeInfo<RequestListenerT> userInfo) -> ServeInfo<RequestListenerT> {
                 return {
                     .path = userInfo.path,

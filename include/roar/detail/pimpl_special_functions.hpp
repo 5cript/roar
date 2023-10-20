@@ -34,3 +34,8 @@
 #define ROAR_PIMPL_SPECIAL_FUNCTIONS_IMPL_NO_DTOR(Name) \
     Name::Name(Name&&) = default; \
     Name& Name::operator=(Name&&) = default
+
+/**
+ * @brief Utility function for rule of 5 abidance in pimpl classes.
+ */
+#define ROAR_PIMPL_SPECIAL_FUNCTIONS_IMPL_NO_MOVE(Name) Name::~Name() = default;

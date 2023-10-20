@@ -50,6 +50,7 @@ namespace Roar::Tests
         ROAR_DELETE(deleteHere)("/deleteHere");
         ROAR_OPTIONS(optionsHere)("/optionsHere");
         ROAR_HEAD(headHere)("/headHere");
+        ROAR_GET(sse)("/sse");
         ROAR_GET(unsecure)
         ({
             .path = "/unsecure",
@@ -167,5 +168,15 @@ namespace Roar::Tests
             dynamicGetFunc(session, std::move(req));
         else
             justOk(session, std::move(req));
+    }
+    inline void SimpleRoutes::sse(Session& session, EmptyBodyRequest&& req)
+    {
+        using namespace boost::beast::http;
+        session.send<string_body>(req)
+            ->status(status::ok)
+            .contentType("text/event-stream")
+            .body("id: 1\nmessage: Hello\n\nid: 2\nmessage: World\n\n")
+            .preparePayload()
+            .commit();
     }
 }

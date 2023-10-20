@@ -35,6 +35,8 @@ namespace Roar
             std::optional<std::vector<std::string>> regexMatches_;
             std::string path_;
             std::unordered_map<std::string, std::string> query_;
+            std::string host_;
+            std::string port_;
         };
     }
 
@@ -49,7 +51,13 @@ namespace Roar
         , private Detail::RequestExtensions
     {
       public:
+        using self_type = Request<BodyT>;
         using beast_request = boost::beast::http::request<BodyT>;
+
+        Request()
+            : boost::beast::http::request<BodyT>{}
+            , Detail::RequestExtensions{}
+        {}
 
         /**
          * @brief Construct a new Request object from a beast request to upgrade it.
@@ -57,7 +65,7 @@ namespace Roar
          * @param req A beast http request.
          */
         explicit Request(beast_request req)
-            : boost::beast::http::request<BodyT>(std::move(req))
+            : boost::beast::http::request<BodyT>{std::move(req)}
             , Detail::RequestExtensions{}
         {
             parseTarget();
@@ -69,7 +77,7 @@ namespace Roar
          * @param req
          */
         explicit Request(beast_request req, Detail::RequestExtensions&& extensions)
-            : boost::beast::http::request<BodyT>(std::move(req))
+            : boost::beast::http::request<BodyT>{std::move(req)}
             , Detail::RequestExtensions{std::move(extensions)}
         {
             parseTarget();
@@ -83,6 +91,76 @@ namespace Roar
         auto const& path() const
         {
             return path_;
+        }
+
+        Request<BodyT>& path(std::string&& path)
+        {
+            path_ = std::move(path);
+            return *this;
+        }
+        Request<BodyT>& path(std::string const& path)
+        {
+            path_ = path;
+            return *this;
+        }
+        Request<BodyT>& path(std::string_view path)
+        {
+            path_ = std::string{path};
+            return *this;
+        }
+        Request<BodyT>& host(std::string&& host)
+        {
+            host_ = std::move(host);
+            return *this;
+        }
+        Request<BodyT>& host(std::string const& host)
+        {
+            host_ = host;
+            return *this;
+        }
+        Request<BodyT>& host(std::string_view host)
+        {
+            host_ = std::string{host};
+            return *this;
+        }
+        Request<BodyT>& host(char const* host)
+        {
+            host_ = std::string{host};
+            return *this;
+        }
+        std::string host() const
+        {
+            return host_;
+        }
+
+        Request<BodyT>& port(std::string&& port)
+        {
+            port_ = std::move(port);
+            return *this;
+        }
+        Request<BodyT>& port(std::string const& port)
+        {
+            port_ = port;
+            return *this;
+        }
+        Request<BodyT>& port(std::string_view port)
+        {
+            port_ = std::string{port};
+            return *this;
+        }
+        Request<BodyT>& port(unsigned short port)
+        {
+            port_ = std::to_string(port);
+            return *this;
+        }
+        Request<BodyT>& port(char const* port)
+        {
+            port_ = std::string{port};
+            return *this;
+        }
+        std::string port() const
+        {
+            return port_;
         }
 
         /**
@@ -110,9 +188,10 @@ namespace Roar
          *
          * @param matches matches[0] = full match, matches[1] = first capture group, ...
          */
-        void pathMatches(std::vector<std::string>&& matches)
+        Request<BodyT>& pathMatches(std::vector<std::string>&& matches)
         {
             regexMatches_ = std::move(matches);
+            return *this;
         }
 
         /**
@@ -160,6 +239,16 @@ namespace Roar
             return nlohmann::json::parse(this->body());
         }
 
+        template <typename Body = BodyT>
+        std::enable_if_t<std::is_same_v<Body, boost::beast::http::string_body>, Request<BodyT>&>
+        json(nlohmann::json const& j, int indent = -1)
+        {
+            this->body() = j.dump(indent);
+            this->set(boost::beast::http::field::content_type, "application/json");
+            this->prepare_payload();
+            return *this;
+        }
+#endif
         /**
          * @brief Rips extensions out of this request object intended to be implanted into another request object.
          *
@@ -167,10 +256,20 @@ namespace Roar
          */
         Detail::RequestExtensions ejectExtensions() &&
         {
-            return {.regexMatches_ = std::move(regexMatches_), .path_ = std::move(path_), .query_ = std::move(query_)};
+            return {
+                .regexMatches_ = std::move(regexMatches_),
+                .path_ = std::move(path_),
+                .query_ = std::move(query_),
+                .host_ = std::move(host_),
+                .port_ = std::move(port_)};
         }
-#endif
 
+        /**
+         * @brief Returns true if the request expects a continue response.
+         *
+         * @return true
+         * @return false
+         */
         bool expectsContinue() const
         {
             auto iter = this->find(boost::beast::http::field::expect);
@@ -180,6 +279,24 @@ namespace Roar
                 return iter->value() == "100-continue";
         }
 
+        /**
+         * @brief enables/disables the expect continue header.
+         *
+         * @param enable
+         */
+        void expectsContinue(bool enable)
+        {
+            if (enable)
+                this->set(boost::beast::http::field::expect, "100-continue");
+            else
+                this->erase(boost::beast::http::field::expect);
+        }
+
+        /**
+         * @brief Returns the content length header.
+         *
+         * @return std::optional<std::size_t>
+         */
         std::optional<std::size_t> contentLength() const
         {
             auto contentLength = this->find("Content-Length");
@@ -187,6 +304,16 @@ namespace Roar
                 return std::nullopt;
             else
                 return boost::lexical_cast<std::size_t>(contentLength->value());
+        }
+
+        /**
+         * @brief Sets the content length header.
+         *
+         * @param length
+         */
+        void contentLength(std::size_t length)
+        {
+            this->set(boost::beast::http::field::content_length, std::to_string(length));
         }
 
         /**
@@ -233,6 +360,12 @@ namespace Roar
             return BasicAuth::fromBase64(value.substr(spacePos + 1, value.size() - spacePos - 1));
         }
 
+        Request<BodyT>& basicAuth(BasicAuth const& auth)
+        {
+            this->set(boost::beast::http::field::authorization, "Basic " + auth.toBase64());
+            return *this;
+        }
+
         /**
          * @brief Returns a digest auth object with all digest auth information.
          */
@@ -250,6 +383,12 @@ namespace Roar
             return DigestAuth::fromParameters(value.substr(spacePos + 1));
         }
 
+        Request<BodyT>& digestAuth(DigestAuth const& auth)
+        {
+            this->set(boost::beast::http::field::authorization, "Digest " + auth.toParameters());
+            return *this;
+        }
+
         /**
          * @brief Returns token data of bearer authentication method.
          */
@@ -264,6 +403,12 @@ namespace Roar
             if (iter->value().substr(0, spacePos) != "Bearer")
                 return std::nullopt;
             return std::string{iter->value().substr(spacePos + 1)};
+        }
+
+        Request<BodyT>& bearerAuth(std::string const& token)
+        {
+            this->set(boost::beast::http::field::authorization, "Bearer " + token);
+            return *this;
         }
 
         /**
@@ -320,11 +465,6 @@ namespace Roar
             }
             return query;
         }
-
-      private:
-        std::optional<std::vector<std::string>> regexMatches_;
-        std::string path_;
-        std::unordered_map<std::string, std::string> query_;
     };
 
     using EmptyBodyRequest = Request<boost::beast::http::empty_body>;

@@ -9,6 +9,7 @@ namespace Roar
     struct DigestAuth
     {
         static std::optional<DigestAuth> fromParameters(std::string_view parameterList);
+        std::string toParameters() const;
 
         DigestAuth();
         DigestAuth(

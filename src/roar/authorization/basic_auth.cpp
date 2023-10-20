@@ -21,6 +21,10 @@ namespace Roar
         }
         return std::nullopt;
     }
+    std::string BasicAuth::toBase64() const
+    {
+        return base64Encode(user + ":" + password);
+    }
     BasicAuth::BasicAuth(std::string user, std::string password)
         : user{std::move(user)}
         , password{std::move(password)}

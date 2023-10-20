@@ -1,5 +1,5 @@
 #include <roar/ssl/make_ssl_context.hpp>
-#include <roar/detail/overloaded.hpp>
+#include <roar/utility/overloaded.hpp>
 
 namespace Roar
 {
@@ -17,7 +17,7 @@ namespace Roar
             boost::asio::ssl::context::single_dh_use);
 
         std::visit(
-            Detail::overloaded{
+            overloaded{
                 [&](std::string_view key) {
                     sslContext.use_certificate_chain(boost::asio::buffer(key.data(), key.size()));
                 },
@@ -28,7 +28,7 @@ namespace Roar
             settings.certificate);
 
         std::visit(
-            Detail::overloaded{
+            overloaded{
                 [&](std::string_view key) {
                     sslContext.use_private_key(
                         boost::asio::buffer(key.data(), key.size()), boost::asio::ssl::context::file_format::pem);
