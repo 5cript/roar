@@ -275,52 +275,5 @@ namespace Roar
             }
         }
     }
-    //------------------------------------------------------------------------------------------------------------------
-    Detail::PromiseTypeBind<
-        Detail::PromiseTypeBindThen<
-            Detail::PromiseReferenceWrap<boost::beast::http::response_parser<boost::beast::http::empty_body>>,
-            Detail::PromiseReferenceWrap<bool>>,
-        Detail::PromiseTypeBindFail<Error>>
-    Client::readServerSentEvents(
-        std::function<bool(std::string_view, std::string_view)> onEvent,
-        std::function<void(std::optional<Error> const&)> onEndOfStream,
-        std::chrono::seconds initialTimeout,
-        std::chrono::seconds eventTimeout)
-    {
-        auto ctx = std::make_shared<SseContext>(std::move(onEvent), std::move(onEndOfStream));
-
-        return newPromise([this, initialTimeout, eventTimeout, &ctx](Defer d) mutable {
-            withLowerLayerDo([&](auto& socket) {
-                if (initialTimeout.count() == 0)
-                    socket.expires_never();
-                else
-                    socket.expires_after(initialTimeout);
-            });
-
-            withStreamDo([d = std::move(d), eventTimeout, &ctx, this](auto& socket) mutable {
-                boost::beast::http::async_read_header(
-                    socket,
-                    ctx->headerBuffer,
-                    ctx->responseParser,
-                    [weak = weak_from_this(), ctx, eventTimeout, d = std::move(d)](
-                        boost::beast::error_code ec, std::size_t) {
-                        auto self = weak.lock();
-                        if (!self)
-                            return d.reject(Error{.error = ec, .additionalInfo = "Client is no longer alive."});
-
-                        if (ec)
-                            return d.reject(Error{.error = ec, .additionalInfo = "Stream sse header read failed."});
-
-                        bool shallContinue = true;
-                        d.resolve(Detail::ref(ctx->responseParser), Detail::ref(shallContinue));
-
-                        if (!shallContinue)
-                            return;
-
-                        ctx->enterReadCycle(self, eventTimeout);
-                    });
-            });
-        });
-    }
     // ##################################################################################################################
 }

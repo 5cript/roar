@@ -52,7 +52,7 @@ namespace Roar::Tests
     {
         auto client = makeClient();
 
-        auto req = Request<boost::beast::http::empty_body>{};
+        auto req = Roar::Request<boost::beast::http::empty_body>{};
         req.method(boost::beast::http::verb::get);
         req.host("::1");
         req.port(server_->getLocalEndpoint().port());
@@ -76,7 +76,7 @@ namespace Roar::Tests
     {
         auto client = makeClient();
 
-        auto req = Request<boost::beast::http::empty_body>{};
+        auto req = Roar::Request<boost::beast::http::empty_body>{};
         req.method(boost::beast::http::verb::get);
         req.host("::inval");
         req.port(12345);
@@ -99,7 +99,7 @@ namespace Roar::Tests
     {
         auto client = makeClient();
 
-        auto req = Request<boost::beast::http::empty_body>{};
+        auto req = Roar::Request<boost::beast::http::empty_body>{};
         req.method(boost::beast::http::verb::get);
         req.host("::1");
         // hoping the port is unused:
@@ -123,7 +123,7 @@ namespace Roar::Tests
     {
         auto client = makeClient();
 
-        auto req = Request<boost::beast::http::empty_body>{};
+        auto req = Roar::Request<boost::beast::http::empty_body>{};
         req.method(boost::beast::http::verb::get);
         req.host("::1");
         req.port(server_->getLocalEndpoint().port());
@@ -152,7 +152,7 @@ namespace Roar::Tests
     {
         auto client = makeClient();
 
-        auto req = Request<boost::beast::http::empty_body>{};
+        auto req = Roar::Request<boost::beast::http::empty_body>{};
         req.method(boost::beast::http::verb::get);
         req.host("::1");
         req.port(server_->getLocalEndpoint().port());
@@ -183,7 +183,7 @@ namespace Roar::Tests
     {
         auto client = makeClient();
 
-        auto req = Request<boost::beast::http::empty_body>{};
+        auto req = Roar::Request<boost::beast::http::empty_body>{};
         req.method(boost::beast::http::verb::get);
         req.host("::1");
         req.port(server_->getLocalEndpoint().port());
@@ -214,7 +214,7 @@ namespace Roar::Tests
     {
         auto client = makeClient();
 
-        auto req = Request<boost::beast::http::empty_body>{};
+        auto req = Roar::Request<boost::beast::http::empty_body>{};
         req.method(boost::beast::http::verb::get);
         req.host("::1");
         req.port(server_->getLocalEndpoint().port());
@@ -241,74 +241,4 @@ namespace Roar::Tests
         ASSERT_TRUE(result.has_value());
         EXPECT_EQ(*result, "Hello");
     }
-
-    // TEST_F(AsyncClientTests, CanReceiveServerSentEvents)
-    // {
-    //     auto client = makeClient("http");
-    //     std::string host = "::1";
-    //     // std::string host = "sse.dev";
-
-    //     std::cout << server_->getLocalEndpoint().port() << std::endl;
-    //     // std::this_thread::sleep_for(std::chrono::seconds(100));
-
-    //     auto req = Request<boost::beast::http::empty_body>{};
-    //     req.method(boost::beast::http::verb::get);
-
-    //     req.host(host);
-    //     req.target("/sse");
-    //     req.port(server_->getLocalEndpoint().port());
-    //     // req.host(host);
-    //     // req.target("/test");
-    //     // req.port(443);
-
-    //     req.setHeader(boost::beast::http::field::cache_control, "no-cache");
-    //     req.setHeader(boost::beast::http::field::host, host);
-    //     req.setHeader(boost::beast::http::field::accept, "text/event-stream");
-    //     req.setHeader(boost::beast::http::field::connection, "keep-alive");
-    //     req.version(11);
-
-    //     std::vector<std::pair<std::string, std::string>> chunks;
-
-    //     std::promise<bool> awaitCompletion;
-    //     client->request(std::move(req), std::chrono::seconds(5))
-    //         .then([&awaitCompletion, client, &chunks]() {
-    //             client
-    //                 ->readServerSentEvents(
-    //                     [&chunks, client](auto type, auto payload) {
-    //                         std::cout << "chunk: " << type << " " << payload << std::endl;
-    //                         // chunks.emplace_back(std::string{type}, std::string{payload});
-    //                         // if (chunks.size() >= 2)
-    //                         //     return false;
-    //                         return true;
-    //                     },
-    //                     [&awaitCompletion](auto e) {
-    //                         if (e)
-    //                         {
-    //                             std::cerr << *e << std::endl;
-    //                             awaitCompletion.set_value(false);
-    //                         }
-    //                         else
-    //                             awaitCompletion.set_value(true);
-    //                     })
-    //                 .then([](auto& parser, auto& shallContinue) {
-    //                     std::cout << parser.get().result_int() << "\n";
-    //                     shallContinue = true;
-    //                 })
-    //                 .fail([&awaitCompletion](auto e) {
-    //                     std::cerr << e << std::endl;
-    //                     awaitCompletion.set_value(false);
-    //                 });
-    //         })
-    //         .fail([&awaitCompletion](auto e) {
-    //             std::cerr << e << std::endl;
-    //             awaitCompletion.set_value(false);
-    //         });
-
-    //     ASSERT_TRUE(awaitCompletion.get_future().get());
-    //     ASSERT_EQ(chunks.size(), 2);
-    //     EXPECT_EQ(chunks[0].first, "message");
-    //     EXPECT_EQ(chunks[0].second, "Hello");
-    //     EXPECT_EQ(chunks[1].first, "message");
-    //     EXPECT_EQ(chunks[1].second, "World");
-    // }
 }

@@ -224,20 +224,6 @@ namespace Roar
             });
         }
 
-        Detail::PromiseTypeBind<
-            Detail::PromiseTypeBindThen<
-                Detail::PromiseReferenceWrap<boost::beast::http::response_parser<boost::beast::http::empty_body>>,
-                Detail::PromiseReferenceWrap<bool>>,
-            Detail::PromiseTypeBindFail<Error>>
-        readServerSentEvents(
-            std::function<bool(std::string_view, std::string_view)> onEvent =
-                [](auto, auto) {
-                    return true;
-                },
-            std::function<void(std::optional<Error> const&)> onEndOfStream = [](auto) {},
-            std::chrono::seconds initialTimeout = defaultTimeout,
-            std::chrono::seconds eventTimeout = std::chrono::seconds{0});
-
         Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<>, Detail::PromiseTypeBindFail<Error>> shutdown()
         {
             return promise::newPromise([&, this](promise::Defer d) mutable {
