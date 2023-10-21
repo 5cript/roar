@@ -132,6 +132,11 @@ namespace Roar::Curl
         Request& verifyHost(bool verify = true);
 
         /**
+         * @brief expect 100 continue?
+         */
+        Request& expect100Continue();
+
+        /**
          * @brief Set a timeout for connects.
          *
          * @param timeout The timeout in milliseconds.

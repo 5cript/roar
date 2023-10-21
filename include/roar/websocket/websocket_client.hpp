@@ -1,6 +1,6 @@
 #pragma once
 
-#include "roar/detail/promise_compat.hpp"
+#include <roar/detail/promise_compat.hpp>
 #include <roar/detail/pimpl_special_functions.hpp>
 #include <roar/detail/shared_from_base.hpp>
 #include <roar/websocket/websocket_base.hpp>

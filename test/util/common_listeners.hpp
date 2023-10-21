@@ -4,6 +4,11 @@
 
 #include <nlohmann/json.hpp>
 
+#include <thread>
+#include <chrono>
+
+#include <iostream>
+
 namespace Roar::Tests
 {
     using namespace Roar::RegexLiterals;
@@ -50,6 +55,14 @@ namespace Roar::Tests
         ROAR_DELETE(deleteHere)("/deleteHere");
         ROAR_OPTIONS(optionsHere)("/optionsHere");
         ROAR_HEAD(headHere)("/headHere");
+        ROAR_GET(sse)
+        ({
+            .path = "/sse",
+            .routeOptions =
+                {
+                    .allowUnsecure = true,
+                },
+        });
         ROAR_GET(unsecure)
         ({
             .path = "/unsecure",
@@ -68,6 +81,9 @@ namespace Roar::Tests
             session.send<string_body>(req)->status(status::ok).commit();
         }
 
+        int sseId = 0;
+        std::unordered_map<int, std::shared_ptr<Session>> sseSessions;
+
       private:
         BOOST_DESCRIBE_CLASS(
             SimpleRoutes,
@@ -82,6 +98,7 @@ namespace Roar::Tests
              roar_headHere,
              roar_anything,
              roar_ab,
+             roar_sse,
              roar_unsecure,
              roar_sendIntermediate,
              roar_dynamicGet))
@@ -167,5 +184,57 @@ namespace Roar::Tests
             dynamicGetFunc(session, std::move(req));
         else
             justOk(session, std::move(req));
+    }
+    inline void SimpleRoutes::sse(Session& session, EmptyBodyRequest&& req)
+    {
+        using namespace boost::beast::http;
+        const auto id = sseId++;
+        sseSessions[id] = session.shared_from_this();
+
+        std::shared_ptr<int> counter = std::make_shared<int>(0);
+
+        std::shared_ptr<std::function<void()>> doThing = std::make_shared<std::function<void()>>();
+
+        *doThing = [this, counter, doThing, &session, id]() mutable {
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+            std::cout << *counter << "\n";
+
+            ++*counter;
+            if (*counter == 5)
+            {
+                sseSessions.erase(id);
+                doThing.reset();
+            }
+            else
+            {
+                std::cout << "Sent SSE message " << *counter << " to session " << id << std::endl;
+                session.send("id: " + std::to_string(*counter) + "\n" + "data: " + std::to_string(*counter) + "\n\n")
+                    .then([this, id, counter, doThing](bool) {
+                        std::cout << "Sent SSE message " << *counter << " to session " << id << std::endl;
+                        (*doThing)();
+                    })
+                    .fail([this, id, &doThing](auto&&) mutable {
+                        std::cout << "Failed to send SSE message, removing session " << id << std::endl;
+                        sseSessions.erase(id);
+                        doThing.reset();
+                    });
+            }
+        };
+
+        session.sendWithAllAcceptedCors<empty_body>()
+            ->status(status::ok)
+            .header(boost::beast::http::field::cache_control, "no-cache")
+            .contentType("text/event-stream")
+            .commit()
+            .then([this, id, counter, doThing](bool) {
+                std::cout << "Sent Header\n";
+                (*doThing)();
+            })
+            .fail([this, id, &doThing](auto&&) mutable {
+                std::cout << "Failed to send SSE message, removing session " << id << std::endl;
+                sseSessions.erase(id);
+                doThing.reset();
+            });
     }
 }

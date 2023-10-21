@@ -5,6 +5,7 @@
 #include "test_web_socket.hpp"
 #include "test_serve.hpp"
 #include "test_url.hpp"
+#include "test_unsecure_async_client.hpp"
 
 #include <gtest/gtest.h>
 

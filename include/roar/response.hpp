@@ -17,6 +17,8 @@
 
 #include <type_traits>
 #include <numeric>
+#include <string>
+#include <optional>
 #include <iterator>
 
 namespace Roar
@@ -109,6 +111,10 @@ namespace Roar
             preparePayload();
             return *this;
         }
+        auto body() const
+        {
+            return response_.body();
+        }
 
         /**
          * @brief (De)Activate chunked encoding.
@@ -121,6 +127,10 @@ namespace Roar
             response_.chunked(activate);
             return *this;
         }
+        bool chunked() const
+        {
+            return response_.chunked();
+        }
 
         /**
          * @brief For setting of the content type.
@@ -131,6 +141,112 @@ namespace Roar
         Response& contentType(std::string const& type)
         {
             return setHeader(boost::beast::http::field::content_type, type);
+        }
+        std::optional<std::string> contentType() const
+        {
+            if (auto it = response_.find(boost::beast::http::field::content_type); it != std::end(response_))
+                return std::string{it->value()};
+            return std::nullopt;
+        }
+
+        Response& contentLength(std::size_t length)
+        {
+            return setHeader(boost::beast::http::field::content_length, std::to_string(length));
+        }
+        std::optional<std::size_t> contentLength() const
+        {
+            if (auto it = response_.find(boost::beast::http::field::content_length); it != std::end(response_))
+                return std::stoull(std::string{it->value()});
+            return std::nullopt;
+        }
+
+        auto begin()
+        {
+            return response_.begin();
+        }
+        auto begin() const
+        {
+            return response_.begin();
+        }
+        auto end()
+        {
+            return response_.end();
+        }
+        auto end() const
+        {
+            return response_.end();
+        }
+        auto cbegin() const
+        {
+            return response_.cbegin();
+        }
+        auto cend() const
+        {
+            return response_.cend();
+        }
+
+        auto at(boost::beast::http::field field) const
+        {
+            return response_.at(field);
+        }
+
+        void clear()
+        {
+            response_.clear();
+        }
+
+        auto equal_range(boost::beast::http::field field) const
+        {
+            return response_.equal_range(field);
+        }
+
+        auto erase(boost::beast::http::field field)
+        {
+            return response_.erase(field);
+        }
+        auto find(boost::beast::http::field field) const
+        {
+            return response_.find(field);
+        }
+        bool hasContentLength() const
+        {
+            return response_.has_content_length();
+        }
+        bool hasField(boost::beast::http::field field) const
+        {
+            return response_.has_field(field);
+        }
+        bool hasKeepAlive() const
+        {
+            return response_.has_keep_alive();
+        }
+        auto payloadSize() const
+        {
+            return response_.payload_size();
+        }
+        auto reason() const
+        {
+            return response_.reason();
+        }
+        auto result() const
+        {
+            return response_.result();
+        }
+        auto resultInt() const
+        {
+            return response_.result_int();
+        }
+        void set(boost::beast::http::field field, std::string const& value)
+        {
+            response_.set(field, value);
+        }
+        auto target() const
+        {
+            return response_.target();
+        }
+        auto version() const
+        {
+            return response_.version();
         }
 
         /**
@@ -155,6 +271,13 @@ namespace Roar
             return *this;
         }
 
+        std::optional<std::string> getHeader(boost::beast::http::field field) const
+        {
+            if (auto it = response_.find(field); it != std::end(response_))
+                return std::string{it->value()};
+            return std::nullopt;
+        }
+
         /**
          * @brief Can be used to set a header field.
          *
@@ -177,6 +300,20 @@ namespace Roar
             return *this;
         }
 
+      private:
+        auto joinList(std::vector<std::string> const& list)
+        {
+            return list.empty() ? std::string{}
+                                : std::accumulate(
+                                      std::next(std::begin(list)),
+                                      std::end(list),
+                                      list.front(),
+                                      [](std::string accum, std::string const& elem) {
+                                          return std::move(accum) + "," + elem;
+                                      });
+        };
+
+      public:
         /**
          * @brief Sets cors headers.
          * @param req A request to base the cors headers off of.
@@ -193,17 +330,6 @@ namespace Roar
             response_.set(
                 boost::beast::http::field::access_control_allow_origin,
                 cors->allowedOrigin(std::string{req[boost::beast::http::field::origin]}));
-
-            const auto joinList = [](std::vector<std::string> const& list) {
-                return list.empty() ? std::string{}
-                                    : std::accumulate(
-                                          std::next(std::begin(list)),
-                                          std::end(list),
-                                          list.front(),
-                                          [](std::string accum, std::string const& elem) {
-                                              return std::move(accum) + "," + elem;
-                                          });
-            };
 
             // Preflight requests require both methods and allowHeaders to be set.
             if (req.method() == boost::beast::http::verb::options)
@@ -245,6 +371,15 @@ namespace Roar
                         }));
             }
 
+            return *this;
+        }
+
+        Response& enableCorsEverything()
+        {
+            response_.set(boost::beast::http::field::access_control_allow_origin, "*");
+            response_.set(boost::beast::http::field::access_control_allow_methods, "*");
+            response_.set(boost::beast::http::field::access_control_allow_headers, "*");
+            response_.set(boost::beast::http::field::access_control_allow_credentials, "true");
             return *this;
         }
 

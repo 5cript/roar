@@ -1,6 +1,6 @@
 #pragma once
 
-#include <roar/detail/overloaded.hpp>
+#include <roar/utility/overloaded.hpp>
 
 #include <variant>
 #include <functional>
@@ -43,7 +43,7 @@ namespace Roar
         static std::optional<T> getValue(HolderClassT& holder, FlexibleProvider<HolderClassT, T, true> const& provider)
         {
             return std::visit(
-                Detail::overloaded{
+                overloaded{
                     [](std::monostate) -> std::optional<T> {
                         return std::nullopt;
                     },
@@ -81,7 +81,7 @@ namespace Roar
         static T getValue(HolderClassT& holder, FlexibleProvider<HolderClassT, T, false> const& provider)
         {
             return std::visit(
-                Detail::overloaded{
+                overloaded{
                     [&holder](std::function<T(HolderClassT&)> const& fn) -> T {
                         return fn(holder);
                     },

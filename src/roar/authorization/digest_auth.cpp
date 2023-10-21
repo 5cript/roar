@@ -31,6 +31,39 @@ namespace Roar
             x3::eps[([](auto&) {})];
     }
 
+    std::string DigestAuth::toParameters() const
+    {
+        auto result = std::string{};
+
+        auto write = [&result](std::string const& name, std::string const& value) mutable {
+            if (!value.empty())
+            {
+                result += name;
+                result += '=';
+                result += '"';
+                result += value;
+                result += '"';
+                result += ", ";
+            }
+        };
+
+        write("username", username);
+        write("realm", realm);
+        write("uri", uri);
+        write("algorithm", algorithm);
+        write("nonce", nonce);
+        write("nc", nc);
+        write("cnonce", cnonce);
+        write("qop", qop);
+        write("response", response);
+        write("opaque", opaque);
+
+        if (!result.empty())
+            result.resize(result.size() - 2);
+
+        return result;
+    }
+
     std::optional<DigestAuth> DigestAuth::fromParameters(std::string_view parameterList)
     {
         using namespace std::string_literals;

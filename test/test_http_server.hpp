@@ -13,8 +13,8 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-#include <format>
 #include <future>
+#include <sstream>
 
 namespace Roar::Tests
 {
@@ -198,18 +198,16 @@ namespace Roar::Tests
         auto pos = headers["Content-Type"].find("boundary=");
         ASSERT_NE(pos, std::string::npos);
         const auto boundary = headers["Content-Type"].substr(pos + 9);
-        const auto inplaceFormatted = std::format(
-            "{}\r\nContent-Type: plain/text\r\nContent-Range: bytes 0-100/25600\r\n\r\n{}\r\n"
-            "{}\r\nContent-Type: plain/text\r\nContent-Range: bytes 200-350/25600\r\n\r\n{}\r\n"
-            "{}\r\nContent-Type: plain/text\r\nContent-Range: bytes 400-465/25600\r\n\r\n{}\r\n"
-            "{}",
-            boundary,
-            base.substr(0, 100),
-            boundary,
-            base.substr(200, 150),
-            boundary,
-            base.substr(400, 65),
-            boundary);
+
+        std::stringstream sstr;
+        sstr << boundary << "\r\nContent-Type: plain/text\r\nContent-Range: bytes 0-100/25600\r\n\r\n"
+             << base.substr(0, 100) << "\r\n"
+             << boundary << "\r\nContent-Type: plain/text\r\nContent-Range: bytes 200-350/25600\r\n\r\n"
+             << base.substr(200, 150) << "\r\n"
+             << boundary << "\r\nContent-Type: plain/text\r\nContent-Range: bytes 400-465/25600\r\n\r\n"
+             << base.substr(400, 65) << "\r\n"
+             << boundary;
+        const auto inplaceFormatted = sstr.str();
 
         EXPECT_EQ(body, inplaceFormatted);
     }
@@ -231,18 +229,16 @@ namespace Roar::Tests
         auto pos = headers["Content-Type"].find("boundary=");
         ASSERT_NE(pos, std::string::npos);
         const auto boundary = headers["Content-Type"].substr(pos + 9);
-        const auto inplaceFormatted = std::format(
-            "{}\r\nContent-Type: plain/text\r\nContent-Range: bytes 200-6800/25600\r\n\r\n{}\r\n"
-            "{}\r\nContent-Type: plain/text\r\nContent-Range: bytes 0-10/25600\r\n\r\n{}\r\n"
-            "{}\r\nContent-Type: plain/text\r\nContent-Range: bytes 137-10521/25600\r\n\r\n{}\r\n"
-            "{}",
-            boundary,
-            base.substr(200, 6600),
-            boundary,
-            base.substr(0, 10),
-            boundary,
-            base.substr(137, 10521 - 137),
-            boundary);
+
+        std::stringstream sstr;
+        sstr << boundary << "\r\nContent-Type: plain/text\r\nContent-Range: bytes 200-6800/25600\r\n\r\n"
+             << base.substr(200, 6600) << "\r\n"
+             << boundary << "\r\nContent-Type: plain/text\r\nContent-Range: bytes 0-10/25600\r\n\r\n"
+             << base.substr(0, 10) << "\r\n"
+             << boundary << "\r\nContent-Type: plain/text\r\nContent-Range: bytes 137-10521/25600\r\n\r\n"
+             << base.substr(137, 10521 - 137) << "\r\n"
+             << boundary;
+        const auto inplaceFormatted = sstr.str();
 
         EXPECT_EQ(body, inplaceFormatted);
     }

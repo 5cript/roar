@@ -8,7 +8,7 @@ namespace Roar
 {
     struct SslContextCreationParameters
     {
-        boost::asio::ssl::context::method method = boost::asio::ssl::context::tlsv13;
+        boost::asio::ssl::context::method method = boost::asio::ssl::context::tls_server;
         std::variant<std::string_view, std::filesystem::path> certificate;
         std::variant<std::string_view, std::filesystem::path> privateKey;
         std::string_view diffieHellmanParameters = "";

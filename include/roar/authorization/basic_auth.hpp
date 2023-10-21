@@ -14,5 +14,7 @@ namespace Roar
 
         std::string user;
         std::string password;
+
+        std::string toBase64() const;
     };
 }

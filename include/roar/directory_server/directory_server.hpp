@@ -7,7 +7,6 @@
 #include <roar/filesystem/jail.hpp>
 #include <roar/routing/request_listener.hpp>
 #include <roar/session/session.hpp>
-#include <roar/detail/overloaded.hpp>
 
 #include <boost/beast/http/file_body.hpp>
 

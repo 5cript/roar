@@ -62,7 +62,12 @@ namespace Roar
         {
             auto& wss =
                 std::get<boost::beast::websocket::stream<boost::beast::ssl_stream<Detail::StreamType>>>(client->ws_);
-            if (!SSL_set_tlsext_host_name(wss.next_layer().native_handle(), origHost.c_str()))
+            if (!SSL_ctrl(
+                    wss.next_layer().native_handle(),
+                    SSL_CTRL_SET_TLSEXT_HOSTNAME,
+                    TLSEXT_NAMETYPE_host_name,
+                    // yikes openssl you make me do this
+                    const_cast<void*>(reinterpret_cast<void const*>(origHost.c_str()))))
             {
                 auto ec = boost::beast::error_code(
                     static_cast<int>(::ERR_get_error()), boost::asio::error::get_ssl_category());

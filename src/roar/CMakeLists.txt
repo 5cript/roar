@@ -1,6 +1,7 @@
 add_library(
   roar STATIC
   server.cpp
+  client.cpp
   mime_type.cpp
   mechanics/ranges.cpp
   mechanics/cookie.cpp
