@@ -163,6 +163,12 @@ namespace Roar
             return port_;
         }
 
+        Request<BodyT>& setHeader(boost::beast::http::field field, std::string value)
+        {
+            this->set(field, std::move(value));
+            return *this;
+        }
+
         /**
          * @brief Returns the query part of the url as an unordered_map<string, string>.
          *

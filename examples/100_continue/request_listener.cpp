@@ -12,6 +12,7 @@ void RequestListener::putHere(Roar::Session& session, Roar::EmptyBodyRequest&& r
         bool allow = contentLength && request.contentLength() <= 1024;
 
         if (!allow)
+        {
             session.send<empty_body>(request)
                 ->status(status::expectation_failed)
                 .setHeader(field::connection, "close")
@@ -19,6 +20,7 @@ void RequestListener::putHere(Roar::Session& session, Roar::EmptyBodyRequest&& r
                 .fail([](Roar::Error const& err) {
                     std::cout << "Failed to send expectation failure: " << err << "\n";
                 });
+        }
         else
         {
             session.send<empty_body>(request)

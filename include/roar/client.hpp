@@ -24,6 +24,8 @@
 #include <unordered_map>
 #include <string_view>
 #include <functional>
+#include <type_traits>
+#include <future>
 
 namespace Roar
 {
@@ -233,11 +235,57 @@ namespace Roar
                     return true;
                 },
             std::function<void(std::optional<Error> const&)> onEndOfStream = [](auto) {},
-            std::function<bool(std::uint64_t size, std::string_view)> onHeader =
-                [](auto, auto) {
-                    return true;
-                },
-            std::chrono::seconds timeout = defaultTimeout);
+            std::chrono::seconds initialTimeout = defaultTimeout,
+            std::chrono::seconds eventTimeout = std::chrono::seconds{0});
+
+        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<>, Detail::PromiseTypeBindFail<Error>> shutdown()
+        {
+            return promise::newPromise([&, this](promise::Defer d) mutable {
+                bool isClosed = false;
+                withLowerLayerDo([&](auto& socket) {
+                    if (!socket.socket().is_open())
+                        isClosed = true;
+                });
+
+                if (isClosed)
+                    return d.resolve();
+
+                if (std::holds_alternative<boost::beast::tcp_stream>(socket_))
+                {
+                    auto& socket = std::get<boost::beast::tcp_stream>(socket_);
+                    socket.cancel();
+                    socket.close();
+                    return d.resolve();
+                }
+                else
+                {
+                    auto& socket = std::get<boost::beast::ssl_stream<boost::beast::tcp_stream>>(socket_);
+                    socket.async_shutdown([d = std::move(d)](boost::beast::error_code ec) mutable {
+                        if (ec == boost::asio::error::eof)
+                            ec = {};
+
+                        if (ec)
+                            return d.reject(Error{.error = ec, .additionalInfo = "Stream shutdown failed."});
+
+                        d.resolve();
+                    });
+                }
+            });
+        }
+
+        std::future_status shutdownSync(std::chrono::seconds timeout = defaultTimeout)
+        {
+            std::promise<void> waiter;
+            auto waiterFuture = waiter.get_future();
+            shutdown()
+                .then([&waiter]() mutable {
+                    waiter.set_value();
+                })
+                .fail([&waiter](auto) mutable {
+                    waiter.set_value();
+                });
+            return waiterFuture.wait_for(timeout);
+        }
 
       public:
         template <typename FunctionT>
@@ -318,11 +366,12 @@ namespace Roar
             withLowerLayerDo([timeout](auto& socket) {
                 socket.expires_after(timeout);
             });
-            withStreamDo([this, &request, &d, timeout](auto& socket) mutable {
+            withStreamDo([this, request, &d, timeout](auto& socket) mutable {
+                std::shared_ptr<Request<BodyT>> requestPtr = std::make_shared<Request<BodyT>>(std::move(request));
                 boost::beast::http::async_write(
                     socket,
-                    request,
-                    [weak = weak_from_this(), d = std::move(d), timeout](
+                    *requestPtr,
+                    [weak = weak_from_this(), d = std::move(d), requestPtr, timeout](
                         boost::beast::error_code ec, std::size_t) mutable {
                         auto self = weak.lock();
                         if (!self)

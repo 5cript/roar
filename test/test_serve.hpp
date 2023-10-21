@@ -541,7 +541,8 @@ namespace Roar::Tests
 
     TEST_F(ServeTests, CanUploadFile)
     {
-        const auto res = Curl::Request{}.source("Yes I am there.").put(url("/allAllowed/emptyDir/file.txt"));
+        const auto res =
+            Curl::Request{}.expect100Continue().source("Yes I am there.").put(url("/allAllowed/emptyDir/file.txt"));
         EXPECT_EQ(res.code(), boost::beast::http::status::ok);
         std::ifstream reader{listener_->pathSupplier() / "emptyDir/file.txt", std::ios::binary};
         std::string body;
@@ -551,7 +552,7 @@ namespace Roar::Tests
 
     TEST_F(ServeTests, CanOverwriteFileIfAllowed)
     {
-        const auto res = Curl::Request{}.source("Yes I am there.").put(url("/allAllowed/file.txt"));
+        const auto res = Curl::Request{}.expect100Continue().source("Yes I am there.").put(url("/allAllowed/file.txt"));
         EXPECT_EQ(res.code(), boost::beast::http::status::ok);
         std::ifstream reader{listener_->pathSupplier() / "file.txt", std::ios::binary};
         std::string body;
@@ -561,13 +562,14 @@ namespace Roar::Tests
 
     TEST_F(ServeTests, CannotUploadWhereSomethingExistsThatIsNotARegularFile)
     {
-        const auto res = Curl::Request{}.source("Yes I am there.").put(url("/allAllowed/emptyDir"));
+        const auto res = Curl::Request{}.expect100Continue().source("Yes I am there.").put(url("/allAllowed/emptyDir"));
         EXPECT_EQ(res.code(), boost::beast::http::status::forbidden);
     }
 
     TEST_F(ServeTests, CannotUploadToExistingFileWhenDisallowed)
     {
-        const auto res = Curl::Request{}.source("Yes I am there.").put(url("/overwriteNotAllowed/file.txt"));
+        const auto res =
+            Curl::Request{}.expect100Continue().source("Yes I am there.").put(url("/overwriteNotAllowed/file.txt"));
         EXPECT_EQ(res.code(), boost::beast::http::status::forbidden);
     }
 

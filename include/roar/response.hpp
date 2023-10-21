@@ -300,6 +300,20 @@ namespace Roar
             return *this;
         }
 
+      private:
+        auto joinList(std::vector<std::string> const& list)
+        {
+            return list.empty() ? std::string{}
+                                : std::accumulate(
+                                      std::next(std::begin(list)),
+                                      std::end(list),
+                                      list.front(),
+                                      [](std::string accum, std::string const& elem) {
+                                          return std::move(accum) + "," + elem;
+                                      });
+        };
+
+      public:
         /**
          * @brief Sets cors headers.
          * @param req A request to base the cors headers off of.
@@ -316,17 +330,6 @@ namespace Roar
             response_.set(
                 boost::beast::http::field::access_control_allow_origin,
                 cors->allowedOrigin(std::string{req[boost::beast::http::field::origin]}));
-
-            const auto joinList = [](std::vector<std::string> const& list) {
-                return list.empty() ? std::string{}
-                                    : std::accumulate(
-                                          std::next(std::begin(list)),
-                                          std::end(list),
-                                          list.front(),
-                                          [](std::string accum, std::string const& elem) {
-                                              return std::move(accum) + "," + elem;
-                                          });
-            };
 
             // Preflight requests require both methods and allowHeaders to be set.
             if (req.method() == boost::beast::http::verb::options)
@@ -368,6 +371,15 @@ namespace Roar
                         }));
             }
 
+            return *this;
+        }
+
+        Response& enableCorsEverything()
+        {
+            response_.set(boost::beast::http::field::access_control_allow_origin, "*");
+            response_.set(boost::beast::http::field::access_control_allow_methods, "*");
+            response_.set(boost::beast::http::field::access_control_allow_headers, "*");
+            response_.set(boost::beast::http::field::access_control_allow_credentials, "true");
             return *this;
         }
 

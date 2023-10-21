@@ -4,6 +4,8 @@
 #include <boost/spirit/home/x3.hpp>
 #include <boost/spirit/home/x3/support/utility/annotate_on_success.hpp>
 #include <boost/spirit/home/x3/support/utility/error_reporting.hpp>
+#include <boost/asio/read.hpp>
+#include <boost/asio/read_until.hpp>
 
 namespace Roar
 {
@@ -16,18 +18,20 @@ namespace Roar
             namespace ascii = boost::spirit::x3::ascii;
 
             using ascii::char_;
+            using ascii::alnum;
 
-            const auto key = x3::rule<struct KeyTag, std::string>{"key"} = +(char_ - ':');
+            const auto key = x3::rule<struct KeyTag, std::string>{"key"} = +(alnum | char_('-') | char_('_'));
             const auto value = x3::rule<struct ValueTag, std::string>{"value"} = +(char_ - '\n');
             const auto newLine = x3::rule<struct NewLineTag, std::string>{"newLine"} = char_('\n');
             const auto whitespace = x3::rule<struct WhitespaceTag, std::string>{"whitespace"} =
                 char_(' ') | char_('\t');
 
             const auto entry = x3::rule<struct EntryTag, std::pair<std::string, std::string>>{"entry"} =
-                key[([](auto& ctx) {
-                    x3::traits::move_to(x3::_attr(ctx), x3::_val(ctx).first);
-                })] >>
-                ':' >> *whitespace >> value[([](auto& ctx) {
+                -(key[([](auto& ctx) {
+                      x3::traits::move_to(x3::_attr(ctx), x3::_val(ctx).first);
+                  })] > ':' >>
+                  *whitespace) >>
+                value[([](auto& ctx) {
                     x3::traits::move_to(x3::_attr(ctx), x3::_val(ctx).second);
                 })];
 
@@ -56,7 +60,10 @@ namespace Roar
         }
     }
     //------------------------------------------------------------------------------------------------------------------
-    ROAR_PIMPL_SPECIAL_FUNCTIONS_IMPL_NO_MOVE(Client);
+    Client::~Client()
+    {
+        shutdownSync();
+    }
     //------------------------------------------------------------------------------------------------------------------
     Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<std::size_t>, Detail::PromiseTypeBindFail<Error>>
     Client::send(std::string message, std::chrono::seconds timeout)
@@ -97,8 +104,9 @@ namespace Roar
                     std::string data = std::string(4096, '\0');
                 };
                 auto buf = std::make_shared<Buf>();
-                socket.async_read_some(
-                    boost::asio::buffer(buf->data, buf->data.size()),
+                boost::asio::async_read(
+                    socket,
+                    boost::asio::buffer(buf->data),
                     [d = std::move(d), weak = weak_from_this(), buf](auto ec, std::size_t bytesTransferred) {
                         auto self = weak.lock();
                         if (!self)
@@ -107,7 +115,7 @@ namespace Roar
                         if (ec)
                             return d.reject(Error{.error = ec, .additionalInfo = "Stream read failed."});
 
-                        d.resolve(std::string_view{buf->data}, bytesTransferred);
+                        d.resolve(std::string_view{buf->data.data(), bytesTransferred}, bytesTransferred);
                     });
             });
         });
@@ -149,7 +157,6 @@ namespace Roar
         {
           public:
             SseContext(
-                std::function<bool(std::uint64_t size, std::string_view)> onHeader,
                 std::function<bool(std::string_view, std::string_view)> onEvent,
                 std::function<void(std::optional<Error> const&)> onEndOfStream);
 
@@ -157,174 +164,115 @@ namespace Roar
 
             void enterReadCycle(std::shared_ptr<Client> client, std::chrono::seconds timeout);
 
-            std::size_t parseChunk(std::uint64_t remain, std::string_view rawData);
+            void parseChunk(std::string_view rawData);
             void onEndOfStream(std::optional<Error> const&);
 
           public:
-            std::function<bool(std::uint64_t size, std::string_view)> onHeader;
             std::function<bool(std::string_view, std::string_view)> onEvent;
             boost::beast::flat_buffer headerBuffer;
             boost::beast::http::response_parser<boost::beast::http::empty_body> responseParser;
 
           private:
-            std::unique_ptr<OnChunkHeader> onChunkHeader_;
-            std::unique_ptr<OnChunkBody> onChunkBody_;
             std::function<void(std::optional<Error> const&)> onEndOfStream_;
             bool streamEndReached_;
             std::string messageBuffer_;
+            std::size_t searchCursor_;
         };
-
-        class OnChunkHandler
-        {
-          public:
-            void setWeakContext(std::weak_ptr<SseContext> weakCtx);
-            virtual ~OnChunkHandler() = default;
-
-          protected:
-            std::weak_ptr<SseContext> weakCtx_;
-        };
-
-        struct OnChunkHeader : public OnChunkHandler
-        {
-            void operator()(std::uint64_t size, std::string_view extensions, boost::beast::error_code& error);
-        };
-
-        struct OnChunkBody : public OnChunkHandler
-        {
-            std::size_t operator()(std::uint64_t remain, std::string_view body, boost::beast::error_code& error);
-        };
-
-        void OnChunkHandler::setWeakContext(std::weak_ptr<SseContext> weakCtx)
-        {
-            weakCtx_ = std::move(weakCtx);
-        }
-
-        void OnChunkHeader::operator()(std::uint64_t size, std::string_view ext, boost::beast::error_code& error)
-        {
-            auto ctx = weakCtx_.lock();
-            if (!ctx)
-            {
-                error = boost::asio::error::no_recovery;
-                return;
-            }
-
-            if (!ctx->onHeader(size, ext))
-                return ctx->onEndOfStream(std::nullopt);
-
-            if (size == 0)
-                return ctx->onEndOfStream(std::nullopt);
-        }
-
-        std::size_t
-        OnChunkBody::operator()(std::uint64_t remain, std::string_view body, boost::beast::error_code& error)
-        {
-            auto ctx = weakCtx_.lock();
-            if (!ctx)
-            {
-                error = boost::asio::error::no_recovery;
-                return body.size();
-            }
-
-            return ctx->parseChunk(remain, body);
-        }
 
         SseContext::SseContext(
-            std::function<bool(std::uint64_t size, std::string_view)> onHeader,
             std::function<bool(std::string_view, std::string_view)> onEvent,
             std::function<void(std::optional<Error> const&)> onEndOfStream)
-            : onHeader{std::move(onHeader)}
-            , onEvent{std::move(onEvent)}
+            : onEvent{std::move(onEvent)}
             , headerBuffer{}
             , responseParser{}
-            , onChunkHeader_{std::make_unique<OnChunkHeader>()}
-            , onChunkBody_{std::make_unique<OnChunkBody>()}
             , onEndOfStream_{std::move(onEndOfStream)}
             , streamEndReached_{false}
             , messageBuffer_{}
+            , searchCursor_{0}
         {}
 
         void SseContext::onEndOfStream(std::optional<Error> const& err)
         {
+            bool wasEndedBefore = streamEndReached_;
             streamEndReached_ = true;
-            onEndOfStream_(err);
-        }
-
-        void SseContext::init()
-        {
-            onChunkHeader_->setWeakContext(weak_from_this());
-            onChunkBody_->setWeakContext(weak_from_this());
-            responseParser.on_chunk_header(*onChunkHeader_);
-            responseParser.on_chunk_body(*onChunkBody_);
+            if (!wasEndedBefore)
+                onEndOfStream_(err);
         }
 
         void SseContext::enterReadCycle(std::shared_ptr<Client> client, std::chrono::seconds timeout)
         {
-            client->withLowerLayerDo([&](auto& socket) {
+            client->withLowerLayerDo([timeout](auto& socket) {
                 socket.expires_after(timeout);
             });
 
-            client->withStreamDo([client, timeout, self = shared_from_this()](auto& socket) {
-                boost::beast::http::async_read_some(
-                    socket, self->headerBuffer, self->responseParser, [self, client, timeout](auto ec, auto) {
-                        if (ec)
-                            return self->onEndOfStream(Error{.error = ec, .additionalInfo = "Stream read failed."});
+            client->withStreamDo([&client, timeout, this](auto& socket) {
+                if (streamEndReached_)
+                    return;
+
+                boost::asio::async_read_until(
+                    socket,
+                    headerBuffer,
+                    "\n\n",
+                    [weakClient = client->weak_from_this(), self = shared_from_this(), timeout](
+                        boost::beast::error_code ec, std::size_t) mutable {
+                        auto client = weakClient.lock();
+                        if (!client)
+                            return;
 
                         if (self->streamEndReached_)
                             return;
-                        self->enterReadCycle(client, timeout);
+
+                        if (ec)
+                            return self->onEndOfStream(Error{.error = ec, .additionalInfo = "Stream read failed."});
+
+                        self->parseChunk(std::string_view{
+                            boost::asio::buffer_cast<char const*>(self->headerBuffer.data()),
+                            self->headerBuffer.size()});
+
+                        self->headerBuffer.consume(self->headerBuffer.size());
+
+                        self->enterReadCycle(std::move(client), timeout);
                     });
             });
         }
 
-        std::size_t SseContext::parseChunk(std::uint64_t remain, std::string_view rawData)
+        void SseContext::parseChunk(std::string_view rawData)
         {
-            auto const missing = remain - static_cast<std::uint64_t>(rawData.size());
-            messageBuffer_.append(rawData);
+            std::string data = std::string{rawData};
+            using namespace boost::spirit::x3;
 
-            // We need to wait for more data
-            if (missing > 0)
-                return rawData.size();
+            std::vector<std::pair<std::string, std::string>> keyValuePairs;
+            try
+            {
+                auto const parser = Detail::Parser::entries;
+                auto iter = std::make_move_iterator(data.cbegin());
+                const auto end = std::make_move_iterator(data.cend());
 
-            auto actualParse = [this](std::string& data) {
-                using namespace boost::spirit::x3;
-
-                std::vector<std::pair<std::string, std::string>> keyValuePairs;
-                try
+                bool success = parse(iter, end, parser, keyValuePairs);
+                if (!success)
                 {
-                    auto const parser = Detail::Parser::entries;
-                    auto iter = std::make_move_iterator(data.cbegin());
-                    const auto end = std::make_move_iterator(data.cend());
-
-                    bool success = parse(iter, end, parser, keyValuePairs);
-                    if (!success)
-                    {
-                        return onEndOfStream(
-                            Error{.error = boost::asio::error::no_recovery, .additionalInfo = "Error parsing chunk."});
-                    }
-
-                    std::string event;
-                    std::string eventData;
-
-                    for (auto const& [key, value] : keyValuePairs)
-                    {
-                        if (key == "event")
-                            event = value;
-                        else if (key == "data")
-                            eventData = value;
-                    }
-
-                    if (!onEvent(event, eventData))
-                        onEndOfStream(std::nullopt);
+                    return onEndOfStream(
+                        Error{.error = boost::asio::error::no_recovery, .additionalInfo = "Error parsing chunk."});
                 }
-                catch (expectation_failure<std::string_view::const_iterator> const& e)
+
+                std::string event;
+                std::string eventData;
+
+                for (auto const& [key, value] : keyValuePairs)
                 {
-                    return onEndOfStream(Error{.error = boost::asio::error::no_recovery, .additionalInfo = e.what()});
+                    if (key == "event")
+                        event = value;
+                    else if (key == "data")
+                        eventData = value;
                 }
-            };
 
-            actualParse(messageBuffer_);
-            messageBuffer_.clear();
-            return rawData.size();
+                if (!onEvent(event, eventData))
+                    onEndOfStream(std::nullopt);
+            }
+            catch (expectation_failure<std::string_view::const_iterator> const& e)
+            {
+                return onEndOfStream(Error{.error = boost::asio::error::no_recovery, .additionalInfo = e.what()});
+            }
         }
     }
     //------------------------------------------------------------------------------------------------------------------
@@ -336,29 +284,32 @@ namespace Roar
     Client::readServerSentEvents(
         std::function<bool(std::string_view, std::string_view)> onEvent,
         std::function<void(std::optional<Error> const&)> onEndOfStream,
-        std::function<bool(std::uint64_t size, std::string_view)> onHeader,
-        std::chrono::seconds timeout)
+        std::chrono::seconds initialTimeout,
+        std::chrono::seconds eventTimeout)
     {
-        auto ctx = std::make_shared<SseContext>(std::move(onHeader), std::move(onEvent), std::move(onEndOfStream));
-        return newPromise([this, timeout, ctx](Defer d) mutable {
-            ctx->init();
+        auto ctx = std::make_shared<SseContext>(std::move(onEvent), std::move(onEndOfStream));
 
+        return newPromise([this, initialTimeout, eventTimeout, &ctx](Defer d) mutable {
             withLowerLayerDo([&](auto& socket) {
-                socket.expires_after(timeout);
+                if (initialTimeout.count() == 0)
+                    socket.expires_never();
+                else
+                    socket.expires_after(initialTimeout);
             });
-            withStreamDo([d = std::move(d), timeout, ctx, this](auto& socket) mutable {
+
+            withStreamDo([d = std::move(d), eventTimeout, &ctx, this](auto& socket) mutable {
                 boost::beast::http::async_read_header(
                     socket,
                     ctx->headerBuffer,
                     ctx->responseParser,
-                    [weak = weak_from_this(), ctx, timeout, d = std::move(d)](
+                    [weak = weak_from_this(), ctx, eventTimeout, d = std::move(d)](
                         boost::beast::error_code ec, std::size_t) {
                         auto self = weak.lock();
                         if (!self)
                             return d.reject(Error{.error = ec, .additionalInfo = "Client is no longer alive."});
 
                         if (ec)
-                            return d.reject(Error{.error = ec, .additionalInfo = "Stream read failed."});
+                            return d.reject(Error{.error = ec, .additionalInfo = "Stream sse header read failed."});
 
                         bool shallContinue = true;
                         d.resolve(Detail::ref(ctx->responseParser), Detail::ref(shallContinue));
@@ -366,7 +317,7 @@ namespace Roar
                         if (!shallContinue)
                             return;
 
-                        ctx->enterReadCycle(self, timeout);
+                        ctx->enterReadCycle(self, eventTimeout);
                     });
             });
         });

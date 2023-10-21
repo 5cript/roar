@@ -75,6 +75,11 @@ namespace Roar::Curl
 
         return *this;
     }
+    Request& Request::expect100Continue()
+    {
+        setHeader("Expect", "100-continue");
+        return *this;
+    }
     Request& Request::bearerAuth(std::string const& bearerToken)
     {
         check(curl_easy_setopt(instance_, CURLOPT_HTTPAUTH, CURLAUTH_BEARER));

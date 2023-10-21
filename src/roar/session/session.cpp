@@ -78,7 +78,12 @@ namespace Roar
               std::move(standardResponseProvider))}
     {}
     //------------------------------------------------------------------------------------------------------------------
-    ROAR_PIMPL_SPECIAL_FUNCTIONS_IMPL(Session);
+    ROAR_PIMPL_SPECIAL_FUNCTIONS_IMPL_NO_DTOR(Session);
+    //------------------------------------------------------------------------------------------------------------------
+    Session::~Session()
+    {
+        close();
+    }
     //------------------------------------------------------------------------------------------------------------------
     void Session::readLimit(std::size_t bytesPerSecond)
     {
@@ -87,6 +92,31 @@ namespace Roar
                 stream.rate_policy().read_limit(bytesPerSecond);
             else
                 stream.next_layer().rate_policy().read_limit(bytesPerSecond);
+        });
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<std::size_t>, Detail::PromiseTypeBindFail<Error>>
+    Session::send(std::string message, std::chrono::seconds timeout)
+    {
+        using namespace promise;
+
+        return newPromise([this, message = std::move(message), timeout](Defer d) mutable {
+            withStreamDo([this, &d, &message, timeout](auto& stream) mutable {
+                boost::beast::get_lowest_layer(stream).expires_after(timeout);
+                std::shared_ptr<std::string> messagePtr = std::make_shared<std::string>(std::move(message));
+                boost::asio::async_write(
+                    stream,
+                    boost::asio::buffer(*messagePtr),
+                    [d = std::move(d), weak = weak_from_this(), messagePtr](auto ec, std::size_t bytesTransferred) {
+                        auto self = weak.lock();
+                        if (!self)
+                            return d.reject(Error{.error = ec, .additionalInfo = "Session is no longer alive."});
+
+                        if (ec)
+                            return d.reject(Error{.error = ec, .additionalInfo = "Stream write failed."});
+                        d.resolve(bytesTransferred);
+                    });
+            });
         });
     }
     //------------------------------------------------------------------------------------------------------------------

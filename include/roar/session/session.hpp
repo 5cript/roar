@@ -81,6 +81,10 @@ namespace Roar
                 : session_(session.shared_from_this())
                 , response_{std::move(res)}
             {}
+            SendIntermediate(Session& session)
+                : session_(session.shared_from_this())
+                , response_{session_->prepareResponse<BodyT>()}
+            {}
             SendIntermediate(SendIntermediate&&) = default;
             SendIntermediate(SendIntermediate const&) = delete;
             SendIntermediate& operator=(SendIntermediate&&) = default;
@@ -158,6 +162,11 @@ namespace Roar
                 response_.setHeader(field, std::forward<T>(value));
                 return *this;
             }
+            template <typename T>
+            SendIntermediate& header(boost::beast::http::field field, T&& value)
+            {
+                return setHeader(field, std::forward<T>(value));
+            }
 
             /**
              * @brief Set a callback function that is called whenever some data was written.
@@ -193,6 +202,12 @@ namespace Roar
                 return *this;
             }
 
+            SendIntermediate& modifyResponse(std::function<void(Response<BodyT>&)> func)
+            {
+                func(response_);
+                return *this;
+            }
+
           private:
             using CommitReturnType =
                 Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<bool>, Detail::PromiseTypeBindFail<Error>>;
@@ -202,7 +217,11 @@ namespace Roar
              * @brief Sends the response and invalidates this object
              */
             template <typename T = BodyT, bool OverrideSfinae = false>
-            std::enable_if_t<!std::is_same_v<T, RangeFileBody> || OverrideSfinae, CommitReturnType> commit()
+            std::enable_if_t<
+                !(std::is_same_v<T, RangeFileBody> || std::is_same_v<T, boost::beast::http::empty_body>) ||
+                    OverrideSfinae,
+                CommitReturnType>
+            commit()
             {
                 if (overallTimeout_)
                 {
@@ -213,6 +232,24 @@ namespace Roar
                 promise_ = std::make_unique<promise::Promise>(promise::newPromise());
                 serializer_ = std::make_unique<boost::beast::http::serializer<false, BodyT>>(response_.response());
                 writeChunk();
+                return {*promise_};
+            }
+
+            /**
+             * @brief Sends the response and invalidates this object
+             */
+            template <typename T = BodyT>
+            std::enable_if_t<std::is_same_v<T, boost::beast::http::empty_body>, CommitReturnType> commit()
+            {
+                if (overallTimeout_)
+                {
+                    session_->withStreamDo([this](auto& stream) {
+                        boost::beast::get_lowest_layer(stream).expires_after(*overallTimeout_);
+                    });
+                }
+                promise_ = std::make_unique<promise::Promise>(promise::newPromise());
+                serializer_ = std::make_unique<boost::beast::http::serializer<false, BodyT>>(response_.response());
+                writeHeader();
                 return {*promise_};
             }
 
@@ -234,9 +271,8 @@ namespace Roar
 
                     setHeader(
                         field::content_range,
-                        std::string{"bytes "} + std::to_string(first) +
-                        "-" + std::to_string(second) + "/" + std::to_string(fileSize)
-                    );
+                        std::string{"bytes "} + std::to_string(first) + "-" + std::to_string(second) + "/" +
+                            std::to_string(fileSize));
                 }
                 status(status::partial_content);
                 return commit<BodyT, true>();
@@ -298,8 +334,6 @@ namespace Roar
                     if (!overallTimeout_)
                         boost::beast::get_lowest_layer(stream).expires_after(std::chrono::seconds(sessionTimeout));
 
-                    serializer_ = std::make_unique<boost::beast::http::serializer<false, BodyT>>(response_.response());
-
                     boost::beast::http::async_write_header(
                         stream,
                         *serializer_,
@@ -307,7 +341,7 @@ namespace Roar
                             if (ec)
                                 self->promise_->fail(ec);
                             else
-                                self->promise_->resolve();
+                                self->promise_->resolve(false);
                         });
                 });
             }
@@ -369,16 +403,28 @@ namespace Roar
         template <typename BodyT>
         [[nodiscard]] std::shared_ptr<SendIntermediate<BodyT>> send(boost::beast::http::response<BodyT>&& res)
         {
-            return std::shared_ptr<SendIntermediate<BodyT>>(
-                new SendIntermediate<BodyT>{*this, std::move(res)});
+            return std::shared_ptr<SendIntermediate<BodyT>>(new SendIntermediate<BodyT>{*this, std::move(res)});
         }
 
         template <typename BodyT>
         [[nodiscard]] std::shared_ptr<SendIntermediate<BodyT>> send(Response<BodyT>&& res)
         {
-            return std::shared_ptr<SendIntermediate<BodyT>>(
-                new SendIntermediate<BodyT>{*this, std::move(res)});
+            return std::shared_ptr<SendIntermediate<BodyT>>(new SendIntermediate<BodyT>{*this, std::move(res)});
         }
+
+        template <typename BodyT>
+        [[nodiscard]] std::shared_ptr<SendIntermediate<BodyT>> sendWithAllAcceptedCors()
+        {
+            return std::shared_ptr<SendIntermediate<BodyT>>(new SendIntermediate<BodyT>{*this});
+        }
+
+        /**
+         * @brief Send raw data. Use this after sending a proper response for sending additional data.
+         *
+         * @param data
+         */
+        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<std::size_t>, Detail::PromiseTypeBindFail<Error>>
+        send(std::string message, std::chrono::seconds timeout = std::chrono::seconds{10});
 
         /**
          * @brief Utility class to build up read operations.
@@ -598,6 +644,15 @@ namespace Roar
             res.setHeader(boost::beast::http::field::server, "Roar+" BOOST_BEAST_VERSION_STRING);
             if (routeOptions().cors)
                 res.enableCors(req, routeOptions().cors);
+            return res;
+        }
+        template <typename BodyT = boost::beast::http::empty_body>
+        [[nodiscard]] Response<BodyT> prepareResponse()
+        {
+            auto res = Response<BodyT>{};
+            res.setHeader(boost::beast::http::field::server, "Roar+" BOOST_BEAST_VERSION_STRING);
+            if (routeOptions().cors)
+                res.enableCorsEverything();
             return res;
         }
 
