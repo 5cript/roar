@@ -1,8 +1,9 @@
+#pragma once
 
-
+#include <string_view>
 namespace Roar::Tests
 {
-    char const* certificateForTests =
+    static constexpr std::string_view certificateForTests =
         "-----BEGIN CERTIFICATE-----\r\n"
         "MIIF/zCCA+egAwIBAgIUP+fnN+9ZTdBIPqH17yfgbhcc7towDQYJKoZIhvcNAQEL\r\n"
         "BQAwgY4xCzAJBgNVBAYTAkRFMRUwEwYDVQQIDAxMb3dlci1TYXhvbnkxDjAMBgNV\r\n"
@@ -39,7 +40,7 @@ namespace Roar::Tests
         "EI/7\r\n"
         "-----END CERTIFICATE-----\r\n";
 
-    char const* keyForTests =
+    static constexpr std::string_view keyForTests =
         "-----BEGIN ENCRYPTED PRIVATE KEY-----\r\n"
         "MIIJnDBOBgkqhkiG9w0BBQ0wQTApBgkqhkiG9w0BBQwwHAQIrf/77b8sNwUCAggA\r\n"
         "MAwGCCqGSIb3DQIJBQAwFAYIKoZIhvcNAwcECNHCR2GvchYZBIIJSHIIG5ap59IE\r\n"
@@ -95,5 +96,5 @@ namespace Roar::Tests
         "W78JU09QBBw1qYEFER5zAw==\r\n"
         "-----END ENCRYPTED PRIVATE KEY-----\r\n";
 
-    char const* keyPassphrase = "asdf";
+    static constexpr std::string_view keyPassphrase = "asdf";
 }
