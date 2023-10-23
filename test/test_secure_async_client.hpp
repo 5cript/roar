@@ -15,7 +15,7 @@
 
 namespace Roar::Tests
 {
-    class AsyncClientTests
+    class SecureAsyncClientTests
         : public CommonServerSetup
         , public ::testing::Test
     {
@@ -32,7 +32,7 @@ namespace Roar::Tests
         std::shared_ptr<SimpleRoutes> listener_;
     };
 
-    TEST_F(AsyncClientTests, ConnectingSecurelyToUnsecureServerFails)
+    TEST_F(SecureAsyncClientTests, ConnectingSecurelyToUnsecureServerFails)
     {
         auto client = makeClient("https");
 
@@ -55,7 +55,7 @@ namespace Roar::Tests
         EXPECT_FALSE(awaitCompletion.get_future().get());
     }
 
-    TEST_F(AsyncClientTests, CanSendRequestToSecureServerAndCompleteViaThen)
+    TEST_F(SecureAsyncClientTests, CanSendRequestToSecureServerAndCompleteViaThen)
     {
         auto client = makeClient("https");
 
