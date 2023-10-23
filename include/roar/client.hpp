@@ -248,7 +248,7 @@ namespace Roar
                         socket,
                         *buffer_,
                         context->response.response(),
-                        [weak = weak_from_this(), buffer = this->buffer_, d = std::move(d), timeout, context](
+                        [weak = weak_from_this(), buffer = this->buffer_, d = std::move(d), context](
                             boost::beast::error_code ec, std::size_t) mutable {
                             auto self = weak.lock();
                             if (!self)
@@ -459,12 +459,12 @@ namespace Roar
             withLowerLayerDo([timeout](auto& socket) {
                 socket.expires_after(timeout);
             });
-            withStreamDo([this, request, &d, timeout](auto& socket) mutable {
+            withStreamDo([this, request, &d](auto& socket) mutable {
                 std::shared_ptr<Request<BodyT>> requestPtr = std::make_shared<Request<BodyT>>(std::move(request));
                 boost::beast::http::async_write(
                     socket,
                     *requestPtr,
-                    [weak = weak_from_this(), d = std::move(d), requestPtr, timeout](
+                    [weak = weak_from_this(), d = std::move(d), requestPtr](
                         boost::beast::error_code ec, std::size_t) mutable {
                         auto self = weak.lock();
                         if (!self)
