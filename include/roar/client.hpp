@@ -26,6 +26,7 @@
 #include <functional>
 #include <type_traits>
 #include <future>
+#include <any>
 
 namespace Roar
 {
@@ -74,6 +75,54 @@ namespace Roar
             Detail::PromiseTypeBindThen<std::string_view, std::size_t>,
             Detail::PromiseTypeBindFail<Error>>
         read(std::chrono::seconds timeout = defaultTimeout);
+
+        /**
+         * @brief Attach some state to the client lifetime.
+         *
+         * @param tag A tag name, to retrieve it back with.
+         * @param state The state.
+         */
+        template <typename T>
+        void attachState(std::string const& tag, T&& state)
+        {
+            attachedState_[tag] = std::forward<T>(state);
+        }
+
+        /**
+         * @brief Create state in place.
+         *
+         * @tparam ConstructionArgs
+         * @param tag
+         * @param args
+         */
+        template <typename T, typename... ConstructionArgs>
+        void emplaceState(std::string const& tag, ConstructionArgs&&... args)
+        {
+            attachedState_[tag] = std::make_any<T>(std::forward<ConstructionArgs>(args)...);
+        }
+
+        /**
+         * @brief Retrieve attached state by tag.
+         *
+         * @tparam T Type of the attached state.
+         * @param tag The tag of the state.
+         * @return T& Returns a reference to the held state.
+         */
+        template <typename T>
+        T& state(std::string const& tag)
+        {
+            return std::any_cast<T&>(attachedState_.at(tag));
+        }
+
+        /**
+         * @brief Remove attached state.
+         *
+         * @param tag The tag of the state to remove.
+         */
+        void removeState(std::string const& tag)
+        {
+            attachedState_.erase(tag);
+        }
 
         /**
          * @brief Connects the client to a server and performs a request
@@ -374,5 +423,6 @@ namespace Roar
       private:
         std::variant<boost::beast::ssl_stream<boost::beast::tcp_stream>, boost::beast::tcp_stream> socket_;
         boost::asio::ip::tcp::resolver::results_type::endpoint_type endpoint_;
+        std::unordered_map<std::string, std::any> attachedState_;
     };
 }
