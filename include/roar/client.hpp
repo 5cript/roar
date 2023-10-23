@@ -35,21 +35,25 @@ namespace Roar
       public:
         constexpr static std::chrono::seconds defaultTimeout{10};
 
-        struct ConstructionArguments
+        struct SslOptions
         {
-            /// Required io executor for boost::asio.
-            boost::asio::any_io_executor executor;
-
             /// Supply for SSL support.
-            std::optional<boost::asio::ssl::context> sslContext;
+            boost::asio::ssl::context sslContext;
 
             /// SSL verify mode:
-            boost::asio::ssl::verify_mode sslVerifyMode = boost::asio::ssl::verify_none;
+            boost::asio::ssl::verify_mode sslVerifyMode = boost::asio::ssl::verify_peer;
 
             /**
              * @brief sslVerifyCallback, you can use boost::asio::ssl::rfc2818_verification(host) most of the time.
              */
-            std::function<bool(bool, boost::asio::ssl::verify_context&)> sslVerifyCallback = {};
+            std::function<bool(bool, boost::asio::ssl::verify_context&)> sslVerifyCallback;
+        };
+
+        struct ConstructionArguments
+        {
+            /// Required io executor for boost::asio.
+            boost::asio::any_io_executor executor;
+            std::optional<SslOptions> sslOptions = std::nullopt;
         };
 
         Client(ConstructionArguments&& args);
@@ -135,22 +139,6 @@ namespace Roar
         request(Request<BodyT>&& request, std::chrono::seconds timeout = defaultTimeout)
         {
             return promise::newPromise([&, this](promise::Defer d) mutable {
-                if (std::holds_alternative<boost::beast::ssl_stream<boost::beast::tcp_stream>>(socket_))
-                {
-                    auto& sslSocket = std::get<boost::beast::ssl_stream<boost::beast::tcp_stream>>(socket_);
-                    if (!SSL_ctrl(
-                            sslSocket.native_handle(),
-                            SSL_CTRL_SET_TLSEXT_HOSTNAME,
-                            TLSEXT_NAMETYPE_host_name,
-                            // yikes openssl you make me do this
-                            const_cast<void*>(reinterpret_cast<void const*>(request.host().c_str()))))
-                    {
-                        boost::beast::error_code ec{
-                            static_cast<int>(::ERR_get_error()), boost::asio::error::get_ssl_category()};
-                        return d.reject(Error{.error = ec, .additionalInfo = "SSL_set_tlsext_host_name failed."});
-                    }
-                }
-
                 const auto host = request.host();
                 const auto port = request.port();
                 doResolve(
@@ -373,6 +361,10 @@ namespace Roar
         {
             if (std::holds_alternative<boost::beast::ssl_stream<boost::beast::tcp_stream>>(socket_))
             {
+                auto maybeError = setupSsl(request.host());
+                if (maybeError)
+                    return d.reject(*maybeError);
+
                 auto& sslSocket = std::get<boost::beast::ssl_stream<boost::beast::tcp_stream>>(socket_);
                 withLowerLayerDo([&](auto& socket) {
                     socket.expires_after(timeout);
@@ -420,7 +412,10 @@ namespace Roar
             });
         }
 
+        std::optional<Error> setupSsl(std::string const& host);
+
       private:
+        std::optional<SslOptions> sslOptions_;
         std::variant<boost::beast::ssl_stream<boost::beast::tcp_stream>, boost::beast::tcp_stream> socket_;
         boost::asio::ip::tcp::resolver::results_type::endpoint_type endpoint_;
         std::unordered_map<std::string, std::any> attachedState_;

@@ -7,32 +7,74 @@
 #include <boost/asio/read.hpp>
 #include <boost/asio/read_until.hpp>
 
+#include <stdexcept>
+
 namespace Roar
 {
     using namespace promise;
 
     // ##################################################################################################################
     Client::Client(ConstructionArguments&& args)
-        : socket_{[&args]() -> decltype(socket_) {
-            if (args.sslContext)
+        : sslOptions_{std::move(args.sslOptions)}
+        , socket_{[this, &args]() -> decltype(socket_) {
+            if (args.sslOptions)
                 return boost::beast::ssl_stream<boost::beast::tcp_stream>{
-                    boost::beast::tcp_stream{args.executor}, *args.sslContext};
+                    boost::beast::tcp_stream{args.executor}, sslOptions_->sslContext};
             else
                 return boost::beast::tcp_stream{args.executor};
         }()}
-    {
-        if (std::holds_alternative<boost::beast::ssl_stream<boost::beast::tcp_stream>>(socket_))
-        {
-            auto& sslSocket = std::get<boost::beast::ssl_stream<boost::beast::tcp_stream>>(socket_);
-            sslSocket.set_verify_mode(args.sslVerifyMode);
-            if (args.sslVerifyCallback)
-                sslSocket.set_verify_callback(std::move(args.sslVerifyCallback));
-        }
-    }
+        , endpoint_{}
+        , attachedState_{}
+    {}
     //------------------------------------------------------------------------------------------------------------------
     Client::~Client()
     {
         shutdownSync();
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    std::optional<Error> Client::setupSsl(std::string const& host)
+    {
+        if (std::holds_alternative<boost::beast::ssl_stream<boost::beast::tcp_stream>>(socket_))
+        {
+            if (!sslOptions_)
+                throw std::runtime_error{"No SSL options, but SSL socket was created?"};
+
+            auto& sslSocket = std::get<boost::beast::ssl_stream<boost::beast::tcp_stream>>(socket_);
+            if (!SSL_ctrl(
+                    sslSocket.native_handle(),
+                    SSL_CTRL_SET_TLSEXT_HOSTNAME,
+                    TLSEXT_NAMETYPE_host_name,
+                    // yikes openssl you make me do this
+                    const_cast<void*>(reinterpret_cast<void const*>(host.c_str()))))
+            {
+                boost::beast::error_code ec{
+                    static_cast<int>(::ERR_get_error()), boost::asio::error::get_ssl_category()};
+                return Error{.error = ec, .additionalInfo = "SSL_set_tlsext_host_name failed."};
+            }
+
+            sslSocket.set_verify_mode(sslOptions_->sslVerifyMode);
+            if (!sslOptions_->sslVerifyCallback)
+            {
+                if (sslOptions_->sslVerifyMode == boost::asio::ssl::verify_none)
+                {
+                    sslSocket.set_verify_callback([](bool, boost::asio::ssl::verify_context&) {
+                        return true;
+                    });
+                }
+                else
+                {
+                    return Error{
+                        .error = boost::asio::error::operation_not_supported,
+                        .additionalInfo = "No verify callback provided when verify mode is not none."};
+                }
+            }
+            else
+                sslSocket.set_verify_callback(sslOptions_->sslVerifyCallback);
+
+            return std::nullopt;
+        }
+        else
+            return Error{.error = boost::asio::error::operation_not_supported, .additionalInfo = "Not an SSL socket."};
     }
     //------------------------------------------------------------------------------------------------------------------
     Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<std::size_t>, Detail::PromiseTypeBindFail<Error>>
