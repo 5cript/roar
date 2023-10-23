@@ -29,21 +29,6 @@ namespace Roar::Tests
             secureServer_->installRequestListener<SimpleRoutes>();
         }
 
-        std::shared_ptr<Client> makeClient(std::string const& scheme = "http")
-        {
-            if (scheme == "http")
-                return std::make_shared<Client>(Client::ConstructionArguments{.executor = executor_});
-            else if (scheme == "https")
-            {
-                return std::make_shared<Client>(Client::ConstructionArguments{
-                    .executor = executor_,
-                    .sslContext = boost::asio::ssl::context{boost::asio::ssl::context::tlsv12_client},
-                });
-            }
-            else
-                throw std::runtime_error{"Unknown scheme: " + scheme};
-        }
-
       protected:
         std::shared_ptr<SimpleRoutes> listener_;
     };
