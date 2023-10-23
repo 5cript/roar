@@ -29,21 +29,6 @@ namespace Roar::Tests
             secureServer_->installRequestListener<SimpleRoutes>();
         }
 
-        std::shared_ptr<Client> makeClient(std::string const& scheme = "http")
-        {
-            if (scheme == "http")
-                return std::make_shared<Client>(Client::ConstructionArguments{.executor = executor_});
-            else if (scheme == "https")
-            {
-                return std::make_shared<Client>(Client::ConstructionArguments{
-                    .executor = executor_,
-                    .sslContext = boost::asio::ssl::context{boost::asio::ssl::context::tlsv12_client},
-                });
-            }
-            else
-                throw std::runtime_error{"Unknown scheme: " + scheme};
-        }
-
       protected:
         std::shared_ptr<SimpleRoutes> listener_;
     };
@@ -240,5 +225,32 @@ namespace Roar::Tests
         auto result = awaitCompletion.get_future().get();
         ASSERT_TRUE(result.has_value());
         EXPECT_EQ(*result, "Hello");
+    }
+
+    TEST_F(AsyncClientTests, CanAttachAndRetrieveState)
+    {
+        auto client = makeClient();
+
+        client->attachState<std::string>("name", std::string{"Hello"});
+        auto& str = client->state<std::string>("name");
+        EXPECT_EQ(str, "Hello");
+    }
+
+    TEST_F(AsyncClientTests, CanEmplaceState)
+    {
+        auto client = makeClient();
+
+        client->emplaceState<std::string>("name", "Hello");
+        auto& str = client->state<std::string>("name");
+        EXPECT_EQ(str, "Hello");
+    }
+
+    TEST_F(AsyncClientTests, CanRemoveState)
+    {
+        auto client = makeClient();
+
+        client->emplaceState<std::string>("name", "Hello");
+        client->removeState("name");
+        EXPECT_THROW(client->state<std::string>("name"), std::out_of_range);
     }
 }

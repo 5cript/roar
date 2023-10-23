@@ -1,18 +1,20 @@
+#pragma once
+
 #include <boost/asio/ssl/context.hpp>
 
-#include <string_view>
+#include <string>
 #include <filesystem>
 #include <variant>
 
 namespace Roar
 {
-    struct SslContextCreationParameters
+    struct SslServerContext
     {
-        boost::asio::ssl::context::method method = boost::asio::ssl::context::tls_server;
-        std::variant<std::string_view, std::filesystem::path> certificate;
-        std::variant<std::string_view, std::filesystem::path> privateKey;
-        std::string_view diffieHellmanParameters = "";
-        std::string_view password = "";
+        boost::asio::ssl::context ctx = boost::asio::ssl::context{boost::asio::ssl::context::tls_server};
+        std::variant<std::string, std::filesystem::path> certificate;
+        std::variant<std::string, std::filesystem::path> privateKey;
+        std::string diffieHellmanParameters = "";
+        std::string password = "";
     };
 
     /**
@@ -22,5 +24,5 @@ namespace Roar
      * @param settings
      * @return boost::asio::ssl::context
      */
-    boost::asio::ssl::context makeSslContext(SslContextCreationParameters settings);
+    void initializeServerSslContext(SslServerContext& ctx);
 }

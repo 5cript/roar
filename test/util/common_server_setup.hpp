@@ -1,8 +1,10 @@
 #pragma once
 
 #include "../resources/keys.hpp"
+#include "temporary_directory.hpp"
 
 #include <roar/server.hpp>
+#include <roar/client.hpp>
 #include <roar/url/url.hpp>
 #include <roar/ssl/make_ssl_context.hpp>
 
@@ -22,10 +24,11 @@ namespace Roar::Tests
     {
       public:
         CommonServerSetup()
-            : pool_{2}
+            : pool_{4}
             , executor_{pool_.executor()}
             , errors_{}
             , server_{}
+            , tmpDir_{std::filesystem::current_path(), true}
         {}
 
         void makeDefaultServer()
@@ -40,21 +43,74 @@ namespace Roar::Tests
             server_->start();
         }
 
-        void makeSecureServer()
+        std::pair<std::filesystem::path, std::filesystem::path> generateCertAndKey() const
         {
+            std::filesystem::path certFile = tmpDir_.path() / "example.com.crt";
+            std::filesystem::path keyFile = tmpDir_.path() / "example.com.key";
+            std::stringstream cmd;
+            cmd << "openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -nodes -keyout " << keyFile << " -out "
+                << certFile
+                << " -subj \"/CN=example.com\" -addext "
+                   "\"subjectAltName=DNS:example.com,DNS:*.example.com,IP:127.0.0.1\"";
+            system(cmd.str().c_str());
+            return {certFile, keyFile};
+        }
+
+        void makeSecureServer(bool freshKeys = false)
+        {
+            auto ctx = [this, freshKeys]() {
+                if (freshKeys)
+                {
+                    const auto [certFile, keyFile] = generateCertAndKey();
+                    return SslServerContext{
+                        .certificate = certFile,
+                        .privateKey = keyFile,
+                    };
+                }
+                else
+                {
+                    return SslServerContext{
+                        .certificate = std::string{certificateForTests},
+                        .privateKey = std::string{keyForTests},
+                        .password = std::string{keyPassphrase},
+                    };
+                }
+            }();
+            initializeServerSslContext(ctx);
+
             secureServer_ = std::make_unique<Roar::Server>(Roar::Server::ConstructionArguments{
                 .executor = executor_,
-                .sslContext = makeSslContext(SslContextCreationParameters{
-                    .certificate = std::string_view{certificateForTests},
-                    .privateKey = std::string_view{keyForTests},
-                    .password = keyPassphrase,
-                }),
+                .sslContext = std::move(ctx),
                 .onError =
                     [this](Roar::Error&& err) {
                         errors_.push_back(std::move(err));
                     },
             });
             secureServer_->start();
+        }
+
+        std::shared_ptr<Client>
+        makeClient(std::string const& scheme = "http", std::optional<Client::SslOptions> options = std::nullopt)
+        {
+            if (scheme == "http")
+                return std::make_shared<Client>(Client::ConstructionArguments{.executor = executor_});
+            else if (scheme == "https")
+            {
+                if (!options)
+                {
+                    options = Client::SslOptions{
+                        .sslContext = boost::asio::ssl::context{boost::asio::ssl::context::tlsv12_client},
+                        .sslVerifyMode = boost::asio::ssl::verify_none,
+                    };
+                }
+
+                return std::make_shared<Client>(Client::ConstructionArguments{
+                    .executor = executor_,
+                    .sslOptions = std::move(options),
+                });
+            }
+            else
+                throw std::runtime_error{"Unknown scheme: " + scheme};
         }
 
         std::string urlImpl(Roar::Server& server, std::string const& path, UrlParams params = {}) const
@@ -95,5 +151,6 @@ namespace Roar::Tests
         std::vector<Roar::Error> errors_;
         std::unique_ptr<Roar::Server> server_;
         std::unique_ptr<Roar::Server> secureServer_;
+        TemporaryDirectory tmpDir_;
     };
 }
