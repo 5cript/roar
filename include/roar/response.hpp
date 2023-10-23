@@ -9,6 +9,7 @@
 
 #include <boost/beast/http/message.hpp>
 #include <boost/beast/http/string_body.hpp>
+#include <boost/beast/http/empty_body.hpp>
 #include <promise-cpp/promise.hpp>
 
 #ifdef ROAR_ENABLE_NLOHMANN_JSON

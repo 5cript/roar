@@ -16,6 +16,7 @@ namespace Roar
     // ##################################################################################################################
     Client::Client(ConstructionArguments&& args)
         : sslOptions_{std::move(args.sslOptions)}
+        , buffer_{std::make_shared<boost::beast::flat_buffer>()}
         , socket_{[this, &args]() -> decltype(socket_) {
             if (args.sslOptions)
                 return boost::beast::ssl_stream<boost::beast::tcp_stream>{
@@ -111,15 +112,11 @@ namespace Roar
                 socket.expires_after(timeout);
             });
             withStreamDo([this, d = std::move(d)](auto& socket) mutable {
-                struct Buf
-                {
-                    std::string data = std::string(4096, '\0');
-                };
-                auto buf = std::make_shared<Buf>();
+                auto messagePtr = std::make_shared<std::string>();
                 boost::asio::async_read(
                     socket,
-                    boost::asio::buffer(buf->data),
-                    [d = std::move(d), weak = weak_from_this(), buf](auto ec, std::size_t bytesTransferred) {
+                    boost::asio::buffer(*messagePtr),
+                    [d = std::move(d), weak = weak_from_this(), messagePtr](auto ec, std::size_t bytesTransferred) {
                         auto self = weak.lock();
                         if (!self)
                             return d.reject(Error{.error = ec, .additionalInfo = "Client is no longer alive."});
@@ -127,7 +124,7 @@ namespace Roar
                         if (ec)
                             return d.reject(Error{.error = ec, .additionalInfo = "Stream read failed."});
 
-                        d.resolve(std::string_view{buf->data.data(), bytesTransferred}, bytesTransferred);
+                        d.resolve(std::string_view{messagePtr->data(), bytesTransferred}, bytesTransferred);
                     });
             });
         });
