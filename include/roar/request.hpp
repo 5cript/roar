@@ -88,44 +88,43 @@ namespace Roar
          *
          * @return auto const& The path.
          */
-        auto const& path() const
+        std::string path() const
         {
             return path_;
         }
 
-        Request<BodyT>& path(std::string&& path)
+        void target(std::string_view target)
         {
-            path_ = std::move(path);
-            return *this;
+            static_cast<beast_request*>(this)->target(target);
+            parseTarget();
         }
-        Request<BodyT>& path(std::string const& path)
+        std::string_view target() const
         {
-            path_ = path;
-            return *this;
+            return static_cast<beast_request const*>(this)->target();
         }
-        Request<BodyT>& path(std::string_view path)
-        {
-            path_ = std::string{path};
-            return *this;
-        }
+
         Request<BodyT>& host(std::string&& host)
         {
             host_ = std::move(host);
+            this->set(boost::beast::http::field::host, host_);
             return *this;
         }
         Request<BodyT>& host(std::string const& host)
         {
             host_ = host;
+            this->set(boost::beast::http::field::host, host_);
             return *this;
         }
         Request<BodyT>& host(std::string_view host)
         {
             host_ = std::string{host};
+            this->set(boost::beast::http::field::host, host_);
             return *this;
         }
         Request<BodyT>& host(char const* host)
         {
             host_ = std::string{host};
+            this->set(boost::beast::http::field::host, host_);
             return *this;
         }
         std::string host() const
