@@ -238,7 +238,7 @@ namespace Roar
                 withLowerLayerDo([timeout](auto& socket) {
                     socket.expires_after(timeout);
                 });
-                withStreamDo([this, timeout, d = std::move(d)](auto& socket) mutable {
+                withStreamDo([this, d = std::move(d)](auto& socket) mutable {
                     struct Context
                     {
                         Response<ResponseBodyT> response{};
