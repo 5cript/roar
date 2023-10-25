@@ -232,4 +232,17 @@ namespace Roar::Tests
         EXPECT_GE(headers.size(), 1);
         EXPECT_EQ(headers["Content-Type"], "text/plain");
     }
+
+    TEST_F(CurlRequestTests, CanPerformCustomRequest)
+    {
+        std::string body;
+        const auto result = Request{}.sink(body).custom("GET", url("/index.txt"));
+        EXPECT_EQ(body, "Hello");
+    }
+
+    TEST_F(CurlRequestTests, CanPerformBodylessPutViaCustomRequest)
+    {
+        const auto result = Request{}.custom("PUT", url("/putHereNothing"));
+        EXPECT_EQ(result.code(), boost::beast::http::status::no_content);
+    }
 }

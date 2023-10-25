@@ -51,6 +51,7 @@ namespace Roar::Tests
         ROAR_GET(ab)("/a/b");
         ROAR_GET(anything)(R"(\/([^\/]+)\/(.+))"_rgx);
         ROAR_PUT(putHere)("/putHere");
+        ROAR_PUT(putHereNothing)("/putHereNothing");
         ROAR_POST(postHere)("/postHere");
         ROAR_DELETE(deleteHere)("/deleteHere");
         ROAR_OPTIONS(optionsHere)("/optionsHere");
@@ -92,6 +93,7 @@ namespace Roar::Tests
             (),
             (roar_index,
              roar_putHere,
+             roar_putHereNothing,
              roar_postHere,
              roar_deleteHere,
              roar_optionsHere,
@@ -127,6 +129,11 @@ namespace Roar::Tests
                     .preparePayload()
                     .commit();
             });
+    }
+    inline void SimpleRoutes::putHereNothing(Session& session, EmptyBodyRequest&& req)
+    {
+        using namespace boost::beast::http;
+        session.send<empty_body>(req)->contentType("text/plain").status(status::no_content).commit();
     }
     inline void SimpleRoutes::postHere(Session& session, EmptyBodyRequest&& req)
     {

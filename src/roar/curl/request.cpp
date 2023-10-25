@@ -142,6 +142,12 @@ namespace Roar::Curl
         this->url(url);
         return perform();
     }
+    Response Request::custom(std::string const& request, std::string const& url)
+    {
+        check(curl_easy_setopt(instance_, CURLOPT_CUSTOMREQUEST, request.c_str()));
+        this->url(url);
+        return perform();
+    }
     Request& Request::verbose(bool enable)
     {
         check(curl_easy_setopt(instance_, CURLOPT_VERBOSE, enable ? 1L : 0L));

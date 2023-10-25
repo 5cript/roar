@@ -342,7 +342,7 @@ namespace Roar::Curl
          * @brief Finishes and performs the request as a get request.
          *
          * @param url The target to send this request to.
-         * @return Request& Returned for chaining.
+         * @return A response object.
          */
         Response get(std::string const& url);
 
@@ -350,7 +350,7 @@ namespace Roar::Curl
          * @brief Finishes and performs the request as a put request.
          *
          * @param url The target to send this request to.
-         * @return Request& Returned for chaining.
+         * @return A response object.
          */
         Response put(std::string const& url);
 
@@ -358,7 +358,7 @@ namespace Roar::Curl
          * @brief Finishes and performs the request as a post request.
          *
          * @param url The target to send this request to.
-         * @return Request& Returned for chaining.
+         * @return A response object.
          */
         Response post(std::string const& url);
 
@@ -366,7 +366,7 @@ namespace Roar::Curl
          * @brief Finishes and performs the request as a delete request.
          *
          * @param url The target to send this request to.
-         * @return Request& Returned for chaining.
+         * @return A response object.
          */
         Response delete_(std::string const& url);
 
@@ -374,7 +374,7 @@ namespace Roar::Curl
          * @brief Finishes and performs the request as a options request.
          *
          * @param url The target to send this request to.
-         * @return Request& Returned for chaining.
+         * @return A response object.
          */
         Response options(std::string const& url);
 
@@ -382,7 +382,7 @@ namespace Roar::Curl
          * @brief Finishes and performs the request as a head request.
          *
          * @param url The target to send this request to.
-         * @return Request& Returned for chaining.
+         * @return A response object.
          */
         Response head(std::string const& url);
 
@@ -390,9 +390,18 @@ namespace Roar::Curl
          * @brief Finishes and performs the request as a patch request.
          *
          * @param url The target to send this request to.
-         * @return Request& Returned for chaining.
+         * @return A response object.
          */
         Response patch(std::string const& url);
+
+        /**
+         * @brief For requests outside the common verbs. (Or for put requests without body).
+         *
+         * @param request A custom request verb
+         * @param url The target to send this request to.
+         * @return A response object.
+         */
+        Response custom(std::string const& request, std::string const& url);
 
         /**
          * @brief Returns the underlying curl instance.
