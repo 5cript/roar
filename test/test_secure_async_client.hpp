@@ -15,6 +15,8 @@
 
 namespace Roar::Tests
 {
+    using namespace std::chrono_literals;
+
     class SecureAsyncClientTests
         : public CommonServerSetup
         , public ::testing::Test
@@ -78,5 +80,31 @@ namespace Roar::Tests
             });
 
         EXPECT_TRUE(awaitCompletion.get_future().get());
+    }
+
+    TEST_F(SecureAsyncClientTests, FailingToConnectRejectsThePromiseWithAssertionOrException)
+    {
+        auto client = makeClient("https");
+
+        auto req = Roar::Request<boost::beast::http::empty_body>{};
+        req.method(boost::beast::http::verb::get);
+        req.version(11);
+
+        req.host("::1");
+        req.port(secureServer_->getLocalEndpoint().port());
+        req.target("/index.txt");
+
+        secureServer_->stop();
+
+        std::promise<bool> awaitCompletion;
+        client->request(std::move(req), 1s)
+            .then([client, &awaitCompletion]() {
+                awaitCompletion.set_value(true);
+            })
+            .fail([&awaitCompletion](auto e) {
+                awaitCompletion.set_value(false);
+            });
+
+        EXPECT_FALSE(awaitCompletion.get_future().get());
     }
 }

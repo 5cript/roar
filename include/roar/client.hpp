@@ -165,10 +165,11 @@ namespace Roar
                                     boost::asio::ip::tcp::resolver::results_type::endpoint_type endpoint) mutable {
                                     auto self = weak.lock();
                                     if (!self)
-                                        d.reject(Error{.error = ec, .additionalInfo = "Client is no longer alive."});
+                                        return d.reject(
+                                            Error{.error = ec, .additionalInfo = "Client is no longer alive."});
 
                                     if (ec)
-                                        d.reject(Error{.error = ec, .additionalInfo = "TCP connect failed."});
+                                        return d.reject(Error{.error = ec, .additionalInfo = "TCP connect failed."});
 
                                     self->endpoint_ = endpoint;
 
