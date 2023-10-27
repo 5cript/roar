@@ -328,53 +328,42 @@ namespace Roar
             });
         }
 
-        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<>, Detail::PromiseTypeBindFail<Error>> shutdown()
+        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<>, Detail::PromiseTypeBindFail<Error>> close()
         {
             return promise::newPromise([&, this](promise::Defer d) mutable {
-                bool isClosed = false;
+                resolver_.cancel();
                 withLowerLayerDo([&](auto& socket) {
-                    if (!socket.socket().is_open())
-                        isClosed = true;
+                    if (socket.socket().is_open())
+                    {
+                        socket.cancel();
+                        socket.close();
+                    }
                 });
-
-                if (isClosed)
-                    return d.resolve();
-
-                if (std::holds_alternative<boost::beast::tcp_stream>(socket_))
-                {
-                    auto& socket = std::get<boost::beast::tcp_stream>(socket_);
-                    socket.cancel();
-                    socket.close();
-                    return d.resolve();
-                }
-                else
-                {
-                    auto& socket = std::get<boost::beast::ssl_stream<boost::beast::tcp_stream>>(socket_);
-                    socket.async_shutdown([d = std::move(d)](boost::beast::error_code ec) mutable {
-                        if (ec == boost::asio::error::eof)
-                            ec = {};
-
-                        if (ec)
-                            return d.reject(Error{.error = ec, .additionalInfo = "Stream shutdown failed."});
-
-                        d.resolve();
-                    });
-                }
+                return d.resolve();
             });
         }
 
-        std::future_status shutdownSync(std::chrono::seconds timeout = defaultTimeout)
+        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<>, Detail::PromiseTypeBindFail<Error>>
+        shutdownSsl(std::chrono::seconds timeout = defaultTimeout)
         {
-            std::promise<void> waiter;
-            auto waiterFuture = waiter.get_future();
-            shutdown()
-                .then([&waiter]() mutable {
-                    waiter.set_value();
-                })
-                .fail([&waiter](auto) mutable {
-                    waiter.set_value();
+            return promise::newPromise([&, this](promise::Defer d) mutable {
+                if (std::holds_alternative<boost::beast::tcp_stream>(socket_))
+                    return d.resolve();
+
+                withLowerLayerDo([timeout](auto& socket) {
+                    socket.expires_after(timeout);
                 });
-            return waiterFuture.wait_for(timeout);
+                auto& socket = std::get<boost::beast::ssl_stream<boost::beast::tcp_stream>>(socket_);
+                socket.async_shutdown([d = std::move(d)](boost::beast::error_code ec) mutable {
+                    if (ec == boost::asio::error::eof)
+                        ec = {};
+
+                    if (ec)
+                        return d.reject(Error{.error = ec, .additionalInfo = "Stream shutdown failed."});
+
+                    d.resolve();
+                });
+            });
         }
 
       public:
@@ -483,6 +472,7 @@ namespace Roar
 
       private:
         std::optional<SslOptions> sslOptions_;
+        boost::asio::ip::tcp::resolver resolver_;
         std::shared_ptr<boost::beast::flat_buffer> buffer_;
         std::variant<boost::beast::ssl_stream<boost::beast::tcp_stream>, boost::beast::tcp_stream> socket_;
         boost::asio::ip::tcp::resolver::results_type::endpoint_type endpoint_;

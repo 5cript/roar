@@ -16,6 +16,7 @@ namespace Roar
     // ##################################################################################################################
     Client::Client(ConstructionArguments&& args)
         : sslOptions_{std::move(args.sslOptions)}
+        , resolver_{args.executor}
         , buffer_{std::make_shared<boost::beast::flat_buffer>()}
         , socket_{[this, &args]() -> decltype(socket_) {
             if (args.sslOptions)
@@ -30,7 +31,7 @@ namespace Roar
     //------------------------------------------------------------------------------------------------------------------
     Client::~Client()
     {
-        shutdownSync();
+        close();
     }
     //------------------------------------------------------------------------------------------------------------------
     std::optional<Error> Client::setupSsl(std::string const& host)
@@ -136,24 +137,11 @@ namespace Roar
         std::function<void(boost::beast::error_code ec, boost::asio::ip::tcp::resolver::results_type results)>
             onResolve)
     {
-        withLowerLayerDo([&](auto& socket) {
-            struct ResolveCtx
-            {
-                boost::asio::ip::tcp::resolver resolver;
-                boost::asio::ip::tcp::resolver::query query;
-            };
-            auto resolveCtx = std::make_shared<ResolveCtx>(ResolveCtx{
-                .resolver = boost::asio::ip::tcp::resolver{socket.get_executor()},
-                .query =
-                    boost::asio::ip::tcp::resolver::query{
-                        host, port, boost::asio::ip::resolver_query_base::numeric_service},
+        resolver_.async_resolve(
+            boost::asio::ip::tcp::resolver::query{host, port, boost::asio::ip::resolver_query_base::numeric_service},
+            [onResolve = std::move(onResolve)](boost::beast::error_code ec, auto results) mutable {
+                onResolve(ec, std::move(results));
             });
-            resolveCtx->resolver.async_resolve(
-                resolveCtx->query,
-                [onResolve = std::move(onResolve), resolveCtx](boost::beast::error_code ec, auto results) mutable {
-                    onResolve(ec, std::move(results));
-                });
-        });
     }
     // ##################################################################################################################
 }
