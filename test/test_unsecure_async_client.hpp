@@ -29,21 +29,6 @@ namespace Roar::Tests
             secureServer_->installRequestListener<SimpleRoutes>();
         }
 
-        std::shared_ptr<Client> makeClient(std::string const& scheme = "http")
-        {
-            if (scheme == "http")
-                return std::make_shared<Client>(Client::ConstructionArguments{.executor = executor_});
-            else if (scheme == "https")
-            {
-                return std::make_shared<Client>(Client::ConstructionArguments{
-                    .executor = executor_,
-                    .sslContext = boost::asio::ssl::context{boost::asio::ssl::context::tlsv12_client},
-                });
-            }
-            else
-                throw std::runtime_error{"Unknown scheme: " + scheme};
-        }
-
       protected:
         std::shared_ptr<SimpleRoutes> listener_;
     };
@@ -226,12 +211,105 @@ namespace Roar::Tests
         client->request(std::move(req), std::chrono::seconds(5))
             .then([&awaitCompletion, client, &parser]() {
                 client->readResponse(parser)
-                    .then([&awaitCompletion](auto const& parser) {
+                    .then([&awaitCompletion, &parser]() {
                         awaitCompletion.set_value(parser.get().body());
                     })
                     .fail([&awaitCompletion](auto e) {
                         awaitCompletion.set_value(std::nullopt);
                     });
+            })
+            .fail([&awaitCompletion](auto e) {
+                awaitCompletion.set_value(std::nullopt);
+            });
+
+        auto result = awaitCompletion.get_future().get();
+        ASSERT_TRUE(result.has_value());
+        EXPECT_EQ(*result, "Hello");
+    }
+
+    TEST_F(AsyncClientTests, CanAttachAndRetrieveState)
+    {
+        auto client = makeClient();
+
+        client->attachState<std::string>("name", std::string{"Hello"});
+        auto& str = client->state<std::string>("name");
+        EXPECT_EQ(str, "Hello");
+    }
+
+    TEST_F(AsyncClientTests, CanEmplaceState)
+    {
+        auto client = makeClient();
+
+        client->emplaceState<std::string>("name", "Hello");
+        auto& str = client->state<std::string>("name");
+        EXPECT_EQ(str, "Hello");
+    }
+
+    TEST_F(AsyncClientTests, CanRemoveState)
+    {
+        auto client = makeClient();
+
+        client->emplaceState<std::string>("name", "Hello");
+        client->removeState("name");
+        EXPECT_THROW(client->state<std::string>("name"), std::out_of_range);
+    }
+
+    TEST_F(AsyncClientTests, CanReadHeaderFirstAndThenDecideToReadBody)
+    {
+        auto client = makeClient();
+
+        auto req = Roar::Request<boost::beast::http::empty_body>{};
+        req.method(boost::beast::http::verb::get);
+        req.host("::1");
+        req.port(server_->getLocalEndpoint().port());
+        req.target("/index.txt");
+        req.version(11);
+
+        boost::beast::http::response_parser<boost::beast::http::string_body> parser{};
+        std::promise<std::optional<std::string>> awaitCompletion;
+        boost::beast::http::status status{};
+        client->request(std::move(req), std::chrono::seconds(5))
+            .then([&awaitCompletion, client, &parser, &status]() {
+                client->readHeader(parser)
+                    .then([&awaitCompletion, client, &parser, &status]() {
+                        status = parser.get().result();
+                        client->readResponse<boost::beast::http::string_body>(parser)
+                            .then([&awaitCompletion, &parser]() {
+                                awaitCompletion.set_value(parser.get().body());
+                            })
+                            .fail([&awaitCompletion](auto e) {
+                                awaitCompletion.set_value(std::nullopt);
+                            });
+                    })
+                    .fail([&awaitCompletion](auto e) {
+                        awaitCompletion.set_value(std::nullopt);
+                    });
+            })
+            .fail([&awaitCompletion](auto e) {
+                awaitCompletion.set_value(std::nullopt);
+            });
+
+        auto result = awaitCompletion.get_future().get();
+        ASSERT_TRUE(result.has_value());
+        EXPECT_EQ(*result, "Hello");
+        EXPECT_EQ(status, boost::beast::http::status::ok);
+    }
+
+    TEST_F(AsyncClientTests, CanRequestAndReadResponseInOneStep)
+    {
+        auto client = makeClient();
+
+        auto req = Roar::Request<boost::beast::http::empty_body>{};
+        req.method(boost::beast::http::verb::get);
+        req.host("::1");
+        req.port(server_->getLocalEndpoint().port());
+        req.target("/index.txt");
+        req.version(11);
+
+        std::promise<std::optional<std::string>> awaitCompletion;
+        client->requestAndReadResponse<boost::beast::http::string_body>(std::move(req))
+            .then([&awaitCompletion](auto& response) {
+                awaitCompletion.set_value(response.body());
             })
             .fail([&awaitCompletion](auto e) {
                 awaitCompletion.set_value(std::nullopt);

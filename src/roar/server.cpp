@@ -20,7 +20,7 @@ namespace Roar
     struct Server::Implementation : public std::enable_shared_from_this<Server::Implementation>
     {
         boost::asio::ip::tcp::acceptor acceptor;
-        std::optional<boost::asio::ssl::context> sslContext;
+        std::optional<SslServerContext> sslContext;
         boost::asio::ip::tcp::endpoint bindEndpoint;
         boost::asio::ip::tcp::endpoint resolvedEndpoint;
         std::shared_mutex acceptorStopGuard;
@@ -32,7 +32,7 @@ namespace Roar
 
         Implementation(
             boost::asio::any_io_executor& executor,
-            std::optional<boost::asio::ssl::context> sslContext,
+            std::optional<SslServerContext> sslContext,
             std::function<void(Error&&)> onError,
             std::function<void(boost::system::error_code)> onAcceptAbort,
             std::unique_ptr<StandardResponseProvider> standardResponseProvider);
@@ -42,7 +42,7 @@ namespace Roar
     //------------------------------------------------------------------------------------------------------------------
     Server::Implementation::Implementation(
         boost::asio::any_io_executor& executor,
-        std::optional<boost::asio::ssl::context> sslContext,
+        std::optional<SslServerContext> sslContext,
         std::function<void(Error&&)> onError,
         std::function<void(boost::system::error_code)> onAcceptAbort,
         std::unique_ptr<StandardResponseProvider> standardResponseProvider)

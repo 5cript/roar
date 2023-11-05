@@ -22,6 +22,7 @@
 #include <boost/beast/http/read.hpp>
 #include <boost/beast/ssl/ssl_stream.hpp>
 #include <boost/beast/core/tcp_stream.hpp>
+#include <roar/ssl/make_ssl_context.hpp>
 #include <promise-cpp/promise.hpp>
 
 #include <memory>
@@ -49,7 +50,7 @@ namespace Roar
         Session(
             boost::asio::basic_stream_socket<boost::asio::ip::tcp>&& socket,
             boost::beast::basic_flat_buffer<std::allocator<char>>&& buffer,
-            std::optional<boost::asio::ssl::context>& sslContext,
+            std::optional<SslServerContext>& sslContext,
             bool isSecure,
             std::function<void(Error&&)> onError,
             std::weak_ptr<Router> router,
@@ -743,7 +744,7 @@ namespace Roar
         std::shared_ptr<boost::beast::http::request_parser<boost::beast::http::empty_body>>& parser();
         boost::beast::flat_buffer& buffer();
         StandardResponseProvider const& standardResponseProvider();
-        void startup();
+        void startup(bool immediate = true);
 
       private:
         struct Implementation;

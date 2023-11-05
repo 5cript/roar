@@ -1,4 +1,4 @@
-# HTTP Server 
+# HTTP Server
 
 ## Tutorial
 
@@ -28,13 +28,17 @@ int main()
     Roar::Server server{{.executor = pool.executor()}};
 
     // SSL Server (you can provide your own SSL Context for more options.)
+    //
+    // auto sslContext = SslServerContext{
+    //      .certificate = "certificate string here", // or filesystem::path to cert
+    //      .privateKey = "private key here", // or filesystem::path to key
+    //      .password = "passwordHereIfApplicable",
+    // };
+    // initializeServerSslContext(sslContext);
+    //
     // Roar::Server server{{
     //     .executor = pool.executor()
-    //     .sslContext = makeSslContext(SslContextCreationParameters{
-    //         .certificate = std::string_view{"certificate string here"},
-    //         .privateKey = std::string_view{"private key here"},
-    //         .password = keyPassphrase,
-    //     })
+    //     .sslContext = std::move(sslContext),
     // }};
 
     // stop the thread_pool on scope exit to guarantee that all asynchronous tasks are finished before the server is
@@ -51,7 +55,7 @@ int main()
     std::cin.get();
 }
 ```
-In this example we are creating an asio thread pool for the asynchronous actions of our server, 
+In this example we are creating an asio thread pool for the asynchronous actions of our server,
 the server itself and then start the server by binding and accepting on port 8081.
 ```{warning}
 Important: The Roar::ScopeExit construct ensures that the threads are shutdown before the server or request listeners are destroyed.
@@ -141,7 +145,7 @@ int main()
         pool.stop();
         pool.join();
     }};
-    
+
     server.installRequestListener<RequestListener>();
 
     // Start server and bind on port "port".
@@ -215,7 +219,7 @@ class MyRequestListener
     BOOST_DESCRIBE_CLASS(MyRequestListener, (), (), (), (roar_index, roar_images))
 };
 ```
-Available options for routes are documented here: 
+Available options for routes are documented here:
 <a href="/roar/doxygen/structRoar_1_1RouteInfo.html">RouteInfo</a>.
 
 ```{admonition} Head Requests
@@ -366,7 +370,7 @@ class FileServer
             // Allow DELETE requests to recursively delete directories? Defaults to false.
             .allowDeleteOfNonEmptyDirectories = false,
 
-            // If this option is set, requests to directories do not try to serve an index.html, 
+            // If this option is set, requests to directories do not try to serve an index.html,
             // but give a table with all existing files instead. Defaults to true.
             .allowListing = true,
 

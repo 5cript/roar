@@ -3,47 +3,43 @@
 
 namespace Roar
 {
-    boost::asio::ssl::context makeSslContext(SslContextCreationParameters settings)
+    void initializeServerSslContext(SslServerContext& ctx)
     {
-        boost::asio::ssl::context sslContext{settings.method};
-
-        sslContext.set_password_callback(
-            [password = settings.password](std::size_t, boost::asio::ssl::context_base::password_purpose) {
-                return std::string{password};
+        ctx.ctx.set_password_callback(
+            [password = std::string{ctx.password}](std::size_t, boost::asio::ssl::context_base::password_purpose) {
+                return password;
             });
 
-        sslContext.set_options(
+        ctx.ctx.set_options(
             boost::asio::ssl::context::default_workarounds | boost::asio::ssl::context::no_sslv2 |
             boost::asio::ssl::context::single_dh_use);
 
         std::visit(
             overloaded{
-                [&](std::string_view key) {
-                    sslContext.use_certificate_chain(boost::asio::buffer(key.data(), key.size()));
+                [&](std::string const& key) {
+                    ctx.ctx.use_certificate_chain(boost::asio::buffer(key.data(), key.size()));
                 },
                 [&](std::filesystem::path const& path) {
-                    sslContext.use_certificate_chain_file(path.string());
+                    ctx.ctx.use_certificate_chain_file(path.string());
                 },
             },
-            settings.certificate);
+            ctx.certificate);
 
         std::visit(
             overloaded{
-                [&](std::string_view key) {
-                    sslContext.use_private_key(
+                [&](std::string const& key) {
+                    ctx.ctx.use_private_key(
                         boost::asio::buffer(key.data(), key.size()), boost::asio::ssl::context::file_format::pem);
                 },
                 [&](std::filesystem::path const& path) {
-                    sslContext.use_private_key_file(path.string(), boost::asio::ssl::context::file_format::pem);
+                    ctx.ctx.use_private_key_file(path.string(), boost::asio::ssl::context::file_format::pem);
                 }},
-            settings.privateKey);
+            ctx.privateKey);
 
-        if (!settings.diffieHellmanParameters.empty())
+        if (!ctx.diffieHellmanParameters.empty())
         {
-            sslContext.use_tmp_dh(
-                boost::asio::buffer(settings.diffieHellmanParameters.data(), settings.diffieHellmanParameters.size()));
+            ctx.ctx.use_tmp_dh(
+                boost::asio::buffer(ctx.diffieHellmanParameters.data(), ctx.diffieHellmanParameters.size()));
         }
-
-        return sslContext;
     }
 }

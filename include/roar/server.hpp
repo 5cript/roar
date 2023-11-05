@@ -9,6 +9,7 @@
 #include <roar/routing/request_listener.hpp>
 #include <roar/standard_response_provider.hpp>
 #include <roar/standard_text_response_provider.hpp>
+#include <roar/ssl/make_ssl_context.hpp>
 #include <roar/filesystem/jail.hpp>
 
 #include <boost/describe/modifiers.hpp>
@@ -37,7 +38,7 @@ namespace Roar
             boost::asio::any_io_executor executor;
 
             /// Supply for SSL support.
-            std::optional<boost::asio::ssl::context> sslContext;
+            std::optional<SslServerContext> sslContext;
 
             /// Called when an error occurs in an asynchronous routine.
             std::function<void(Error&&)> onError = [](auto&&) {};

@@ -33,14 +33,14 @@ namespace Roar
         Implementation(
             boost::asio::ip::tcp::socket&& socket,
             boost::beast::flat_buffer&& buffer,
-            std::optional<boost::asio::ssl::context>& sslContext,
+            std::optional<SslServerContext>& sslContext,
             bool isSecure,
             std::function<void(Error&&)> onError,
             std::weak_ptr<Router> router,
             std::shared_ptr<const StandardResponseProvider> standardResponseProvider)
             : stream{[&socket, &sslContext, isSecure]() -> decltype(stream) {
                 if (isSecure)
-                    return boost::beast::ssl_stream<Detail::StreamType>{std::move(socket), *sslContext};
+                    return boost::beast::ssl_stream<Detail::StreamType>{std::move(socket), sslContext->ctx};
                 return Detail::StreamType{std::move(socket)};
             }()}
             , buffer{std::move(buffer)}
@@ -62,7 +62,7 @@ namespace Roar
     Session::Session(
         boost::asio::ip::tcp::socket&& socket,
         boost::beast::flat_buffer&& buffer,
-        std::optional<boost::asio::ssl::context>& sslContext,
+        std::optional<SslServerContext>& sslContext,
         bool isSecure,
         std::function<void(Error&&)> onError,
         std::weak_ptr<Router> router,
@@ -140,22 +140,32 @@ namespace Roar
         });
     }
     //------------------------------------------------------------------------------------------------------------------
-    void Session::startup()
+    void Session::startup(bool immediate)
     {
         if (std::holds_alternative<Detail::StreamType>(impl_->stream))
         {
-            boost::asio::dispatch(
-                std::get<Detail::StreamType>(impl_->stream).get_executor(), [self = this->shared_from_this()]() {
-                    self->readHeader();
-                });
+            if (immediate)
+                readHeader();
+            else
+            {
+                boost::asio::dispatch(
+                    std::get<Detail::StreamType>(impl_->stream).get_executor(), [self = this->shared_from_this()]() {
+                        self->readHeader();
+                    });
+            }
         }
         else
         {
-            boost::asio::dispatch(
-                std::get<boost::beast::ssl_stream<Detail::StreamType>>(impl_->stream).get_executor(),
-                [self = this->shared_from_this()]() {
-                    self->performSslHandshake();
-                });
+            if (immediate)
+                performSslHandshake();
+            else
+            {
+                boost::asio::dispatch(
+                    std::get<boost::beast::ssl_stream<Detail::StreamType>>(impl_->stream).get_executor(),
+                    [self = this->shared_from_this()]() {
+                        self->performSslHandshake();
+                    });
+            }
         }
     }
     //------------------------------------------------------------------------------------------------------------------
@@ -211,7 +221,10 @@ namespace Roar
         std::get<boost::beast::ssl_stream<Detail::StreamType>>(impl_->stream)
             .async_handshake(
                 boost::asio::ssl::stream_base::server,
-                [self = this->shared_from_this()](const boost::system::error_code& ec) {
+                impl_->buffer.cdata(),
+                [self = this->shared_from_this()](const boost::system::error_code& ec, std::size_t bytesTransferred) {
+                    self->impl_->buffer.consume(bytesTransferred);
+
                     if (ec)
                         return self->impl_->onError({.error = ec, .additionalInfo = "Error during SSL handshake."});
                     self->readHeader();

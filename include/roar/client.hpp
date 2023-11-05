@@ -26,6 +26,7 @@
 #include <functional>
 #include <type_traits>
 #include <future>
+#include <any>
 
 namespace Roar
 {
@@ -34,21 +35,25 @@ namespace Roar
       public:
         constexpr static std::chrono::seconds defaultTimeout{10};
 
-        struct ConstructionArguments
+        struct SslOptions
         {
-            /// Required io executor for boost::asio.
-            boost::asio::any_io_executor executor;
-
             /// Supply for SSL support.
-            std::optional<boost::asio::ssl::context> sslContext;
+            boost::asio::ssl::context sslContext;
 
             /// SSL verify mode:
-            boost::asio::ssl::verify_mode sslVerifyMode = boost::asio::ssl::verify_none;
+            boost::asio::ssl::verify_mode sslVerifyMode = boost::asio::ssl::verify_peer;
 
             /**
              * @brief sslVerifyCallback, you can use boost::asio::ssl::rfc2818_verification(host) most of the time.
              */
-            std::function<bool(bool, boost::asio::ssl::verify_context&)> sslVerifyCallback = {};
+            std::function<bool(bool, boost::asio::ssl::verify_context&)> sslVerifyCallback;
+        };
+
+        struct ConstructionArguments
+        {
+            /// Required io executor for boost::asio.
+            boost::asio::any_io_executor executor;
+            std::optional<SslOptions> sslOptions = std::nullopt;
         };
 
         Client(ConstructionArguments&& args);
@@ -76,6 +81,54 @@ namespace Roar
         read(std::chrono::seconds timeout = defaultTimeout);
 
         /**
+         * @brief Attach some state to the client lifetime.
+         *
+         * @param tag A tag name, to retrieve it back with.
+         * @param state The state.
+         */
+        template <typename T>
+        void attachState(std::string const& tag, T&& state)
+        {
+            attachedState_[tag] = std::forward<T>(state);
+        }
+
+        /**
+         * @brief Create state in place.
+         *
+         * @tparam ConstructionArgs
+         * @param tag
+         * @param args
+         */
+        template <typename T, typename... ConstructionArgs>
+        void emplaceState(std::string const& tag, ConstructionArgs&&... args)
+        {
+            attachedState_[tag] = std::make_any<T>(std::forward<ConstructionArgs>(args)...);
+        }
+
+        /**
+         * @brief Retrieve attached state by tag.
+         *
+         * @tparam T Type of the attached state.
+         * @param tag The tag of the state.
+         * @return T& Returns a reference to the held state.
+         */
+        template <typename T>
+        T& state(std::string const& tag)
+        {
+            return std::any_cast<T&>(attachedState_.at(tag));
+        }
+
+        /**
+         * @brief Remove attached state.
+         *
+         * @param tag The tag of the state to remove.
+         */
+        void removeState(std::string const& tag)
+        {
+            attachedState_.erase(tag);
+        }
+
+        /**
          * @brief Connects the client to a server and performs a request
          *
          * @param requestParameters see RequestParameters
@@ -86,22 +139,6 @@ namespace Roar
         request(Request<BodyT>&& request, std::chrono::seconds timeout = defaultTimeout)
         {
             return promise::newPromise([&, this](promise::Defer d) mutable {
-                if (std::holds_alternative<boost::beast::ssl_stream<boost::beast::tcp_stream>>(socket_))
-                {
-                    auto& sslSocket = std::get<boost::beast::ssl_stream<boost::beast::tcp_stream>>(socket_);
-                    if (!SSL_ctrl(
-                            sslSocket.native_handle(),
-                            SSL_CTRL_SET_TLSEXT_HOSTNAME,
-                            TLSEXT_NAMETYPE_host_name,
-                            // yikes openssl you make me do this
-                            const_cast<void*>(reinterpret_cast<void const*>(request.host().c_str()))))
-                    {
-                        boost::beast::error_code ec{
-                            static_cast<int>(::ERR_get_error()), boost::asio::error::get_ssl_category()};
-                        return d.reject(Error{.error = ec, .additionalInfo = "SSL_set_tlsext_host_name failed."});
-                    }
-                }
-
                 const auto host = request.host();
                 const auto port = request.port();
                 doResolve(
@@ -142,28 +179,76 @@ namespace Roar
             });
         }
 
+        /**
+         * @brief Reads only the header, will need be followed up by a readResponse.
+         *
+         * @tparam ResponseBodyT
+         * @param parser
+         * @param timeout
+         * @return Detail::PromiseTypeBind<
+         * Detail::PromiseTypeBindThen<Detail::PromiseReferenceWrap<
+         * Detail::PromiseReferenceWrap<boost::beast::http::response_parser<ResponseBodyT>>>>,
+         * Detail::PromiseTypeBindFail<Error>>
+         */
+        template <typename ResponseBodyT>
+        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<>, Detail::PromiseTypeBindFail<Error>> readHeader(
+            boost::beast::http::response_parser<ResponseBodyT>& parser,
+            std::chrono::seconds timeout = defaultTimeout)
+        {
+            return promise::newPromise([&, this](promise::Defer d) mutable {
+                withLowerLayerDo([timeout](auto& socket) {
+                    socket.expires_after(timeout);
+                });
+                withStreamDo([this, timeout, d = std::move(d), &parser](auto& socket) mutable {
+                    boost::beast::http::async_read_header(
+                        socket,
+                        *buffer_,
+                        parser,
+                        [weak = weak_from_this(), buffer = this->buffer_, d = std::move(d), timeout, &parser](
+                            boost::beast::error_code ec, std::size_t) mutable {
+                            auto self = weak.lock();
+                            if (!self)
+                                return d.reject(Error{.error = ec, .additionalInfo = "Client is no longer alive."});
+
+                            if (ec)
+                                return d.reject(Error{.error = ec, .additionalInfo = "HTTP read failed."});
+
+                            d.resolve();
+                        });
+                });
+            });
+        }
+
+        /**
+         * @brief Read a response from the server.
+         *
+         * @tparam ResponseBodyT
+         * @param timeout
+         * @return Detail::PromiseTypeBind<
+         * Detail::PromiseTypeBindThen<Detail::PromiseReferenceWrap<Response<ResponseBodyT>>>,
+         * Detail::PromiseTypeBindFail<Error>> Returns either a Response<ResponseBodyT> or an Error.
+         */
         template <typename ResponseBodyT>
         Detail::PromiseTypeBind<
             Detail::PromiseTypeBindThen<Detail::PromiseReferenceWrap<Response<ResponseBodyT>>>,
             Detail::PromiseTypeBindFail<Error>>
         readResponse(std::chrono::seconds timeout = defaultTimeout)
         {
-            return promise::newPromise([&, this](promise::Defer d) mutable {
+            return promise::newPromise([this, timeout](promise::Defer d) mutable {
                 withLowerLayerDo([timeout](auto& socket) {
                     socket.expires_after(timeout);
                 });
                 withStreamDo([this, timeout, d = std::move(d)](auto& socket) mutable {
                     struct Context
                     {
-                        Response<ResponseBodyT> response;
-                        boost::beast::flat_buffer buffer;
+                        Response<ResponseBodyT> response{};
                     };
                     auto context = std::make_shared<Context>();
                     boost::beast::http::async_read(
                         socket,
-                        context->buffer,
+                        *buffer_,
                         context->response.response(),
-                        [weak = weak_from_this(), d = std::move(d), timeout, context](
+                        [weak = weak_from_this(), buffer = this->buffer_, d = std::move(d), context](
                             boost::beast::error_code ec, std::size_t) mutable {
                             auto self = weak.lock();
                             if (!self)
@@ -182,16 +267,12 @@ namespace Roar
          * @brief Read a response using a beast response parser. You are responsible for keeping the parser alive!
          *
          * @tparam ResponseBodyT
-         * @param parser
+         * @param parser Passed in by reference, must be alive until the promise is resolved.
          * @param timeout
          * @return Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<>, Detail::PromiseTypeBindFail<Error const&>>
          */
         template <typename ResponseBodyT>
-        Detail::PromiseTypeBind<
-            Detail::PromiseTypeBindThen<
-                Detail::PromiseReferenceWrap<boost::beast::http::response_parser<ResponseBodyT>>>,
-            Detail::PromiseTypeBindFail<Error>>
-        readResponse(
+        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<>, Detail::PromiseTypeBindFail<Error>> readResponse(
             boost::beast::http::response_parser<ResponseBodyT>& parser,
             std::chrono::seconds timeout = defaultTimeout)
         {
@@ -200,16 +281,11 @@ namespace Roar
                     socket.expires_after(timeout);
                 });
                 withStreamDo([this, timeout, d = std::move(d), &parser](auto& socket) mutable {
-                    struct Context
-                    {
-                        boost::beast::flat_buffer buffer;
-                    };
-                    auto context = std::make_shared<Context>();
                     boost::beast::http::async_read(
                         socket,
-                        context->buffer,
+                        *buffer_,
                         parser,
-                        [weak = weak_from_this(), d = std::move(d), timeout, context, &parser](
+                        [weak = weak_from_this(), buffer = this->buffer_, d = std::move(d), timeout, &parser](
                             boost::beast::error_code ec, std::size_t) mutable {
                             auto self = weak.lock();
                             if (!self)
@@ -218,9 +294,36 @@ namespace Roar
                             if (ec)
                                 return d.reject(Error{.error = ec, .additionalInfo = "HTTP read failed."});
 
-                            d.resolve(Detail::ref(parser));
+                            d.resolve();
                         });
                 });
+            });
+        }
+
+        template <typename ResponseBodyT, typename RequestBodyT>
+        Detail::PromiseTypeBind<
+            Detail::PromiseTypeBindThen<Detail::PromiseReferenceWrap<Response<ResponseBodyT>>>,
+            Detail::PromiseTypeBindFail<Error>>
+        requestAndReadResponse(Request<RequestBodyT>&& request, std::chrono::seconds timeout = defaultTimeout)
+        {
+            return promise::newPromise([r = std::move(request), timeout, this](promise::Defer d) mutable {
+                this->request(std::move(r), timeout)
+                    .then([weak = weak_from_this(), timeout, d]() {
+                        auto client = weak.lock();
+                        if (!client)
+                            return d.reject(Error{.additionalInfo = "Client is no longer alive."});
+
+                        client->readResponse<ResponseBodyT>(timeout)
+                            .then([d](auto& response) {
+                                d.resolve(Detail::ref(response));
+                            })
+                            .fail([d](auto error) {
+                                d.reject(std::move(error));
+                            });
+                    })
+                    .fail([d](auto error) {
+                        d.reject(std::move(error));
+                    });
             });
         }
 
@@ -324,6 +427,10 @@ namespace Roar
         {
             if (std::holds_alternative<boost::beast::ssl_stream<boost::beast::tcp_stream>>(socket_))
             {
+                auto maybeError = setupSsl(request.host());
+                if (maybeError)
+                    return d.reject(*maybeError);
+
                 auto& sslSocket = std::get<boost::beast::ssl_stream<boost::beast::tcp_stream>>(socket_);
                 withLowerLayerDo([&](auto& socket) {
                     socket.expires_after(timeout);
@@ -352,12 +459,12 @@ namespace Roar
             withLowerLayerDo([timeout](auto& socket) {
                 socket.expires_after(timeout);
             });
-            withStreamDo([this, request, &d, timeout](auto& socket) mutable {
+            withStreamDo([this, request, &d](auto& socket) mutable {
                 std::shared_ptr<Request<BodyT>> requestPtr = std::make_shared<Request<BodyT>>(std::move(request));
                 boost::beast::http::async_write(
                     socket,
                     *requestPtr,
-                    [weak = weak_from_this(), d = std::move(d), requestPtr, timeout](
+                    [weak = weak_from_this(), d = std::move(d), requestPtr](
                         boost::beast::error_code ec, std::size_t) mutable {
                         auto self = weak.lock();
                         if (!self)
@@ -371,8 +478,13 @@ namespace Roar
             });
         }
 
+        std::optional<Error> setupSsl(std::string const& host);
+
       private:
+        std::optional<SslOptions> sslOptions_;
+        std::shared_ptr<boost::beast::flat_buffer> buffer_;
         std::variant<boost::beast::ssl_stream<boost::beast::tcp_stream>, boost::beast::tcp_stream> socket_;
         boost::asio::ip::tcp::resolver::results_type::endpoint_type endpoint_;
+        std::unordered_map<std::string, std::any> attachedState_;
     };
 }

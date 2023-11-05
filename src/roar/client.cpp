@@ -7,62 +7,75 @@
 #include <boost/asio/read.hpp>
 #include <boost/asio/read_until.hpp>
 
+#include <stdexcept>
+
 namespace Roar
 {
     using namespace promise;
-    namespace Detail
-    {
-        namespace Parser
-        {
-            namespace x3 = boost::spirit::x3;
-            namespace ascii = boost::spirit::x3::ascii;
-
-            using ascii::char_;
-            using ascii::alnum;
-
-            const auto key = x3::rule<struct KeyTag, std::string>{"key"} = +(alnum | char_('-') | char_('_'));
-            const auto value = x3::rule<struct ValueTag, std::string>{"value"} = +(char_ - '\n');
-            const auto newLine = x3::rule<struct NewLineTag, std::string>{"newLine"} = char_('\n');
-            const auto whitespace = x3::rule<struct WhitespaceTag, std::string>{"whitespace"} =
-                char_(' ') | char_('\t');
-
-            const auto entry = x3::rule<struct EntryTag, std::pair<std::string, std::string>>{"entry"} =
-                -(key[([](auto& ctx) {
-                      x3::traits::move_to(x3::_attr(ctx), x3::_val(ctx).first);
-                  })] > ':' >>
-                  *whitespace) >>
-                value[([](auto& ctx) {
-                    x3::traits::move_to(x3::_attr(ctx), x3::_val(ctx).second);
-                })];
-
-            const auto entries =
-                x3::rule<struct EntriesTag, std::vector<std::pair<std::string, std::string>>>{"entries"} =
-                    entry % newLine;
-        }
-    }
 
     // ##################################################################################################################
     Client::Client(ConstructionArguments&& args)
-        : socket_{[&args]() -> decltype(socket_) {
-            if (args.sslContext)
+        : sslOptions_{std::move(args.sslOptions)}
+        , buffer_{std::make_shared<boost::beast::flat_buffer>()}
+        , socket_{[this, &args]() -> decltype(socket_) {
+            if (args.sslOptions)
                 return boost::beast::ssl_stream<boost::beast::tcp_stream>{
-                    boost::beast::tcp_stream{args.executor}, *args.sslContext};
+                    boost::beast::tcp_stream{args.executor}, sslOptions_->sslContext};
             else
                 return boost::beast::tcp_stream{args.executor};
         }()}
-    {
-        if (std::holds_alternative<boost::beast::ssl_stream<boost::beast::tcp_stream>>(socket_))
-        {
-            auto& sslSocket = std::get<boost::beast::ssl_stream<boost::beast::tcp_stream>>(socket_);
-            sslSocket.set_verify_mode(args.sslVerifyMode);
-            if (args.sslVerifyCallback)
-                sslSocket.set_verify_callback(std::move(args.sslVerifyCallback));
-        }
-    }
+        , endpoint_{}
+        , attachedState_{}
+    {}
     //------------------------------------------------------------------------------------------------------------------
     Client::~Client()
     {
         shutdownSync();
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    std::optional<Error> Client::setupSsl(std::string const& host)
+    {
+        if (std::holds_alternative<boost::beast::ssl_stream<boost::beast::tcp_stream>>(socket_))
+        {
+            if (!sslOptions_)
+                throw std::runtime_error{"No SSL options, but SSL socket was created?"};
+
+            auto& sslSocket = std::get<boost::beast::ssl_stream<boost::beast::tcp_stream>>(socket_);
+            if (!SSL_ctrl(
+                    sslSocket.native_handle(),
+                    SSL_CTRL_SET_TLSEXT_HOSTNAME,
+                    TLSEXT_NAMETYPE_host_name,
+                    // yikes openssl you make me do this
+                    const_cast<void*>(reinterpret_cast<void const*>(host.c_str()))))
+            {
+                boost::beast::error_code ec{
+                    static_cast<int>(::ERR_get_error()), boost::asio::error::get_ssl_category()};
+                return Error{.error = ec, .additionalInfo = "SSL_set_tlsext_host_name failed."};
+            }
+
+            sslSocket.set_verify_mode(sslOptions_->sslVerifyMode);
+            if (!sslOptions_->sslVerifyCallback)
+            {
+                if (sslOptions_->sslVerifyMode == boost::asio::ssl::verify_none)
+                {
+                    sslSocket.set_verify_callback([](bool, boost::asio::ssl::verify_context&) {
+                        return true;
+                    });
+                }
+                else
+                {
+                    return Error{
+                        .error = boost::asio::error::operation_not_supported,
+                        .additionalInfo = "No verify callback provided when verify mode is not none."};
+                }
+            }
+            else
+                sslSocket.set_verify_callback(sslOptions_->sslVerifyCallback);
+
+            return std::nullopt;
+        }
+        else
+            return Error{.error = boost::asio::error::operation_not_supported, .additionalInfo = "Not an SSL socket."};
     }
     //------------------------------------------------------------------------------------------------------------------
     Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<std::size_t>, Detail::PromiseTypeBindFail<Error>>
@@ -99,15 +112,11 @@ namespace Roar
                 socket.expires_after(timeout);
             });
             withStreamDo([this, d = std::move(d)](auto& socket) mutable {
-                struct Buf
-                {
-                    std::string data = std::string(4096, '\0');
-                };
-                auto buf = std::make_shared<Buf>();
+                auto messagePtr = std::make_shared<std::string>();
                 boost::asio::async_read(
                     socket,
-                    boost::asio::buffer(buf->data),
-                    [d = std::move(d), weak = weak_from_this(), buf](auto ec, std::size_t bytesTransferred) {
+                    boost::asio::buffer(*messagePtr),
+                    [d = std::move(d), weak = weak_from_this(), messagePtr](auto ec, std::size_t bytesTransferred) {
                         auto self = weak.lock();
                         if (!self)
                             return d.reject(Error{.error = ec, .additionalInfo = "Client is no longer alive."});
@@ -115,7 +124,7 @@ namespace Roar
                         if (ec)
                             return d.reject(Error{.error = ec, .additionalInfo = "Stream read failed."});
 
-                        d.resolve(std::string_view{buf->data.data(), bytesTransferred}, bytesTransferred);
+                        d.resolve(std::string_view{messagePtr->data(), bytesTransferred}, bytesTransferred);
                     });
             });
         });
@@ -145,135 +154,6 @@ namespace Roar
                     onResolve(ec, std::move(results));
                 });
         });
-    }
-    //------------------------------------------------------------------------------------------------------------------
-    namespace
-    {
-        class OnChunkHandler;
-        struct OnChunkHeader;
-        struct OnChunkBody;
-
-        class SseContext : public std::enable_shared_from_this<SseContext>
-        {
-          public:
-            SseContext(
-                std::function<bool(std::string_view, std::string_view)> onEvent,
-                std::function<void(std::optional<Error> const&)> onEndOfStream);
-
-            void init();
-
-            void enterReadCycle(std::shared_ptr<Client> client, std::chrono::seconds timeout);
-
-            void parseChunk(std::string_view rawData);
-            void onEndOfStream(std::optional<Error> const&);
-
-          public:
-            std::function<bool(std::string_view, std::string_view)> onEvent;
-            boost::beast::flat_buffer headerBuffer;
-            boost::beast::http::response_parser<boost::beast::http::empty_body> responseParser;
-
-          private:
-            std::function<void(std::optional<Error> const&)> onEndOfStream_;
-            bool streamEndReached_;
-            std::string messageBuffer_;
-            std::size_t searchCursor_;
-        };
-
-        SseContext::SseContext(
-            std::function<bool(std::string_view, std::string_view)> onEvent,
-            std::function<void(std::optional<Error> const&)> onEndOfStream)
-            : onEvent{std::move(onEvent)}
-            , headerBuffer{}
-            , responseParser{}
-            , onEndOfStream_{std::move(onEndOfStream)}
-            , streamEndReached_{false}
-            , messageBuffer_{}
-            , searchCursor_{0}
-        {}
-
-        void SseContext::onEndOfStream(std::optional<Error> const& err)
-        {
-            bool wasEndedBefore = streamEndReached_;
-            streamEndReached_ = true;
-            if (!wasEndedBefore)
-                onEndOfStream_(err);
-        }
-
-        void SseContext::enterReadCycle(std::shared_ptr<Client> client, std::chrono::seconds timeout)
-        {
-            client->withLowerLayerDo([timeout](auto& socket) {
-                socket.expires_after(timeout);
-            });
-
-            client->withStreamDo([&client, timeout, this](auto& socket) {
-                if (streamEndReached_)
-                    return;
-
-                boost::asio::async_read_until(
-                    socket,
-                    headerBuffer,
-                    "\n\n",
-                    [weakClient = client->weak_from_this(), self = shared_from_this(), timeout](
-                        boost::beast::error_code ec, std::size_t) mutable {
-                        auto client = weakClient.lock();
-                        if (!client)
-                            return;
-
-                        if (self->streamEndReached_)
-                            return;
-
-                        if (ec)
-                            return self->onEndOfStream(Error{.error = ec, .additionalInfo = "Stream read failed."});
-
-                        self->parseChunk(std::string_view{
-                            boost::asio::buffer_cast<char const*>(self->headerBuffer.data()),
-                            self->headerBuffer.size()});
-
-                        self->headerBuffer.consume(self->headerBuffer.size());
-
-                        self->enterReadCycle(std::move(client), timeout);
-                    });
-            });
-        }
-
-        void SseContext::parseChunk(std::string_view rawData)
-        {
-            std::string data = std::string{rawData};
-            using namespace boost::spirit::x3;
-
-            std::vector<std::pair<std::string, std::string>> keyValuePairs;
-            try
-            {
-                auto const parser = Detail::Parser::entries;
-                auto iter = std::make_move_iterator(data.cbegin());
-                const auto end = std::make_move_iterator(data.cend());
-
-                bool success = parse(iter, end, parser, keyValuePairs);
-                if (!success)
-                {
-                    return onEndOfStream(
-                        Error{.error = boost::asio::error::no_recovery, .additionalInfo = "Error parsing chunk."});
-                }
-
-                std::string event;
-                std::string eventData;
-
-                for (auto const& [key, value] : keyValuePairs)
-                {
-                    if (key == "event")
-                        event = value;
-                    else if (key == "data")
-                        eventData = value;
-                }
-
-                if (!onEvent(event, eventData))
-                    onEndOfStream(std::nullopt);
-            }
-            catch (expectation_failure<std::string_view::const_iterator> const& e)
-            {
-                return onEndOfStream(Error{.error = boost::asio::error::no_recovery, .additionalInfo = e.what()});
-            }
-        }
     }
     // ##################################################################################################################
 }

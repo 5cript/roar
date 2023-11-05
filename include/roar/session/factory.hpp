@@ -2,6 +2,7 @@
 
 #include <roar/beast/forward.hpp>
 #include <roar/detail/pimpl_special_functions.hpp>
+#include <roar/ssl/make_ssl_context.hpp>
 #include <roar/standard_response_provider.hpp>
 #include <roar/error.hpp>
 
@@ -23,7 +24,7 @@ namespace Roar
         constexpr static std::chrono::seconds sslDetectionTimeout{10};
 
       public:
-        Factory(std::optional<boost::asio::ssl::context>& sslContext, std::function<void(Error&&)> onError);
+        Factory(std::optional<SslServerContext>& sslContext, std::function<void(Error&&)> onError);
         ROAR_PIMPL_SPECIAL_FUNCTIONS(Factory);
 
         /**
