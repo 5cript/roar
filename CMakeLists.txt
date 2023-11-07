@@ -34,7 +34,7 @@ endif()
 
 if (${ROAR_BUILD_TESTS})
     include(./cmake/test_target.cmake)
-    include(./cmake/gtest.cmake)
+    include(./cmake/dependencies/gtest.cmake)
     add_subdirectory(test)
 endif()
 

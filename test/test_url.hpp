@@ -39,13 +39,13 @@ namespace Roar::Tests
     TEST_F(UrlTests, CanConvertMostSimpleUrlToString)
     {
         Url uri{.scheme = "A", .authority = {.remote = {.host = "HOST"}}};
-        ASSERT_EQ(uri.toString(), "A://HOST");
+        EXPECT_EQ(uri.toString(), "A://HOST");
     }
 
     TEST_F(UrlTests, CanConvertUrlWithPortToString)
     {
         Url uri{.scheme = "A", .authority = {.remote = {.host = "HOST", .port = 84}}};
-        ASSERT_EQ(uri.toString(), "A://HOST:84");
+        EXPECT_EQ(uri.toString(), "A://HOST:84");
     }
 
     TEST_F(UrlTests, CanConvertUrlWithAuthentication)
@@ -61,7 +61,16 @@ namespace Roar::Tests
                     .remote = {.host = "HOST", .port = 84},
                 },
         };
-        ASSERT_EQ(uri.toString(), "A://user:passw@HOST:84");
+        EXPECT_EQ(uri.toString(), "A://user:passw@HOST:84");
+    }
+
+    TEST_F(UrlTests, CanConvertUrlWithAuthUserOnly)
+    {
+        Url uri{
+            .scheme = "A",
+            .authority = {.userInfo = {{.user = "user"}}, .remote = {.host = "HOST", .port = 84}},
+        };
+        EXPECT_EQ(uri.toString(), "A://user@HOST:84");
     }
 
     TEST_F(UrlTests, CanConvertUrlWithPath)
@@ -74,7 +83,7 @@ namespace Roar::Tests
                 },
             .path = {"path", "asdf"},
         };
-        ASSERT_EQ(uri.toString(), "A://HOST:84/path/asdf");
+        EXPECT_EQ(uri.toString(), "A://HOST:84/path/asdf");
     }
 
     TEST_F(UrlTests, CanConvertUrlWithQuery)
@@ -89,7 +98,7 @@ namespace Roar::Tests
             .query = {{"key", "value"}, {"key1", "value1"}},
         };
         const std::string base = "A://HOST:84/path/asdf";
-        ASSERT_TRUE(
+        EXPECT_TRUE(
             uri.toString() == (base + "?key=value&key1=value1") || uri.toString() == (base + "?key1=value1&key=value"));
     }
 
@@ -109,7 +118,7 @@ namespace Roar::Tests
             .query = {{"token", "0"}, {"sort", "true"}},
         };
         const std::string base = "https://lynx:paw@[::1]:729/api/v0/x";
-        ASSERT_TRUE(uri.toString() == (base + "?token=0&sort=true") || uri.toString() == (base + "?sort=true&token=0"));
+        EXPECT_TRUE(uri.toString() == (base + "?token=0&sort=true") || uri.toString() == (base + "?sort=true&token=0"));
     }
 
     TEST_F(UrlTests, CanConvertUrlAuthorityOnly)
@@ -127,7 +136,7 @@ namespace Roar::Tests
             .path = {"api", "v0", "x"},
             .query = {{"token", "0"}, {"sort", "true"}},
         };
-        ASSERT_EQ(uri.schemeAndAuthority(), "https://lynx:paw@[::1]:729");
+        EXPECT_EQ(uri.schemeAndAuthority(), "https://lynx:paw@[::1]:729");
     }
 
     TEST_F(UrlTests, CanParseDifferentSchemes)
@@ -137,7 +146,7 @@ namespace Roar::Tests
             if (forSuccess)
             {
                 ASSERT_TRUE(res) << scheme << " ";
-                ASSERT_EQ(res.value().scheme, scheme);
+                EXPECT_EQ(res.value().scheme, scheme);
             }
             else
             {
@@ -234,31 +243,31 @@ namespace Roar::Tests
     // Unfortunately these invalid ipv4 addresses are actually valid hostnames.
     TEST_F(UrlTests, InvalidIpv4AddressesAreInterpretedAsDomain)
     {
-        ASSERT_TRUE(hostIsDomain(Url::fromString("https://384.168.0.1")));
-        ASSERT_TRUE(hostIsDomain(Url::fromString("https://255.384.255.255")));
-        ASSERT_TRUE(hostIsDomain(Url::fromString("https://0.0.364.0")));
-        ASSERT_TRUE(hostIsDomain(Url::fromString("https://0.0.0.6848")));
-        ASSERT_TRUE(hostIsDomain(Url::fromString("https://0.0.x.0")));
-        ASSERT_TRUE(hostIsDomain(Url::fromString("https://0.1.0")));
+        EXPECT_TRUE(hostIsDomain(Url::fromString("https://384.168.0.1")));
+        EXPECT_TRUE(hostIsDomain(Url::fromString("https://255.384.255.255")));
+        EXPECT_TRUE(hostIsDomain(Url::fromString("https://0.0.364.0")));
+        EXPECT_TRUE(hostIsDomain(Url::fromString("https://0.0.0.6848")));
+        EXPECT_TRUE(hostIsDomain(Url::fromString("https://0.0.x.0")));
+        EXPECT_TRUE(hostIsDomain(Url::fromString("https://0.1.0")));
     }
 
     TEST_F(UrlTests, PathIsCorrectlyParsedOffOfTheUrl)
     {
         auto maybeUrl = Url::fromString("https://does.not.exist.com/");
         ASSERT_TRUE(maybeUrl);
-        ASSERT_EQ(maybeUrl.value().pathAsString(), "/");
+        EXPECT_EQ(maybeUrl.value().pathAsString(), "/");
 
         maybeUrl = Url::fromString("https://does.not.exist.com/first/second");
         ASSERT_TRUE(maybeUrl);
-        ASSERT_EQ(maybeUrl.value().pathAsString(), "/first/second");
+        EXPECT_EQ(maybeUrl.value().pathAsString(), "/first/second");
     }
 
     TEST_F(UrlTests, PathMayContainPercentEncodedCharacters)
     {
         auto maybeUrl = Url::fromString("https://does.not.exist.com/as%20df");
         ASSERT_TRUE(maybeUrl);
-        ASSERT_EQ(maybeUrl.value().pathAsString(), "/as%20df");
-        ASSERT_EQ(maybeUrl.value().pathAsString(false), "/as df");
+        EXPECT_EQ(maybeUrl.value().pathAsString(), "/as%20df");
+        EXPECT_EQ(maybeUrl.value().pathAsString(false), "/as df");
     }
 
     TEST_F(UrlTests, QueryIsParsedOffOfTheUrl)
@@ -296,8 +305,9 @@ namespace Roar::Tests
         std::string urlString = "https://us%3fer%3a:!%22%C2%A7%24@blabla.net";
         auto maybeUrl = Url::fromString(urlString);
         ASSERT_TRUE(maybeUrl);
-        ASSERT_EQ(maybeUrl.value().authority.userInfo->user, "us?er:");
-        ASSERT_EQ(maybeUrl.value().authority.userInfo->password, "!\"§$");
+        EXPECT_EQ(maybeUrl.value().authority.userInfo->user, "us?er:");
+        ASSERT_TRUE(maybeUrl.value().authority.userInfo->password);
+        EXPECT_EQ(*maybeUrl.value().authority.userInfo->password, "!\"§$");
     }
 
     TEST_F(UrlTests, CredentialPasswordCanBeEmpty)
@@ -305,8 +315,18 @@ namespace Roar::Tests
         std::string urlString = "https://admin:@blabla.net";
         auto maybeUrl = Url::fromString(urlString);
         ASSERT_TRUE(maybeUrl);
-        ASSERT_EQ(maybeUrl.value().authority.userInfo->user, "admin");
-        ASSERT_EQ(maybeUrl.value().authority.userInfo->password, "");
+        EXPECT_EQ(maybeUrl.value().authority.userInfo->user, "admin");
+        ASSERT_TRUE(maybeUrl.value().authority.userInfo->password);
+        EXPECT_EQ(maybeUrl.value().authority.userInfo->password, "");
+    }
+
+    TEST_F(UrlTests, CanParseUrlWithUserOnly)
+    {
+        std::string urlString = "https://admin@localhost";
+        auto maybeUrl = Url::fromString(urlString);
+        ASSERT_TRUE(maybeUrl);
+        EXPECT_EQ(maybeUrl.value().authority.userInfo->user, "admin");
+        ASSERT_FALSE(maybeUrl.value().authority.userInfo->password);
     }
 
     TEST_F(UrlTests, SynthesizedUrlStringIsTheSameAsTheParsedString)
@@ -315,7 +335,7 @@ namespace Roar::Tests
             "mailto://us%3Fer:%21%22%C2%A7%24@blabla.net:12345/weird%20path%21here?ke%C2=%3D%26vla#Bla";
         auto maybeUrl = Url::fromString(urlString);
         ASSERT_TRUE(maybeUrl);
-        ASSERT_EQ(maybeUrl.value().toString(true), urlString);
+        EXPECT_EQ(maybeUrl.value().toString(true), urlString);
     }
 
     TEST_F(UrlTests, CanParsePath)
