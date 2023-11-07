@@ -19,7 +19,7 @@ namespace Roar
         struct UserInfo : boost::spirit::x3::position_tagged
         {
             std::string user{};
-            std::string password{};
+            std::optional<std::string> password{};
         };
 
         struct Host

@@ -91,8 +91,17 @@ namespace Roar
             percentEncoded | unreserved | reserved;
 
         struct UserInfoTag;
-        const auto userInfo = x3::rule<UserInfoTag, Url::UserInfo>{"userInfo"} = +(credentialsCharacter - ':') >> ':' >>
-            *(credentialsCharacter - '@');
+        const auto userInfo = x3::rule<UserInfoTag, Url::UserInfo>{"userInfo"} =
+            ((+(credentialsCharacter - ':'))[([](auto& ctx) {
+                 _val(ctx).user = _attr(ctx);
+             })] >>
+             ':' >> (*(credentialsCharacter - '@'))[([](auto& ctx) {
+                 _val(ctx).password = _attr(ctx);
+             })]) |
+            (+(credentialsCharacter - '@'))[([](auto& ctx) {
+                _val(ctx).user = _attr(ctx);
+                _val(ctx).password = std::nullopt;
+            })];
 
         struct DomainCharacterTag;
         const auto domainCharacter = x3::rule<DomainCharacterTag, char>("domainCharacter") = alnum | char_("-.");
@@ -233,10 +242,24 @@ namespace Roar
         std::stringstream result;
         if (authority.userInfo)
         {
+            std::string user;
+            std::string password;
             if (doUrlEncode)
-                result << urlEncode(authority.userInfo->user) << ':' << urlEncode(authority.userInfo->password) << '@';
+            {
+                user = urlEncode(authority.userInfo->user);
+                if (authority.userInfo->password)
+                    password = urlEncode(*authority.userInfo->password);
+            }
             else
-                result << authority.userInfo->user << ':' << authority.userInfo->password << '@';
+            {
+                user = authority.userInfo->user;
+                if (authority.userInfo->password)
+                    password = *authority.userInfo->password;
+            }
+            if (authority.userInfo->password)
+                result << user << ':' << password << '@';
+            else
+                result << user << '@';
         }
         result << hostAsString();
         if (authority.remote.port)
