@@ -4,6 +4,7 @@ Github Pages Documentation: https://5cript.github.io/roar/
 
 This is a network library that has:
 - a HTTP(S) Server based on boost beast.
+- a HTTP(S) Client based on boost beast.
 - a CURL easy wrapper http client.
 - Javascript Promise like syntax for asynchronous actions provided by xhawk18_promise.
 
@@ -32,6 +33,7 @@ This is a network library that has:
   - [x] Websocket Client (SSL and Plain)
   - [x] Websocket Upgrade from HTTP(S) Server
 - [x] Synchronous HTTP Client using libcurl.
+- [x] Asynchronous HTTP Client using beast.
 - [x] URL Parser
 - [ ] HTTP & HTTPS Tunnel Proxy
 
