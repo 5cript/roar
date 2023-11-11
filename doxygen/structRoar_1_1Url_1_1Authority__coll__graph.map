@@ -1,0 +1,17 @@
+<map id="Roar::Url::Authority" name="Roar::Url::Authority">
+<area shape="rect" id="Node000001" title=" " alt="" coords="151,412,277,481"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,207,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,89,91,144,88,210,94,280,102,314,114,347,137,382,167,410,163,414,133,385,109,349,97,316,89,281,83,210,86,143,93,88"/>
+<area shape="rect" id="Node000004" href="$structRoar_1_1Url_1_1Authority_1_1Remote.html" title=" " alt="" coords="124,279,304,348"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="119,87,136,148,159,214,194,278,189,280,154,216,130,150,114,89"/>
+<area shape="rect" id="Node000005" href="$structRoar_1_1Url_1_1Host.html" title=" " alt="" coords="169,124,270,215"/>
+<area shape="poly" id="edge6_Node000005_Node000002" title=" " alt="" coords="147,84,182,123,178,126,143,87"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="328,279,521,348"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="372,350,284,405,281,401,370,346"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="217,348,217,395,211,395,211,348"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="220,215,219,262,213,262,215,215"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="231,5,456,75"/>
+<area shape="poly" id="edge7_Node000005_Node000006" title=" " alt="" coords="302,87,264,126,260,123,299,83"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="295,135,461,204"/>
+<area shape="poly" id="edge8_Node000004_Node000007" title=" " alt="" coords="341,206,267,270,263,266,338,202"/>
+</map>

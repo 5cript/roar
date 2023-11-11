@@ -1,6 +1,9 @@
 <map id="include/roar/utility/sha.hpp" name="include/roar/utility/sha.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="41,5,216,32"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,80,60,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="85,80,173,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="197,80,263,107"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="40,5,213,32"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,80,59,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="112,35,62,73,58,69,109,30"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="83,80,170,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="129,33,129,65,124,65,124,33"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="195,80,261,107"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="146,30,200,69,197,73,143,35"/>
 </map>

@@ -1,0 +1,7 @@
+<map id="Roar::Ipv6" name="Roar::Ipv6">
+<area shape="rect" id="Node000001" title=" " alt="" coords="84,139,160,208"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,132,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="71,74,80,114,84,123,79,126,74,116,66,75"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="157,5,194,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="165,76,148,116,145,124,140,122,144,114,160,74"/>
+</map>

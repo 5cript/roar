@@ -1,8 +1,13 @@
 <map id="Roar::Detail::RangeFileBodyImpl" name="Roar::Detail::RangeFileBodyImpl">
-<area shape="rect" id="node1" title="Support range requests for get requests including multipart/byterange." alt="" coords="354,160,569,384"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,176,83"/>
-<area shape="rect" id="node3" title=" " alt="" coords="200,5,267,83"/>
-<area shape="rect" id="node4" title=" " alt="" coords="291,5,631,83"/>
-<area shape="rect" id="node5" title=" " alt="" coords="655,5,710,83"/>
-<area shape="rect" id="node6" title=" " alt="" coords="737,5,794,83"/>
+<area shape="rect" id="Node000001" title="Support range requests for get requests including multipart/byterange." alt="" coords="335,155,541,437"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,167,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,72,181,129,251,179,322,225,319,229,248,184,178,133,116,76"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="191,5,248,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="250,73,326,161,322,165,246,76"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="273,5,603,75"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="441,74,441,138,435,138,435,74"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="627,5,673,75"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="630,70,553,161,549,158,626,66"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="701,5,759,75"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="709,76,660,133,609,178,556,219,552,215,606,173,656,129,704,73"/>
 </map>

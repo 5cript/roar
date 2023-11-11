@@ -1,4 +1,5 @@
 <map id="Roar::Route" name="Roar::Route">
-<area shape="rect" id="node1" title="A route represents the mapping of a verb+path to a user provided function." alt="" coords="5,145,284,267"/>
-<area shape="rect" id="node2" title=" " alt="" coords="7,5,282,83"/>
+<area shape="rect" id="Node000001" title="A route represents the mapping of a verb+path to a user provided function." alt="" coords="5,139,273,272"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="7,5,272,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="142,75,142,122,137,122,137,75"/>
 </map>

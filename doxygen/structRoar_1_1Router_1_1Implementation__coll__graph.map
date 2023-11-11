@@ -1,6 +1,9 @@
 <map id="Roar::Router::Implementation" name="Roar::Router::Implementation">
-<area shape="rect" id="node1" title=" " alt="" coords="180,175,375,281"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,64,83"/>
-<area shape="rect" id="node3" title=" " alt="" coords="89,5,466,83"/>
-<area shape="rect" id="node4" title=" " alt="" coords="491,5,829,83"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="171,171,356,283"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,55,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="56,61,69,73,178,158,174,162,66,77,53,65"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="79,5,447,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="266,75,266,154,261,154,261,75"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="472,5,801,75"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="570,77,372,175,370,170,568,72"/>
 </map>

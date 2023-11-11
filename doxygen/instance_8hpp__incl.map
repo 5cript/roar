@@ -1,6 +1,9 @@
 <map id="include/roar/curl/instance.hpp" name="include/roar/curl/instance.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="47,5,239,32"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,80,84,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="109,80,178,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="203,80,281,107"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="46,5,238,32"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,80,84,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="126,35,74,73,71,69,123,30"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="108,80,176,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="145,33,145,65,139,65,139,33"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="200,80,278,107"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="160,30,213,69,209,73,157,35"/>
 </map>

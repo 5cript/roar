@@ -1,4 +1,5 @@
 <map id="Roar::Authorization" name="Roar::Authorization">
-<area shape="rect" id="node1" title=" " alt="" coords="47,145,239,252"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,280,83"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="47,139,229,251"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,271,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="141,74,141,122,135,122,135,74"/>
 </map>

@@ -1,6 +1,9 @@
 <map id="include/roar/curl/curl_error.hpp" name="include/roar/curl/curl_error.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="49,5,246,32"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,80,84,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="108,80,187,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="211,80,265,107"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="48,5,244,32"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,80,84,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="130,35,76,73,73,69,127,30"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="107,80,185,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="149,33,149,65,143,65,143,33"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="209,80,262,107"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="163,30,210,68,207,72,160,35"/>
 </map>

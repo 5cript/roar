@@ -1,4 +1,5 @@
 <map id="Roar::DigestAuth" name="Roar::DigestAuth">
-<area shape="rect" id="node1" title=" " alt="" coords="5,292,140,399"/>
-<area shape="rect" id="node2" title=" " alt="" coords="45,5,100,83"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,299,129,432"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="45,5,90,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="70,75,70,282,65,282,65,75"/>
 </map>

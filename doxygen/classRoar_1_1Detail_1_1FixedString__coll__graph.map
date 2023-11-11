@@ -1,5 +1,7 @@
 <map id="Roar::Detail::FixedString&lt; Size &gt;" name="Roar::Detail::FixedString&lt; Size &gt;">
-<area shape="rect" id="node1" title="Utilitarian class to store and modify strings in compile time." alt="" coords="29,145,245,267"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,149,83"/>
-<area shape="rect" id="node3" href="$classchar.html" title=" " alt="" coords="174,5,221,83"/>
+<area shape="rect" id="Node000001" title="Utilitarian class to store and modify strings in compile time." alt="" coords="24,139,231,272"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,140,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="86,74,103,122,98,124,81,75"/>
+<area shape="rect" id="Node000003" href="$classchar.html" title=" " alt="" coords="165,5,202,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="174,76,158,124,153,122,169,74"/>
 </map>

@@ -1,7 +1,12 @@
 <map id="src/roar/mime_type.cpp" name="src/roar/mime_type.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="49,5,208,32"/>
-<area shape="rect" id="node2" href="$mime__type_8hpp.html" title=" " alt="" coords="60,80,197,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,155,60,181"/>
-<area shape="rect" id="node5" title=" " alt="" coords="221,80,332,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="95,155,162,181"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="48,5,206,32"/>
+<area shape="rect" id="Node000002" href="$mime__type_8hpp.html" title=" " alt="" coords="59,80,195,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="129,33,129,65,124,65,124,33"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,155,59,181"/>
+<area shape="poly" id="edge4_Node000001_Node000003" title=" " alt="" coords="102,35,74,54,49,81,38,111,34,141,29,140,33,110,44,79,70,50,99,30"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="220,80,330,107"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="154,30,237,71,235,75,151,35"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="112,109,62,148,58,143,109,105"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="94,155,160,181"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="129,107,129,140,124,140,124,107"/>
 </map>

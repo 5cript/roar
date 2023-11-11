@@ -1,0 +1,11 @@
+<map id="Roar::ShutdownBarrier::Implementation" name="Roar::ShutdownBarrier::Implementation">
+<area shape="rect" id="Node000001" title=" " alt="" coords="139,139,380,208"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,55,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="36,74,43,95,55,113,87,136,124,152,121,157,84,141,51,117,38,97,31,75"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="121,5,238,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="177,74,178,94,184,114,191,125,187,128,179,116,173,95,172,74"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="322,5,359,75"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="333,76,314,116,306,127,302,124,309,113,328,74"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="490,5,517,75"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="492,74,478,97,458,117,429,135,397,149,394,144,426,130,455,113,474,93,488,71"/>
+</map>

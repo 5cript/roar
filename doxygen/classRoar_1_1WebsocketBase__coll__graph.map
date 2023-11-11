@@ -1,5 +1,7 @@
 <map id="Roar::WebsocketBase" name="Roar::WebsocketBase">
-<area shape="rect" id="node1" title=" " alt="" coords="303,160,457,384"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,13,317,90"/>
-<area shape="rect" id="node3" title=" " alt="" coords="341,5,859,97"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="299,155,443,437"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,308,83"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="197,91,302,211,298,214,193,95"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="332,5,840,91"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="552,92,456,202,452,198,548,89"/>
 </map>

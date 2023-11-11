@@ -1,5 +1,7 @@
 <map id="include/roar/body/void_body.hpp" name="include/roar/body/void_body.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="77,5,285,32"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,80,204,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="227,80,289,107"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="76,5,284,32"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,80,203,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="169,34,129,72,126,68,165,31"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="227,80,288,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="195,31,235,68,232,72,192,34"/>
 </map>

@@ -1,6 +1,9 @@
 <map id="Roar::RouteInfo&lt; RequestListenerT &gt;" name="Roar::RouteInfo&lt; RequestListenerT &gt;">
-<area shape="rect" id="node1" title="This class is what is used in ROAR_GET, ROAR_PUT, ... requests All options you can set for routes beh..." alt="" coords="191,145,433,223"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,232,83"/>
-<area shape="rect" id="node3" title=" " alt="" coords="256,5,368,83"/>
-<area shape="rect" id="node4" title=" " alt="" coords="391,5,614,83"/>
+<area shape="rect" id="Node000001" title="This class is what is used in ROAR_GET, ROAR_PUT, ... requests All options you can set for routes beh..." alt="" coords="181,139,415,208"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,223,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="162,72,239,127,235,131,159,77"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="247,5,349,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="301,75,301,122,295,122,295,75"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="374,5,587,75"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="436,77,360,131,357,127,433,72"/>
 </map>

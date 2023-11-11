@@ -1,7 +1,11 @@
 <map id="include/roar/detail/stream_type.hpp" name="include/roar/detail/stream_type.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="335,5,561,32"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,80,219,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="243,80,453,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="477,80,619,107"/>
-<area shape="rect" id="node5" title=" " alt="" coords="643,80,850,107"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="334,5,558,32"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,80,218,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="388,35,185,79,184,74,387,30"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="242,80,451,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="430,35,377,73,374,69,427,30"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="475,80,617,107"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="465,30,518,69,515,73,462,35"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="641,80,846,107"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="499,30,678,73,677,79,498,35"/>
 </map>

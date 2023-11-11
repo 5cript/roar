@@ -1,5 +1,7 @@
 <map id="FileServer" name="FileServer">
-<area shape="rect" id="node1" title=" " alt="" coords="23,145,217,296"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,77,83"/>
-<area shape="rect" id="node3" title=" " alt="" coords="101,5,296,83"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="16,139,204,315"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,68,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="52,74,72,122,67,124,47,76"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="92,5,277,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="174,76,154,124,149,122,169,74"/>
 </map>

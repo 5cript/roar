@@ -1,0 +1,11 @@
+<map id="Roar::Cookie" name="Roar::Cookie">
+<area shape="rect" id="Node000001" title=" " alt="" coords="128,203,280,507"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,51,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="42,73,62,123,88,177,121,232,117,235,84,180,58,125,37,75"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="75,5,218,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="155,74,176,185,171,186,150,75"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="243,5,301,75"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="267,75,243,187,238,186,262,74"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="336,5,373,75"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="354,75,345,125,328,180,292,246,287,243,323,178,340,124,349,74"/>
+</map>

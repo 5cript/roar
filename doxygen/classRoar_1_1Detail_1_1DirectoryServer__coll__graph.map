@@ -1,10 +1,21 @@
 <map id="Roar::Detail::DirectoryServer&lt; RequestListenerT &gt;" name="Roar::Detail::DirectoryServer&lt; RequestListenerT &gt;">
-<area shape="rect" id="node1" title="Internal helper class to serve directories." alt="" coords="383,344,701,568"/>
-<area shape="rect" id="node2" href="$structRoar_1_1Detail_1_1DirectoryServerConstructionArgs.html" title=" " alt="" coords="13,175,431,252"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,52,83"/>
-<area shape="rect" id="node4" title=" " alt="" coords="77,5,282,83"/>
-<area shape="rect" id="node5" title=" " alt="" coords="306,5,517,83"/>
-<area shape="rect" id="node6" href="$classRoar_1_1Jail.html" title=" " alt="" coords="477,145,607,281"/>
-<area shape="rect" id="node7" title=" " alt="" coords="540,5,587,83"/>
-<area shape="rect" id="node8" title=" " alt="" coords="632,175,687,252"/>
+<area shape="rect" id="Node000001" title="Internal helper class to serve directories." alt="" coords="470,357,779,640"/>
+<area shape="rect" id="Node000002" href="$structRoar_1_1Detail_1_1DirectoryServerConstructionArgs.html" title=" " alt="" coords="5,181,415,251"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="273,256,472,391,469,395,270,261"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="11,5,49,75"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="48,73,76,113,107,143,142,170,139,174,104,147,72,116,44,76"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="73,5,269,75"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="181,74,202,165,196,166,176,75"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="293,5,495,75"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="361,76,259,172,256,168,357,72"/>
+<area shape="rect" id="Node000006" href="$classRoar_1_1Jail.html" title=" " alt="" coords="458,139,578,293"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="549,292,568,341,563,343,544,294"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="519,5,557,75"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="537,75,531,122,526,122,532,74"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="602,181,647,251"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="627,251,627,340,622,340,622,251"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="672,181,889,251"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="764,252,713,344,709,341,760,249"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="913,181,1048,251"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="950,252,904,295,795,381,791,377,900,291,946,249"/>
 </map>

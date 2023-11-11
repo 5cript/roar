@@ -1,15 +1,28 @@
 <map id="include/roar/filesystem/special_paths.hpp" name="include/roar/filesystem/special_paths.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="569,5,832,32"/>
-<area shape="rect" id="node2" href="$file__server_8hpp.html" title=" " alt="" coords="172,80,432,107"/>
-<area shape="rect" id="node5" href="$directory__server_8hpp.html" title=" " alt="" coords="547,80,855,107"/>
-<area shape="rect" id="node13" href="$special__paths_8cpp.html" title=" " alt="" coords="879,80,1117,107"/>
-<area shape="rect" id="node3" href="$file__server_8cpp.html" title=" " alt="" coords="5,155,265,181"/>
-<area shape="rect" id="node4" href="$serve__directory_2main_8cpp.html" title=" " alt="" coords="143,229,371,256"/>
-<area shape="rect" id="node6" href="$server_8hpp.html" title=" " alt="" coords="790,155,945,181"/>
-<area shape="rect" id="node7" href="$100__continue_2main_8cpp.html" title=" " alt="" coords="395,229,611,256"/>
-<area shape="rect" id="node8" href="$most__minimal_2main_8cpp.html" title=" " alt="" coords="636,229,856,256"/>
-<area shape="rect" id="node9" href="$simple__server_2main_8cpp.html" title=" " alt="" coords="880,229,1100,256"/>
-<area shape="rect" id="node10" href="$websocket_2main_8cpp.html" title=" " alt="" coords="1125,229,1327,256"/>
-<area shape="rect" id="node11" href="$src_2roar_2routing_2request__listener_8cpp.html" title=" " alt="" coords="1352,229,1583,256"/>
-<area shape="rect" id="node12" href="$server_8cpp.html" title=" " alt="" coords="1607,229,1738,256"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="568,5,830,32"/>
+<area shape="rect" id="Node000002" href="$file__server_8hpp.html" title=" " alt="" coords="172,80,431,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="616,38,372,82,371,77,615,33"/>
+<area shape="rect" id="Node000005" href="$directory__server_8hpp.html" title=" " alt="" coords="545,80,853,107"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="702,47,702,80,696,80,696,47"/>
+<area shape="rect" id="Node000013" href="$special__paths_8cpp.html" title=" " alt="" coords="877,80,1116,107"/>
+<area shape="poly" id="edge13_Node000001_Node000013" title=" " alt="" coords="766,33,945,77,944,82,764,39"/>
+<area shape="rect" id="Node000003" href="$file__server_8cpp.html" title=" " alt="" coords="5,155,265,181"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="260,115,165,156,163,152,258,111"/>
+<area shape="rect" id="Node000004" href="$serve__directory_2main_8cpp.html" title=" " alt="" coords="144,229,371,256"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="297,122,279,182,264,230,259,228,274,181,292,120"/>
+<area shape="rect" id="Node000006" href="$server_8hpp.html" title=" " alt="" coords="789,155,942,181"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="742,111,837,152,835,156,740,115"/>
+<area shape="poly" id="edge8_Node000006_Node000004" title=" " alt="" coords="775,183,364,231,364,226,774,178"/>
+<area shape="rect" id="Node000007" href="$100__continue_2main_8cpp.html" title=" " alt="" coords="395,229,611,256"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="789,187,567,231,566,226,787,182"/>
+<area shape="rect" id="Node000008" href="$most__minimal_2main_8cpp.html" title=" " alt="" coords="635,229,854,256"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="834,192,767,231,764,226,831,187"/>
+<area shape="rect" id="Node000009" href="$simple__server_2main_8cpp.html" title=" " alt="" coords="879,229,1098,256"/>
+<area shape="poly" id="edge9_Node000006_Node000009" title=" " alt="" coords="901,187,968,226,965,231,898,192"/>
+<area shape="rect" id="Node000010" href="$websocket_2main_8cpp.html" title=" " alt="" coords="1122,229,1324,256"/>
+<area shape="poly" id="edge10_Node000006_Node000010" title=" " alt="" coords="943,182,1161,226,1160,231,942,187"/>
+<area shape="rect" id="Node000011" href="$src_2roar_2routing_2request__listener_8cpp.html" title=" " alt="" coords="1348,229,1578,256"/>
+<area shape="poly" id="edge11_Node000006_Node000011" title=" " alt="" coords="957,178,1359,226,1358,231,956,183"/>
+<area shape="rect" id="Node000012" href="$server_8cpp.html" title=" " alt="" coords="1602,229,1732,256"/>
+<area shape="poly" id="edge12_Node000006_Node000012" title=" " alt="" coords="958,172,1240,193,1590,227,1602,228,1601,233,1589,232,1240,198,957,177"/>
 </map>

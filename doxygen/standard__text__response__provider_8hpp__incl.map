@@ -1,9 +1,15 @@
 <map id="include/roar/standard_text_response_provider.hpp" name="include/roar/standard_text_response_provider.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="415,5,725,32"/>
-<area shape="rect" id="node2" href="$standard__response__provider_8hpp.html" title=" " alt="" coords="452,80,688,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,155,204,181"/>
-<area shape="rect" id="node4" title=" " alt="" coords="227,155,438,181"/>
-<area shape="rect" id="node5" title=" " alt="" coords="463,155,677,181"/>
-<area shape="rect" id="node6" title=" " alt="" coords="702,155,883,181"/>
-<area shape="rect" id="node7" title=" " alt="" coords="907,155,995,181"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="413,5,723,32"/>
+<area shape="rect" id="Node000002" href="$standard__response__provider_8hpp.html" title=" " alt="" coords="450,80,686,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="571,33,571,65,565,65,565,33"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,155,203,181"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="487,110,200,154,199,149,486,105"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="227,155,437,181"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="528,110,388,152,386,147,526,105"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="461,155,675,181"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="571,107,571,140,565,140,565,107"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="699,155,880,181"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="607,105,738,147,736,152,606,110"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="903,155,990,181"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="641,105,889,151,888,157,640,110"/>
 </map>

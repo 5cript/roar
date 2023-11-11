@@ -1,6 +1,9 @@
 <map id="Roar::Curl::FileSource" name="Roar::Curl::FileSource">
-<area shape="rect" id="node1" title=" " alt="" coords="119,263,271,369"/>
-<area shape="rect" id="node2" href="$classRoar_1_1Curl_1_1Source.html" title="Sublass this source class to provide your own Source. A source provides data to upload to servers." alt="" coords="5,5,136,200"/>
-<area shape="rect" id="node3" title=" " alt="" coords="160,64,229,141"/>
-<area shape="rect" id="node4" title=" " alt="" coords="253,64,405,141"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="109,309,252,421"/>
+<area shape="rect" id="Node000002" href="$classRoar_1_1Curl_1_1Source.html" title="Sublass this source class to provide your own Source. A source provides data to upload to servers." alt="" coords="5,5,127,245"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="132,257,157,308,152,311,127,260"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="151,91,211,160"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="183,160,183,292,178,292,178,160"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="235,91,377,160"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="296,161,272,220,239,287,233,297,229,294,234,284,267,218,291,159"/>
 </map>

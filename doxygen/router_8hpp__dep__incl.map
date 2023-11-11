@@ -1,6 +1,9 @@
 <map id="include/roar/routing/router.hpp" name="include/roar/routing/router.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="168,5,363,32"/>
-<area shape="rect" id="node2" href="$router_8cpp.html" title=" " alt="" coords="5,80,176,107"/>
-<area shape="rect" id="node3" href="$server_8cpp.html" title=" " alt="" coords="200,80,331,107"/>
-<area shape="rect" id="node4" href="$session_8cpp.html" title=" " alt="" coords="355,80,544,107"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="169,5,362,32"/>
+<area shape="rect" id="Node000002" href="$router_8cpp.html" title=" " alt="" coords="5,80,176,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="222,41,122,82,120,77,220,36"/>
+<area shape="rect" id="Node000003" href="$server_8cpp.html" title=" " alt="" coords="200,80,330,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="268,47,268,80,263,80,263,47"/>
+<area shape="rect" id="Node000004" href="$session_8cpp.html" title=" " alt="" coords="355,80,543,107"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="312,35,418,77,416,82,310,40"/>
 </map>

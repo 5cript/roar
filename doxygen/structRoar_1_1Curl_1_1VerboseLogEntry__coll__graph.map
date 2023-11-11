@@ -1,5 +1,7 @@
 <map id="Roar::Curl::VerboseLogEntry" name="Roar::Curl::VerboseLogEntry">
-<area shape="rect" id="node1" title=" " alt="" coords="8,145,197,223"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,101,83"/>
-<area shape="rect" id="node3" title=" " alt="" coords="126,5,181,83"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,139,185,208"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="7,5,93,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="63,74,77,114,80,122,75,123,72,116,58,75"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="118,5,163,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="132,76,115,124,110,122,127,74"/>
 </map>

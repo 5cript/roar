@@ -1,0 +1,27 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,183,198,209"/>
+<area shape="rect" id="Node000001" href="$classRequestListener.html" title=" " alt="" coords="326,5,443,32"/>
+<area shape="poly" id="edge20_Node000000_Node000001" title=" " alt="" coords="117,169,168,104,204,70,244,42,284,26,325,19,326,24,286,31,247,46,207,74,172,108,121,172"/>
+<area shape="rect" id="Node000002" href="$classRoar_1_1Client.html" title=" " alt="" coords="339,56,430,83"/>
+<area shape="poly" id="edge21_Node000000_Node000002" title=" " alt="" coords="126,171,178,130,211,109,245,92,292,78,338,70,339,75,293,83,247,97,213,114,182,134,130,175"/>
+<area shape="rect" id="Node000003" href="$classRoar_1_1Router.html" title="The route routes http requests to their respective handler functions." alt="" coords="336,107,433,133"/>
+<area shape="poly" id="edge22_Node000000_Node000003" title=" " alt="" coords="150,174,245,143,335,124,336,129,246,148,151,179"/>
+<area shape="rect" id="Node000004" href="$structRoar_1_1Server_1_1Implementation.html" title=" " alt="" coords="288,157,481,184"/>
+<area shape="poly" id="edge23_Node000000_Node000004" title=" " alt="" coords="212,183,287,177,288,182,213,189"/>
+<area shape="rect" id="Node000005" href="$classRoar_1_1Session.html" title=" " alt="" coords="332,208,437,235"/>
+<area shape="poly" id="edge24_Node000000_Node000005" title=" " alt="" coords="213,203,332,214,331,219,212,209"/>
+<area shape="rect" id="Node000006" href="$classRoar_1_1Session_1_1ReadIntermediate.html" title="Utility class to build up read operations." alt="" coords="246,259,523,285"/>
+<area shape="poly" id="edge25_Node000000_Node000006" title=" " alt="" coords="151,213,246,244,296,255,295,261,245,249,150,218"/>
+<area shape="rect" id="Node000007" href="$classRoar_1_1Session_1_1SendIntermediate.html" title="Helper class to prepare and send a response." alt="" coords="246,309,523,336"/>
+<area shape="poly" id="edge26_Node000000_Node000007" title=" " alt="" coords="130,217,182,258,213,278,247,295,281,306,279,311,245,300,211,283,178,262,126,221"/>
+<area shape="rect" id="Node000008" href="$classRoar_1_1WebsocketBase.html" title=" " alt="" coords="308,360,461,387"/>
+<area shape="poly" id="edge27_Node000000_Node000008" title=" " alt="" coords="121,220,172,284,207,318,247,346,277,358,308,366,307,371,275,363,244,350,204,322,168,288,117,223"/>
+<area shape="rect" id="Node000009" href="$structRoar_1_1Detail_1_1SharedFromBase.html" title=" " alt="" coords="578,335,1004,361"/>
+<area shape="poly" id="edge28_Node000008_Node000009" title=" " alt="" coords="475,365,577,359,577,364,476,370"/>
+<area shape="rect" id="Node000011" href="$structRoar_1_1Detail_1_1SharedFromBase.html" title=" " alt="" coords="571,385,1010,412"/>
+<area shape="poly" id="edge30_Node000008_Node000011" title=" " alt="" coords="476,376,571,382,570,388,475,382"/>
+<area shape="rect" id="Node000010" href="$classRoar_1_1WebsocketClient.html" title=" " alt="" coords="1065,335,1221,361"/>
+<area shape="poly" id="edge29_Node000009_Node000010" title=" " alt="" coords="1019,345,1064,345,1064,351,1019,351"/>
+<area shape="rect" id="Node000012" href="$classRoar_1_1WebsocketSession.html" title="A WebsocketSession allows you to interact with a client via websocket protocol." alt="" coords="1058,385,1228,412"/>
+<area shape="poly" id="edge31_Node000011_Node000012" title=" " alt="" coords="1025,396,1058,396,1058,401,1025,401"/>
+</map>

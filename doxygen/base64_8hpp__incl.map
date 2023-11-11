@@ -1,4 +1,7 @@
 <map id="include/roar/utility/base64.hpp" name="include/roar/utility/base64.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,200,32"/>
-<area shape="rect" id="node2" title=" " alt="" coords="75,80,130,107"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,200,32"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="36,80,89,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="98,34,79,68,74,66,93,31"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="114,80,171,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="112,31,131,66,126,68,107,34"/>
 </map>

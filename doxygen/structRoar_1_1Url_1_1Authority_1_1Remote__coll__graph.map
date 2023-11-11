@@ -1,0 +1,12 @@
+<map id="Roar::Url::Authority::Remote" name="Roar::Url::Authority::Remote">
+<area shape="rect" id="Node000001" title=" " alt="" coords="104,279,284,348"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,207,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,88,117,149,134,214,150,247,170,277,165,280,145,250,129,216,112,150,105,89"/>
+<area shape="rect" id="Node000003" href="$structRoar_1_1Url_1_1Host.html" title=" " alt="" coords="143,124,245,215"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="140,85,166,123,162,126,135,88"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="197,215,197,262,191,262,191,215"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="231,5,456,75"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="295,86,246,127,243,123,291,82"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="269,135,436,204"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="317,206,245,270,242,266,314,202"/>
+</map>

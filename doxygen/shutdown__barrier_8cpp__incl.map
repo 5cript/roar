@@ -1,0 +1,17 @@
+<map id="src/roar/utility/shutdown_barrier.cpp" name="src/roar/utility/shutdown_barrier.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="344,5,572,32"/>
+<area shape="rect" id="Node000002" href="$shutdown__barrier_8hpp.html" title=" " alt="" coords="5,80,212,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="397,35,185,79,183,74,396,30"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="235,80,361,107"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="431,35,340,76,338,71,429,30"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="384,80,446,107"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="453,34,432,68,428,66,448,31"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="470,80,531,107"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="468,31,488,66,483,68,463,34"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="555,80,633,107"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="483,30,558,70,556,75,480,35"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="657,80,715,107"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="498,30,644,76,642,81,497,35"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="74,155,143,181"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="111,107,111,140,106,140,106,107"/>
+</map>

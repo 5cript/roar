@@ -1,5 +1,7 @@
 <map id="Roar::PseudoRegex" name="Roar::PseudoRegex">
-<area shape="rect" id="node1" title=" " alt="" coords="5,145,156,223"/>
-<area shape="rect" id="node2" href="$classchar.html" title=" " alt="" coords="16,5,63,83"/>
-<area shape="rect" id="node3" title=" " alt="" coords="95,5,152,83"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,139,145,208"/>
+<area shape="rect" id="Node000002" href="$classchar.html" title=" " alt="" coords="15,5,53,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="33,74,38,114,42,123,37,125,33,115,28,75"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="93,5,141,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="109,75,94,123,89,121,104,74"/>
 </map>

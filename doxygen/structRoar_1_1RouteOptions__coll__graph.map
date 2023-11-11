@@ -1,5 +1,7 @@
 <map id="Roar::RouteOptions" name="Roar::RouteOptions">
-<area shape="rect" id="node1" title="Options that modify the server behavior for a given route." alt="" coords="34,160,173,237"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,52,83"/>
-<area shape="rect" id="node3" title=" " alt="" coords="77,5,279,83"/>
+<area shape="rect" id="Node000001" title="Options that modify the server behavior for a given route." alt="" coords="29,155,158,224"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,43,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="26,74,30,102,39,130,46,140,41,143,34,132,25,103,21,75"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="67,5,261,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="158,75,137,132,131,142,127,140,132,130,153,74"/>
 </map>

@@ -1,5 +1,7 @@
 <map id="Roar::Factory" name="Roar::Factory">
-<area shape="rect" id="node1" title="This factory creates sessions." alt="" coords="5,145,284,252"/>
-<area shape="rect" id="node2" title=" " alt="" coords="9,5,80,83"/>
-<area shape="rect" id="node3" title=" " alt="" coords="105,5,387,83"/>
+<area shape="rect" id="Node000001" title="This factory creates sessions." alt="" coords="5,139,273,251"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="13,5,74,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="57,73,76,113,83,124,78,126,72,116,52,76"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="99,5,372,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="227,76,208,116,202,126,197,123,204,113,222,73"/>
 </map>

@@ -1,5 +1,7 @@
 <map id="Roar::Detail::PromiseTypeBind&lt; PromiseTypeBindThen&lt; ThenArgs... &gt;, PromiseTypeBindFail&lt; FailArgs... &gt; &gt;" name="Roar::Detail::PromiseTypeBind&lt; PromiseTypeBindThen&lt; ThenArgs... &gt;, PromiseTypeBindFail&lt; FailArgs... &gt; &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="5,287,445,408"/>
-<area shape="rect" id="node2" href="$classRoar_1_1Detail_1_1PromiseTypeBindBase.html" title=" " alt="" coords="109,145,341,237"/>
-<area shape="rect" id="node3" title=" " alt="" coords="190,5,261,83"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,279,436,407"/>
+<area shape="rect" id="Node000002" href="$classRoar_1_1Detail_1_1PromiseTypeBindBase.html" title=" " alt="" coords="109,139,332,229"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="223,244,223,279,218,279,218,244"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="190,5,251,75"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="223,74,223,122,218,122,218,74"/>
 </map>

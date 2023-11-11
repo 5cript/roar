@@ -1,7 +1,11 @@
 <map id="Roar::WebsocketClient::ConnectParameters" name="Roar::WebsocketClient::ConnectParameters">
-<area shape="rect" id="node1" title=" " alt="" coords="61,160,343,237"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,108,83"/>
-<area shape="rect" id="node3" title=" " alt="" coords="132,5,187,83"/>
-<area shape="rect" id="node4" title=" " alt="" coords="211,5,281,83"/>
-<area shape="rect" id="node5" title=" " alt="" coords="305,5,640,83"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="48,155,320,224"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,99,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="71,73,89,101,110,129,124,142,120,146,106,132,84,104,67,76"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="123,5,168,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="149,74,159,130,162,138,157,140,154,131,144,75"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="192,5,253,75"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="216,75,200,139,195,137,211,74"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="277,5,603,75"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="383,77,258,149,255,144,381,72"/>
 </map>

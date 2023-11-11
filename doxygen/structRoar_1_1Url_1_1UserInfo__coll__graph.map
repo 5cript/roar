@@ -1,4 +1,9 @@
 <map id="Roar::Url::UserInfo" name="Roar::Url::UserInfo">
-<area shape="rect" id="node1" title=" " alt="" coords="5,160,139,237"/>
-<area shape="rect" id="node2" title=" " alt="" coords="45,5,99,83"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="192,139,316,208"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,207,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="156,82,218,137,215,141,153,86"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="231,5,277,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="257,75,257,122,251,122,251,75"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="301,5,441,75"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="343,76,297,128,293,124,339,73"/>
 </map>

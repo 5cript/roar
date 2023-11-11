@@ -1,6 +1,9 @@
 <map id="Roar::Curl::CurlError" name="Roar::Curl::CurlError">
-<area shape="rect" id="node1" title=" " alt="" coords="90,145,233,252"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,109,83"/>
-<area shape="rect" id="node3" title=" " alt="" coords="134,5,189,83"/>
-<area shape="rect" id="node4" title=" " alt="" coords="229,5,315,83"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="81,139,214,251"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,100,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="83,85,116,137,111,140,78,88"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="125,5,170,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="150,74,150,122,145,122,145,74"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="218,5,295,75"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="249,76,230,116,222,127,217,124,225,113,244,73"/>
 </map>

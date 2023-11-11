@@ -1,6 +1,13 @@
 <map id="Roar::ServeOptions&lt; RequestListenerT &gt;" name="Roar::ServeOptions&lt; RequestListenerT &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="355,219,619,296"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,279,83"/>
-<area shape="rect" id="node3" title=" " alt="" coords="303,5,671,83"/>
-<area shape="rect" id="node4" title=" " alt="" coords="696,5,1033,83"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="714,219,969,288"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,269,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="176,73,258,136,309,167,363,192,424,208,508,221,698,240,697,245,508,226,423,213,361,197,307,172,255,140,172,77"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="294,5,653,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="533,72,770,208,767,213,530,77"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="677,5,1005,75"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="844,74,844,202,839,202,839,74"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="1029,5,1515,75"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1210,77,970,197,934,214,932,209,968,192,1207,72"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="1539,5,1927,75"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1636,77,1444,138,1330,169,1217,197,1099,220,986,237,985,232,1098,215,1215,192,1329,164,1442,132,1635,72"/>
 </map>

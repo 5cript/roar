@@ -1,5 +1,7 @@
 <map id="Roar::Error" name="Roar::Error">
-<area shape="rect" id="node1" title="Holds errors that are produced asynchronously anywhere." alt="" coords="223,145,309,223"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,308,83"/>
-<area shape="rect" id="node3" title=" " alt="" coords="333,5,421,83"/>
+<area shape="rect" id="Node000001" title="Holds errors that are produced asynchronously anywhere." alt="" coords="219,139,296,208"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,299,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="181,73,222,124,218,127,177,76"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="323,5,402,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="338,76,297,127,293,124,334,73"/>
 </map>

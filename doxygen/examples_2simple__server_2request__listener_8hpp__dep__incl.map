@@ -1,5 +1,7 @@
 <map id="examples/simple_server/request_listener.hpp" name="examples/simple_server/request_listener.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="111,5,395,32"/>
-<area shape="rect" id="node2" href="$simple__server_2main_8cpp.html" title=" " alt="" coords="5,80,225,107"/>
-<area shape="rect" id="node3" href="$examples_2simple__server_2request__listener_8cpp.html" title=" " alt="" coords="249,80,533,107"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="111,5,394,32"/>
+<area shape="rect" id="Node000002" href="$simple__server_2main_8cpp.html" title=" " alt="" coords="5,80,225,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="217,42,140,82,138,77,215,37"/>
+<area shape="rect" id="Node000003" href="$examples_2simple__server_2request__listener_8cpp.html" title=" " alt="" coords="249,80,533,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="291,37,368,77,365,82,288,42"/>
 </map>

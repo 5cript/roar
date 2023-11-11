@@ -1,6 +1,9 @@
 <map id="include/roar/authorization/basic_auth.hpp" name="include/roar/authorization/basic_auth.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,264,32"/>
-<area shape="rect" id="node2" title=" " alt="" coords="16,80,83,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="107,80,162,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="187,80,275,107"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,264,32"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="17,80,84,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="122,35,77,72,74,68,118,31"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="108,80,161,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="137,33,137,65,132,65,132,33"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="186,80,273,107"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="153,30,203,69,200,73,149,35"/>
 </map>

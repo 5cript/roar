@@ -1,0 +1,7 @@
+<map id="Roar::Parser::Ipv6SegmentContainer" name="Roar::Parser::Ipv6SegmentContainer">
+<area shape="rect" id="Node000001" title=" " alt="" coords="17,155,245,224"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,124,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="61,75,61,102,68,130,75,141,70,143,63,132,56,103,56,75"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="179,5,217,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="192,75,171,132,166,141,161,139,166,130,187,73"/>
+</map>

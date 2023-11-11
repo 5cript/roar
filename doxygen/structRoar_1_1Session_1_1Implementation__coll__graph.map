@@ -1,12 +1,22 @@
 <map id="Roar::Session::Implementation" name="Roar::Session::Implementation">
-<area shape="rect" id="node1" title=" " alt="" coords="837,300,1040,392"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,160,491,237"/>
-<area shape="rect" id="node3" title=" " alt="" coords="515,160,594,237"/>
-<area shape="rect" id="node4" title=" " alt="" coords="631,5,678,83"/>
-<area shape="rect" id="node8" href="$structRoar_1_1RouteOptions.html" title="Options that modify the server behavior for a given route." alt="" coords="731,160,869,237"/>
-<area shape="rect" id="node5" title=" " alt="" coords="894,160,1101,237"/>
-<area shape="rect" id="node6" title=" " alt="" coords="1125,160,1299,237"/>
-<area shape="rect" id="node7" title=" " alt="" coords="1323,160,1831,237"/>
-<area shape="rect" id="node9" title=" " alt="" coords="715,5,917,83"/>
-<area shape="rect" id="node10" title=" " alt="" coords="1856,160,2195,237"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="807,288,1000,379"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,155,481,224"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="346,221,493,261,648,292,790,314,789,320,647,297,492,267,345,226"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="506,155,575,224"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="545,223,551,244,563,262,578,273,599,282,656,298,723,311,790,320,790,325,722,316,655,304,597,287,575,277,559,266,546,247,540,225"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="622,5,659,75"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="631,75,623,109,619,147,622,187,637,223,668,256,706,282,748,301,791,314,789,319,746,306,703,287,664,260,633,225,617,188,614,147,618,108,626,74"/>
+<area shape="rect" id="Node000008" href="$structRoar_1_1RouteOptions.html" title="Options that modify the server behavior for a given route." alt="" coords="711,155,840,224"/>
+<area shape="poly" id="edge8_Node000008_Node000004" title=" " alt="" coords="653,74,665,102,683,129,699,144,695,148,679,132,661,105,648,76"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="865,155,1062,224"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="952,225,931,274,926,272,947,223"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="1086,155,1251,224"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1107,226,1002,282,1000,278,1105,222"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="1275,155,1774,224"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1379,227,1017,309,1016,304,1378,221"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="807,222,854,274,850,278,803,226"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="700,5,893,75"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="794,75,785,138,780,138,789,74"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="1799,155,2128,224"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="1799,225,1786,227,1362,284,1017,323,1017,318,1361,279,1786,221,1798,219"/>
 </map>

@@ -1,4 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structRoar_1_1Detail_1_1DirectoryServerConstructionArgs.html" title=" " alt="" coords="5,5,424,32"/>
-<area shape="rect" id="node2" href="$classRoar_1_1Detail_1_1DirectoryServer.html" title="Internal helper class to serve directories." alt="" coords="472,5,791,32"/>
+<area shape="rect" id="Node000000" href="$classRoar_1_1Curl_1_1Source.html" title="Sublass this source class to provide your own Source. A source provides data to upload to servers." alt="" coords="5,31,136,57"/>
+<area shape="rect" id="Node000001" href="$classRoar_1_1Curl_1_1FileSource.html" title=" " alt="" coords="190,5,342,32"/>
+<area shape="poly" id="edge10_Node000000_Node000001" title=" " alt="" coords="150,31,189,26,190,31,151,36"/>
+<area shape="rect" id="Node000002" href="$classRoar_1_1Curl_1_1StringSource.html" title=" " alt="" coords="184,56,348,83"/>
+<area shape="poly" id="edge11_Node000000_Node000002" title=" " alt="" coords="151,52,183,56,183,61,150,57"/>
 </map>

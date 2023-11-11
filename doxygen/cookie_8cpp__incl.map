@@ -1,0 +1,24 @@
+<map id="src/roar/mechanics/cookie.cpp" name="src/roar/mechanics/cookie.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="447,5,646,32"/>
+<area shape="rect" id="Node000002" href="$cookie_8hpp.html" title=" " alt="" coords="259,80,437,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="513,35,397,77,396,72,511,30"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="461,80,632,107"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="549,33,549,65,544,65,544,33"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="657,80,725,107"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="573,30,654,70,651,75,571,35"/>
+<area shape="rect" id="Node000003" href="$date_8hpp.html" title=" " alt="" coords="58,155,190,181"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="310,110,178,152,176,147,308,105"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,229,59,256"/>
+<area shape="poly" id="edge6_Node000002_Node000004" title=" " alt="" coords="259,104,197,111,134,122,81,137,61,146,47,157,39,169,34,184,31,215,26,214,28,183,34,167,43,153,58,142,79,132,133,117,196,106,258,99"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="214,155,341,181"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="338,109,302,146,298,142,334,105"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="365,155,475,181"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="362,105,399,142,395,146,359,109"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="499,155,560,181"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="381,105,486,147,484,152,379,110"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="583,155,641,181"/>
+<area shape="poly" id="edge9_Node000002_Node000009" title=" " alt="" coords="397,105,570,151,568,156,396,110"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="110,184,61,222,57,218,106,180"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="94,229,154,256"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="127,182,127,214,121,214,121,182"/>
+</map>

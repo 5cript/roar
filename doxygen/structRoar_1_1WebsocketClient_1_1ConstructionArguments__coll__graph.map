@@ -1,5 +1,7 @@
 <map id="Roar::WebsocketClient::ConstructionArguments" name="Roar::WebsocketClient::ConstructionArguments">
-<area shape="rect" id="node1" title=" " alt="" coords="11,145,314,223"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,123,83"/>
-<area shape="rect" id="node3" title=" " alt="" coords="147,5,378,83"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="7,139,301,208"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,113,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="86,73,122,123,118,126,81,76"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="138,5,359,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="227,76,190,126,186,123,222,73"/>
 </map>

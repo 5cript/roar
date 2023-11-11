@@ -1,5 +1,7 @@
 <map id="Roar::Detail::RangeFileBodyImpl::Sequence" name="Roar::Detail::RangeFileBodyImpl::Sequence">
-<area shape="rect" id="node1" title=" " alt="" coords="5,175,285,296"/>
-<area shape="rect" id="node2" title=" " alt="" coords="46,5,114,83"/>
-<area shape="rect" id="node3" title=" " alt="" coords="183,5,238,83"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,171,276,304"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="47,5,106,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,74,74,110,80,146,83,155,78,156,75,147,69,110,69,74"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="183,5,229,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="200,75,179,147,176,156,171,154,174,146,195,74"/>
 </map>

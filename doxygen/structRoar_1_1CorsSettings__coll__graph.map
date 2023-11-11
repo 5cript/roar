@@ -1,8 +1,13 @@
 <map id="Roar::CorsSettings" name="Roar::CorsSettings">
-<area shape="rect" id="node1" title="Settings object to control CORS requests." alt="" coords="789,160,923,237"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,267,83"/>
-<area shape="rect" id="node3" title=" " alt="" coords="290,5,723,83"/>
-<area shape="rect" id="node4" title=" " alt="" coords="748,5,964,83"/>
-<area shape="rect" id="node5" title=" " alt="" coords="988,5,1103,83"/>
-<area shape="rect" id="node6" title=" " alt="" coords="1145,5,1191,83"/>
+<area shape="rect" id="Node000001" title="Settings object to control CORS requests." alt="" coords="771,155,897,224"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,257,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="258,69,271,72,525,128,755,171,754,177,523,133,269,77,257,74"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="282,5,706,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="567,72,693,128,757,155,755,160,691,133,564,77"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="731,5,937,75"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="837,75,837,137,831,137,831,75"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="961,5,1067,75"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="995,76,972,105,944,133,913,154,909,150,940,129,968,101,990,73"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="1113,5,1150,75"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1125,76,1111,106,1088,133,1047,157,1002,174,957,184,914,190,913,184,956,179,1001,169,1045,153,1084,129,1106,103,1120,73"/>
 </map>

@@ -1,0 +1,9 @@
+<map id="Roar::Client::SslOptions" name="Roar::Client::SslOptions">
+<area shape="rect" id="Node000001" title=" " alt="" coords="61,139,216,208"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,61,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="42,74,50,94,61,113,71,126,67,129,56,116,45,96,37,75"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="97,5,181,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="141,75,141,122,136,122,136,75"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="205,5,539,75"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="314,77,214,133,212,128,311,72"/>
+</map>

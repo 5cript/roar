@@ -1,5 +1,7 @@
 <map id="Roar::ServeInfo&lt; RequestListenerT &gt;" name="Roar::ServeInfo&lt; RequestListenerT &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="132,145,373,223"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,233,83"/>
-<area shape="rect" id="node3" title=" " alt="" coords="258,5,514,83"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="127,139,359,208"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,224,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="149,73,200,125,196,129,145,77"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="249,5,495,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="341,77,289,129,286,125,337,73"/>
 </map>

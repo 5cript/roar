@@ -1,5 +1,7 @@
 <map id="Roar::Factory::Implementation" name="Roar::Factory::Implementation">
-<area shape="rect" id="node1" title=" " alt="" coords="152,145,351,223"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,249,83"/>
-<area shape="rect" id="node3" title=" " alt="" coords="273,5,480,83"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="325,139,514,208"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,476,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="288,72,362,127,359,131,285,77"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="501,5,698,75"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="555,77,481,131,477,127,552,72"/>
 </map>

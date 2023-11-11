@@ -1,4 +1,5 @@
 <map id="Roar::Detail::PromiseTypeBindBase" name="Roar::Detail::PromiseTypeBindBase">
-<area shape="rect" id="node1" title=" " alt="" coords="5,145,237,237"/>
-<area shape="rect" id="node2" title=" " alt="" coords="86,5,157,83"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,139,228,229"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="86,5,147,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,74,119,122,114,122,114,74"/>
 </map>

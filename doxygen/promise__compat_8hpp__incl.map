@@ -1,5 +1,7 @@
 <map id="include/roar/detail/promise_compat.hpp" name="include/roar/detail/promise_compat.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,255,32"/>
-<area shape="rect" id="node2" title=" " alt="" coords="17,80,96,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="121,80,289,107"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,254,32"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="18,80,95,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,34,81,72,77,68,115,31"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="119,80,287,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="144,31,182,68,178,72,140,34"/>
 </map>

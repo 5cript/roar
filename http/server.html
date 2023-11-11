@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HTTP Server &mdash; roar 1.0.0 documentation</title>
@@ -14,10 +14,11 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
         <script src="../_static/js/custom.js"></script>
         <script src="../_static/dark_mode_js/default_dark.js"></script>
         <script src="../_static/dark_mode_js/theme_switcher.js"></script>
@@ -35,11 +36,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> roar
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            roar
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -105,8 +110,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>HTTP Server</li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">HTTP Server</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/http/server.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -117,55 +122,59 @@
            <div itemprop="articleBody">
              
   <section id="http-server">
-<h1>HTTP Server<a class="headerlink" href="#http-server" title="Permalink to this headline"></a></h1>
+<h1>HTTP Server<a class="headerlink" href="#http-server" title="Permalink to this heading"></a></h1>
 <section id="tutorial">
-<h2>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline"></a></h2>
+<h2>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this heading"></a></h2>
 <blockquote>
-<div><p>May 29, 2022 | 3 min read</p>
+<div><p>Nov 11, 2023 | 3 min read</p>
 </div></blockquote>
 <section id="minimal-setup-example">
-<h3>Minimal Setup Example<a class="headerlink" href="#minimal-setup-example" title="Permalink to this headline"></a></h3>
+<h3>Minimal Setup Example<a class="headerlink" href="#minimal-setup-example" title="Permalink to this heading"></a></h3>
 <p>Lets start with the following example:</p>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">Most Minimal Example</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;boost/asio/any_io_executor.hpp&gt;</span><span class="cp"></span>
-<span class="linenos"> 2</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;boost/asio/thread_pool.hpp&gt;</span><span class="cp"></span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;boost/asio/any_io_executor.hpp&gt;</span>
+<span class="linenos"> 2</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;boost/asio/thread_pool.hpp&gt;</span>
 <span class="linenos"> 3</span>
-<span class="linenos"> 4</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;roar/server.hpp&gt;</span><span class="cp"></span>
-<span class="linenos"> 5</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;roar/utility/scope_exit.hpp&gt;</span><span class="cp"></span>
+<span class="linenos"> 4</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;roar/server.hpp&gt;</span>
+<span class="linenos"> 5</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;roar/utility/scope_exit.hpp&gt;</span>
 <span class="linenos"> 6</span>
-<span class="linenos"> 7</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="linenos"> 7</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
 <span class="linenos"> 8</span>
-<span class="linenos"> 9</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"></span>
-<span class="linenos">10</span><span class="p">{</span><span class="w"></span>
-<span class="linenos">11</span><span class="w">    </span><span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">thread_pool</span><span class="w"> </span><span class="n">pool</span><span class="p">{</span><span class="mi">4</span><span class="p">};</span><span class="w"></span>
+<span class="linenos"> 9</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+<span class="linenos">10</span><span class="p">{</span>
+<span class="linenos">11</span><span class="w">    </span><span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">thread_pool</span><span class="w"> </span><span class="n">pool</span><span class="p">{</span><span class="mi">4</span><span class="p">};</span>
 <span class="linenos">12</span>
 <span class="linenos">13</span><span class="w">    </span><span class="c1">// Create server.</span>
-<span class="linenos">14</span><span class="w">    </span><span class="n">Roar</span><span class="o">::</span><span class="n">Server</span><span class="w"> </span><span class="n">server</span><span class="p">{{.</span><span class="n">executor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pool</span><span class="p">.</span><span class="n">executor</span><span class="p">()}};</span><span class="w"></span>
+<span class="linenos">14</span><span class="w">    </span><span class="n">Roar</span><span class="o">::</span><span class="n">Server</span><span class="w"> </span><span class="n">server</span><span class="p">{{.</span><span class="n">executor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pool</span><span class="p">.</span><span class="n">executor</span><span class="p">()}};</span>
 <span class="linenos">15</span>
 <span class="linenos">16</span><span class="w">    </span><span class="c1">// SSL Server (you can provide your own SSL Context for more options.)</span>
-<span class="linenos">17</span><span class="w">    </span><span class="c1">// Roar::Server server{{</span>
-<span class="linenos">18</span><span class="w">    </span><span class="c1">//     .executor = pool.executor()</span>
-<span class="linenos">19</span><span class="w">    </span><span class="c1">//     .sslContext = makeSslContext(SslContextCreationParameters{</span>
-<span class="linenos">20</span><span class="w">    </span><span class="c1">//         .certificate = std::string_view{&quot;certificate string here&quot;},</span>
-<span class="linenos">21</span><span class="w">    </span><span class="c1">//         .privateKey = std::string_view{&quot;private key here&quot;},</span>
-<span class="linenos">22</span><span class="w">    </span><span class="c1">//         .password = keyPassphrase,</span>
-<span class="linenos">23</span><span class="w">    </span><span class="c1">//     })</span>
-<span class="linenos">24</span><span class="w">    </span><span class="c1">// }};</span>
-<span class="linenos">25</span>
-<span class="linenos">26</span><span class="w">    </span><span class="c1">// stop the thread_pool on scope exit to guarantee that all asynchronous tasks are finished before the server is</span>
-<span class="linenos">27</span><span class="w">    </span><span class="c1">// destroyed.</span>
-<span class="linenos">28</span><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">shutdownPool</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Roar</span><span class="o">::</span><span class="n">ScopeExit</span><span class="p">{[</span><span class="o">&amp;</span><span class="n">pool</span><span class="p">]()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="linenos">29</span><span class="w">        </span><span class="n">pool</span><span class="p">.</span><span class="n">stop</span><span class="p">();</span><span class="w"></span>
-<span class="linenos">30</span><span class="w">        </span><span class="n">pool</span><span class="p">.</span><span class="n">join</span><span class="p">();</span><span class="w"></span>
-<span class="linenos">31</span><span class="w">    </span><span class="p">}};</span><span class="w"></span>
-<span class="linenos">32</span>
-<span class="linenos">33</span><span class="w">    </span><span class="c1">// Start server and bind on port &quot;port&quot;.</span>
-<span class="linenos">34</span><span class="w">    </span><span class="n">server</span><span class="p">.</span><span class="n">start</span><span class="p">(</span><span class="mi">8081</span><span class="p">);</span><span class="w"></span>
-<span class="linenos">35</span>
-<span class="linenos">36</span><span class="w">    </span><span class="c1">// Prevent exit somehow:</span>
-<span class="linenos">37</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">get</span><span class="p">();</span><span class="w"></span>
-<span class="linenos">38</span><span class="p">}</span><span class="w"></span>
+<span class="linenos">17</span><span class="w">    </span><span class="c1">//</span>
+<span class="linenos">18</span><span class="w">    </span><span class="c1">// auto sslContext = SslServerContext{</span>
+<span class="linenos">19</span><span class="w">    </span><span class="c1">//      .certificate = &quot;certificate string here&quot;, // or filesystem::path to cert</span>
+<span class="linenos">20</span><span class="w">    </span><span class="c1">//      .privateKey = &quot;private key here&quot;, // or filesystem::path to key</span>
+<span class="linenos">21</span><span class="w">    </span><span class="c1">//      .password = &quot;passwordHereIfApplicable&quot;,</span>
+<span class="linenos">22</span><span class="w">    </span><span class="c1">// };</span>
+<span class="linenos">23</span><span class="w">    </span><span class="c1">// initializeServerSslContext(sslContext);</span>
+<span class="linenos">24</span><span class="w">    </span><span class="c1">//</span>
+<span class="linenos">25</span><span class="w">    </span><span class="c1">// Roar::Server server{{</span>
+<span class="linenos">26</span><span class="w">    </span><span class="c1">//     .executor = pool.executor()</span>
+<span class="linenos">27</span><span class="w">    </span><span class="c1">//     .sslContext = std::move(sslContext),</span>
+<span class="linenos">28</span><span class="w">    </span><span class="c1">// }};</span>
+<span class="linenos">29</span>
+<span class="linenos">30</span><span class="w">    </span><span class="c1">// stop the thread_pool on scope exit to guarantee that all asynchronous tasks are finished before the server is</span>
+<span class="linenos">31</span><span class="w">    </span><span class="c1">// destroyed.</span>
+<span class="linenos">32</span><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">shutdownPool</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Roar</span><span class="o">::</span><span class="n">ScopeExit</span><span class="p">{[</span><span class="o">&amp;</span><span class="n">pool</span><span class="p">]()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">33</span><span class="w">        </span><span class="n">pool</span><span class="p">.</span><span class="n">stop</span><span class="p">();</span>
+<span class="linenos">34</span><span class="w">        </span><span class="n">pool</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="linenos">35</span><span class="w">    </span><span class="p">}};</span>
+<span class="linenos">36</span>
+<span class="linenos">37</span><span class="w">    </span><span class="c1">// Start server and bind on port &quot;port&quot;.</span>
+<span class="linenos">38</span><span class="w">    </span><span class="n">server</span><span class="p">.</span><span class="n">start</span><span class="p">(</span><span class="mi">8081</span><span class="p">);</span>
+<span class="linenos">39</span>
+<span class="linenos">40</span><span class="w">    </span><span class="c1">// Prevent exit somehow:</span>
+<span class="linenos">41</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+<span class="linenos">42</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
@@ -180,46 +189,46 @@ This way we do not need to ensure their survival in asynchronous handlers and do
 This is where the RequestListener concept comes into play.</p>
 </section>
 <section id="the-request-listener">
-<h3>The Request Listener<a class="headerlink" href="#the-request-listener" title="Permalink to this headline"></a></h3>
+<h3>The Request Listener<a class="headerlink" href="#the-request-listener" title="Permalink to this heading"></a></h3>
 <p>Lets define one:</p>
 <div class="literal-block-wrapper docutils container" id="id2">
 <div class="code-block-caption"><span class="caption-text">basic_request_listener.hpp</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#pragma once</span>
 <span class="linenos"> 2</span>
-<span class="linenos"> 3</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;roar/routing/request_listener.hpp&gt;</span><span class="cp"></span>
+<span class="linenos"> 3</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;roar/routing/request_listener.hpp&gt;</span>
 <span class="linenos"> 4</span>
-<span class="linenos"> 5</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;boost/describe/class.hpp&gt;</span><span class="cp"></span>
+<span class="linenos"> 5</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;boost/describe/class.hpp&gt;</span>
 <span class="linenos"> 6</span>
-<span class="linenos"> 7</span><span class="k">class</span><span class="w"> </span><span class="nc">MyRequestListener</span><span class="w"></span>
-<span class="linenos"> 8</span><span class="p">{</span><span class="w"></span>
-<span class="linenos"> 9</span><span class="w">  </span><span class="k">private</span><span class="o">:</span><span class="w"></span>
-<span class="linenos">10</span><span class="w">    </span><span class="n">ROAR_MAKE_LISTENER</span><span class="p">(</span><span class="n">MyRequestListener</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 7</span><span class="k">class</span><span class="w"> </span><span class="nc">MyRequestListener</span>
+<span class="linenos"> 8</span><span class="p">{</span>
+<span class="linenos"> 9</span><span class="w">  </span><span class="k">private</span><span class="o">:</span>
+<span class="linenos">10</span><span class="w">    </span><span class="n">ROAR_MAKE_LISTENER</span><span class="p">(</span><span class="n">MyRequestListener</span><span class="p">);</span>
 <span class="linenos">11</span>
 <span class="linenos">12</span><span class="w">    </span><span class="c1">// Use the ROAR_GET, ... macro to define a route. Routes are basically mappings of paths to handlers.</span>
-<span class="hll"><span class="linenos">13</span><span class="w">    </span><span class="n">ROAR_GET</span><span class="p">(</span><span class="n">index</span><span class="p">)(</span><span class="s">&quot;/&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="hll"><span class="linenos">13</span><span class="w">    </span><span class="n">ROAR_GET</span><span class="p">(</span><span class="n">index</span><span class="p">)(</span><span class="s">&quot;/&quot;</span><span class="p">);</span>
 </span><span class="linenos">14</span>
-<span class="linenos">15</span><span class="w">  </span><span class="k">private</span><span class="o">:</span><span class="w"></span>
+<span class="linenos">15</span><span class="w">  </span><span class="k">private</span><span class="o">:</span>
 <span class="linenos">16</span><span class="w">    </span><span class="c1">// This makes routes visible to the library. For as long as we have to wait for native reflection...</span>
-<span class="hll"><span class="linenos">17</span><span class="w">    </span><span class="n">BOOST_DESCRIBE_CLASS</span><span class="p">(</span><span class="n">MyRequestListener</span><span class="p">,</span><span class="w"> </span><span class="p">(),</span><span class="w"> </span><span class="p">(),</span><span class="w"> </span><span class="p">(),</span><span class="w"> </span><span class="p">(</span><span class="n">roar_index</span><span class="p">,</span><span class="w"> </span><span class="n">roar_upload</span><span class="p">))</span><span class="w"></span>
-</span><span class="linenos">18</span><span class="p">};</span><span class="w"></span>
+<span class="hll"><span class="linenos">17</span><span class="w">    </span><span class="n">BOOST_DESCRIBE_CLASS</span><span class="p">(</span><span class="n">MyRequestListener</span><span class="p">,</span><span class="w"> </span><span class="p">(),</span><span class="w"> </span><span class="p">(),</span><span class="w"> </span><span class="p">(),</span><span class="w"> </span><span class="p">(</span><span class="n">roar_index</span><span class="p">,</span><span class="w"> </span><span class="n">roar_upload</span><span class="p">))</span>
+</span><span class="linenos">18</span><span class="p">};</span>
 </pre></div>
 </div>
 </div>
 <div class="literal-block-wrapper docutils container" id="id3">
 <div class="code-block-caption"><span class="caption-text">basic_request_listener.cpp</span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;basic_request_listener.hpp&quot;</span><span class="cp"></span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;basic_request_listener.hpp&quot;</span>
 <span class="linenos"> 2</span>
-<span class="linenos"> 3</span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">boost</span><span class="o">::</span><span class="nn">beast</span><span class="o">::</span><span class="nn">http</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 3</span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">boost</span><span class="o">::</span><span class="nn">beast</span><span class="o">::</span><span class="nn">http</span><span class="p">;</span>
 <span class="linenos"> 4</span>
-<span class="linenos"> 5</span><span class="kt">void</span><span class="w"> </span><span class="nf">RequestListener::index</span><span class="p">(</span><span class="n">Roar</span><span class="o">::</span><span class="n">Session</span><span class="o">&amp;</span><span class="w"> </span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="n">Roar</span><span class="o">::</span><span class="n">EmptyBodyRequest</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"></span>
-<span class="linenos"> 6</span><span class="p">{</span><span class="w"></span>
-<span class="linenos"> 7</span><span class="w">    </span><span class="n">session</span><span class="w"></span>
-<span class="linenos"> 8</span><span class="w">        </span><span class="p">.</span><span class="n">send</span><span class="o">&lt;</span><span class="n">string_body</span><span class="o">&gt;</span><span class="p">(</span><span class="n">request</span><span class="p">)</span><span class="w"></span>
-<span class="linenos"> 9</span><span class="w">        </span><span class="o">-&gt;</span><span class="n">status</span><span class="p">(</span><span class="n">status</span><span class="o">::</span><span class="n">ok</span><span class="p">)</span><span class="w"></span>
-<span class="linenos">10</span><span class="w">        </span><span class="p">.</span><span class="n">contentType</span><span class="p">(</span><span class="s">&quot;text/plain&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="linenos">11</span><span class="w">        </span><span class="p">.</span><span class="n">body</span><span class="p">(</span><span class="s">&quot;Hi&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="linenos">12</span><span class="w">        </span><span class="p">.</span><span class="n">commit</span><span class="p">();</span><span class="w"></span>
-<span class="linenos">13</span><span class="p">}</span><span class="w"></span>
+<span class="linenos"> 5</span><span class="kt">void</span><span class="w"> </span><span class="nf">RequestListener::index</span><span class="p">(</span><span class="n">Roar</span><span class="o">::</span><span class="n">Session</span><span class="o">&amp;</span><span class="w"> </span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="n">Roar</span><span class="o">::</span><span class="n">EmptyBodyRequest</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">)</span>
+<span class="linenos"> 6</span><span class="p">{</span>
+<span class="linenos"> 7</span><span class="w">    </span><span class="n">session</span>
+<span class="linenos"> 8</span><span class="w">        </span><span class="p">.</span><span class="n">send</span><span class="o">&lt;</span><span class="n">string_body</span><span class="o">&gt;</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="linenos"> 9</span><span class="w">        </span><span class="o">-&gt;</span><span class="n">status</span><span class="p">(</span><span class="n">status</span><span class="o">::</span><span class="n">ok</span><span class="p">)</span>
+<span class="linenos">10</span><span class="w">        </span><span class="p">.</span><span class="n">contentType</span><span class="p">(</span><span class="s">&quot;text/plain&quot;</span><span class="p">)</span>
+<span class="linenos">11</span><span class="w">        </span><span class="p">.</span><span class="n">body</span><span class="p">(</span><span class="s">&quot;Hi&quot;</span><span class="p">)</span>
+<span class="linenos">12</span><span class="w">        </span><span class="p">.</span><span class="n">commit</span><span class="p">();</span>
+<span class="linenos">13</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
@@ -234,91 +243,91 @@ Doxygen about all defined macros:
 <div class="literal-block-wrapper docutils container" id="id4">
 <div class="code-block-caption"><span class="caption-text">Adding the request listener to our</span><a class="headerlink" href="#id4" title="Permalink to this code"></a></div>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">// Other includes as before</span>
-<span class="linenos"> 2</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;basic_request_listener.hpp&quot;</span><span class="cp"></span>
+<span class="linenos"> 2</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;basic_request_listener.hpp&quot;</span>
 <span class="linenos"> 3</span>
-<span class="linenos"> 4</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"></span>
-<span class="linenos"> 5</span><span class="p">{</span><span class="w"></span>
-<span class="linenos"> 6</span><span class="w">    </span><span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">thread_pool</span><span class="w"> </span><span class="n">pool</span><span class="p">{</span><span class="mi">4</span><span class="p">};</span><span class="w"></span>
+<span class="linenos"> 4</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+<span class="linenos"> 5</span><span class="p">{</span>
+<span class="linenos"> 6</span><span class="w">    </span><span class="n">boost</span><span class="o">::</span><span class="n">asio</span><span class="o">::</span><span class="n">thread_pool</span><span class="w"> </span><span class="n">pool</span><span class="p">{</span><span class="mi">4</span><span class="p">};</span>
 <span class="linenos"> 7</span>
 <span class="linenos"> 8</span><span class="w">    </span><span class="c1">// Create server.</span>
-<span class="linenos"> 9</span><span class="w">    </span><span class="n">Roar</span><span class="o">::</span><span class="n">Server</span><span class="w"> </span><span class="n">server</span><span class="p">{{.</span><span class="n">executor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pool</span><span class="p">.</span><span class="n">executor</span><span class="p">()}};</span><span class="w"></span>
+<span class="linenos"> 9</span><span class="w">    </span><span class="n">Roar</span><span class="o">::</span><span class="n">Server</span><span class="w"> </span><span class="n">server</span><span class="p">{{.</span><span class="n">executor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pool</span><span class="p">.</span><span class="n">executor</span><span class="p">()}};</span>
 <span class="linenos">10</span>
 <span class="linenos">11</span><span class="w">    </span><span class="c1">// stop the thread_pool on scope exit to guarantee that all asynchronous tasks are finished before the server is</span>
 <span class="linenos">12</span><span class="w">    </span><span class="c1">// destroyed.</span>
-<span class="linenos">13</span><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">shutdownPool</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Roar</span><span class="o">::</span><span class="n">ScopeExit</span><span class="p">{[</span><span class="o">&amp;</span><span class="n">pool</span><span class="p">]()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="linenos">14</span><span class="w">        </span><span class="n">pool</span><span class="p">.</span><span class="n">stop</span><span class="p">();</span><span class="w"></span>
-<span class="linenos">15</span><span class="w">        </span><span class="n">pool</span><span class="p">.</span><span class="n">join</span><span class="p">();</span><span class="w"></span>
-<span class="linenos">16</span><span class="w">    </span><span class="p">}};</span><span class="w"></span>
-<span class="linenos">17</span><span class="w">    </span>
-<span class="hll"><span class="linenos">18</span><span class="w">    </span><span class="n">server</span><span class="p">.</span><span class="n">installRequestListener</span><span class="o">&lt;</span><span class="n">RequestListener</span><span class="o">&gt;</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">13</span><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">shutdownPool</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Roar</span><span class="o">::</span><span class="n">ScopeExit</span><span class="p">{[</span><span class="o">&amp;</span><span class="n">pool</span><span class="p">]()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">14</span><span class="w">        </span><span class="n">pool</span><span class="p">.</span><span class="n">stop</span><span class="p">();</span>
+<span class="linenos">15</span><span class="w">        </span><span class="n">pool</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="linenos">16</span><span class="w">    </span><span class="p">}};</span>
+<span class="linenos">17</span>
+<span class="hll"><span class="linenos">18</span><span class="w">    </span><span class="n">server</span><span class="p">.</span><span class="n">installRequestListener</span><span class="o">&lt;</span><span class="n">RequestListener</span><span class="o">&gt;</span><span class="p">();</span>
 </span><span class="linenos">19</span>
 <span class="linenos">20</span><span class="w">    </span><span class="c1">// Start server and bind on port &quot;port&quot;.</span>
-<span class="linenos">21</span><span class="w">    </span><span class="n">server</span><span class="p">.</span><span class="n">start</span><span class="p">(</span><span class="mi">8081</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">21</span><span class="w">    </span><span class="n">server</span><span class="p">.</span><span class="n">start</span><span class="p">(</span><span class="mi">8081</span><span class="p">);</span>
 <span class="linenos">22</span>
 <span class="linenos">23</span><span class="w">    </span><span class="c1">// Prevent exit somehow:</span>
-<span class="linenos">24</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">get</span><span class="p">();</span><span class="w"></span>
-<span class="linenos">25</span><span class="p">}</span><span class="w"></span>
+<span class="linenos">24</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+<span class="linenos">25</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
 <p>After this, making requests to the server on “/” will yield a response:</p>
 <div class="literal-block-wrapper docutils container" id="id5">
 <div class="code-block-caption"><span class="caption-text">Curl</span><a class="headerlink" href="#id5" title="Permalink to this code"></a></div>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>$ curl -v localhost:8081/
-<span class="linenos"> 2</span>*   Trying <span class="m">127</span>.0.0.1:8081...
-<span class="linenos"> 3</span>* Connected to localhost <span class="o">(</span><span class="m">127</span>.0.0.1<span class="o">)</span> port <span class="m">8081</span> <span class="o">(</span><span class="c1">#0)</span>
-<span class="linenos"> 4</span>&gt; GET / HTTP/1.1
-<span class="linenos"> 5</span>&gt; Host: localhost:8081
-<span class="linenos"> 6</span>&gt; User-Agent: curl/7.83.0
-<span class="linenos"> 7</span>&gt; Accept: */*
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>$<span class="w"> </span>curl<span class="w"> </span>-v<span class="w"> </span>localhost:8081/
+<span class="linenos"> 2</span>*<span class="w">   </span>Trying<span class="w"> </span><span class="m">127</span>.0.0.1:8081...
+<span class="linenos"> 3</span>*<span class="w"> </span>Connected<span class="w"> </span>to<span class="w"> </span>localhost<span class="w"> </span><span class="o">(</span><span class="m">127</span>.0.0.1<span class="o">)</span><span class="w"> </span>port<span class="w"> </span><span class="m">8081</span><span class="w"> </span><span class="o">(</span><span class="c1">#0)</span>
+<span class="linenos"> 4</span>&gt;<span class="w"> </span>GET<span class="w"> </span>/<span class="w"> </span>HTTP/1.1
+<span class="linenos"> 5</span>&gt;<span class="w"> </span>Host:<span class="w"> </span>localhost:8081
+<span class="linenos"> 6</span>&gt;<span class="w"> </span>User-Agent:<span class="w"> </span>curl/7.83.0
+<span class="linenos"> 7</span>&gt;<span class="w"> </span>Accept:<span class="w"> </span>*/*
 <span class="linenos"> 8</span>&gt;
-<span class="linenos"> 9</span>* Mark bundle as not supporting multiuse
-<span class="linenos">10</span>&lt; HTTP/1.1 <span class="m">200</span> OK
-<span class="linenos">11</span>&lt; Server: Roar+Boost.Beast/330
-<span class="linenos">12</span>&lt; Content-Type: text/plain
-<span class="linenos">13</span>&lt; Content-Length: <span class="m">2</span>
+<span class="linenos"> 9</span>*<span class="w"> </span>Mark<span class="w"> </span>bundle<span class="w"> </span>as<span class="w"> </span>not<span class="w"> </span>supporting<span class="w"> </span>multiuse
+<span class="linenos">10</span>&lt;<span class="w"> </span>HTTP/1.1<span class="w"> </span><span class="m">200</span><span class="w"> </span>OK
+<span class="linenos">11</span>&lt;<span class="w"> </span>Server:<span class="w"> </span>Roar+Boost.Beast/330
+<span class="linenos">12</span>&lt;<span class="w"> </span>Content-Type:<span class="w"> </span>text/plain
+<span class="linenos">13</span>&lt;<span class="w"> </span>Content-Length:<span class="w"> </span><span class="m">2</span>
 <span class="linenos">14</span>&lt;
-<span class="linenos">15</span>Hi* Connection <span class="c1">#0 to host localhost left intact</span>
+<span class="linenos">15</span>Hi*<span class="w"> </span>Connection<span class="w"> </span><span class="c1">#0 to host localhost left intact</span>
 </pre></div>
 </div>
 </div>
 </section>
 </section>
 <section id="requestlistener">
-<h2>RequestListener<a class="headerlink" href="#requestlistener" title="Permalink to this headline"></a></h2>
+<h2>RequestListener<a class="headerlink" href="#requestlistener" title="Permalink to this heading"></a></h2>
 <p>A request listener is a class that maps paths to request handlers.
 The following snippet shows a more detailed example.</p>
 <div class="literal-block-wrapper docutils container" id="id6">
 <div class="code-block-caption"><span class="caption-text">More sophisticated request listener.</span><a class="headerlink" href="#id6" title="Permalink to this code"></a></div>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#pragma once</span>
 <span class="linenos"> 2</span>
-<span class="linenos"> 3</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;roar/routing/request_listener.hpp&gt;</span><span class="cp"></span>
+<span class="linenos"> 3</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;roar/routing/request_listener.hpp&gt;</span>
 <span class="linenos"> 4</span>
-<span class="linenos"> 5</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;boost/describe/class.hpp&gt;</span><span class="cp"></span>
+<span class="linenos"> 5</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;boost/describe/class.hpp&gt;</span>
 <span class="linenos"> 6</span>
-<span class="linenos"> 7</span><span class="k">class</span><span class="w"> </span><span class="nc">MyRequestListener</span><span class="w"></span>
-<span class="linenos"> 8</span><span class="p">{</span><span class="w"></span>
-<span class="linenos"> 9</span><span class="w">  </span><span class="k">private</span><span class="o">:</span><span class="w"></span>
-<span class="linenos">10</span><span class="w">    </span><span class="n">ROAR_MAKE_LISTENER</span><span class="p">(</span><span class="n">MyRequestListener</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 7</span><span class="k">class</span><span class="w"> </span><span class="nc">MyRequestListener</span>
+<span class="linenos"> 8</span><span class="p">{</span>
+<span class="linenos"> 9</span><span class="w">  </span><span class="k">private</span><span class="o">:</span>
+<span class="linenos">10</span><span class="w">    </span><span class="n">ROAR_MAKE_LISTENER</span><span class="p">(</span><span class="n">MyRequestListener</span><span class="p">);</span>
 <span class="linenos">11</span>
 <span class="linenos">12</span><span class="w">    </span><span class="c1">// This is an abbreviation, where only the path is specified.</span>
-<span class="linenos">13</span><span class="w">    </span><span class="n">ROAR_GET</span><span class="p">(</span><span class="n">index</span><span class="p">)(</span><span class="s">&quot;/&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">13</span><span class="w">    </span><span class="n">ROAR_GET</span><span class="p">(</span><span class="n">index</span><span class="p">)(</span><span class="s">&quot;/&quot;</span><span class="p">);</span>
 <span class="linenos">14</span>
 <span class="linenos">15</span><span class="w">    </span><span class="c1">// This here sets more options:</span>
-<span class="linenos">16</span><span class="w">    </span><span class="n">ROAR_GET</span><span class="p">(</span><span class="n">images</span><span class="p">)({</span><span class="w"></span>
-<span class="linenos">17</span><span class="w">        </span><span class="p">.</span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/img/(.+)&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="linenos">16</span><span class="w">    </span><span class="n">ROAR_GET</span><span class="p">(</span><span class="n">images</span><span class="p">)({</span>
+<span class="linenos">17</span><span class="w">        </span><span class="p">.</span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/img/(.+)&quot;</span><span class="p">,</span>
 <span class="linenos">18</span><span class="w">        </span><span class="p">.</span><span class="n">pathType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Roar</span><span class="o">::</span><span class="n">RoutePathType</span><span class="o">::</span><span class="n">Regex</span><span class="p">,</span><span class="w">  </span><span class="c1">// Path is a regular expression</span>
-<span class="linenos">19</span><span class="w">        </span><span class="p">.</span><span class="n">routeOptions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">19</span><span class="w">        </span><span class="p">.</span><span class="n">routeOptions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 <span class="linenos">20</span><span class="w">            </span><span class="p">.</span><span class="n">allowUnsecure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="c1">// Allow HTTP request here, even if HTTPS server</span>
 <span class="linenos">21</span><span class="w">            </span><span class="p">.</span><span class="n">expectUpgrade</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="c1">// Expect Websocket upgrade request here?</span>
-<span class="linenos">22</span><span class="w">            </span><span class="p">.</span><span class="n">cors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Roar</span><span class="o">::</span><span class="n">makePermissiveCorsSettings</span><span class="p">(</span><span class="s">&quot;get&quot;</span><span class="p">),</span><span class="w"></span>
-<span class="linenos">23</span><span class="w">        </span><span class="p">}</span><span class="w"></span>
-<span class="linenos">24</span><span class="w">    </span><span class="p">})</span><span class="w"></span>
+<span class="linenos">22</span><span class="w">            </span><span class="p">.</span><span class="n">cors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Roar</span><span class="o">::</span><span class="n">makePermissiveCorsSettings</span><span class="p">(</span><span class="s">&quot;get&quot;</span><span class="p">),</span>
+<span class="linenos">23</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">24</span><span class="w">    </span><span class="p">})</span>
 <span class="linenos">25</span>
-<span class="linenos">26</span><span class="w">  </span><span class="k">private</span><span class="o">:</span><span class="w"></span>
+<span class="linenos">26</span><span class="w">  </span><span class="k">private</span><span class="o">:</span>
 <span class="linenos">27</span><span class="w">    </span><span class="c1">// This makes routes visible to the library. For as long as we have to wait for native reflection...</span>
-<span class="linenos">28</span><span class="w">    </span><span class="n">BOOST_DESCRIBE_CLASS</span><span class="p">(</span><span class="n">MyRequestListener</span><span class="p">,</span><span class="w"> </span><span class="p">(),</span><span class="w"> </span><span class="p">(),</span><span class="w"> </span><span class="p">(),</span><span class="w"> </span><span class="p">(</span><span class="n">roar_index</span><span class="p">,</span><span class="w"> </span><span class="n">roar_images</span><span class="p">))</span><span class="w"></span>
-<span class="linenos">29</span><span class="p">};</span><span class="w"></span>
+<span class="linenos">28</span><span class="w">    </span><span class="n">BOOST_DESCRIBE_CLASS</span><span class="p">(</span><span class="n">MyRequestListener</span><span class="p">,</span><span class="w"> </span><span class="p">(),</span><span class="w"> </span><span class="p">(),</span><span class="w"> </span><span class="p">(),</span><span class="w"> </span><span class="p">(</span><span class="n">roar_index</span><span class="p">,</span><span class="w"> </span><span class="n">roar_images</span><span class="p">))</span>
+<span class="linenos">29</span><span class="p">};</span>
 </pre></div>
 </div>
 </div>
@@ -334,161 +343,161 @@ Add all routes you have to the last list and prefix them with “roar_”.
 Forgetting them here will result in them not being found.</p>
 </section>
 <section id="routing">
-<h2>Routing<a class="headerlink" href="#routing" title="Permalink to this headline"></a></h2>
+<h2>Routing<a class="headerlink" href="#routing" title="Permalink to this heading"></a></h2>
 <p>Routing is the process of taking a path and finding the appropriate handler for it.
 Roar supports two kinds: simple string matches of paths and regex paths.</p>
 <section id="string-paths">
-<h3>String Paths<a class="headerlink" href="#string-paths" title="Permalink to this headline"></a></h3>
+<h3>String Paths<a class="headerlink" href="#string-paths" title="Permalink to this heading"></a></h3>
 <p>String paths take precedence over regex paths.</p>
 </section>
 <section id="regex-paths">
-<h3>Regex Paths<a class="headerlink" href="#regex-paths" title="Permalink to this headline"></a></h3>
+<h3>Regex Paths<a class="headerlink" href="#regex-paths" title="Permalink to this heading"></a></h3>
 <p>Regex routes are taken when a path of a request matches with the given regex.
 These matches can be obtained in the handler like so:</p>
 <div class="literal-block-wrapper docutils container" id="id7">
 <div class="code-block-caption"><span class="caption-text">More sophisticated request listener.</span><a class="headerlink" href="#id7" title="Permalink to this code"></a></div>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;basic_request_listener.hpp&quot;</span><span class="cp"></span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;basic_request_listener.hpp&quot;</span>
 <span class="linenos"> 2</span>
-<span class="linenos"> 3</span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">boost</span><span class="o">::</span><span class="nn">beast</span><span class="o">::</span><span class="nn">http</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 3</span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">boost</span><span class="o">::</span><span class="nn">beast</span><span class="o">::</span><span class="nn">http</span><span class="p">;</span>
 <span class="linenos"> 4</span>
-<span class="linenos"> 5</span><span class="kt">void</span><span class="w"> </span><span class="nf">RequestListener::image</span><span class="p">(</span><span class="n">Roar</span><span class="o">::</span><span class="n">Session</span><span class="o">&amp;</span><span class="w"> </span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="n">Roar</span><span class="o">::</span><span class="n">EmptyBodyRequest</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"></span>
-<span class="linenos"> 6</span><span class="p">{</span><span class="w"></span>
+<span class="linenos"> 5</span><span class="kt">void</span><span class="w"> </span><span class="nf">RequestListener::image</span><span class="p">(</span><span class="n">Roar</span><span class="o">::</span><span class="n">Session</span><span class="o">&amp;</span><span class="w"> </span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="n">Roar</span><span class="o">::</span><span class="n">EmptyBodyRequest</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">)</span>
+<span class="linenos"> 6</span><span class="p">{</span>
 <span class="hll"><span class="linenos"> 7</span><span class="w">    </span><span class="c1">// Does not return the full path match.</span>
-</span><span class="linenos"> 8</span><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">matches</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request</span><span class="p">.</span><span class="n">pathMatches</span><span class="p">();</span><span class="w"></span>
+</span><span class="linenos"> 8</span><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">matches</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request</span><span class="p">.</span><span class="n">pathMatches</span><span class="p">();</span>
 <span class="linenos"> 9</span>
 <span class="linenos">10</span><span class="w">    </span><span class="c1">// Suppose the regex was &quot;/img/(.+)/([a-z])&quot; and the path was &quot;/img/bla/b&quot;.</span>
 <span class="linenos">11</span><span class="w">    </span><span class="c1">// then: matches[0] =&gt; &quot;bla&quot;,</span>
 <span class="linenos">12</span><span class="w">    </span><span class="c1">//       matches[1] =&gt; &quot;b&quot;</span>
-<span class="linenos">13</span><span class="p">}</span><span class="w"></span>
+<span class="linenos">13</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
 </section>
 </section>
 <section id="sending-responses">
-<h2>Sending Responses<a class="headerlink" href="#sending-responses" title="Permalink to this headline"></a></h2>
+<h2>Sending Responses<a class="headerlink" href="#sending-responses" title="Permalink to this heading"></a></h2>
 <p>Here is an example on how to send a response.
 The session is kept alive over the course of the send operation.</p>
 <div class="literal-block-wrapper docutils container" id="id8">
 <div class="code-block-caption"><span class="caption-text">Write Example</span><a class="headerlink" href="#id8" title="Permalink to this code"></a></div>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kt">void</span><span class="w"> </span><span class="nf">RequestListener::index</span><span class="p">(</span><span class="n">Roar</span><span class="o">::</span><span class="n">Session</span><span class="o">&amp;</span><span class="w"> </span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="n">Roar</span><span class="o">::</span><span class="n">EmptyBodyRequest</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"></span>
-<span class="linenos"> 2</span><span class="p">{</span><span class="w"></span>
-<span class="linenos"> 3</span><span class="w">    </span><span class="n">session</span><span class="w"></span>
-<span class="linenos"> 4</span><span class="w">        </span><span class="p">.</span><span class="n">send</span><span class="o">&lt;</span><span class="n">string_body</span><span class="o">&gt;</span><span class="p">(</span><span class="n">request</span><span class="p">)</span><span class="w"></span>
-<span class="linenos"> 5</span><span class="w">        </span><span class="o">-&gt;</span><span class="n">status</span><span class="p">(</span><span class="n">status</span><span class="o">::</span><span class="n">ok</span><span class="p">)</span><span class="w"></span>
-<span class="linenos"> 6</span><span class="w">        </span><span class="p">.</span><span class="n">contentType</span><span class="p">(</span><span class="s">&quot;text/plain&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="linenos"> 7</span><span class="w">        </span><span class="p">.</span><span class="n">body</span><span class="p">(</span><span class="s">&quot;Hi&quot;</span><span class="p">)</span><span class="w"></span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kt">void</span><span class="w"> </span><span class="nf">RequestListener::index</span><span class="p">(</span><span class="n">Roar</span><span class="o">::</span><span class="n">Session</span><span class="o">&amp;</span><span class="w"> </span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="n">Roar</span><span class="o">::</span><span class="n">EmptyBodyRequest</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">)</span>
+<span class="linenos"> 2</span><span class="p">{</span>
+<span class="linenos"> 3</span><span class="w">    </span><span class="n">session</span>
+<span class="linenos"> 4</span><span class="w">        </span><span class="p">.</span><span class="n">send</span><span class="o">&lt;</span><span class="n">string_body</span><span class="o">&gt;</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="linenos"> 5</span><span class="w">        </span><span class="o">-&gt;</span><span class="n">status</span><span class="p">(</span><span class="n">status</span><span class="o">::</span><span class="n">ok</span><span class="p">)</span>
+<span class="linenos"> 6</span><span class="w">        </span><span class="p">.</span><span class="n">contentType</span><span class="p">(</span><span class="s">&quot;text/plain&quot;</span><span class="p">)</span>
+<span class="linenos"> 7</span><span class="w">        </span><span class="p">.</span><span class="n">body</span><span class="p">(</span><span class="s">&quot;Hi&quot;</span><span class="p">)</span>
 <span class="linenos"> 8</span><span class="w">        </span><span class="p">.</span><span class="n">commit</span><span class="p">()</span><span class="w"> </span><span class="c1">// Actually performs the send operation.</span>
 <span class="linenos"> 9</span><span class="w">        </span><span class="c1">// Javascript-Promise like continuation:</span>
-<span class="linenos">10</span><span class="w">        </span><span class="p">.</span><span class="n">then</span><span class="p">([](</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">req</span><span class="p">){</span><span class="w"></span>
+<span class="linenos">10</span><span class="w">        </span><span class="p">.</span><span class="n">then</span><span class="p">([](</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">req</span><span class="p">){</span>
 <span class="linenos">11</span><span class="w">            </span><span class="c1">// Send complete.</span>
-<span class="linenos">12</span><span class="w">        </span><span class="p">})</span><span class="w"></span>
-<span class="linenos">13</span><span class="w">        </span><span class="p">.</span><span class="n">fail</span><span class="p">([](</span><span class="n">Roar</span><span class="o">::</span><span class="n">Error</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">12</span><span class="w">        </span><span class="p">})</span>
+<span class="linenos">13</span><span class="w">        </span><span class="p">.</span><span class="n">fail</span><span class="p">([](</span><span class="n">Roar</span><span class="o">::</span><span class="n">Error</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="linenos">14</span><span class="w">            </span><span class="c1">// Send failed.</span>
-<span class="linenos">15</span><span class="w">        </span><span class="p">})</span><span class="w"></span>
-<span class="linenos">16</span><span class="w">    </span><span class="p">;</span><span class="w"></span>
-<span class="linenos">17</span><span class="p">}</span><span class="w"></span>
+<span class="linenos">15</span><span class="w">        </span><span class="p">})</span>
+<span class="linenos">16</span><span class="w">    </span><span class="p">;</span>
+<span class="linenos">17</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
 </section>
 <section id="reading-a-body">
-<h2>Reading a Body<a class="headerlink" href="#reading-a-body" title="Permalink to this headline"></a></h2>
+<h2>Reading a Body<a class="headerlink" href="#reading-a-body" title="Permalink to this heading"></a></h2>
 <p>Here is an example on how to read a body.
 The session is kept alive over the course of the read operation.</p>
 <div class="literal-block-wrapper docutils container" id="id9">
 <div class="code-block-caption"><span class="caption-text">Write Example</span><a class="headerlink" href="#id9" title="Permalink to this code"></a></div>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kt">void</span><span class="w"> </span><span class="nf">RequestListener::upload</span><span class="p">(</span><span class="n">Roar</span><span class="o">::</span><span class="n">Session</span><span class="o">&amp;</span><span class="w"> </span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="n">Roar</span><span class="o">::</span><span class="n">EmptyBodyRequest</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"></span>
-<span class="linenos"> 2</span><span class="p">{</span><span class="w"></span>
-<span class="linenos"> 3</span><span class="w">    </span><span class="k">namespace</span><span class="w"> </span><span class="nn">http</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nn">boost</span><span class="o">::</span><span class="nn">beast</span><span class="o">::</span><span class="nn">http</span><span class="p">;</span><span class="w"></span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kt">void</span><span class="w"> </span><span class="nf">RequestListener::upload</span><span class="p">(</span><span class="n">Roar</span><span class="o">::</span><span class="n">Session</span><span class="o">&amp;</span><span class="w"> </span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="n">Roar</span><span class="o">::</span><span class="n">EmptyBodyRequest</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">)</span>
+<span class="linenos"> 2</span><span class="p">{</span>
+<span class="linenos"> 3</span><span class="w">    </span><span class="k">namespace</span><span class="w"> </span><span class="nn">http</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nn">boost</span><span class="o">::</span><span class="nn">beast</span><span class="o">::</span><span class="nn">http</span><span class="p">;</span>
 <span class="linenos"> 4</span>
-<span class="linenos"> 5</span><span class="w">    </span><span class="n">boost</span><span class="o">::</span><span class="n">beast</span><span class="o">::</span><span class="n">error_code</span><span class="w"> </span><span class="n">ec</span><span class="p">;</span><span class="w"></span>
-<span class="linenos"> 6</span><span class="w">    </span><span class="n">http</span><span class="o">::</span><span class="n">file_body</span><span class="o">::</span><span class="n">value_type</span><span class="w"> </span><span class="n">body</span><span class="p">;</span><span class="w"></span>
-<span class="linenos"> 7</span><span class="w">    </span><span class="n">body</span><span class="p">.</span><span class="n">open</span><span class="p">(</span><span class="s">&quot;/tmp/bla.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">boost</span><span class="o">::</span><span class="n">beast</span><span class="o">::</span><span class="n">file_mode</span><span class="o">::</span><span class="n">write</span><span class="p">,</span><span class="w"> </span><span class="n">ec</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 5</span><span class="w">    </span><span class="n">boost</span><span class="o">::</span><span class="n">beast</span><span class="o">::</span><span class="n">error_code</span><span class="w"> </span><span class="n">ec</span><span class="p">;</span>
+<span class="linenos"> 6</span><span class="w">    </span><span class="n">http</span><span class="o">::</span><span class="n">file_body</span><span class="o">::</span><span class="n">value_type</span><span class="w"> </span><span class="n">body</span><span class="p">;</span>
+<span class="linenos"> 7</span><span class="w">    </span><span class="n">body</span><span class="p">.</span><span class="n">open</span><span class="p">(</span><span class="s">&quot;/tmp/bla.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">boost</span><span class="o">::</span><span class="n">beast</span><span class="o">::</span><span class="n">file_mode</span><span class="o">::</span><span class="n">write</span><span class="p">,</span><span class="w"> </span><span class="n">ec</span><span class="p">);</span>
 <span class="linenos"> 8</span><span class="w">    </span><span class="c1">// if (ec) reply with error.</span>
 <span class="linenos"> 9</span>
-<span class="linenos">10</span><span class="w">    </span><span class="n">session</span><span class="p">.</span><span class="k">template</span><span class="w"> </span><span class="n">read</span><span class="o">&lt;</span><span class="n">http</span><span class="o">::</span><span class="n">file_body</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">req</span><span class="p">),</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">body</span><span class="p">))</span><span class="w"></span>
-<span class="linenos">11</span><span class="w">        </span><span class="o">-&gt;</span><span class="n">noBodyLimit</span><span class="p">()</span><span class="w"></span>
-<span class="linenos">12</span><span class="w">        </span><span class="p">.</span><span class="n">commit</span><span class="p">()</span><span class="w"></span>
-<span class="linenos">13</span><span class="w">        </span><span class="p">.</span><span class="n">then</span><span class="p">([](</span><span class="n">Session</span><span class="o">&amp;</span><span class="w"> </span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="n">Request</span><span class="o">&lt;</span><span class="n">http</span><span class="o">::</span><span class="n">file_body</span><span class="o">&gt;</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">req</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="linenos">14</span><span class="w">            </span><span class="n">session</span><span class="w"></span>
-<span class="linenos">15</span><span class="w">                </span><span class="p">.</span><span class="n">send</span><span class="o">&lt;</span><span class="n">string_body</span><span class="o">&gt;</span><span class="p">(</span><span class="n">request</span><span class="p">)</span><span class="w"></span>
-<span class="linenos">16</span><span class="w">                </span><span class="o">-&gt;</span><span class="n">status</span><span class="p">(</span><span class="n">status</span><span class="o">::</span><span class="n">ok</span><span class="p">)</span><span class="w"></span>
-<span class="linenos">17</span><span class="w">                </span><span class="p">.</span><span class="n">contentType</span><span class="p">(</span><span class="s">&quot;text/plain&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="linenos">18</span><span class="w">                </span><span class="p">.</span><span class="n">body</span><span class="p">(</span><span class="s">&quot;Thank you!&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="linenos">19</span><span class="w">                </span><span class="p">.</span><span class="n">commit</span><span class="p">();</span><span class="w"></span>
-<span class="linenos">20</span><span class="w">        </span><span class="p">});</span><span class="w"></span>
-<span class="linenos">21</span><span class="p">}</span><span class="w"></span>
+<span class="linenos">10</span><span class="w">    </span><span class="n">session</span><span class="p">.</span><span class="k">template</span><span class="w"> </span><span class="n">read</span><span class="o">&lt;</span><span class="n">http</span><span class="o">::</span><span class="n">file_body</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">req</span><span class="p">),</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">body</span><span class="p">))</span>
+<span class="linenos">11</span><span class="w">        </span><span class="o">-&gt;</span><span class="n">noBodyLimit</span><span class="p">()</span>
+<span class="linenos">12</span><span class="w">        </span><span class="p">.</span><span class="n">commit</span><span class="p">()</span>
+<span class="linenos">13</span><span class="w">        </span><span class="p">.</span><span class="n">then</span><span class="p">([](</span><span class="n">Session</span><span class="o">&amp;</span><span class="w"> </span><span class="n">session</span><span class="p">,</span><span class="w"> </span><span class="n">Request</span><span class="o">&lt;</span><span class="n">http</span><span class="o">::</span><span class="n">file_body</span><span class="o">&gt;</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">req</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">14</span><span class="w">            </span><span class="n">session</span>
+<span class="linenos">15</span><span class="w">                </span><span class="p">.</span><span class="n">send</span><span class="o">&lt;</span><span class="n">string_body</span><span class="o">&gt;</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="linenos">16</span><span class="w">                </span><span class="o">-&gt;</span><span class="n">status</span><span class="p">(</span><span class="n">status</span><span class="o">::</span><span class="n">ok</span><span class="p">)</span>
+<span class="linenos">17</span><span class="w">                </span><span class="p">.</span><span class="n">contentType</span><span class="p">(</span><span class="s">&quot;text/plain&quot;</span><span class="p">)</span>
+<span class="linenos">18</span><span class="w">                </span><span class="p">.</span><span class="n">body</span><span class="p">(</span><span class="s">&quot;Thank you!&quot;</span><span class="p">)</span>
+<span class="linenos">19</span><span class="w">                </span><span class="p">.</span><span class="n">commit</span><span class="p">();</span>
+<span class="linenos">20</span><span class="w">        </span><span class="p">});</span>
+<span class="linenos">21</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
 </section>
 <section id="rate-limiting">
-<h2>Rate Limiting<a class="headerlink" href="#rate-limiting" title="Permalink to this headline"></a></h2>
+<h2>Rate Limiting<a class="headerlink" href="#rate-limiting" title="Permalink to this heading"></a></h2>
 <p>Download/Upload speeds can be set on a session using “readLimit” and “writeLimit”.
 <a href="/roar/doxygen/classRoar_1_1Session.html">Session class</a>.</p>
 </section>
 <section id="serving-directories">
-<h2>Serving Directories<a class="headerlink" href="#serving-directories" title="Permalink to this headline"></a></h2>
+<h2>Serving Directories<a class="headerlink" href="#serving-directories" title="Permalink to this heading"></a></h2>
 <p>Serving directories for file download, upload and deletion can be done in the following way:
 (Also see the serve_directory example for a more).</p>
 <div class="literal-block-wrapper docutils container" id="id10">
 <div class="code-block-caption"><span class="caption-text">A class that gives access to the filesystem</span><a class="headerlink" href="#id10" title="Permalink to this code"></a></div>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">class</span><span class="w"> </span><span class="nc">FileServer</span><span class="w"></span>
-<span class="linenos"> 2</span><span class="p">{</span><span class="w"></span>
-<span class="linenos"> 3</span><span class="w">  </span><span class="k">private</span><span class="o">:</span><span class="w"></span>
-<span class="linenos"> 4</span><span class="w">    </span><span class="n">ROAR_MAKE_LISTENER</span><span class="p">(</span><span class="n">FileServer</span><span class="p">);</span><span class="w"></span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">class</span><span class="w"> </span><span class="nc">FileServer</span>
+<span class="linenos"> 2</span><span class="p">{</span>
+<span class="linenos"> 3</span><span class="w">  </span><span class="k">private</span><span class="o">:</span>
+<span class="linenos"> 4</span><span class="w">    </span><span class="n">ROAR_MAKE_LISTENER</span><span class="p">(</span><span class="n">FileServer</span><span class="p">);</span>
 <span class="linenos"> 5</span>
-<span class="linenos"> 6</span><span class="w">    </span><span class="n">ROAR_SERVE</span><span class="p">(</span><span class="n">serveMyDirectory</span><span class="p">)</span><span class="w"></span>
-<span class="linenos"> 7</span><span class="w">    </span><span class="p">({</span><span class="w"></span>
+<span class="linenos"> 6</span><span class="w">    </span><span class="n">ROAR_SERVE</span><span class="p">(</span><span class="n">serveMyDirectory</span><span class="p">)</span>
+<span class="linenos"> 7</span><span class="w">    </span><span class="p">({</span>
 <span class="linenos"> 8</span><span class="w">        </span><span class="c1">// RouteOptions, that are also present in normal routes.</span>
-<span class="linenos"> 9</span><span class="w">        </span><span class="p">.</span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="linenos">10</span><span class="w">        </span><span class="p">.</span><span class="n">routeOptions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{.</span><span class="n">allowUnsecure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">},</span><span class="w"></span>
+<span class="linenos"> 9</span><span class="w">        </span><span class="p">.</span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">,</span>
+<span class="linenos">10</span><span class="w">        </span><span class="p">.</span><span class="n">routeOptions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{.</span><span class="n">allowUnsecure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">},</span>
 <span class="linenos">11</span>
 <span class="linenos">12</span><span class="w">        </span><span class="c1">// ServeOptions, these can also be set on a per session basis. Provide defaults here:</span>
-<span class="linenos">13</span><span class="w">        </span><span class="p">.</span><span class="n">serveOptions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">13</span><span class="w">        </span><span class="p">.</span><span class="n">serveOptions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 <span class="linenos">14</span><span class="w">            </span><span class="c1">// Allow GET requests for file downloads?</span>
-<span class="linenos">15</span><span class="w">            </span><span class="p">.</span><span class="n">allowDownload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">,</span><span class="w"></span>
+<span class="linenos">15</span><span class="w">            </span><span class="p">.</span><span class="n">allowDownload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">,</span>
 <span class="linenos">16</span>
 <span class="linenos">17</span><span class="w">            </span><span class="c1">// Allow PUT requests for file uploads? Defaults to false.</span>
-<span class="linenos">18</span><span class="w">            </span><span class="p">.</span><span class="n">allowUpload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"></span>
+<span class="linenos">18</span><span class="w">            </span><span class="p">.</span><span class="n">allowUpload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span>
 <span class="linenos">19</span>
 <span class="linenos">20</span><span class="w">            </span><span class="c1">// Allow PUT requests to overwrite existing files? Defaults to false.</span>
-<span class="linenos">21</span><span class="w">            </span><span class="p">.</span><span class="n">allowOverwrite</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"></span>
+<span class="linenos">21</span><span class="w">            </span><span class="p">.</span><span class="n">allowOverwrite</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span>
 <span class="linenos">22</span>
 <span class="linenos">23</span><span class="w">            </span><span class="c1">// Allow DELETE requests to delete existing files (and empty directories)? Defaults to false.</span>
-<span class="linenos">24</span><span class="w">            </span><span class="p">.</span><span class="n">allowDelete</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"></span>
+<span class="linenos">24</span><span class="w">            </span><span class="p">.</span><span class="n">allowDelete</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span>
 <span class="linenos">25</span>
 <span class="linenos">26</span><span class="w">            </span><span class="c1">// Allow DELETE requests to recursively delete directories? Defaults to false.</span>
-<span class="linenos">27</span><span class="w">            </span><span class="p">.</span><span class="n">allowDeleteOfNonEmptyDirectories</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"></span>
+<span class="linenos">27</span><span class="w">            </span><span class="p">.</span><span class="n">allowDeleteOfNonEmptyDirectories</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span>
 <span class="linenos">28</span>
-<span class="linenos">29</span><span class="w">            </span><span class="c1">// If this option is set, requests to directories do not try to serve an index.html, </span>
+<span class="linenos">29</span><span class="w">            </span><span class="c1">// If this option is set, requests to directories do not try to serve an index.html,</span>
 <span class="linenos">30</span><span class="w">            </span><span class="c1">// but give a table with all existing files instead. Defaults to true.</span>
-<span class="linenos">31</span><span class="w">            </span><span class="p">.</span><span class="n">allowListing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">,</span><span class="w"></span>
+<span class="linenos">31</span><span class="w">            </span><span class="p">.</span><span class="n">allowListing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">,</span>
 <span class="linenos">32</span>
 <span class="linenos">33</span><span class="w">            </span><span class="c1">// A path to the filesystem. Special magic prefix values are replaced.</span>
-<span class="linenos">34</span><span class="w">            </span><span class="p">.</span><span class="n">pathProvider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;~/roar&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="linenos">34</span><span class="w">            </span><span class="p">.</span><span class="n">pathProvider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;~/roar&quot;</span><span class="p">,</span>
 <span class="linenos">35</span><span class="w">            </span><span class="c1">// Alternatives:</span>
 <span class="linenos">36</span><span class="w">            </span><span class="c1">// .pathProvider = &amp;FileServer::servePath_</span>
 <span class="linenos">37</span><span class="w">            </span><span class="c1">// .pathProvider = &amp;FileServer::servePath</span>
 <span class="linenos">38</span><span class="w">            </span><span class="c1">// .pathProvider = &amp;FileServer::servePath2</span>
 <span class="linenos">39</span>
 <span class="linenos">40</span><span class="w">            </span><span class="c1">// Optional! CSS Style to style the directory listing. I recommend using the default, its pretty ;)</span>
-<span class="linenos">41</span><span class="w">            </span><span class="p">.</span><span class="n">customListingStyle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="linenos">42</span><span class="w">        </span><span class="p">},</span><span class="w"></span>
-<span class="linenos">43</span><span class="w">    </span><span class="p">});</span><span class="w"></span>
+<span class="linenos">41</span><span class="w">            </span><span class="p">.</span><span class="n">customListingStyle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">,</span>
+<span class="linenos">42</span><span class="w">        </span><span class="p">},</span>
+<span class="linenos">43</span><span class="w">    </span><span class="p">});</span>
 <span class="linenos">44</span>
-<span class="linenos">45</span><span class="w">  </span><span class="k">private</span><span class="o">:</span><span class="w"></span>
-<span class="linenos">46</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">filesystem</span><span class="o">::</span><span class="n">path</span><span class="w"> </span><span class="n">servePath_</span><span class="p">;</span><span class="w"></span>
-<span class="linenos">47</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">filesystem</span><span class="o">::</span><span class="n">path</span><span class="w"> </span><span class="nf">servePath</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="linenos">48</span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">servePath_</span><span class="p">;</span><span class="w"></span>
-<span class="linenos">49</span><span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="linenos">50</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">filesystem</span><span class="o">::</span><span class="n">path</span><span class="w"> </span><span class="nf">servePath2</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="linenos">51</span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">servePath_</span><span class="p">;</span><span class="w"></span>
-<span class="linenos">52</span><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="linenos">45</span><span class="w">  </span><span class="k">private</span><span class="o">:</span>
+<span class="linenos">46</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">filesystem</span><span class="o">::</span><span class="n">path</span><span class="w"> </span><span class="n">servePath_</span><span class="p">;</span>
+<span class="linenos">47</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">filesystem</span><span class="o">::</span><span class="n">path</span><span class="w"> </span><span class="nf">servePath</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">48</span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">servePath_</span><span class="p">;</span>
+<span class="linenos">49</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">50</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">filesystem</span><span class="o">::</span><span class="n">path</span><span class="w"> </span><span class="nf">servePath2</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">51</span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">servePath_</span><span class="p">;</span>
+<span class="linenos">52</span><span class="w">    </span><span class="p">}</span>
 <span class="linenos">53</span>
-<span class="linenos">54</span><span class="w">    </span><span class="n">BOOST_DESCRIBE_CLASS</span><span class="p">(</span><span class="n">FileServer</span><span class="p">,</span><span class="w"> </span><span class="p">(),</span><span class="w"> </span><span class="p">(),</span><span class="w"> </span><span class="p">(),</span><span class="w"> </span><span class="p">(</span><span class="n">roar_serveMyDirectory</span><span class="p">))</span><span class="w"></span>
-<span class="linenos">55</span><span class="p">};</span><span class="w"></span>
+<span class="linenos">54</span><span class="w">    </span><span class="n">BOOST_DESCRIBE_CLASS</span><span class="p">(</span><span class="n">FileServer</span><span class="p">,</span><span class="w"> </span><span class="p">(),</span><span class="w"> </span><span class="p">(),</span><span class="w"> </span><span class="p">(),</span><span class="w"> </span><span class="p">(</span><span class="n">roar_serveMyDirectory</span><span class="p">))</span>
+<span class="linenos">55</span><span class="p">};</span>
 </pre></div>
 </div>
 </div>
@@ -505,28 +514,28 @@ Filesystem paths can be prefixed by one of the following values:</p>
 This function can be used to fine-control permissions.</p>
 <div class="literal-block-wrapper docutils container" id="id11">
 <div class="code-block-caption"><span class="caption-text">Control permissions.</span><a class="headerlink" href="#id11" title="Permalink to this code"></a></div>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="n">Roar</span><span class="o">::</span><span class="n">ServeDecision</span><span class="w"> </span><span class="nf">FileServer::serveMyDirectory</span><span class="p">(</span><span class="w"></span>
-<span class="linenos"> 2</span><span class="w">    </span><span class="n">Roar</span><span class="o">::</span><span class="n">Session</span><span class="o">&amp;</span><span class="w"> </span><span class="n">session</span><span class="p">,</span><span class="w"></span>
-<span class="linenos"> 3</span><span class="w">    </span><span class="n">Roar</span><span class="o">::</span><span class="n">EmptyBodyRequest</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"></span>
-<span class="linenos"> 4</span><span class="w">    </span><span class="n">Roar</span><span class="o">::</span><span class="n">FileAndStatus</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">fileAndStatus</span><span class="p">,</span><span class="w"></span>
-<span class="linenos"> 5</span><span class="w">    </span><span class="n">Roar</span><span class="o">::</span><span class="n">ServeOptions</span><span class="o">&lt;</span><span class="n">FileServer</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">options</span><span class="p">)</span><span class="w"></span>
-<span class="linenos"> 6</span><span class="p">{</span><span class="w"></span>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="n">Roar</span><span class="o">::</span><span class="n">ServeDecision</span><span class="w"> </span><span class="nf">FileServer::serveMyDirectory</span><span class="p">(</span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="n">Roar</span><span class="o">::</span><span class="n">Session</span><span class="o">&amp;</span><span class="w"> </span><span class="n">session</span><span class="p">,</span>
+<span class="linenos"> 3</span><span class="w">    </span><span class="n">Roar</span><span class="o">::</span><span class="n">EmptyBodyRequest</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">,</span>
+<span class="linenos"> 4</span><span class="w">    </span><span class="n">Roar</span><span class="o">::</span><span class="n">FileAndStatus</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">fileAndStatus</span><span class="p">,</span>
+<span class="linenos"> 5</span><span class="w">    </span><span class="n">Roar</span><span class="o">::</span><span class="n">ServeOptions</span><span class="o">&lt;</span><span class="n">FileServer</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">options</span><span class="p">)</span>
+<span class="linenos"> 6</span><span class="p">{</span>
 <span class="linenos"> 7</span><span class="w">    </span><span class="n">session</span><span class="p">.</span><span class="n">readLimit</span><span class="p">(</span><span class="mi">100&#39;000</span><span class="p">);</span><span class="w"> </span><span class="c1">// 100kb/s</span>
 <span class="linenos"> 8</span><span class="w">    </span><span class="n">session</span><span class="p">.</span><span class="n">writeLimit</span><span class="p">(</span><span class="mi">100&#39;000</span><span class="p">);</span><span class="w"> </span><span class="c1">// 100kb/s</span>
 <span class="linenos"> 9</span>
-<span class="linenos">10</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">fileAndStatus</span><span class="p">.</span><span class="n">file</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span><span class="w"></span>
-<span class="linenos">11</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fileAndStatus</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">type</span><span class="p">())</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">10</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">fileAndStatus</span><span class="p">.</span><span class="n">file</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="linenos">11</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fileAndStatus</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">type</span><span class="p">())</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
 <span class="linenos">12</span>
 <span class="linenos">13</span><span class="w">    </span><span class="c1">// You can do something like:</span>
 <span class="linenos">14</span><span class="w">    </span><span class="cm">/**</span>
 <span class="linenos">15</span><span class="cm">     * if (user has permissions)</span>
 <span class="linenos">16</span><span class="cm">     *   options.allowUpload = true;</span>
-<span class="linenos">17</span><span class="cm">     */</span><span class="w"></span>
-<span class="linenos">18</span><span class="w">    </span><span class="n">options</span><span class="p">.</span><span class="n">allowListing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
-<span class="linenos">19</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Roar</span><span class="o">::</span><span class="n">ServeDecision</span><span class="o">::</span><span class="n">Continue</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">17</span><span class="cm">     */</span>
+<span class="linenos">18</span><span class="w">    </span><span class="n">options</span><span class="p">.</span><span class="n">allowListing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="linenos">19</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Roar</span><span class="o">::</span><span class="n">ServeDecision</span><span class="o">::</span><span class="n">Continue</span><span class="p">;</span>
 <span class="linenos">20</span><span class="w">    </span><span class="c1">// return Roar::ServeDecision::Deny;</span>
 <span class="linenos">21</span><span class="w">    </span><span class="c1">// return Roar::ServeDecision::Handled;</span>
-<span class="linenos">22</span><span class="p">}</span><span class="w"></span>
+<span class="linenos">22</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
