@@ -42,7 +42,7 @@ add_custom_command(
     WORKING_DIRECTORY ${SPHINX_DIR})
 
 add_custom_target(
-    documentation
+    documentation ALL
     COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/scripts/servethis.py"
             "${DOCS_DIR}/servethis.py"
     COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/auxiliary/.nojekyll"
