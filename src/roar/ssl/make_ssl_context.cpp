@@ -42,4 +42,13 @@ namespace Roar
                 boost::asio::buffer(ctx.diffieHellmanParameters.data(), ctx.diffieHellmanParameters.size()));
         }
     }
+
+    boost::asio::ssl::context makeSslContext(const std::string& certificate, const std::string& privateKey)
+    {
+        SslServerContext ctx;
+        ctx.certificate = certificate;
+        ctx.privateKey = privateKey;
+        initializeServerSslContext(ctx);
+        return std::move(ctx.ctx);
+    }
 }

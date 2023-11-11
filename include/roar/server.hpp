@@ -25,6 +25,7 @@
 #include <unordered_map>
 #include <functional>
 #include <iterator>
+#include <variant>
 
 namespace Roar
 {
@@ -38,7 +39,7 @@ namespace Roar
             boost::asio::any_io_executor executor;
 
             /// Supply for SSL support.
-            std::optional<SslServerContext> sslContext;
+            std::optional<std::variant<SslServerContext, boost::asio::ssl::context>> sslContext;
 
             /// Called when an error occurs in an asynchronous routine.
             std::function<void(Error&&)> onError = [](auto&&) {};

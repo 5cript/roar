@@ -28,16 +28,16 @@ namespace Roar
     // ##################################################################################################################
     struct Factory::Implementation
     {
-        std::optional<SslServerContext>& sslContext;
+        std::optional<std::variant<SslServerContext, boost::asio::ssl::context>>& sslContext;
         std::function<void(Error&&)> onError;
 
-        Implementation(std::optional<SslServerContext>& sslContext, std::function<void(Error&&)> onError)
+        Implementation(std::optional<std::variant<SslServerContext, boost::asio::ssl::context>>& sslContext, std::function<void(Error&&)> onError)
             : sslContext{sslContext}
             , onError{std::move(onError)}
         {}
     };
     // ##################################################################################################################
-    Factory::Factory(std::optional<SslServerContext>& sslContext, std::function<void(Error&&)> onError)
+    Factory::Factory(std::optional<std::variant<SslServerContext, boost::asio::ssl::context>>& sslContext, std::function<void(Error&&)> onError)
         : impl_{std::make_unique<Implementation>(sslContext, std::move(onError))}
     {}
     //------------------------------------------------------------------------------------------------------------------

@@ -50,7 +50,7 @@ namespace Roar
         Session(
             boost::asio::basic_stream_socket<boost::asio::ip::tcp>&& socket,
             boost::beast::basic_flat_buffer<std::allocator<char>>&& buffer,
-            std::optional<SslServerContext>& sslContext,
+            std::optional<std::variant<SslServerContext, boost::asio::ssl::context>>& sslContext,
             bool isSecure,
             std::function<void(Error&&)> onError,
             std::weak_ptr<Router> router,

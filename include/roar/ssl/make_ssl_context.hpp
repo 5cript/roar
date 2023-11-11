@@ -25,4 +25,6 @@ namespace Roar
      * @return boost::asio::ssl::context
      */
     void initializeServerSslContext(SslServerContext& ctx);
+
+    boost::asio::ssl::context makeSslContext(const std::string& certificate, const std::string& privateKey);
 }

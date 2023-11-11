@@ -3,6 +3,7 @@
 #include <roar/session/session.hpp>
 #include <roar/request.hpp>
 #include <roar/routing/router.hpp>
+#include <roar/utility/visit_overloaded.hpp>
 
 #include <boost/beast/core/flat_buffer.hpp>
 #include <boost/asio/dispatch.hpp>
@@ -33,14 +34,29 @@ namespace Roar
         Implementation(
             boost::asio::ip::tcp::socket&& socket,
             boost::beast::flat_buffer&& buffer,
-            std::optional<SslServerContext>& sslContext,
+            std::optional<std::variant<SslServerContext, boost::asio::ssl::context>>& sslContext,
             bool isSecure,
             std::function<void(Error&&)> onError,
             std::weak_ptr<Router> router,
             std::shared_ptr<const StandardResponseProvider> standardResponseProvider)
-            : stream{[&socket, &sslContext, isSecure]() -> decltype(stream) {
+            : stream{[&socket, &sslContext, isSecure]() mutable -> decltype(stream) {
                 if (isSecure)
-                    return boost::beast::ssl_stream<Detail::StreamType>{std::move(socket), sslContext->ctx};
+                {
+                    if (!sslContext)
+                        throw std::runtime_error{"No SSL context available."};
+
+                    return boost::beast::ssl_stream<Detail::StreamType>{
+                        std::move(socket), [&sslContext]() -> boost::asio::ssl::context& {
+                            return std::visit(
+                                [](auto& ctx) -> boost::asio::ssl::context& {
+                                    if constexpr (std::is_same_v<std::decay_t<decltype(ctx)>, SslServerContext>)
+                                        return ctx.ctx;
+                                    else
+                                        return ctx;
+                                },
+                                *sslContext);
+                        }()};
+                }
                 return Detail::StreamType{std::move(socket)};
             }()}
             , buffer{std::move(buffer)}
@@ -62,7 +78,7 @@ namespace Roar
     Session::Session(
         boost::asio::ip::tcp::socket&& socket,
         boost::beast::flat_buffer&& buffer,
-        std::optional<SslServerContext>& sslContext,
+        std::optional<std::variant<SslServerContext, boost::asio::ssl::context>>& sslContext,
         bool isSecure,
         std::function<void(Error&&)> onError,
         std::weak_ptr<Router> router,

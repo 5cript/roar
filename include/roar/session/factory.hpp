@@ -9,6 +9,7 @@
 #include <memory>
 #include <optional>
 #include <functional>
+#include <variant>
 #include <chrono>
 
 namespace Roar
@@ -24,7 +25,9 @@ namespace Roar
         constexpr static std::chrono::seconds sslDetectionTimeout{10};
 
       public:
-        Factory(std::optional<SslServerContext>& sslContext, std::function<void(Error&&)> onError);
+        Factory(
+            std::optional<std::variant<SslServerContext, boost::asio::ssl::context>>& sslContext,
+            std::function<void(Error&&)> onError);
         ROAR_PIMPL_SPECIAL_FUNCTIONS(Factory);
 
         /**
