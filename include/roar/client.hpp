@@ -141,10 +141,11 @@ namespace Roar
             return promise::newPromise([&, this](promise::Defer d) mutable {
                 const auto host = request.host();
                 const auto port = request.port();
+                std::shared_ptr<Request<BodyT>> requestPtr = std::make_shared<Request<BodyT>>(std::move(request));
                 doResolve(
                     host,
                     port,
-                    [weak = weak_from_this(), timeout, request = std::move(request), d = std::move(d)](
+                    [weak = weak_from_this(), timeout, requestPtr, d = std::move(d)](
                         boost::beast::error_code ec, boost::asio::ip::tcp::resolver::results_type results) mutable {
                         auto self = weak.lock();
                         if (!self)
@@ -157,10 +158,7 @@ namespace Roar
                             socket.expires_after(timeout);
                             socket.async_connect(
                                 results,
-                                [weak = self->weak_from_this(),
-                                 d = std::move(d),
-                                 request = std::move(request),
-                                 timeout](
+                                [weak = self->weak_from_this(), d = std::move(d), requestPtr, timeout](
                                     boost::beast::error_code ec,
                                     boost::asio::ip::tcp::resolver::results_type::endpoint_type endpoint) mutable {
                                     auto self = weak.lock();
@@ -173,7 +171,7 @@ namespace Roar
 
                                     self->endpoint_ = endpoint;
 
-                                    self->onConnect(std::move(request), std::move(d), timeout);
+                                    self->onConnect(std::move(*requestPtr), std::move(d), timeout);
                                 });
                         });
                     });
@@ -449,7 +447,7 @@ namespace Roar
             withLowerLayerDo([timeout](auto& socket) {
                 socket.expires_after(timeout);
             });
-            withStreamDo([this, request, &d](auto& socket) mutable {
+            withStreamDo([this, request = std::move(request), &d](auto& socket) mutable {
                 std::shared_ptr<Request<BodyT>> requestPtr = std::make_shared<Request<BodyT>>(std::move(request));
                 boost::beast::http::async_write(
                     socket,
