@@ -185,16 +185,18 @@ namespace Roar
         Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<>, Detail::PromiseTypeBindFail<Error>>
         request(Request<BodyT>&& req, std::chrono::seconds timeout = defaultTimeout)
         {
-            return promise::newPromise([req = std::move(req), timeout, this](promise::Defer d) mutable {
-                const auto host = req.host();
-                const auto port = req.port();
+            return promise::newPromise([sharedRequest = std::make_shared<Request<BodyT>>(std::move(req)),
+                                        timeout,
+                                        this](promise::Defer d) mutable {
+                const auto host = sharedRequest->host();
+                const auto port = sharedRequest->port();
                 connect(host, port, timeout)
-                    .then([weak = weak_from_this(), req = std::move(req), timeout, d]() mutable {
+                    .then([weak = weak_from_this(), sharedRequest = std::move(sharedRequest), timeout, d]() mutable {
                         auto self = weak.lock();
                         if (!self)
                             return d.reject(Error{.additionalInfo = "Client is no longer alive."});
 
-                        self->performRequest(std::move(req), std::move(d), timeout);
+                        self->performRequest(std::move(sharedRequest), std::move(d), timeout);
                     })
                     .fail([d](auto error) mutable {
                         d.reject(std::move(error));
@@ -464,21 +466,21 @@ namespace Roar
         }
 
         template <typename BodyT>
-        void performRequest(Request<BodyT>&& request, promise::Defer&& d, std::chrono::seconds timeout)
+        void
+        performRequest(std::shared_ptr<Request<BodyT>> sharedRequest, promise::Defer&& d, std::chrono::seconds timeout)
         {
-            auto iter = request.find(boost::beast::http::field::expect);
-            if (iter != request.end() && iter->value() == "100-continue")
-                return performRequestWithExpectContinue(std::move(request), std::move(d), timeout);
+            auto iter = sharedRequest->find(boost::beast::http::field::expect);
+            if (iter != sharedRequest->end() && iter->value() == "100-continue")
+                return performRequestWithExpectContinue(std::move(sharedRequest), std::move(d), timeout);
 
             withLowerLayerDo([timeout](auto& socket) {
                 socket.expires_after(timeout);
             });
-            withStreamDo([this, request = std::move(request), &d, timeout](auto& socket) mutable {
-                std::shared_ptr<Request<BodyT>> requestPtr = std::make_shared<Request<BodyT>>(std::move(request));
+            withStreamDo([this, sharedRequest = std::move(sharedRequest), &d](auto& socket) mutable {
                 boost::beast::http::async_write(
                     socket,
-                    *requestPtr,
-                    [weak = weak_from_this(), d = std::move(d), requestPtr](
+                    *sharedRequest,
+                    [weak = weak_from_this(), d = std::move(d), sharedRequest](
                         boost::beast::error_code ec, std::size_t) mutable {
                         auto self = weak.lock();
                         if (!self)
@@ -493,14 +495,15 @@ namespace Roar
         }
 
         template <typename BodyT>
-        void
-        performRequestWithExpectContinue(Request<BodyT>&& request, promise::Defer&& d, std::chrono::seconds timeout)
+        void performRequestWithExpectContinue(
+            std::shared_ptr<Request<BodyT>> sharedRequest,
+            promise::Defer&& d,
+            std::chrono::seconds timeout)
         {
             withLowerLayerDo([timeout](auto& socket) {
                 socket.expires_after(timeout);
             });
 
-            auto sharedRequest = std::make_shared<Request<BodyT>>(std::move(request));
             auto serializerPtr = std::make_shared<boost::beast::http::request_serializer<BodyT>>(*sharedRequest);
 
             withStreamDo([this, serializerPtr, sharedRequest, d = std::move(d), timeout](auto& socket) mutable {
