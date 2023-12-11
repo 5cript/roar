@@ -13,6 +13,7 @@
 #include <gmock/gmock.h>
 
 #include <future>
+#include <iostream>
 
 namespace Roar::Tests
 {
@@ -318,5 +319,91 @@ namespace Roar::Tests
         auto result = awaitCompletion.get_future().get();
         ASSERT_TRUE(result.has_value());
         EXPECT_EQ(*result, "Hello");
+    }
+
+    TEST_F(AsyncClientTests, CanMake100ContinueHandledRequest)
+    {
+        auto client = makeClient();
+
+        auto req = Roar::Request<boost::beast::http::string_body>{};
+        req.method(boost::beast::http::verb::post);
+        req.host("::1");
+        req.port(server_->getLocalEndpoint().port());
+        req.target("/uploadExpect100Continue");
+        req.insert(boost::beast::http::field::expect, "100-continue");
+        req.version(11);
+        req.body() = "Hello";
+        req.prepare_payload();
+
+        std::promise<std::optional<std::string>> awaitCompletion;
+        client->requestAndReadResponse<boost::beast::http::string_body>(std::move(req))
+            .then([&awaitCompletion](auto& response) {
+                awaitCompletion.set_value(response.body());
+            })
+            .fail([&awaitCompletion](auto e) {
+                std::cout << e << std::endl;
+                awaitCompletion.set_value(std::nullopt);
+            });
+
+        auto fut = awaitCompletion.get_future();
+        auto status = fut.wait_for(std::chrono::seconds(10));
+        ASSERT_EQ(status, std::future_status::ready);
+        auto result = fut.get();
+        ASSERT_TRUE(result.has_value());
+        EXPECT_EQ(*result, "Hello");
+    }
+
+    TEST_F(AsyncClientTests, Expect100ContinueRequestFailsWhenServerDeclinesContinuation)
+    {
+        auto client = makeClient();
+
+        auto req = Roar::Request<boost::beast::http::string_body>{};
+        req.method(boost::beast::http::verb::post);
+        req.host("::1");
+        req.port(server_->getLocalEndpoint().port());
+        req.target("/uploadExpect100ContinueDecline");
+        req.insert(boost::beast::http::field::expect, "100-continue");
+        req.version(11);
+        req.body() = "Hello";
+        req.prepare_payload();
+
+        std::promise<std::optional<std::string>> awaitCompletion;
+        client->requestAndReadResponse<boost::beast::http::string_body>(std::move(req))
+            .then([&awaitCompletion](auto& response) {
+                awaitCompletion.set_value(response.body());
+            })
+            .fail([&awaitCompletion](auto e) {
+                awaitCompletion.set_value(std::nullopt);
+            });
+
+        auto result = awaitCompletion.get_future().get();
+        ASSERT_FALSE(result.has_value());
+    }
+
+    TEST_F(AsyncClientTests, Expect100ContinueRequestFailsWhenEndpointDoesNotExit)
+    {
+        auto client = makeClient();
+
+        auto req = Roar::Request<boost::beast::http::string_body>{};
+        req.method(boost::beast::http::verb::post);
+        req.host("::1");
+        req.port(server_->getLocalEndpoint().port());
+        req.target("/uploadExpect100ContinueDeclineXXX");
+        req.insert(boost::beast::http::field::expect, "100-continue");
+        req.version(11);
+        req.body() = "Hello";
+        req.prepare_payload();
+
+        std::promise<std::optional<std::string>> awaitCompletion;
+        client->requestAndReadResponse<boost::beast::http::string_body>(std::move(req))
+            .then([&awaitCompletion](auto& response) {
+                awaitCompletion.set_value(response.body());
+            })
+            .fail([&awaitCompletion](auto e) {
+                awaitCompletion.set_value(std::nullopt);
+            });
+
+        auto result = awaitCompletion.get_future().get();
+        ASSERT_FALSE(result.has_value());
     }
 }

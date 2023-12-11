@@ -414,7 +414,7 @@ namespace Roar
         }
 
         template <typename BodyT>
-        [[nodiscard]] std::shared_ptr<SendIntermediate<BodyT>> sendWithAllAcceptedCors()
+        [[nodiscard]] std::shared_ptr<SendIntermediate<BodyT>> send()
         {
             return std::shared_ptr<SendIntermediate<BodyT>>(new SendIntermediate<BodyT>{*this});
         }
@@ -445,9 +445,10 @@ namespace Roar
                     if constexpr (std::is_same_v<BodyT, boost::beast::http::empty_body>)
                         throw std::runtime_error("Attempting to read with empty_body type.");
                     else
+                    {
                         return boost::beast::http::request_parser<BodyT>{
                             std::move(*session.parser()), std::forward<Forwards>(forwardArgs)...};
-                    session.parser().reset();
+                    }
                 }()}
                 , originalExtensions_{std::move(req).ejectExtensions()}
                 , onChunk_{}
@@ -534,6 +535,30 @@ namespace Roar
             }
 
             /**
+             * @brief Start reading the header here.
+             *
+             * @return Promise
+             */
+            Detail::PromiseTypeBind<
+                Detail::PromiseTypeBindThen<
+                    Detail::PromiseReferenceWrap<Session>,
+                    Detail::PromiseReferenceWrap<boost::beast::http::request_parser<BodyT> const>,
+                    std::shared_ptr<ReadIntermediate<BodyT>>>,
+                Detail::PromiseTypeBindFail<Error const&>>
+            commitHeaderOnly()
+            {
+                if (overallTimeout_)
+                {
+                    session_->withStreamDo([this](auto& stream) {
+                        boost::beast::get_lowest_layer(stream).expires_after(*overallTimeout_);
+                    });
+                }
+                promise_ = std::make_unique<promise::Promise>(promise::newPromise());
+                readHeader();
+                return {*promise_};
+            }
+
+            /**
              * @brief Set a timeout for the whole read operation.
              *
              * @param timeout The timeout as a std::chrono::duration.
@@ -590,6 +615,45 @@ namespace Roar
                 });
             }
 
+            void readHeader()
+            {
+                session_->withStreamDo([this](auto& stream) {
+                    if (!overallTimeout_)
+                        boost::beast::get_lowest_layer(stream).expires_after(std::chrono::seconds(sessionTimeout));
+
+                    boost::beast::http::async_read_header(
+                        stream,
+                        session_->buffer(),
+                        req_,
+                        [self = this->shared_from_this()](boost::beast::error_code ec, std::size_t) {
+                            if (ec)
+                            {
+                                self->session_->close();
+                                self->promise_->reject(Error{.error = ec});
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    self->promise_->template resolve(
+                                        Detail::ref(*self->session_), Detail::cref(self->req_), self);
+                                }
+                                catch (std::exception const& exc)
+                                {
+                                    using namespace std::string_literals;
+                                    self->session_
+                                        ->send(self->session_->standardResponseProvider().makeStandardResponse(
+                                            *self->session_,
+                                            boost::beast::http::status::internal_server_error,
+                                            "An exception was thrown in the header read completion handler: "s +
+                                                exc.what()))
+                                        ->commit();
+                                }
+                            }
+                        });
+                });
+            }
+
           private:
             std::shared_ptr<Session> session_;
             boost::beast::http::request_parser<BodyT> req_;
@@ -627,6 +691,14 @@ namespace Roar
         template <typename BodyT, typename OriginalBodyT, typename... Forwards>
         [[nodiscard]] std::shared_ptr<ReadIntermediate<BodyT>>
         read(Request<OriginalBodyT> req, Forwards&&... forwardArgs)
+        {
+            return std::shared_ptr<ReadIntermediate<BodyT>>(
+                new ReadIntermediate<BodyT>{*this, std::move(req), std::forward<Forwards>(forwardArgs)...});
+        }
+
+        template <typename BodyT, typename OriginalBodyT, typename... Forwards>
+        [[nodiscard]] std::shared_ptr<ReadIntermediate<BodyT>>
+        readHeader(Request<OriginalBodyT> req, Forwards&&... forwardArgs)
         {
             return std::shared_ptr<ReadIntermediate<BodyT>>(
                 new ReadIntermediate<BodyT>{*this, std::move(req), std::forward<Forwards>(forwardArgs)...});

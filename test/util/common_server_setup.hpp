@@ -28,7 +28,7 @@ namespace Roar::Tests
             , executor_{pool_.executor()}
             , errors_{}
             , server_{}
-            , tmpDir_{std::filesystem::current_path(), true}
+            , tmpDir_{programDirectory, true}
         {}
 
         void makeDefaultServer()

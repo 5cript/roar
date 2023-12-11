@@ -53,6 +53,8 @@ namespace Roar::Tests
         ROAR_PUT(putHere)("/putHere");
         ROAR_PUT(putHereNothing)("/putHereNothing");
         ROAR_POST(postHere)("/postHere");
+        ROAR_POST(uploadExpect100Continue)("/uploadExpect100Continue");
+        ROAR_POST(uploadExpect100ContinueDecline)("/uploadExpect100ContinueDecline");
         ROAR_DELETE(deleteHere)("/deleteHere");
         ROAR_OPTIONS(optionsHere)("/optionsHere");
         ROAR_HEAD(headHere)("/headHere");
@@ -95,6 +97,8 @@ namespace Roar::Tests
              roar_putHere,
              roar_putHereNothing,
              roar_postHere,
+             roar_uploadExpect100Continue,
+             roar_uploadExpect100ContinueDecline,
              roar_deleteHere,
              roar_optionsHere,
              roar_headHere,
@@ -138,6 +142,46 @@ namespace Roar::Tests
     inline void SimpleRoutes::postHere(Session& session, EmptyBodyRequest&& req)
     {
         return putHere(session, std::move(req));
+    }
+    inline void SimpleRoutes::uploadExpect100Continue(Session& session, EmptyBodyRequest&& req)
+    {
+        using namespace boost::beast::http;
+        session.template read<string_body>(std::move(req))
+            ->noBodyLimit()
+            .commitHeaderOnly()
+            .then([](Session& session, auto const& requestParser, auto readContext) {
+                if (requestParser.is_header_done())
+                {
+                    auto const& message = requestParser.get();
+                    // if message has expect 100 continue
+                    if (message[field::expect] == "100-continue")
+                    {
+                        session.send<empty_body>()->status(status::continue_).commit();
+                    }
+                    else
+                    {
+                        session.send<empty_body>()->status(status::expectation_failed).commit();
+                        return;
+                    }
+                    readContext->commit()
+                        .then([](Session& session, auto const& request) {
+                            session.send<string_body>(request)
+                                ->contentType("text/plain")
+                                .status(status::ok)
+                                .body(request.body())
+                                .preparePayload()
+                                .commit();
+                        })
+                        .fail([](auto const& error) {
+                            std::cout << "Failed to read body\n";
+                        });
+                }
+            });
+    }
+    inline void SimpleRoutes::uploadExpect100ContinueDecline(Session& session, EmptyBodyRequest&& req)
+    {
+        using namespace boost::beast::http;
+        session.send<empty_body>(req)->contentType("text/plain").status(status::expectation_failed).commit();
     }
     inline void SimpleRoutes::deleteHere(Session& session, EmptyBodyRequest&& req)
     {
@@ -229,7 +273,7 @@ namespace Roar::Tests
             }
         };
 
-        session.sendWithAllAcceptedCors<empty_body>()
+        session.send<empty_body>()
             ->status(status::ok)
             .header(boost::beast::http::field::cache_control, "no-cache")
             .contentType("text/event-stream")

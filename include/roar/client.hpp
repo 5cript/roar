@@ -129,23 +129,21 @@ namespace Roar
         }
 
         /**
-         * @brief Connects the client to a server and performs a request
+         * @brief Resolve host and connect to server and perform SSL handshake.
          *
-         * @param requestParameters see RequestParameters
-         * @return A promise to continue after the connect.
+         * @param host The host to connect to.
+         * @param port The port to connect to.
+         * @param timeout The timeout for the connection.
+         * @return Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<>, Detail::PromiseTypeBindFail<Error>>
          */
-        template <typename BodyT>
         Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<>, Detail::PromiseTypeBindFail<Error>>
-        request(Request<BodyT>&& request, std::chrono::seconds timeout = defaultTimeout)
+        connect(std::string const& host, std::string const& port, std::chrono::seconds timeout = defaultTimeout)
         {
             return promise::newPromise([&, this](promise::Defer d) mutable {
-                const auto host = request.host();
-                const auto port = request.port();
-                std::shared_ptr<Request<BodyT>> requestPtr = std::make_shared<Request<BodyT>>(std::move(request));
                 doResolve(
                     host,
                     port,
-                    [weak = weak_from_this(), timeout, requestPtr, d = std::move(d)](
+                    [weak = weak_from_this(), timeout, d = std::move(d), host](
                         boost::beast::error_code ec, boost::asio::ip::tcp::resolver::results_type results) mutable {
                         auto self = weak.lock();
                         if (!self)
@@ -158,7 +156,7 @@ namespace Roar
                             socket.expires_after(timeout);
                             socket.async_connect(
                                 results,
-                                [weak = self->weak_from_this(), d = std::move(d), requestPtr, timeout](
+                                [weak = self->weak_from_this(), d = std::move(d), timeout, host](
                                     boost::beast::error_code ec,
                                     boost::asio::ip::tcp::resolver::results_type::endpoint_type endpoint) mutable {
                                     auto self = weak.lock();
@@ -170,10 +168,36 @@ namespace Roar
                                         return d.reject(Error{.error = ec, .additionalInfo = "TCP connect failed."});
 
                                     self->endpoint_ = endpoint;
-
-                                    self->onConnect(std::move(*requestPtr), std::move(d), timeout);
+                                    self->onConnect(host, std::move(d), timeout);
                                 });
                         });
+                    });
+            });
+        }
+
+        /**
+         * @brief Connects the client to a server and performs a request
+         *
+         * @param requestParameters see RequestParameters
+         * @return A promise to continue after the connect.
+         */
+        template <typename BodyT>
+        Detail::PromiseTypeBind<Detail::PromiseTypeBindThen<>, Detail::PromiseTypeBindFail<Error>>
+        request(Request<BodyT>&& req, std::chrono::seconds timeout = defaultTimeout)
+        {
+            return promise::newPromise([req = std::move(req), timeout, this](promise::Defer d) mutable {
+                const auto host = req.host();
+                const auto port = req.port();
+                connect(host, port, timeout)
+                    .then([weak = weak_from_this(), req = std::move(req), timeout, d]() mutable {
+                        auto self = weak.lock();
+                        if (!self)
+                            return d.reject(Error{.additionalInfo = "Client is no longer alive."});
+
+                        self->performRequest(std::move(req), std::move(d), timeout);
+                    })
+                    .fail([d](auto error) mutable {
+                        d.reject(std::move(error));
                     });
             });
         }
@@ -305,8 +329,8 @@ namespace Roar
             Detail::PromiseTypeBindFail<Error>>
         requestAndReadResponse(Request<RequestBodyT>&& request, std::chrono::seconds timeout = defaultTimeout)
         {
-            return promise::newPromise([r = std::move(request), timeout, this](promise::Defer d) mutable {
-                this->request(std::move(r), timeout)
+            return promise::newPromise([request = std::move(request), timeout, this](promise::Defer d) mutable {
+                this->request(std::move(request), timeout)
                     .then([weak = weak_from_this(), timeout, d]() {
                         auto client = weak.lock();
                         if (!client)
@@ -410,12 +434,11 @@ namespace Roar
             std::function<void(boost::beast::error_code ec, boost::asio::ip::tcp::resolver::results_type results)>
                 onResolve);
 
-        template <typename BodyT>
-        void onConnect(Request<BodyT>&& request, promise::Defer&& d, std::chrono::seconds timeout)
+        void onConnect(std::string const& host, promise::Defer&& d, std::chrono::seconds timeout)
         {
             if (std::holds_alternative<boost::beast::ssl_stream<boost::beast::tcp_stream>>(socket_))
             {
-                auto maybeError = setupSsl(request.host());
+                auto maybeError = setupSsl(host);
                 if (maybeError)
                     return d.reject(*maybeError);
 
@@ -425,8 +448,7 @@ namespace Roar
                 });
                 sslSocket.async_handshake(
                     boost::asio::ssl::stream_base::client,
-                    [weak = weak_from_this(), d = std::move(d), request = std::move(request), timeout](
-                        boost::beast::error_code ec) mutable {
+                    [weak = weak_from_this(), d = std::move(d)](boost::beast::error_code ec) mutable {
                         auto self = weak.lock();
                         if (!self)
                             return d.reject(Error{.error = ec, .additionalInfo = "Client is no longer alive."});
@@ -434,20 +456,24 @@ namespace Roar
                         if (ec)
                             return d.reject(Error{.error = ec, .additionalInfo = "SSL handshake failed."});
 
-                        self->performRequest(std::move(request), std::move(d), timeout);
+                        d.resolve();
                     });
             }
             else
-                performRequest(std::move(request), std::move(d), timeout);
+                d.resolve();
         }
 
         template <typename BodyT>
         void performRequest(Request<BodyT>&& request, promise::Defer&& d, std::chrono::seconds timeout)
         {
+            auto iter = request.find(boost::beast::http::field::expect);
+            if (iter != request.end() && iter->value() == "100-continue")
+                return performRequestWithExpectContinue(std::move(request), std::move(d), timeout);
+
             withLowerLayerDo([timeout](auto& socket) {
                 socket.expires_after(timeout);
             });
-            withStreamDo([this, request = std::move(request), &d](auto& socket) mutable {
+            withStreamDo([this, request = std::move(request), &d, timeout](auto& socket) mutable {
                 std::shared_ptr<Request<BodyT>> requestPtr = std::make_shared<Request<BodyT>>(std::move(request));
                 boost::beast::http::async_write(
                     socket,
@@ -458,6 +484,105 @@ namespace Roar
                         if (!self)
                             return d.reject(Error{.error = ec, .additionalInfo = "Client is no longer alive."});
 
+                        if (ec)
+                            return d.reject(Error{.error = ec, .additionalInfo = "HTTP write failed."});
+
+                        d.resolve();
+                    });
+            });
+        }
+
+        template <typename BodyT>
+        void
+        performRequestWithExpectContinue(Request<BodyT>&& request, promise::Defer&& d, std::chrono::seconds timeout)
+        {
+            withLowerLayerDo([timeout](auto& socket) {
+                socket.expires_after(timeout);
+            });
+
+            auto sharedRequest = std::make_shared<Request<BodyT>>(std::move(request));
+            auto serializerPtr = std::make_shared<boost::beast::http::request_serializer<BodyT>>(*sharedRequest);
+
+            withStreamDo([this, serializerPtr, sharedRequest, d = std::move(d), timeout](auto& socket) mutable {
+                boost::beast::http::async_write_header(
+                    socket,
+                    *serializerPtr,
+                    [weak = weak_from_this(), d = std::move(d), serializerPtr, sharedRequest, timeout](
+                        boost::beast::error_code ec, std::size_t) mutable {
+                        auto self = weak.lock();
+                        if (!self)
+                            return d.reject(Error{.error = ec, .additionalInfo = "Client is no longer alive."});
+
+                        if (ec)
+                            return d.reject(Error{.error = ec, .additionalInfo = "HTTP write failed."});
+
+                        self->read100ContinueResponse(
+                            std::make_pair(std::move(serializerPtr), std::move(sharedRequest)), std::move(d), timeout);
+                    });
+            });
+        }
+
+        template <typename BodyT>
+        void read100ContinueResponse(
+            std::pair<std::shared_ptr<boost::beast::http::request_serializer<BodyT>>, std::shared_ptr<Request<BodyT>>>&&
+                requestPair,
+            promise::Defer&& d,
+            std::chrono::seconds timeout)
+        {
+            withStreamDo([requestPair = std::move(requestPair), d = std::move(d), timeout, this](auto& socket) mutable {
+                auto response = std::make_shared<boost::beast::http::response<boost::beast::http::string_body>>();
+
+                withLowerLayerDo([timeout](auto& socket) {
+                    socket.expires_after(timeout);
+                });
+                boost::beast::http::async_read(
+                    socket,
+                    *buffer_,
+                    *response,
+                    [d = std::move(d),
+                     buffer = this->buffer_,
+                     response,
+                     requestPair = std::move(requestPair),
+                     timeout,
+                     weak = weak_from_this()](boost::beast::error_code ec, std::size_t) mutable {
+                        auto self = weak.lock();
+                        if (!self)
+                            return d.reject(Error{.error = ec, .additionalInfo = "Client is no longer alive."});
+
+                        if (ec)
+                            return d.reject(Error{.error = ec, .additionalInfo = "HTTP read failed."});
+
+                        if (response->result() != boost::beast::http::status::continue_)
+                        {
+                            using namespace std::string_literals;
+                            return d.reject(Error{
+                                .additionalInfo = "Server did not respond with 100-continue, but with "s +
+                                    std::to_string(response->result_int()) + "."s});
+                        }
+                        else
+                        {
+                            self->complete100ContinueRequest<BodyT>(std::move(requestPair), std::move(d), timeout);
+                        }
+                    });
+            });
+        }
+
+        template <typename BodyT>
+        void complete100ContinueRequest(
+            std::pair<std::shared_ptr<boost::beast::http::request_serializer<BodyT>>, std::shared_ptr<Request<BodyT>>>&&
+                requestPair,
+            promise::Defer&& d,
+            std::chrono::seconds timeout)
+        {
+            withLowerLayerDo([timeout](auto& socket) {
+                socket.expires_after(timeout);
+            });
+
+            withStreamDo([&requestPair, &d](auto& socket) mutable {
+                boost::beast::http::async_write(
+                    socket,
+                    *requestPair.first,
+                    [d = std::move(d), requestPair](boost::beast::error_code ec, std::size_t) mutable {
                         if (ec)
                             return d.reject(Error{.error = ec, .additionalInfo = "HTTP write failed."});
 
