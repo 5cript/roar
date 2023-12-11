@@ -32,11 +32,11 @@ namespace Roar
     {
         struct RequestExtensions
         {
-            std::optional<std::vector<std::string>> regexMatches_;
-            std::string path_;
-            std::unordered_map<std::string, std::string> query_;
-            std::string host_;
-            std::string port_;
+            std::optional<std::vector<std::string>> regexMatches_{std::nullopt};
+            std::string path_{};
+            std::unordered_map<std::string, std::string> query_{};
+            std::string host_{};
+            std::string port_{};
         };
     }
 
