@@ -46,7 +46,10 @@ namespace Roar
             /**
              * @brief sslVerifyCallback, you can use boost::asio::ssl::rfc2818_verification(host) most of the time.
              */
-            std::function<bool(bool, boost::asio::ssl::verify_context&)> sslVerifyCallback;
+            std::function<bool(bool, boost::asio::ssl::verify_context&)> sslVerifyCallback = [](bool, auto&) {
+                // Ending here? Do not forget to implement your own callback.
+                return false;
+            };
         };
 
         struct ConstructionArguments
