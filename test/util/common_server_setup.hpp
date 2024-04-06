@@ -40,7 +40,9 @@ namespace Roar::Tests
                         errors_.push_back(std::move(err));
                     },
             });
-            server_->start();
+            auto result = server_->start();
+            if (!result)
+                throw std::runtime_error{"Failed to start server"};
         }
 
         std::pair<std::filesystem::path, std::filesystem::path> generateCertAndKey() const
@@ -86,7 +88,7 @@ namespace Roar::Tests
                         errors_.push_back(std::move(err));
                     },
             });
-            secureServer_->start();
+            (void)secureServer_->start();
         }
 
         std::shared_ptr<Client>

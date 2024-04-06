@@ -40,7 +40,7 @@ int main()
     }};
 
     // Start server and bind on port "port".
-    server.start(port);
+    (void)server.start(port);
 
     // Add a request listener class.
     server.installRequestListener<RequestListener>();

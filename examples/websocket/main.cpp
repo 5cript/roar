@@ -22,7 +22,7 @@ int main()
     Roar::Server server{{.executor = executor}};
 
     // Start server and bind on port "port".
-    server.start(port);
+    (void)server.start(port);
 
     // Add a request listener class.
     server.installRequestListener<RequestListener>();

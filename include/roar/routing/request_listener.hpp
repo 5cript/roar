@@ -90,9 +90,9 @@ namespace Roar
 
     struct FileAndStatus
     {
-        std::filesystem::path file;
-        std::filesystem::path relative;
-        std::filesystem::file_status status;
+        std::filesystem::path file{};
+        std::filesystem::path relative{};
+        std::filesystem::file_status status{};
     };
     template <typename RequestListenerT>
     using ServeHandlerType = ServeDecision (RequestListenerT::*)(
