@@ -12,7 +12,7 @@ git clone --branch gh-pages git@github.com:5cript/roar.git .
 cd ..
 
 ./scripts/build_docs.sh
-rsync -rts ./build/clang_docs/docs/ gh-pages
+rsync -rts ./build/clang_debug/docs/ gh-pages
 
 # Do manually:
 # cd gh-pages

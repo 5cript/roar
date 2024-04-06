@@ -178,7 +178,7 @@ namespace Roar::Detail
                     else
                         return {.file = *absolute, .relative = *relative, .status = std::filesystem::file_status{}};
                 }
-                return {.file = {}, .status = std::filesystem::file_status{}};
+                return {};
             };
 
             std::pair<std::filesystem::file_type, std::filesystem::path> fileAndStatus;

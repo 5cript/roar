@@ -22,7 +22,7 @@ int main()
     }};
 
     // Start server and bind on port "port".
-    server.start(8081);
+    (void)server.start(8081);
 
     // Prevent exit somehow:
     std::cin.get();

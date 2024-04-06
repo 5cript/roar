@@ -3,7 +3,7 @@
 There is no pure websocket server. Instead you have to setup an http server and upgrade your session to a websocket session.
 Here is an example:
 
-```{code-block} c++
+```c++
 ---
 #include <roar/routing/request_listener.hpp>
 #include <roar/websocket/websocket_session.hpp>
@@ -40,5 +40,5 @@ void RequestListener::ws(Roar::Session& session, Roar::EmptyBodyRequest&& reques
         .fail([](Roar::Error const&) {
             std::cout << "Could not upgrade to websocket.\n";
         });
-} 
+}
 ```

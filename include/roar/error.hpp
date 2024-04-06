@@ -18,7 +18,7 @@ namespace Roar
      */
     struct Error
     {
-        std::variant<boost::system::error_code, std::string> error;
+        std::variant<boost::system::error_code, std::string> error = std::string{};
         std::string_view additionalInfo = {};
 
         std::string toString() const;

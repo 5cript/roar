@@ -30,7 +30,7 @@ int main()
     server.installRequestListener<RequestListener>();
 
     // Start server and bind on port "port".
-    server.start(port);
+    (void)server.start(port);
 
     std::cout
         << Roar::Curl::Request{}.verbose().source("Small").put("http://localhost:" + std::to_string(port) + "/").code()
