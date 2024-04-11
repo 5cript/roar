@@ -54,9 +54,6 @@ namespace Roar
     void ShutdownBarrier::installSignalHandlers()
     {
         signal(SIGINT, &onSignal); // Ctrl + C
-#if !defined(_WIN32)
-        signal(SIGTSTP, &onSignal); // Ctrl + Z, common way to stop programs from the terminal gracefully
-#endif
         signal(SIGTERM, &onSignal); // Sent by OS on shutdown
     }
 }
