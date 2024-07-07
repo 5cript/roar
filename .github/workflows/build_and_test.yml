@@ -24,15 +24,21 @@ jobs:
           packages: libcurl4-openssl-dev libcrypto++-dev ninja-build
 
       - name: Install boost
-        uses: MarkusJx/install-boost@v2.4.1
+        uses: MarkusJx/install-boost@v2.4.5
         id: install-boost
         with:
           # REQUIRED: Specify the required boost version
           # A list of supported versions can be found here:
           # https://github.com/MarkusJx/prebuilt-boost/blob/main/versions-manifest.json
-          boost_version: 1.81.0
+          boost_version: 1.83.0
           # OPTIONAL: Specify a platform version
           platform_version: 22.04
+
+      - name: Dump Tooling Versions
+        run: |
+          clang++ --version
+          cmake --version
+          ninja --version
 
       - name: Configure CMake
         run: cmake -B ${{github.workspace}}/build/clang_${{env.BUILD_TYPE}} -G"Ninja" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_FLAGS="-stdlib=libc++" -DROAR_BUILD_TESTS=on -DCMAKE_CXX_EXTENSIONS=on -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang -DCMAKE_LINKER=lld -DCMAKE_CXX_STANDARD=20
@@ -56,13 +62,13 @@ jobs:
           packages: libcurl4-openssl-dev libcrypto++-dev ninja-build
 
       - name: Install boost
-        uses: MarkusJx/install-boost@v2.4.1
+        uses: MarkusJx/install-boost@v2.4.5
         id: install-boost
         with:
           # REQUIRED: Specify the required boost version
           # A list of supported versions can be found here:
           # https://github.com/MarkusJx/prebuilt-boost/blob/main/versions-manifest.json
-          boost_version: 1.81.0
+          boost_version: 1.83.0
           # OPTIONAL: Specify a platform version
           platform_version: 20.04
 
