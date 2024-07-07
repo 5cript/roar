@@ -3,7 +3,7 @@ set(PROMISE_MULTITHREAD on CACHE BOOL "Promise multithreading on")
 
 option(ROAR_EXTERNAL_PROMISE "Use an external promise library (provide it manually)" OFF)
 set(ROAR_PROMISE_GIT_REPOSITORY "https://github.com/5cript/promise-cpp.git" CACHE STRING "The URL from which to clone the promiselib repository")
-set(ROAR_PROMISE_GIT_TAG "dfec4c3b579d721a85eb594484c5e4417977a030" CACHE STRING "The git tag or commit hash to checkout from the promiselib repository")
+set(ROAR_PROMISE_GIT_TAG "bfad5bdd58f29465741858d826338e5b4ca65826" CACHE STRING "The git tag or commit hash to checkout from the promiselib repository")
 
 if (ROAR_EXTERNAL_PROMISE)
 else()
