@@ -17,13 +17,13 @@ namespace Roar
     struct RouteOptions
     {
         /// If the server is an https server, setting this to true will allow unencrypted requests on this route.
-        bool allowUnsecure;
+        bool allowUnsecure = false;
 
         /// Set this to true if you expect a websocket upgrade request on this route.
-        bool expectUpgrade;
+        bool expectUpgrade = false;
 
         /// Set this to provide automatically generated cors headers and preflight requests.
-        std::optional<CorsSettings> cors;
+        std::optional<CorsSettings> cors = std::nullopt;
     };
 
     namespace Detail

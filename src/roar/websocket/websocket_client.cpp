@@ -157,7 +157,7 @@ namespace Roar
                             endpointIterator,
                             [self = shared_from_this(),
                              timeout = std::move(connectParameters.timeout),
-                             host = connectParameters.host](auto ec, auto const& endpoint) {
+                             host = connectParameters.host](auto ec, boost::asio::ip::tcp::resolver::results_type::endpoint_type const& endpoint) {
                                 self->impl_->onConnect(ec, endpoint, timeout, std::move(host), self);
                             });
                     },
