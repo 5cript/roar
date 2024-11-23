@@ -599,7 +599,7 @@ namespace Roar
                             auto request = Request<BodyT>(self->req_.release(), std::move(self->originalExtensions_));
                             try
                             {
-                                self->promise_->template resolve(Detail::ref(*self->session_), Detail::cref(request));
+                                self->promise_->resolve(Detail::ref(*self->session_), Detail::cref(request));
                             }
                             catch (std::exception const& exc)
                             {
@@ -635,7 +635,7 @@ namespace Roar
                             {
                                 try
                                 {
-                                    self->promise_->template resolve(
+                                    self->promise_->resolve(
                                         Detail::ref(*self->session_), Detail::cref(self->req_), self);
                                 }
                                 catch (std::exception const& exc)
