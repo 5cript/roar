@@ -34,7 +34,7 @@ int main()
         .executor = pool.executor(),
         .onError = onAsynchronousError,
     }};
-    const auto shutdownPool = Roar::ScopeExit{[&pool]() {
+    const auto shutdownPool = Roar::ScopeExit{[&pool]() noexcept {
         pool.stop();
         pool.join();
     }};

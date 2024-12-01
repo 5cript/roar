@@ -16,7 +16,7 @@ int main()
 
     // stop the thread_pool on scope exit to guarantee that all asynchronous tasks are finished before the server is
     // destroyed.
-    const auto shutdownPool = Roar::ScopeExit{[&pool]() {
+    const auto shutdownPool = Roar::ScopeExit{[&pool]() noexcept {
         pool.stop();
         pool.join();
     }};
