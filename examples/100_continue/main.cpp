@@ -21,7 +21,7 @@ int main()
 
     // Create server.
     Roar::Server server{{.executor = pool.executor()}};
-    const auto shutdownPool = Roar::ScopeExit{[&pool]() {
+    const auto shutdownPool = Roar::ScopeExit{[&pool]() noexcept {
         pool.stop();
         pool.join();
     }};
