@@ -5,7 +5,6 @@
 #include <roar/error.hpp>
 #include <roar/websocket/websocket_session.hpp>
 #include <roar/response.hpp>
-#include <roar/beast/forward.hpp>
 #include <roar/detail/pimpl_special_functions.hpp>
 #include <roar/literals/memory.hpp>
 #include <roar/routing/proto_route.hpp>

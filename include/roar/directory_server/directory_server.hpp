@@ -481,7 +481,7 @@ namespace Roar::Detail
             else
             {
                 RangeFileBody::value_type body;
-                boost::beast::error_code ec;
+                std::error_code ec;
                 body.open(fileAndStatus.file.string().c_str(), std::ios_base::in, ec);
                 if (ec)
                     return session.sendStandardResponse(

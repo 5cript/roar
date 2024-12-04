@@ -1,6 +1,5 @@
 #pragma once
 
-#include <roar/beast/forward.hpp>
 #include <roar/detail/pimpl_special_functions.hpp>
 #include <roar/ssl/make_ssl_context.hpp>
 #include <roar/standard_response_provider.hpp>

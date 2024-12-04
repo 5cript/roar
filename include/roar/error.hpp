@@ -1,7 +1,5 @@
 #pragma once
 
-#include <roar/beast/forward.hpp>
-
 #include <boost/system/system_error.hpp>
 
 #include <string>

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <boost/utility/string_view_fwd.hpp>
 #include <roar/mechanics/cookie.hpp>
 #include <roar/authorization/basic_auth.hpp>
 #include <roar/authorization/digest_auth.hpp>
@@ -95,12 +96,13 @@ namespace Roar
 
         void target(std::string_view target)
         {
-            static_cast<beast_request*>(this)->target(target);
+            static_cast<beast_request*>(this)->target(boost::string_view{target.data(), target.size()});
             parseTarget();
         }
         std::string_view target() const
         {
-            return static_cast<beast_request const*>(this)->target();
+            auto target = static_cast<beast_request const*>(this)->target();
+            return std::string_view{target.data(), target.size()};
         }
 
         Request<BodyT>& host(std::string&& host)
@@ -345,7 +347,8 @@ namespace Roar
             auto spacePos = iter->value().find(' ');
             if (spacePos == std::string::npos)
                 return std::nullopt;
-            return authorizationSchemeFromString(iter->value().substr(0, spacePos));
+            auto boostView = iter->value().substr(0, spacePos);
+            return authorizationSchemeFromString(std::string_view{boostView.data(), boostView.size()});
         }
 
         /**
@@ -362,7 +365,8 @@ namespace Roar
                 return std::nullopt;
             if (value.substr(0, spacePos) != "Basic")
                 return std::nullopt;
-            return BasicAuth::fromBase64(value.substr(spacePos + 1, value.size() - spacePos - 1));
+            auto boostView = value.substr(spacePos + 1, value.size() - spacePos - 1);
+            return BasicAuth::fromBase64(std::string_view{boostView.data(), boostView.size()});
         }
 
         Request<BodyT>& basicAuth(BasicAuth const& auth)
@@ -385,7 +389,8 @@ namespace Roar
                 return std::nullopt;
             if (value.substr(0, spacePos) != "Digest")
                 return std::nullopt;
-            return DigestAuth::fromParameters(value.substr(spacePos + 1));
+            auto boostView = value.substr(spacePos + 1);
+            return DigestAuth::fromParameters(std::string_view{boostView.data(), boostView.size()});
         }
 
         Request<BodyT>& digestAuth(DigestAuth const& auth)
