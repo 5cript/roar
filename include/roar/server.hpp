@@ -1,7 +1,6 @@
 #pragma once
 
 #include <roar/directory_server/directory_server.hpp>
-#include <roar/beast/forward.hpp>
 #include <roar/routing/proto_route.hpp>
 #include <roar/error.hpp>
 #include <roar/session/session.hpp>

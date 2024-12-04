@@ -63,7 +63,7 @@ namespace Roar::Tests
             return session.sendStandardResponse(status::bad_request, "Cannot parse ranges.");
 
         RangeFileBody::value_type body;
-        boost::beast::error_code ec;
+        std::error_code ec;
         body.open(tempDir_.path() / "index.txt", std::ios_base::in, ec);
         if (ec)
             return session.sendStandardResponse(status::internal_server_error, "Cannot open file for reading.");
