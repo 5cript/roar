@@ -156,8 +156,8 @@ namespace Roar::Dns
         ResolverType resolver{executor};
 
         boost::system::error_code ec;
-        typename ResolverType::iterator end, start = resolver.resolve(host.c_str(), port.c_str(), flags, ec);
-        std::vector<typename ResolverType::endpoint_type> endpoints(start, end);
+        auto result = resolver.resolve(host.c_str(), port.c_str(), flags, ec);
+        std::vector<typename ResolverType::endpoint_type> endpoints{result.begin(), result.end()};
 
         if (endpoints.empty())
             throw std::runtime_error("Cannot resolve passed host.");
@@ -179,7 +179,7 @@ namespace Roar::Dns
         PickerFunctionT&& picker,
         boost::asio::ip::resolver_base::flags flags = {})
     {
-        return resolve<ExecutorType, PickerFunctionT, Protocol>(
+        return resolveSelect<ExecutorType, PickerFunctionT, Protocol>(
             std::forward<ExecutorType>(executor),
             host,
             std::to_string(port),

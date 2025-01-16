@@ -138,7 +138,9 @@ namespace Roar
             onResolve)
     {
         resolver_.async_resolve(
-            boost::asio::ip::tcp::resolver::query{host, port, boost::asio::ip::resolver_query_base::numeric_service},
+            host,
+            port,
+            boost::asio::ip::resolver_query_base::numeric_service,
             [onResolve = std::move(onResolve)](boost::beast::error_code ec, auto results) mutable {
                 onResolve(ec, std::move(results));
             });
