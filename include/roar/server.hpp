@@ -38,7 +38,7 @@ namespace Roar
             boost::asio::any_io_executor executor;
 
             /// Supply for SSL support.
-            std::optional<std::variant<SslServerContext, boost::asio::ssl::context>> sslContext;
+            std::optional<std::variant<SslServerContext, boost::asio::ssl::context>> sslContext = std::nullopt;
 
             /// Called when an error occurs in an asynchronous routine.
             std::function<void(Error&&)> onError = [](auto&&) {};
