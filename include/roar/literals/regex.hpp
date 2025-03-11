@@ -20,7 +20,7 @@ namespace Roar
     {
         inline namespace RegexLiterals
         {
-            inline PseudoRegex operator"" _rgx(char const* regexString, std::size_t length)
+            inline PseudoRegex operator""_rgx(char const* regexString, std::size_t length)
             {
                 return PseudoRegex{regexString, length};
             }
