@@ -64,7 +64,7 @@ jobs:
         with:
           msystem: clang64
           release: true
-          install: mingw-w64-clang-x86_64-clang make unzip mingw-w64-clang-x86_64-cmake mingw-w64-clang-x86_64-boost mingw-w64-clang-x86_64-crypto++ libcurl mingw-w64-clang-x86_64-ninja
+          install: mingw-w64-clang-x86_64-clang make unzip mingw-w64-clang-x86_64-cmake mingw-w64-clang-x86_64-boost mingw-w64-clang-x86_64-crypto++ libcurl mingw-w64-clang-x86_64-ninja mingw-w64-clang-x86_64-nlohmann-json
 
       - name: Workspace Path Fixup
         run: echo "WSPACE=$(cygpath '${{github.workspace}}')" >> $GITHUB_ENV

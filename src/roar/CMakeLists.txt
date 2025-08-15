@@ -39,7 +39,7 @@ target_include_directories(roar PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../include
                                        ${CURL_INCLUDE_DIR})
 target_link_libraries(
   roar
-  PUBLIC Boost::system
+  PUBLIC Boost::boost
          promise
          roar-cryptopp
          CURL::libcurl
