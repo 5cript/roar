@@ -109,8 +109,9 @@ namespace Roar
     //------------------------------------------------------------------------------------------------------------------
     boost::leaf::result<void> Server::start(unsigned short port, std::string const& host)
     {
-        return start(Dns::resolveSingle(
-            impl_->acceptor.get_executor(), host, port, false, boost::asio::ip::resolver_base::flags::passive));
+        return start(
+            Dns::resolveSingle(
+                impl_->acceptor.get_executor(), host, port, false, boost::asio::ip::resolver_base::flags::passive));
     }
     //------------------------------------------------------------------------------------------------------------------
     boost::asio::ip::basic_endpoint<boost::asio::ip::tcp> const& Server::getLocalEndpoint() const
@@ -120,25 +121,27 @@ namespace Roar
     //------------------------------------------------------------------------------------------------------------------
     boost::leaf::result<void> Server::start(boost::asio::ip::tcp::endpoint const& bindEndpoint)
     {
+        using namespace std::string_literals;
+
         stop();
         boost::system::error_code ec;
         impl_->bindEndpoint = bindEndpoint;
 
         impl_->acceptor.open(impl_->bindEndpoint.protocol(), ec);
         if (ec)
-            return boost::leaf::new_error("Could not open http server acceptor.", ec);
+            return boost::leaf::new_error("Could not open http server acceptor."s, ec);
 
         impl_->acceptor.set_option(boost::asio::socket_base::reuse_address(true), ec);
         if (ec)
-            return boost::leaf::new_error("Could not configure socket to reuse address.", ec);
+            return boost::leaf::new_error("Could not configure socket to reuse address."s, ec);
 
         impl_->acceptor.bind(impl_->bindEndpoint, ec);
         if (ec)
-            return boost::leaf::new_error("Could not bind socket.", ec);
+            return boost::leaf::new_error("Could not bind socket."s, ec);
 
         impl_->acceptor.listen(boost::asio::socket_base::max_listen_connections, ec);
         if (ec)
-            return boost::leaf::new_error("Could not listen on socket.", ec);
+            return boost::leaf::new_error("Could not listen on socket."s, ec);
 
         impl_->resolvedEndpoint = impl_->acceptor.local_endpoint();
         impl_->acceptOnce(0);
