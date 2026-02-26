@@ -3,7 +3,6 @@
 #include "instance.hpp"
 
 #include <curl/curl.h>
-#include <boost/beast/http/status.hpp>
 
 #include <string>
 
@@ -50,15 +49,15 @@ namespace Roar::Curl
 
         /**
          * @brief Response code.
-         * @return boost::beast::http::status
+         * @return int
          */
-        boost::beast::http::status code() const;
+        long code() const;
 
         /**
          * @brief Response code of the proxy if there was one inbetween.
-         * @return boost::beast::http::status
+         * @return int
          */
-        boost::beast::http::status proxyCode() const;
+        long proxyCode() const;
 
         /**
          * @brief Was there a response to the request?

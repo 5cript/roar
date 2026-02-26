@@ -2,7 +2,6 @@
 #include <roar/curl/response.hpp>
 #include <roar/curl/instance.hpp>
 
-#include <boost/beast/http/status.hpp>
 #include <curl/system.h>
 
 namespace Roar::Curl
@@ -40,24 +39,24 @@ namespace Roar::Curl
             return static_cast<long long>(ul);
         return 0;
     }
-    boost::beast::http::status Response::code() const
+    long Response::code() const
     {
         long code = 0;
         auto res = curl_easy_getinfo(instance_.get(), CURLINFO_RESPONSE_CODE, &code);
-        if (res == CURLE_OK)
-            return boost::beast::http::int_to_status(static_cast<unsigned int>(code));
-        return boost::beast::http::status::unknown;
+        if (res != CURLE_OK)
+            return 0;
+        return code;
     }
-    boost::beast::http::status Response::proxyCode() const
+    long Response::proxyCode() const
     {
         long code = 0;
         auto res = curl_easy_getinfo(instance_.get(), CURLINFO_HTTP_CONNECTCODE, &code);
-        if (res == CURLE_OK)
-            return boost::beast::http::int_to_status(static_cast<unsigned int>(code));
-        return boost::beast::http::status::unknown;
+        if (res != CURLE_OK)
+            return 0;
+        return code;
     }
     Response::operator bool() const
     {
-        return code() != boost::beast::http::status::unknown;
+        return code() != 0;
     }
 }
