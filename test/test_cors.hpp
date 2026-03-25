@@ -205,7 +205,7 @@ namespace Roar::Tests
     {
         std::unordered_map<std::string, std::string> headers;
         auto res = Curl::Request{}.headerSink(headers).options(url("/permissiveCors"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::ok);
+        EXPECT_EQ(res.code(), 200) << res.result();
         ASSERT_NE(std::end(headers), headers.find("Access-Control-Allow-Origin"));
         EXPECT_EQ(headers["Access-Control-Allow-Origin"], "*");
     }
@@ -233,13 +233,13 @@ namespace Roar::Tests
     {
         std::unordered_map<std::string, std::string> headers;
         auto res = Curl::Request{}.headerSink(headers).options(urlEncryptedServer("/permissiveCors"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::forbidden);
+        EXPECT_EQ(res.code(), 403);
     }
 
     TEST_F(CorsTests, PreflightRequestOnEncryptedServerIsAccessibleUnencryptedWhenAllowed)
     {
         std::unordered_map<std::string, std::string> headers;
         auto res = Curl::Request{}.headerSink(headers).options(urlEncryptedServer("/unsecurePermissiveCors"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::ok);
+        EXPECT_EQ(res.code(), 200);
     }
 }

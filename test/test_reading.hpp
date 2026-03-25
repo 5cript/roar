@@ -101,7 +101,7 @@ namespace Roar::Tests
         using namespace Roar::Literals;
         auto now = std::chrono::system_clock::now();
         const auto res = Curl::Request{}.emplaceSource<ChunkedSource>(1_MiB).put(url("/failPut"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
+        EXPECT_EQ(res.code(), 400);
         EXPECT_LT(std::chrono::system_clock::now() - now, std::chrono::seconds{1});
     }
 }

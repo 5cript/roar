@@ -75,7 +75,7 @@ namespace Roar::Tests
     TEST_F(CurlRequestTests, CanMakeSimpleGetRequest)
     {
         auto response = Request{}.get(url("/index.txt"));
-        EXPECT_EQ(response.code(), http::status::ok) << response.result();
+        EXPECT_EQ(response.code(), 200) << response.result();
     }
 
     TEST_F(CurlRequestTests, CanRetrieveBodyWithStringSink)
@@ -117,7 +117,7 @@ namespace Roar::Tests
     TEST_F(CurlRequestTests, CanGetResponseCode)
     {
         const auto response = Request{}.get(url("/index.txt"));
-        EXPECT_EQ(response.code(), boost::beast::http::status::ok);
+        EXPECT_EQ(response.code(), 200) << response.result();
     }
 
     TEST_F(CurlRequestTests, CanGetSizeOfDownload)
@@ -174,19 +174,19 @@ namespace Roar::Tests
     TEST_F(CurlRequestTests, CanMakeDeleteRequest)
     {
         const auto result = Request{}.delete_(url("/deleteHere"));
-        EXPECT_EQ(result.code(), boost::beast::http::status::ok);
+        EXPECT_EQ(result.code(), 200) << result.result();
     }
 
     TEST_F(CurlRequestTests, CanMakeOptionsRequest)
     {
         const auto result = Request{}.options(url("/optionsHere"));
-        EXPECT_EQ(result.code(), boost::beast::http::status::ok);
+        EXPECT_EQ(result.code(), 200) << result.result();
     }
 
     TEST_F(CurlRequestTests, CanMakeHeadRequest)
     {
         const auto result = Request{}.head(url("/headHere"));
-        EXPECT_EQ(result.code(), boost::beast::http::status::ok);
+        EXPECT_EQ(result.code(), 200) << result.result();
     }
 
     TEST_F(CurlRequestTests, CanUseFileAsSource)
@@ -243,6 +243,6 @@ namespace Roar::Tests
     TEST_F(CurlRequestTests, CanPerformBodylessPutViaCustomRequest)
     {
         const auto result = Request{}.custom("PUT", url("/putHereNothing"));
-        EXPECT_EQ(result.code(), boost::beast::http::status::no_content);
+        EXPECT_EQ(result.code(), 204) << result.result();
     }
 }

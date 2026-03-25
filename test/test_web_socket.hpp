@@ -77,7 +77,7 @@ namespace Roar::Tests
     {
         namespace http = boost::beast::http;
         auto res = Curl::Request{}.get(url("/ws"));
-        EXPECT_EQ(res.code(), http::status::upgrade_required);
+        EXPECT_EQ(res.code(), 426);
     }
 
     TEST_F(WebsocketTests, CanUpgradeToWebsocketSession)
