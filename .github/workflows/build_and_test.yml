@@ -97,6 +97,7 @@ jobs:
         run: |
           echo "BREW_PREFIX=$(brew --prefix)" >> $GITHUB_ENV
           echo "LLVM_PREFIX=$(brew --prefix llvm@19)" >> $GITHUB_ENV
+          echo "SDKROOT=$(xcrun --sdk macosx --show-sdk-path)" >> $GITHUB_ENV
 
       - name: Configure CMake
         run: >
@@ -104,8 +105,8 @@ jobs:
           -DCMAKE_C_COMPILER=${{env.LLVM_PREFIX}}/bin/clang
           -DCMAKE_CXX_COMPILER=${{env.LLVM_PREFIX}}/bin/clang++
           -DCMAKE_LINKER=${{env.BREW_PREFIX}}/opt/lld@19/bin/lld
-          -DCMAKE_CXX_FLAGS="-stdlib=libc++ -nostdinc++ -I${{env.LLVM_PREFIX}}/include/c++/v1 -I${{env.LLVM_PREFIX}}/lib/clang/19/include"
-          -DCMAKE_C_FLAGS="-I${{env.LLVM_PREFIX}}/lib/clang/19/include"
+          -DCMAKE_OSX_SYSROOT=${{env.SDKROOT}}
+          -DCMAKE_CXX_FLAGS="-stdlib=libc++"
           -DCMAKE_EXE_LINKER_FLAGS="-L${{env.LLVM_PREFIX}}/lib/c++ -L${{env.LLVM_PREFIX}}/lib/unwind -lunwind -Wl,-rpath,${{env.LLVM_PREFIX}}/lib/c++"
           -DROAR_BUILD_TESTS=on
           -S ${{github.workspace}}
