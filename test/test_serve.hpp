@@ -373,35 +373,35 @@ namespace Roar::Tests
     {
         std::unordered_map<std::string, std::string> headers;
         const auto res = Curl::Request{}.headerSink(headers).head(url("/1/file.txt"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::ok);
+        EXPECT_EQ(res.code(), 200);
     }
 
     TEST_F(ServeTests, HeadRequestToNonExistingFileReturns404)
     {
         std::unordered_map<std::string, std::string> headers;
         const auto res = Curl::Request{}.headerSink(headers).head(url("/1/you_dont_exist.txt"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::not_found);
+        EXPECT_EQ(res.code(), 404);
     }
 
     TEST_F(ServeTests, CannotMakeHeadRequestWhenNoFileIsSpecified)
     {
         std::unordered_map<std::string, std::string> headers;
         const auto res = Curl::Request{}.headerSink(headers).head(url("/nothingAllowed"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::method_not_allowed);
+        EXPECT_EQ(res.code(), 405);
     }
 
     TEST_F(ServeTests, CannotMakeHeadRequestWhenDownloadIsNotAllowed)
     {
         std::unordered_map<std::string, std::string> headers;
         const auto res = Curl::Request{}.headerSink(headers).head(url("/nothingAllowed/file.txt"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::method_not_allowed);
+        EXPECT_EQ(res.code(), 405);
     }
 
     TEST_F(ServeTests, StringPathsTakePrecedence)
     {
         std::string body;
         const auto res = Curl::Request{}.sink(body).get(url("/1/bla"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::ok);
+        EXPECT_EQ(res.code(), 200);
         EXPECT_EQ(body, "string");
     }
 
@@ -409,7 +409,7 @@ namespace Roar::Tests
     {
         std::string body;
         const auto res = Curl::Request{}.sink(body).get(url("/1/blub"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::ok);
+        EXPECT_EQ(res.code(), 200);
         EXPECT_EQ(body, "regex");
     }
 
@@ -417,44 +417,44 @@ namespace Roar::Tests
     {
         std::unordered_map<std::string, std::string> headers;
         auto res = Curl::Request{}.headerSink(headers).options(url("/nothingAllowed"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::no_content);
+        EXPECT_EQ(res.code(), 204);
         EXPECT_EQ(headers.at("Allow"), "OPTIONS");
 
         res = Curl::Request{}.headerSink(headers).options(url("/allAllowed"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::no_content);
+        EXPECT_EQ(res.code(), 204);
         EXPECT_EQ(headers.at("Allow"), "OPTIONS, GET, HEAD, PUT, DELETE");
     }
 
     TEST_F(ServeTests, DisallowedDownloadReturnsMethodNotAllowed)
     {
         const auto res = Curl::Request{}.get(url("/nothingAllowed/file.txt"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::method_not_allowed);
+        EXPECT_EQ(res.code(), 405);
     }
 
     TEST_F(ServeTests, DisallowedUploadReturnsMethodNotAllowed)
     {
         const auto res = Curl::Request{}.source("bla").put(url("/nothingAllowed/file.txt"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::method_not_allowed);
+        EXPECT_EQ(res.code(), 405);
     }
 
     TEST_F(ServeTests, DisallowedDeleteReturnsMethodNotAllowed)
     {
         const auto res = Curl::Request{}.delete_(url("/nothingAllowed/file.txt"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::method_not_allowed);
+        EXPECT_EQ(res.code(), 405);
     }
 
     TEST_F(ServeTests, DisallowedDeleteNonEmptyDirectoryReturnsForbidden)
     {
         EXPECT_TRUE(std::filesystem::exists(listener_->pathSupplier() / "nonEmptyDir"));
         const auto res = Curl::Request{}.delete_(url("/deleteAllowedButNotDirectories/nonEmptyDir"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::forbidden);
+        EXPECT_EQ(res.code(), 403);
     }
 
     TEST_F(ServeTests, CanDeleteEmptyDirectory)
     {
         EXPECT_TRUE(std::filesystem::exists(listener_->pathSupplier() / "emptyDir"));
         const auto res = Curl::Request{}.delete_(url("/allAllowed/emptyDir"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::no_content);
+        EXPECT_EQ(res.code(), 204);
         EXPECT_FALSE(std::filesystem::exists(listener_->pathSupplier() / "emptyDir"));
     }
 
@@ -462,52 +462,52 @@ namespace Roar::Tests
     {
         EXPECT_TRUE(std::filesystem::exists(listener_->pathSupplier() / "nonEmptyDir"));
         const auto res = Curl::Request{}.delete_(url("/allAllowed/nonEmptyDir"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::no_content);
+        EXPECT_EQ(res.code(), 204);
         EXPECT_FALSE(std::filesystem::exists(listener_->pathSupplier() / "nonEmptyDir"));
     }
 
     TEST_F(ServeTests, UserDeniedRequestReturnsForbidden)
     {
         const auto res = Curl::Request{}.get(url("/deny/file.txt"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::forbidden);
+        EXPECT_EQ(res.code(), 403);
     }
 
     TEST_F(ServeTests, UserDeniedRequestWithHandledDoesWhatUserDoes)
     {
         const auto res = Curl::Request{}.get(url("/customDeny/file.txt"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::bad_request);
+        EXPECT_EQ(res.code(), 400);
     }
 
     TEST_F(ServeTests, SecureServerOnlyAllowsSecureServes)
     {
         const auto res = Curl::Request{}.get(urlEncryptedServer("/1/file.txt", {.secure = false}));
-        EXPECT_EQ(res.code(), boost::beast::http::status::forbidden);
+        EXPECT_EQ(res.code(), 403);
     }
 
     TEST_F(ServeTests, SecureServerAllowUnsecureServesWhenAllowed)
     {
         const auto res = Curl::Request{}.get(urlEncryptedServer("/allAllowed/file.txt", {.secure = false}));
-        EXPECT_EQ(res.code(), boost::beast::http::status::ok);
+        EXPECT_EQ(res.code(), 200);
     }
 
     TEST_F(ServeTests, UnrelatedMethodReturnsNotFound)
     {
         const auto res = Curl::Request{}.patch(url("/1/file.txt"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::not_found);
+        EXPECT_EQ(res.code(), 404);
     }
 
     TEST_F(ServeTests, CanDownloadFile)
     {
         std::string body;
         const auto res = Curl::Request{}.sink(body).get(url("/allAllowed/file.txt"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::ok);
+        EXPECT_EQ(res.code(), 200);
         EXPECT_EQ(body, ServingListener::DummyFileContent);
     }
 
     TEST_F(ServeTests, CannotDownloadFileIfItDoesNotExist)
     {
         const auto res = Curl::Request{}.get(url("/allAllowed/file_404.txt"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::not_found);
+        EXPECT_EQ(res.code(), 404);
     }
 
     TEST_F(ServeTests, CanDeleteFile)
@@ -521,7 +521,7 @@ namespace Roar::Tests
     {
         std::string body;
         const auto res = Curl::Request{}.sink(body).get(url("/allAllowed"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::ok);
+        EXPECT_EQ(res.code(), 200);
         EXPECT_TRUE(body.starts_with("<!DOCTYPE"));
     }
 
@@ -529,21 +529,21 @@ namespace Roar::Tests
     {
         std::string body;
         const auto res = Curl::Request{}.sink(body).get(url("/1"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::ok);
+        EXPECT_EQ(res.code(), 200);
         EXPECT_TRUE(body.starts_with(ServingListener::DummyFileContent));
     }
 
     TEST_F(ServeTests, DirectoryListingReturnsErrorIfNotAllowed)
     {
         const auto res = Curl::Request{}.get(url("/nothingAllowed/nonEmptyDir"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::method_not_allowed);
+        EXPECT_EQ(res.code(), 405);
     }
 
     TEST_F(ServeTests, CanUploadFile)
     {
         const auto res =
             Curl::Request{}.expect100Continue().source("Yes I am there.").put(url("/allAllowed/emptyDir/file.txt"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::ok);
+        EXPECT_EQ(res.code(), 200);
         std::ifstream reader{listener_->pathSupplier() / "emptyDir/file.txt", std::ios::binary};
         std::string body;
         std::getline(reader, body);
@@ -553,7 +553,7 @@ namespace Roar::Tests
     TEST_F(ServeTests, CanOverwriteFileIfAllowed)
     {
         const auto res = Curl::Request{}.expect100Continue().source("Yes I am there.").put(url("/allAllowed/file.txt"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::ok);
+        EXPECT_EQ(res.code(), 200);
         std::ifstream reader{listener_->pathSupplier() / "file.txt", std::ios::binary};
         std::string body;
         std::getline(reader, body);
@@ -563,21 +563,21 @@ namespace Roar::Tests
     TEST_F(ServeTests, CannotUploadWhereSomethingExistsThatIsNotARegularFile)
     {
         const auto res = Curl::Request{}.expect100Continue().source("Yes I am there.").put(url("/allAllowed/emptyDir"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::forbidden);
+        EXPECT_EQ(res.code(), 403);
     }
 
     TEST_F(ServeTests, CannotUploadToExistingFileWhenDisallowed)
     {
         const auto res =
             Curl::Request{}.expect100Continue().source("Yes I am there.").put(url("/overwriteNotAllowed/file.txt"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::forbidden);
+        EXPECT_EQ(res.code(), 403);
     }
 
     TEST_F(ServeTests, CannotUploadFileWithout100ContinueHandling)
     {
         const auto res =
             Curl::Request{}.source("Yes I am there.").setHeader("Expect", "").put(url("/allAllowed/emptyDir/file.txt"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::expectation_failed);
+        EXPECT_EQ(res.code(), 417);
     }
 
     // Test is not exhaustive.
@@ -586,21 +586,21 @@ namespace Roar::Tests
         const auto res =
             Curl::Request{}.source("Yes I am there.").setHeader("Expect", "").put(url("/deep/../../../file.txt"));
         // There is a file there, but should report as not_found.
-        EXPECT_EQ(res.code(), boost::beast::http::status::not_found);
+        EXPECT_EQ(res.code(), 404);
     }
 
     TEST_F(ServeTests, CanModifyPermissionsOnTheFly)
     {
         std::string body;
         const auto res = Curl::Request{}.sink(body).get(url("/nothingIsAllowedButIsOverruled/file.txt"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::ok);
+        EXPECT_EQ(res.code(), 200);
         EXPECT_EQ(body, ServingListener::DummyFileContent);
     }
 
     TEST_F(ServeTests, UnmodifiedDisallowedPermissionsAreStillDisallowed)
     {
         const auto res = Curl::Request{}.source("test").put(url("/nothingIsAllowedButIsOverruled/file.txt"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::method_not_allowed);
+        EXPECT_EQ(res.code(), 405);
     }
 
     TEST_F(ServeTests, CanMakeRangeRequest)
@@ -610,7 +610,7 @@ namespace Roar::Tests
                              .setHeader(boost::beast::http::field::range, "bytes=1-3")
                              .sink(body)
                              .get(url("/allAllowed/file.txt"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::partial_content);
+        EXPECT_EQ(res.code(), 206);
         EXPECT_EQ(body, std::string{ServingListener::DummyFileContent}.substr(1, 2));
     }
 
@@ -618,8 +618,8 @@ namespace Roar::Tests
     {
         std::string body;
         const auto res = Curl::Request{}.sink(body).get(url("/index.html"));
-        EXPECT_EQ(res.code(), boost::beast::http::status::ok);
+        EXPECT_EQ(res.code(), 200);
         const auto res2 = Curl::Request{}.sink(body).get(url("/"));
-        EXPECT_EQ(res2.code(), boost::beast::http::status::ok);
+        EXPECT_EQ(res2.code(), 200);
     }
 }
